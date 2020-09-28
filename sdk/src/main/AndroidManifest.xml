@@ -1,2 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.realifetech.sdk"></manifest>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.realifetech.realifetech_sdk">
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+</manifest>
