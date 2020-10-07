@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "com.apollographql.apollo"
 
 android {
     compileSdkVersion 30
@@ -24,6 +25,11 @@ android {
     }
 }
 
+apollo {
+    // instruct the compiler to generate Kotlin models
+    generateKotlinModels.set(true)
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -33,6 +39,10 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
     implementation 'com.github.mrmike:ok2curl:0.6.0'
+
+    // GraphQL
+    implementation("com.apollographql.apollo:apollo-runtime:2.4.1")
+    implementation("com.apollographql.apollo:apollo-coroutines-support:2.4.1")
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
