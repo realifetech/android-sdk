@@ -21,7 +21,7 @@ class Analytics private constructor() {
             sendPendingEvents()
         }
     }
-    private val engine: AnalyticsEngine = RtlBackendAnalyticsEngine()
+    private val engine: AnalyticsEngine = AnalyticsProvider.provideAnalyticsEngine()
     private val storage: AnalyticsStorage = AnalyticsProvider.provideAnalyticsStorage()
 
     /**
@@ -63,7 +63,7 @@ class Analytics private constructor() {
      * If the event was sent successfully, we will remove it from the pending [storage], otherwise nothing will be changed.
      */
     @Synchronized
-    private fun sendPendingEvents() {
+    private suspend fun sendPendingEvents() {
         val allPendingEvents = storage.getAll()
         if (allPendingEvents.isEmpty()) {
             retryPolicy.cancel()
