@@ -9,6 +9,7 @@ import com.realifetech.sdk.general.di.GeneralProvider
 import com.realifetech.sdk.general.domain.DeviceConfiguration
 import com.realifetech.sdk.general.domain.DeviceRegisterResponse
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class General private constructor() {
@@ -38,15 +39,20 @@ class General private constructor() {
     @Synchronized
     fun registerDevice(): Result<DeviceRegisterResponse> {
         SdkInitializationPrecondition.checkContextInitialized()
-        val deviceRegistration = GeneralProvider(configuration.requireContext()).provideDeviceRegistration()
 
-        Log.d("General", "Sending register device request")
-        val result = deviceRegistration.registerDevice()
-        isSdkReady = result is Result.Success
+        return try {
+            val deviceRegistration = GeneralProvider(configuration.requireContext()).provideDeviceRegistration()
 
-        Log.d("General", "Register device request result, is SDK ready = $isSdkReady")
+            Log.d("General", "Sending register device request")
+            val result = deviceRegistration.registerDevice()
+            isSdkReady = result is Result.Success
 
-        return result
+            Log.d("General", "Register device request result, is SDK ready = $isSdkReady")
+            result
+        } catch (exception: Exception) {
+            Log.e("General", exception.message, exception)
+            Result.Error(exception)
+        }
     }
 
     companion object {
