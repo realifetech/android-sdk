@@ -9,7 +9,11 @@ import androidx.core.widget.doOnTextChanged
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sdk.Realifetech
 import com.realifetech.sdk.domain.Result
+import kotlinx.android.synthetic.main.activity_analytics_sample.*
 import kotlinx.android.synthetic.main.activity_communication_sample.*
+import kotlinx.android.synthetic.main.activity_communication_sample.operationTextView
+import kotlinx.android.synthetic.main.activity_communication_sample.progressBar
+import kotlinx.android.synthetic.main.activity_communication_sample.resultTextView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -17,38 +21,46 @@ import kotlinx.coroutines.withContext
 
 class AnalyticsSampleActivity : AppCompatActivity() {
 
+    private val oldDictionary: Map<String, String>?
+        get() {
+            return if (oldDictionaryCheckBox.isChecked) {
+                mapOf("OldUserId" to "123")
+            } else {
+                null
+            }
+        }
+
+    private val newDictionary: Map<String, String>?
+        get() {
+            return if (newDictionaryCheckBox.isChecked) {
+                mapOf("NewUserId" to "278")
+            } else {
+                null
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_analytics_sample)
 
-        val storage = DeviceConfigurationStorage(this)
-        tokenEditText.setText(storage.pushNotificationsToken)
-
-        tokenEditText.doOnTextChanged { text, _, _, _ ->
-            storage.pushNotificationsToken = text.toString()
-        }
-
-        registerPushNotifications.setOnClickListener {
-            registerPushNotifications()
+        sendEventButton.setOnClickListener {
+            sendEvent()
         }
     }
 
-    private fun registerPushNotifications() {
+    private fun sendEvent() {
         progressBar.isVisible = true
         resultTextView.text = ""
-        operationTextView.text = "Registering for push notifications"
+        operationTextView.text = "Sending analytics event"
 
-        GlobalScope.launch(Dispatchers.Main) {
-            val result = withContext(Dispatchers.IO) {
-                Realifetech.getCommunicate().registerForPushNotifications(tokenEditText.text.toString())
+        Realifetech.getAnalytics()
+            .logEvent(typeEditText.text.toString(), actionEditText.text.toString(), newDictionary, oldDictionary) {
+                progressBar.isVisible = false
+                resultTextView.text = when (it != null) {
+                    false -> "Success!"
+                    else -> it?.message ?: "Unknown error"
+                }
             }
-
-            progressBar.isVisible = false
-            resultTextView.text = when (result) {
-                is Result.Success -> "Success!"
-                is Result.Error -> result.exception.message ?: "Unknown error"
-            }
-        }
     }
 
     companion object {

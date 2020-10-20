@@ -12,7 +12,7 @@ internal object CoreProvider {
             return OAuth2AuthenticationInterceptor(authenticationToken)
         }
 
-    private val authenticationToken: AuthenticationToken
+    val authenticationToken: AuthenticationToken
         get() {
             return AuthenticationToken(authenticationTokenStorage, AuthenticationBackendApiDataSource())
         }

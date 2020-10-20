@@ -26,6 +26,10 @@
             android:name=".CommunicationSampleActivity"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".AnalyticsSampleActivity"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>
