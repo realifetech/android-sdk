@@ -43,6 +43,8 @@ class GeneralSampleActivity : AppCompatActivity() {
                 Realifetech.getGeneral().registerDevice()
             }
 
+            deviceIdentifierTextView.text  = Realifetech.getGeneral().deviceIdentifier
+
             progressBar.isVisible = false
             resultTextView.text = when (result) {
                 is Result.Success -> "Success!"
