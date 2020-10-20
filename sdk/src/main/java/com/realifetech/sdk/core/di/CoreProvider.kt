@@ -3,8 +3,7 @@ package com.realifetech.sdk.core.di
 import com.realifetech.sdk.core.data.AuthenticationBackendApiDataSource
 import com.realifetech.sdk.core.data.AuthenticationTokenStorage
 import com.realifetech.sdk.core.data.AuthenticationTokenPreferenceStorage
-import com.realifetech.sdk.core.domain.AuthentificationToken
-import com.realifetech.sdk.core.network.AuthorizationApiNetwork
+import com.realifetech.sdk.core.domain.AuthenticationToken
 import com.realifetech.sdk.core.network.OAuth2AuthenticationInterceptor
 
 internal object CoreProvider {
@@ -13,9 +12,9 @@ internal object CoreProvider {
             return OAuth2AuthenticationInterceptor(authenticationToken)
         }
 
-    private val authenticationToken: AuthentificationToken
+    private val authenticationToken: AuthenticationToken
         get() {
-            return AuthentificationToken(authenticationTokenStorage, AuthenticationBackendApiDataSource())
+            return AuthenticationToken(authenticationTokenStorage, AuthenticationBackendApiDataSource())
         }
 
     private val authenticationTokenStorage: AuthenticationTokenStorage

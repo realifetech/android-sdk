@@ -3,7 +3,7 @@ package com.realifetech.sdk.core.domain
 import com.realifetech.sdk.core.data.AuthenticationTokenStorage
 import com.realifetech.sdk.general.General
 
-internal class AuthentificationToken(
+internal class AuthenticationToken(
     private val storage: AuthenticationTokenStorage,
     private val apiSource: ApiDataSource
 ) {

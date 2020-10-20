@@ -14,6 +14,7 @@ class SampleApplication : Application() {
             context = this@SampleApplication
             apiUrl = storage.apiUrl
             graphApiUrl = storage.graphQl
+            clientSecret = storage.clientSecret
         }
     }
 }
