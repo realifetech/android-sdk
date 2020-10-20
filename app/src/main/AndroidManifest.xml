@@ -21,6 +21,11 @@
         <activity
             android:name=".GeneralSampleActivity"
             android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".CommunicationSampleActivity"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>
