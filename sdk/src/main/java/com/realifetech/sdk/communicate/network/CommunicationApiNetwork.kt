@@ -2,6 +2,7 @@ package com.realifetech.sdk.communicate.network
 
 import android.util.Log
 import com.moczul.ok2curl.CurlInterceptor
+import com.realifetech.sdk.core.di.CoreProvider
 import com.realifetech.sdk.core.network.OAuth2AuthenticationInterceptor
 import com.realifetech.sdk.general.General
 import okhttp3.OkHttpClient
@@ -11,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 internal object CommunicationApiNetwork {
 
     private val httpClient = OkHttpClient.Builder()
-        .addInterceptor(OAuth2AuthenticationInterceptor())
+        .addInterceptor(CoreProvider.oAuthInterceptor)
         .addInterceptor(CurlInterceptor { message ->
             Log.d("SdkCurl", message)
         })

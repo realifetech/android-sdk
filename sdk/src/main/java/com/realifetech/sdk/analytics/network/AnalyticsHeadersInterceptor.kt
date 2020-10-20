@@ -10,7 +10,7 @@ internal class AnalyticsHeadersInterceptor : Interceptor {
         val clientSecret = General.instance.configuration.clientSecret
 
         val request = chain.request().newBuilder()
-            .addHeader("X-LS-DeviceId", Realifetech.getGeneral().deviceIdentified)
+            .addHeader("X-LS-DeviceId", Realifetech.getGeneral().deviceIdentifier)
             .addHeader("Authorization", "Bearer $clientSecret")
             .build()
 
