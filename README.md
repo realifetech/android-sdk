@@ -101,4 +101,4 @@ To determine if the device is a member of an audience, you would use the followi
 RealifeTech.getAudience().deviceIsMemberOfAudience(audience_id) { error, doesBelong ->
     // To be executed on completion
 }
-```U
+```
