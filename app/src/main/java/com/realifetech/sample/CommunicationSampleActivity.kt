@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.realifetech.sample.data.DeviceConfigurationStorage
-import com.realifetech.sdk.Realifetech
+import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.domain.Result
 import kotlinx.android.synthetic.main.activity_communication_sample.*
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +40,7 @@ class CommunicationSampleActivity : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.Main) {
             val result = withContext(Dispatchers.IO) {
-                Realifetech.getCommunicate().registerForPushNotifications(tokenEditText.text.toString())
+                RealifeTech.getCommunicate().registerForPushNotifications(tokenEditText.text.toString())
             }
 
             progressBar.isVisible = false

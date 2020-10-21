@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.widget.doOnTextChanged
 import com.realifetech.sample.data.DeviceConfigurationStorage
-import com.realifetech.sdk.Realifetech
+import com.realifetech.sdk.RealifeTech
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -13,16 +13,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        apiUrlEditTextView.setText(Realifetech.getGeneral().configuration.apiUrl)
-        graphQlUrlEditTextView.setText(Realifetech.getGeneral().configuration.graphApiUrl)
+        apiUrlEditTextView.setText(RealifeTech.getGeneral().configuration.apiUrl)
+        graphQlUrlEditTextView.setText(RealifeTech.getGeneral().configuration.graphApiUrl)
 
         val storage = DeviceConfigurationStorage(this)
         apiUrlEditTextView.doOnTextChanged { text, _, _, _ ->
-            Realifetech.getGeneral().configuration.apiUrl = text.toString()
+            RealifeTech.getGeneral().configuration.apiUrl = text.toString()
             storage.apiUrl = text.toString()
         }
         graphQlUrlEditTextView.doOnTextChanged { text, _, _, _ ->
-            Realifetech.getGeneral().configuration.graphApiUrl = text.toString()
+            RealifeTech.getGeneral().configuration.graphApiUrl = text.toString()
             storage.graphQl = text.toString()
         }
 

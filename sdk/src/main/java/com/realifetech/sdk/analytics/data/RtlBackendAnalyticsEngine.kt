@@ -34,7 +34,7 @@ internal class RtlBackendAnalyticsEngine(private val apolloClient: ApolloClient)
             if (response.data?.putAnalyticEvent?.success == true) {
                 Result.Success(true)
             } else {
-                Result.Error(Exception())
+                Result.Error(Exception(response.errors?.firstOrNull()?.message.orEmpty()))
             }
         } catch (e: Exception) {
             Result.Error(e)

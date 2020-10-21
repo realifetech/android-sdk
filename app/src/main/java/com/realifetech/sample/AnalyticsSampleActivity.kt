@@ -5,19 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
-import com.realifetech.sample.data.DeviceConfigurationStorage
-import com.realifetech.sdk.Realifetech
-import com.realifetech.sdk.domain.Result
+import com.realifetech.sdk.RealifeTech
 import kotlinx.android.synthetic.main.activity_analytics_sample.*
 import kotlinx.android.synthetic.main.activity_communication_sample.*
 import kotlinx.android.synthetic.main.activity_communication_sample.operationTextView
 import kotlinx.android.synthetic.main.activity_communication_sample.progressBar
 import kotlinx.android.synthetic.main.activity_communication_sample.resultTextView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AnalyticsSampleActivity : AppCompatActivity() {
 
@@ -53,7 +46,7 @@ class AnalyticsSampleActivity : AppCompatActivity() {
         resultTextView.text = ""
         operationTextView.text = "Sending analytics event"
 
-        Realifetech.getAnalytics()
+        RealifeTech.getAnalytics()
             .logEvent(typeEditText.text.toString(), actionEditText.text.toString(), newDictionary, oldDictionary) {
                 progressBar.isVisible = false
                 resultTextView.text = when (it != null) {

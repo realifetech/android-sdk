@@ -1,0 +1,7 @@
+query belongsToAudience($audienceId: ID!) {
+  me {
+    device {
+      belongsToAudience(audienceId: $audienceId)
+    }
+  }
+}
