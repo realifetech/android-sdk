@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.realifetech.sdk.Realifetech
+import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.analytics.domain.AnalyticsEventDatabaseConverter
 import com.realifetech.sdk.analytics.domain.PendingAnalyticsEvent
 
@@ -18,7 +18,7 @@ internal abstract class PendingAnalyticEventsDatabase : RoomDatabase() {
 
         private val databaseInstance: PendingAnalyticEventsDatabase by lazy {
             Room.databaseBuilder(
-                Realifetech.getGeneral().configuration.requireContext(),
+                RealifeTech.getGeneral().configuration.requireContext(),
                 PendingAnalyticEventsDatabase::class.java,
                 DATABASE_NAME
             ).build()

@@ -25,7 +25,8 @@ class General private constructor() {
     var isSdkReady: Boolean = false
 
     val deviceIdentifier: String
-        get() = PhysicalDeviceInfo(configuration.requireContext()).deviceId
+//        get() = PhysicalDeviceInfo(configuration.requireContext()).deviceId
+        get() = "EE76F4D8-BC5A-438D-9F06-9F6873F60960"
 
     private object Holder {
         val instance = General()

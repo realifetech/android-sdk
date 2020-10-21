@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.realifetech.sample.data.DeviceConfigurationStorage
-import com.realifetech.sdk.Realifetech
+import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.domain.Result
 import kotlinx.android.synthetic.main.activity_general_sample.*
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,7 @@ class GeneralSampleActivity : AppCompatActivity() {
 
         clientSecretEditText.doOnTextChanged { text, _, _, _ ->
             storage.clientSecret = text.toString()
-            Realifetech.getGeneral().configuration.clientSecret = text.toString()
+            RealifeTech.getGeneral().configuration.clientSecret = text.toString()
         }
 
         registerDeviceButton.setOnClickListener {
@@ -40,10 +40,10 @@ class GeneralSampleActivity : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.Main) {
             val result = withContext(Dispatchers.IO) {
-                Realifetech.getGeneral().registerDevice()
+                RealifeTech.getGeneral().registerDevice()
             }
 
-            deviceIdentifierTextView.text  = Realifetech.getGeneral().deviceIdentifier
+            deviceIdentifierTextView.text  = RealifeTech.getGeneral().deviceIdentifier
 
             progressBar.isVisible = false
             resultTextView.text = when (result) {

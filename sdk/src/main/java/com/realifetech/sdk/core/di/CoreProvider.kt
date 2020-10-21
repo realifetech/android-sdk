@@ -5,6 +5,7 @@ import com.realifetech.sdk.core.data.AuthenticationTokenStorage
 import com.realifetech.sdk.core.data.AuthenticationTokenPreferenceStorage
 import com.realifetech.sdk.core.domain.AuthenticationToken
 import com.realifetech.sdk.core.network.OAuth2AuthenticationInterceptor
+import com.realifetech.sdk.core.network.graphQl.GraphQlHeadersInterceptor
 
 internal object CoreProvider {
     val oAuthInterceptor: OAuth2AuthenticationInterceptor
@@ -15,6 +16,11 @@ internal object CoreProvider {
     val authenticationToken: AuthenticationToken
         get() {
             return AuthenticationToken(authenticationTokenStorage, AuthenticationBackendApiDataSource())
+        }
+
+    val graphQlInterceptor: GraphQlHeadersInterceptor
+        get() {
+            return GraphQlHeadersInterceptor(authenticationToken)
         }
 
     private val authenticationTokenStorage: AuthenticationTokenStorage
