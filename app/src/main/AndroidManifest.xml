@@ -30,6 +30,10 @@
             android:name=".AnalyticsSampleActivity"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".AudienceSampleActivity"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>

@@ -12,7 +12,7 @@ internal class DeviceRepository(private val dataSource: DataSource, private val 
         val response = dataSource.registerDevice()
 
         if (response is Result.Error) {
-            Log.w("DeviceRepository", "Register device Error: ${response.exception.message}")
+            Log.e("DeviceRepository", "Register device Error: ${response.exception.message}")
             retryPolicy.execute()
         } else {
             retryPolicy.cancel()

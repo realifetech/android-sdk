@@ -29,5 +29,6 @@ class MainActivity : AppCompatActivity() {
         generalButton.setOnClickListener { GeneralSampleActivity.start(this) }
         communicateButton.setOnClickListener { CommunicationSampleActivity.start(this) }
         analyticsButton.setOnClickListener { AnalyticsSampleActivity.start(this) }
+        audienceButton.setOnClickListener { AudienceSampleActivity.start(this) }
     }
 }

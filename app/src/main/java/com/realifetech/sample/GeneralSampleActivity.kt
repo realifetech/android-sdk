@@ -43,7 +43,7 @@ class GeneralSampleActivity : AppCompatActivity() {
                 RealifeTech.getGeneral().registerDevice()
             }
 
-            deviceIdentifierTextView.text  = RealifeTech.getGeneral().deviceIdentifier
+            deviceIdentifierTextView.text = withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
 
             progressBar.isVisible = false
             resultTextView.text = when (result) {
