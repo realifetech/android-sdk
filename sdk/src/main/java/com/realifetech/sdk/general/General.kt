@@ -24,6 +24,7 @@ class General private constructor() {
     val configuration = DeviceConfiguration()
 
     var isSdkReady: Boolean = false
+        private set
 
     val deviceIdentifier: String
         get() = AdvertisingIdClient.getAdvertisingIdInfo(configuration.requireContext()).id

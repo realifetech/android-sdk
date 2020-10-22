@@ -31,6 +31,10 @@ class GeneralSampleActivity : AppCompatActivity() {
         registerDeviceButton.setOnClickListener {
             registerDeviceSdk()
         }
+        refreshSdkReadyButton.setOnClickListener {
+            val text = if (RealifeTech.getGeneral().isSdkReady) "Yes" else "NO"
+            sdkReadyTextView.text = text
+        }
     }
 
     private fun registerDeviceSdk() {
