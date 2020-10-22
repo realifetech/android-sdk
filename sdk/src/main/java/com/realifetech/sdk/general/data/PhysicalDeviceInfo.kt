@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.os.Build
 import android.util.DisplayMetrics
+import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.utils.appVersionName
 import com.realifetech.sdk.general.utils.isWifiConnected
 import com.realifetech.sdk.general.utils.isWifiOn

@@ -1,11 +1,12 @@
 package com.realifetech.sdk.general
 
 import android.util.Log
+import androidx.annotation.WorkerThread
 import com.realifetech.sdk.domain.LinearRetryPolicy
 import com.realifetech.sdk.domain.Result
 import com.realifetech.sdk.domain.RetryPolicy
-import com.realifetech.sdk.general.data.PhysicalDeviceInfo
 import com.realifetech.sdk.general.di.GeneralProvider
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.realifetech.sdk.general.domain.DeviceConfiguration
 import com.realifetech.sdk.general.domain.DeviceRegisterResponse
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
@@ -25,8 +26,7 @@ class General private constructor() {
     var isSdkReady: Boolean = false
 
     val deviceIdentifier: String
-//        get() = PhysicalDeviceInfo(configuration.requireContext()).deviceId
-        get() = "EE76F4D8-BC5A-438D-9F06-9F6873F60960"
+        get() = AdvertisingIdClient.getAdvertisingIdInfo(configuration.requireContext()).id
 
     private object Holder {
         val instance = General()

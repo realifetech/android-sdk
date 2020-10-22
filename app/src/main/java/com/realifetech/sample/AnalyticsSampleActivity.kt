@@ -7,7 +7,6 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import com.realifetech.sdk.RealifeTech
 import kotlinx.android.synthetic.main.activity_analytics_sample.*
-import kotlinx.android.synthetic.main.activity_communication_sample.*
 import kotlinx.android.synthetic.main.activity_communication_sample.operationTextView
 import kotlinx.android.synthetic.main.activity_communication_sample.progressBar
 import kotlinx.android.synthetic.main.activity_communication_sample.resultTextView

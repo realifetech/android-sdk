@@ -1,21 +1,21 @@
 package com.realifetech.sdk.core.network
 
-import android.util.Log
-import com.moczul.ok2curl.CurlInterceptor
-import com.realifetech.sdk.core.network.OAuth2AuthenticationInterceptor
 import com.realifetech.sdk.general.General
-import com.realifetech.sdk.general.network.DeviceApiService
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 internal object AuthorizationApiNetwork {
 
-    private val httpClient = OkHttpClient.Builder()
-        .addInterceptor(CurlInterceptor { message ->
-            Log.d("SdkCurl", message)
-        })
-        .build()
+    private val httpClient: OkHttpClient
+        get() {
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            return OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build()
+        }
 
     fun get(): AuthorizationApiService {
         val retrofit = Retrofit.Builder()

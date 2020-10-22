@@ -1,23 +1,25 @@
 package com.realifetech.sdk.core.network.graphQl
 
-import android.util.Log
 import com.apollographql.apollo.ApolloClient
-import com.moczul.ok2curl.CurlInterceptor
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.core.di.CoreProvider
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 
 internal object GraphQlModule {
     val apolloClient: ApolloClient
-        get() = ApolloClient.builder()
-            .serverUrl(RealifeTech.getGeneral().configuration.graphApiUrl)
-            .okHttpClient(
-                OkHttpClient.Builder()
-                    .addInterceptor(CurlInterceptor { message ->
-                        Log.d("SdkCurl", message)
-                    })
-                    .addInterceptor(CoreProvider.graphQlInterceptor)
-                    .build()
-            )
-            .build()
+        get() {
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+            return ApolloClient.builder()
+                .serverUrl(RealifeTech.getGeneral().configuration.graphApiUrl)
+                .okHttpClient(
+                    OkHttpClient.Builder()
+                        .addInterceptor(CoreProvider.graphQlInterceptor)
+                        .addInterceptor(loggingInterceptor)
+                        .build()
+                )
+                .build()
+        }
 }
