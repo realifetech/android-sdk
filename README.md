@@ -1,5 +1,58 @@
 # android-sdk
 
+# Get started
+
+In order to use the SDK you will have to add it to your project. Currently, the SDK is located in a Maven Repository,
+deployed using Github Package. In order to use the Maven Repository where the SDK resides:
+
+1. In your project, **root** `build.gradle` file, in the section for `repositories` add the RealifeTech SDK repo as
+   following:
+
+```groovy
+allprojects {
+    repositories {
+        //  .....
+
+        maven {
+            name = "RealifeTech SDK Artifactory"
+            url = uri("https://maven.pkg.github.com/realifetech/android-sdk")
+
+            credentials {
+                Properties properties = new Properties()
+                properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+                username = properties.getProperty("gpr.user") ?: System.getenv("GITHUB_USER")
+                password = properties.getProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+```
+
+Observe that to access this repository you need to provide your user name and to generate an access token. Generated
+token should have the following required permission: `read:packages`. How to generate a token in Github can be
+found https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token
+
+When you have the username and the token, you can provide them using different approaches:
+
+- Save it in your `local.properties` file, which is not saved in the repository, this way avoiding committing sensitive
+  information. Recommended way. In your `local.properties` add 2 lines with the correct information, as following:
+  ```groovy
+    gpr.user=john-doe
+    grp.key=my_github_token
+  ```
+- Create 2 environment variables, GITHUB_USER & GITHUB_TOKEN respectively, and provide the information there.
+- Hardcode the values in the `build.gradle` file. Not recommended due to sensitiveness.
+
+2. When the repository information was added, you can proceed by adding the dependency for the SDK to your project. For
+   example, in your **app** `build.gradle` file, under dependencies section, add the following:
+   ```groovy
+        dependencies {
+            implementation 'com.realifetech:sdk:1.0'
+        }
+    ```
+3. Now sync your project, and proceed with coding.
+
 # Setup SDK
 
 The SDK is composed of 2 phases: setup & functionality.
