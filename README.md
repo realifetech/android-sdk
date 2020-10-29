@@ -1,4 +1,4 @@
-# android-sdk
+# RealifeTech SDK
 
 # Get started
 
@@ -35,21 +35,23 @@ found https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-g
 
 When you have the username and the token, you can provide them using different approaches:
 
-- Save it in your `local.properties` file, which is not saved in the repository, this way avoiding committing sensitive
-  information. Recommended way. In your `local.properties` add 2 lines with the correct information, as following:
+- Recommended way. Save it in your `local.properties` file, which is not saved in the repository, this way avoiding
+  committing sensitive information. In your `local.properties` add 2 lines with the correct information, as following:
+
   ```groovy
-    gpr.user=john-doe
-    grp.key=my_github_token
+    gpr.user = john - doe
+    grp.key = my_github_token
   ```
+
 - Create 2 environment variables, GITHUB_USER & GITHUB_TOKEN respectively, and provide the information there.
 - Hardcode the values in the `build.gradle` file. Not recommended due to sensitiveness.
 
 2. When the repository information was added, you can proceed by adding the dependency for the SDK to your project. For
    example, in your **app** `build.gradle` file, under dependencies section, add the following:
    ```groovy
-        dependencies {
-            implementation 'com.realifetech:sdk:1.0'
-        }
+   dependencies {
+        implementation 'com.realifetech:sdk:1.0'
+   }
     ```
 3. Now sync your project, and proceed with coding.
 
