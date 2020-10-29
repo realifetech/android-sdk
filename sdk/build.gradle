@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "com.apollographql.apollo"
+apply plugin: "maven-publish"
 
 android {
     compileSdkVersion 30
@@ -12,7 +13,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "1.0-rc1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -38,6 +39,54 @@ android {
 apollo {
     // instruct the compiler to generate Kotlin models
     generateKotlinModels.set(true)
+}
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/realifetech/android-sdk")
+            credentials {
+                Properties properties = new Properties()
+                properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+                username = properties.getProperty("gpr.user") ?: System.getenv("GITHUB_USER")
+                password = properties.getProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+        maven {
+            name = "CustomMavenRepo"
+            url = "file://${buildDir}/repo"
+        }
+    }
+
+    publications {
+        mySdk(MavenPublication) {
+            groupId "com.realifetech"
+            artifactId "sdk"
+            version "1.0-rc4"
+            artifact("$buildDir/outputs/aar/sdk-release.aar")
+            artifact(sourceJar)
+
+
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+
+                //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                configurations.api.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                }
+            }
+        }
+    }
 }
 
 dependencies {
