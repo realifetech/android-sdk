@@ -39,8 +39,8 @@ When you have the username and the token, you can provide them using different a
   committing sensitive information. In your `local.properties` add 2 lines with the correct information, as following:
 
   ```groovy
-    gpr.user = john - doe
-    grp.key = my_github_token
+    gpr.user=john-doe
+    grp.key=my_github_token
   ```
 
 - Create 2 environment variables, GITHUB_USER & GITHUB_TOKEN respectively, and provide the information there.
