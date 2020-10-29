@@ -19,6 +19,19 @@ allprojects {
     repositories {
         google()
         jcenter()
+
+        maven {
+            name = "RealifeTech SDK Artifactory"
+            url = uri("https://maven.pkg.github.com/realifetech/android-sdk")
+
+            credentials {
+                Properties properties = new Properties()
+                properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+                username = properties.getProperty("gpr.user") ?: System.getenv("GITHUB_USER")
+                password = properties.getProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
 }
 
