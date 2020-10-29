@@ -8,10 +8,12 @@ import com.realifetech.sdk.analytics.domain.AnalyticsEvent
 import com.realifetech.sdk.domain.LinearRetryPolicy
 import com.realifetech.sdk.domain.Result
 import com.realifetech.sdk.domain.RetryPolicy
+import com.realifetech.sdk.general.General
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class Analytics private constructor() {
@@ -39,21 +41,29 @@ class Analytics private constructor() {
         old: Map<String, Any>?,
         completion: ((error: Exception?) -> Unit)?
     ) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val event = AnalyticsEvent(type, action, new, old)
-            val result = engine.logEvent(event)
 
-            val error = if (result is Result.Error) {
-                storage.save(event)
-                retryPolicy.execute()
-                result.exception
+        GlobalScope.launch(Dispatchers.IO) {
+            val event = AnalyticsEvent(type, action, new, old, Calendar.getInstance().timeInMillis)
+
+            val errorResponse = if (General.instance.isSdkReady) {
+                val result = engine.logEvent(event)
+
+                val error = if (result is Result.Error) {
+                    storage.save(event)
+                    retryPolicy.execute()
+                    result.exception
+                } else {
+                    retryPolicy.cancel()
+                    null
+                }
+                error
             } else {
-                retryPolicy.cancel()
-                null
+                storage.save(event)
+                RuntimeException("The SDK is not ready yet")
             }
 
             withContext(Dispatchers.Main) {
-                completion?.invoke(error)
+                completion?.invoke(errorResponse)
             }
         }
     }
