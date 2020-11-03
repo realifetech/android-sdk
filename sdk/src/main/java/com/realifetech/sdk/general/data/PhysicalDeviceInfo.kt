@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.os.Build
 import android.util.DisplayMetrics
+import com.realifetech.realifetech_sdk.BuildConfig
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.utils.appVersionName
 import com.realifetech.sdk.general.utils.isWifiConnected
@@ -22,7 +23,7 @@ open class PhysicalDeviceInfo(private val context: Context) : DeviceInfo {
         get() = context.packageName
 
     override val appVersionName: String
-        get() = context.appVersionName
+        get() = "SDK_${BuildConfig.VERSION_NAME}"
 
     override val osVersion: String
         get() = Build.VERSION.RELEASE
