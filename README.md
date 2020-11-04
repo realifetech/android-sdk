@@ -98,7 +98,7 @@ Realifetech.getGeneral().isSdkReady
 Use the following function to register the device for push notifications.
 
 ```kotlin
-Realifetech.getCommunicate().registerForPushNotifications(notifications_token)
+Realifetech.getCommunicate().registerForPushNotifications(token: String)
 ```
 
 In order to register for push notifications, a `token` is required. The token will be sent from Firebase using their
@@ -153,7 +153,5 @@ If the logging fails (for instance due to connectivity issues) we will retry unt
 To determine if the device is a member of an audience, you would use the following function, passing the `audienceId`:
 
 ```kotlin
-RealifeTech.getAudience().deviceIsMemberOfAudience(audience_id) { error, doesBelong ->
-    // To be executed on completion
-}
+deviceIsMemberOfAudience(externalAudienceId: String, callback: (error: Error?, result: Boolean) -> Unit)
 ```
