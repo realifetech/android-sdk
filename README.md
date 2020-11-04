@@ -153,5 +153,5 @@ If the logging fails (for instance due to connectivity issues) we will retry unt
 To determine if the device is a member of an audience, you would use the following function, passing the `audienceId`:
 
 ```kotlin
-deviceIsMemberOfAudience(externalAudienceId: String, callback: (error: Error?, result: Boolean) -> Unit)
+RealifeTech.getAudience().deviceIsMemberOfAudience(externalAudienceId: String, callback: (error: Error?, result: Boolean) -> Unit)
 ```
