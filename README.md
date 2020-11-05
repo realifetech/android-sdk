@@ -1,6 +1,14 @@
 # RealifeTech SDK
 
-# Get started
+# Getting started
+
+## 1. Ensure the following requirements are met
+* Android Studio 4.0+
+* Deployment Target of Android 30.0
+* Min Supported SDK: 23
+* Kotlin
+
+## 2. Install the RealifeTechSDK dependency
 
 In order to use the SDK you will have to add it to your project. Currently, the SDK is located in a Maven Repository,
 deployed using Github Package. In order to use the Maven Repository where the SDK resides:
@@ -57,9 +65,7 @@ When you have the username and the token, you can provide them using different a
 
 # Setup SDK
 
-The SDK is composed of 2 phases: setup & functionality.
-
-## Setup
+The SDK is composed of 2 phases: Configuration & Functionality.
 
 ### Configuration
 
