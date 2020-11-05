@@ -30,7 +30,7 @@ allprojects {
 ```
 
 Observe that to access this repository you need to provide your user name and to generate an access token. Generated
-token should have the following required permission: `read:packages`. How to generate a token in Github can be
+token should have the following required permissions: `write:packages` & `read:packages`. How to generate a token in Github can be
 found https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token
 
 When you have the username and the token, you can provide them using different approaches:
