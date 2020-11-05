@@ -13,7 +13,7 @@ internal class AuthenticationBackendApiDataSource : AuthenticationToken.ApiDataS
         return if (responseBody != null) {
             val timeNowMilliseconds = Calendar.getInstance().timeInMillis
             val expireTimeInMilliseconds =
-                timeNowMilliseconds + TimeUnit.MINUTES.toMillis(responseBody.expiresIn.toLong())
+                timeNowMilliseconds + TimeUnit.SECONDS.toMillis(responseBody.expiresIn.toLong())
             AuthenticationToken.AccessTokenInfo(responseBody.accessToken, expireTimeInMilliseconds)
         } else {
             null
