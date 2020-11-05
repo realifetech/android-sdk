@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.realifetech.sample.data.DeviceConfigurationStorage
+import com.realifetech.sample.utils.hideKeyboard
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.domain.Result
 import kotlinx.android.synthetic.main.activity_communication_sample.*
@@ -29,6 +30,7 @@ class CommunicationSampleActivity : AppCompatActivity() {
         }
 
         registerPushNotifications.setOnClickListener {
+            hideKeyboard()
             registerPushNotifications()
         }
     }
