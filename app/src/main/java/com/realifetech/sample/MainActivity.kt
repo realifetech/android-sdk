@@ -13,6 +13,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        appVersionTextView.text = BuildConfig.VERSION_NAME
+
         apiUrlEditTextView.setText(RealifeTech.getGeneral().configuration.apiUrl)
         graphQlUrlEditTextView.setText(RealifeTech.getGeneral().configuration.graphApiUrl)
 
