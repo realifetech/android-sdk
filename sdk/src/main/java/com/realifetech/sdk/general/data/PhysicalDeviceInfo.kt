@@ -6,7 +6,6 @@ import android.os.Build
 import android.util.DisplayMetrics
 import com.realifetech.realifetech_sdk.BuildConfig
 import com.realifetech.sdk.general.General
-import com.realifetech.sdk.general.utils.appVersionName
 import com.realifetech.sdk.general.utils.isWifiConnected
 import com.realifetech.sdk.general.utils.isWifiOn
 
@@ -20,7 +19,7 @@ open class PhysicalDeviceInfo(private val context: Context) : DeviceInfo {
     }
 
     override val deviceId: String
-        get() = context.packageName
+        get() = General.instance.deviceIdentifier
 
     override val appVersionName: String
         get() = "SDK_${BuildConfig.VERSION_NAME}"
