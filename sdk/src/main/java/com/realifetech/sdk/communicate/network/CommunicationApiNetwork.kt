@@ -15,6 +15,7 @@ internal object CommunicationApiNetwork {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             return OkHttpClient.Builder()
                 .addInterceptor(CoreProvider.oAuthInterceptor)
+                .addInterceptor(CoreProvider.deviceIdInterceptor)
                 .addInterceptor(loggingInterceptor)
                 .build()
         }
