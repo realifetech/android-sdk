@@ -2,7 +2,7 @@ package com.realifetech.sdk.audiences
 
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
-import com.realifetech.BelongsToAudienceByExternalIdQuery
+import com.realifetech.BelongsToAudienceWithExternalIdQuery
 import com.realifetech.sdk.core.network.graphQl.GraphQlModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,12 +18,13 @@ class Audiences private constructor() {
             var belongsToAudienceResponse = false
 
             try {
-                val responseServer = apolloClient.query(BelongsToAudienceByExternalIdQuery(externalAudienceId)).await()
-                belongsToAudienceResponse = responseServer.data?.me?.device?.belongsToAudienceByExternalId ?: false
+                val responseServer =
+                    apolloClient.query(BelongsToAudienceWithExternalIdQuery(externalAudienceId)).await()
+                belongsToAudienceResponse = responseServer.data?.me?.device?.belongsToAudienceWithExternalId ?: false
                 val firstServerError = responseServer.errors?.firstOrNull()
                 errorToReturn = if (firstServerError != null) Error(firstServerError.message) else null
             } catch (exception: ApolloHttpException) {
-                val errorMessage =  "HTTP error with code = ${exception.code()} & message = ${exception.message()}"
+                val errorMessage = "HTTP error with code = ${exception.code()} & message = ${exception.message()}"
                 errorToReturn = Error(errorMessage)
             }
 

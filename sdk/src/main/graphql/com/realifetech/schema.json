@@ -788,7 +788,7 @@
               "deprecationReason": null
             },
             {
-              "name": "belongsToAudienceByExternalId",
+              "name": "belongsToAudienceWithExternalId",
               "description": null,
               "args": [
                 {
@@ -3928,9 +3928,9 @@
   "extensions": {
     "tracing": {
       "version": 1,
-      "startTime": "2020-10-27T23:08:29.950Z",
-      "endTime": "2020-10-27T23:08:30.105Z",
-      "duration": 155210943,
+      "startTime": "2020-11-09T10:43:22.567Z",
+      "endTime": "2020-11-09T10:43:22.588Z",
+      "duration": 20757483,
       "execution": {
         "resolvers": []
       }
