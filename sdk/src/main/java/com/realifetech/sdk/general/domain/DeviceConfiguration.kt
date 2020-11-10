@@ -6,7 +6,7 @@ class DeviceConfiguration {
     var context: Context? = null
     var appCode: String = ""
     var clientSecret: String = ""
-    var apiUrl = "https://api.livestyled.com/"
+    var apiUrl = "https://api.livestyled.com/v3"
     var graphApiUrl = "https://api.realifetech.com/graphql"
 
     fun requireContext(): Context {
