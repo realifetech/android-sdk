@@ -13,7 +13,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0-rc9"
+        versionName "1.0-rc11"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -86,10 +86,6 @@ project.afterEvaluate {
                     username = properties.getProperty("gpr.user") ?: System.getenv("GITHUB_USER")
                     password = properties.getProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
                 }
-            }
-            maven {
-                name = "CustomMavenRepo"
-                url = "file://${buildDir}/repo"
             }
         }
 
