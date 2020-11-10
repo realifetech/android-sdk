@@ -26,6 +26,12 @@ class DeviceConfigurationStorage(private val context: Context) {
             preferences.edit { putString("ClientSecret", value) }
         }
 
+    var clientId: String
+        get() = preferences.getString("ClientId", "").orEmpty()
+        set(value) {
+            preferences.edit { putString("ClientId", value) }
+        }
+
     var pushNotificationsToken: String
         get() = preferences.getString("PushToken", "").orEmpty()
         set(value) {

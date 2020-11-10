@@ -22,13 +22,15 @@ internal class AuthenticationToken(
     }
 
     private fun requestAccessTokenServer() {
-        val accessTokenInfo = apiSource.getAccessToken(General.instance.configuration.clientSecret) ?: return
+        val configuration = General.instance.configuration
+        val accessTokenInfo =
+            apiSource.getAccessToken(configuration.clientSecret, configuration.appCode + "_0") ?: return
         storage.accessToken = accessTokenInfo.token
         storage.expireAtMilliseconds = accessTokenInfo.expireAtMilliseconds
     }
 
     interface ApiDataSource {
-        fun getAccessToken(clientSecret: String): AccessTokenInfo?
+        fun getAccessToken(clientSecret: String, clientId: String): AccessTokenInfo?
     }
 
     data class AccessTokenInfo(val token: String, val expireAtMilliseconds: Long)

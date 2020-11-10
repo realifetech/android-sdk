@@ -4,6 +4,7 @@ import android.content.Context
 
 class DeviceConfiguration {
     var context: Context? = null
+    var appCode: String = ""
     var clientSecret: String = ""
     var apiUrl = "https://api.livestyled.com/"
     var graphApiUrl = "https://api.realifetech.com/graphql"

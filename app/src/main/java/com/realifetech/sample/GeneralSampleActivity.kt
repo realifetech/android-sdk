@@ -22,10 +22,16 @@ class GeneralSampleActivity : AppCompatActivity() {
 
         val storage = DeviceConfigurationStorage(this)
         clientSecretEditText.setText(storage.clientSecret)
+        clientIdEditText.setText(storage.clientId)
 
         clientSecretEditText.doOnTextChanged { text, _, _, _ ->
             storage.clientSecret = text.toString()
             RealifeTech.getGeneral().configuration.clientSecret = text.toString()
+        }
+
+        clientIdEditText.doOnTextChanged { text, _, _, _ ->
+            storage.clientId = text.toString()
+            RealifeTech.getGeneral().configuration.appCode = text.toString()
         }
 
         registerDeviceButton.setOnClickListener {
