@@ -21,6 +21,7 @@ class SampleApplication : Application() {
             apiUrl = storage.apiUrl
             graphApiUrl = storage.graphQl
             clientSecret = storage.clientSecret
+            appCode = storage.clientId
         }
     }
 }
