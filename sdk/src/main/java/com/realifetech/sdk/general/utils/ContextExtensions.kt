@@ -26,3 +26,9 @@ val Context.isWifiConnected: Boolean
             applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return connectivityManager.activeNetworkInfo?.isConnectedOrConnecting == true
     }
+
+val Context.hasNetworkConnection: Boolean
+    get() {
+        val manager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return manager.activeNetworkInfo?.isConnected == true
+    }
