@@ -58,7 +58,7 @@ class General private constructor() {
     }
 
     companion object {
-        private val DEVICE_REGISTRATION_RETRY_TIME_MILLISECONDS = TimeUnit.SECONDS.toMillis(15)
+        private val DEVICE_REGISTRATION_RETRY_TIME_MILLISECONDS = TimeUnit.SECONDS.toMillis(10)
 
         val instance: General by lazy { Holder.instance }
     }
