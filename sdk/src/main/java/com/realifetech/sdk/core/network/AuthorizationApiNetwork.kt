@@ -20,7 +20,7 @@ internal object AuthorizationApiNetwork {
     fun get(): AuthorizationApiService {
         val retrofit = Retrofit.Builder()
             .client(httpClient)
-            .baseUrl(General.instance.configuration.apiUrl)
+            .baseUrl(General.instance.configuration.finalApiUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
