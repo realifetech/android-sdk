@@ -13,4 +13,16 @@ class DeviceConfiguration {
         return this.context
             ?: throw RuntimeException("The context was not set. Use the Configuration module to set the Context")
     }
+
+    /**
+     * Use this property as [apiUrl], as this will ensure you have a valid base url when using Retrofit library
+     */
+    internal val finalApiUrl: String
+        get() {
+            return if (apiUrl.endsWith("/")) {
+                apiUrl
+            } else {
+                "$apiUrl/"
+            }
+        }
 }

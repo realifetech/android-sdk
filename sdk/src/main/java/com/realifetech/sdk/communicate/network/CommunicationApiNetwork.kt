@@ -23,7 +23,7 @@ internal object CommunicationApiNetwork {
     fun get(): CommunicationApiService {
         val retrofit = Retrofit.Builder()
             .client(httpClient)
-            .baseUrl(General.instance.configuration.apiUrl)
+            .baseUrl(General.instance.configuration.finalApiUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

@@ -21,13 +21,9 @@ internal object DeviceApiNetwork {
         }
 
     fun get(): DeviceApiService {
-        var baseUrl = General.instance.configuration.apiUrl
-        if (!baseUrl.endsWith("/")) {
-            baseUrl += "/"
-        }
         val retrofit = Retrofit.Builder()
             .client(httpClient)
-            .baseUrl(baseUrl)
+            .baseUrl(General.instance.configuration.finalApiUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
