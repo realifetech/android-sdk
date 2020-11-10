@@ -3,6 +3,7 @@
 # Getting started
 
 ## 1. Ensure the following requirements are met
+
 * Android Studio 4.0+
 * Deployment Target of Android 30.0
 * Min Supported SDK: 23
@@ -37,9 +38,12 @@ allprojects {
 }
 ```
 
-Observe that to access this repository you need to provide your user name and to generate an access token. Generated
-token should have the following required permissions: `write:packages` & `read:packages`. How to generate a token in Github can be
-found https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token
+To access the repository it requires authentification:
+
+- username, your Github user name.
+- password, a generated Personal Access Token for Github. Generated token should have the following required
+  permissions: `write:packages` & `read:packages`. How to generate a token in Github can be
+  found https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token
 
 When you have the username and the token, you can provide them using different approaches:
 
@@ -73,13 +77,17 @@ Use the following function(s) to configure the SDK for use. You will be provided
 onboarding.
 
 ```kotlin
- Realifetech.getGeneral().configuration.apply {
+ RealifeTech.getGeneral().configuration.apply {
     context = app_context
     apiUrl = "https://my-server-url.com"
     graphApiUrl = "https://my-server-url.com/graphql"
     clientSecret = "my_client_secret"
+    appCode = "my_client_id"
 }
 ```
+
+In the code snippet above, there are 5 properties which needs to be configured. `context`, `clientSecret` and `appCode`
+are required, as they don't provide a default value. Whereas `graphApiUrl` & `apiUrl` do have default values.
 
 Note: _The above setup is recommended to be done at the start of the app, in the `Application` class._
 
@@ -159,5 +167,6 @@ If the logging fails (for instance due to connectivity issues) we will retry unt
 To determine if the device is a member of an audience, you would use the following function, passing the `audienceId`:
 
 ```kotlin
-RealifeTech.getAudience().deviceIsMemberOfAudience(externalAudienceId: String, callback: (error: Error?, result: Boolean) -> Unit)
+RealifeTech.getAudience()
+    .deviceIsMemberOfAudience(externalAudienceId: String, callback:(error: Error?, result: Boolean) -> Unit)
 ```
