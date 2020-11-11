@@ -1,9 +1,16 @@
 package com.realifetech.sdk.general.domain
 
 import android.content.Context
+import com.realifetech.sdk.communicate.Communicate
 
 class DeviceConfiguration {
     var context: Context? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                Communicate.instance.resendPendingToken()
+            }
+        }
     var appCode: String = ""
     var clientSecret: String = ""
     var apiUrl = "https://api.livestyled.com/v3"
