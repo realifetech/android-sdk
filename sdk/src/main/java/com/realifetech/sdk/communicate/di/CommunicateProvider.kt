@@ -4,8 +4,6 @@ import com.realifetech.sdk.communicate.data.PushNotificationsTokenPreferenceStor
 import com.realifetech.sdk.communicate.data.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.network.CommunicationApiNetwork
 import com.realifetech.sdk.communicate.network.CommunicationApiService
-import com.realifetech.sdk.core.data.AuthenticationTokenPreferenceStorage
-import com.realifetech.sdk.core.data.AuthenticationTokenStorage
 
 object CommunicateProvider {
     internal fun provideApiService(): CommunicationApiService {
