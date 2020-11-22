@@ -1,12 +1,12 @@
-package com.realifetech.sdk.core.network.graphQl
+package com.realifetech.core_sdk.network.graphQl
 
 import android.util.Log
-import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.core.domain.AuthenticationToken
+import com.realifetech.core_sdk.domain.AuthenticationToken
+import com.realifetech.core_sdk.domain.CoreConfiguration
 import okhttp3.Interceptor
 import okhttp3.Response
 
-internal class GraphQlHeadersInterceptor(private val accessToken: AuthenticationToken) : Interceptor {
+class GraphQlHeadersInterceptor(private val accessToken: AuthenticationToken) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
 
         accessToken.ensureActive()
@@ -14,7 +14,7 @@ internal class GraphQlHeadersInterceptor(private val accessToken: Authentication
         Log.d("GraphQlInterceptor", "Sending request with auth token: $token")
 
         val request = chain.request().newBuilder()
-            .addHeader("X-LS-DeviceId", RealifeTech.getGeneral().deviceIdentifier)
+            .addHeader("X-LS-DeviceId", CoreConfiguration.deviceId)
             .addHeader("Authorization", "Bearer $token")
             .build()
 

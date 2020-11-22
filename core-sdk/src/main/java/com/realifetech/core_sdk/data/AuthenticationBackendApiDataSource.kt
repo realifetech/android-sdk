@@ -1,8 +1,8 @@
-package com.realifetech.sdk.core.data
+package com.realifetech.core_sdk.data
 
-import com.realifetech.sdk.core.domain.AuthenticationToken
-import com.realifetech.sdk.core.network.AccessTokenBody
-import com.realifetech.sdk.core.network.AuthorizationApiNetwork
+import com.realifetech.core_sdk.domain.AuthenticationToken
+import com.realifetech.core_sdk.network.AccessTokenBody
+import com.realifetech.core_sdk.network.AuthorizationApiNetwork
 import java.util.*
 import java.util.concurrent.TimeUnit
 
