@@ -1,6 +1,6 @@
 package com.realifetech.sdk.general.network
 
-import com.realifetech.sdk.core.di.CoreProvider
+import com.realifetech.core_sdk.di.CoreProvider
 import com.realifetech.sdk.general.General
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

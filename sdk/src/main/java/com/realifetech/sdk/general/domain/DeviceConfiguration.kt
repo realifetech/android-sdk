@@ -1,6 +1,7 @@
 package com.realifetech.sdk.general.domain
 
 import android.content.Context
+import com.realifetech.core_sdk.domain.CoreConfiguration
 import com.realifetech.sdk.communicate.Communicate
 import kotlin.concurrent.thread
 
@@ -9,15 +10,32 @@ class DeviceConfiguration {
         set(value) {
             field = value
             if (value != null) {
+                CoreConfiguration.context = value
                 thread {
                     Communicate.instance.resendPendingToken()
                 }
             }
         }
     var appCode: String = ""
+        set(value) {
+            field = value
+            CoreConfiguration.appCode = value
+        }
     var clientSecret: String = ""
+        set(value) {
+            field = value
+            CoreConfiguration.clientSecret = value
+        }
     var apiUrl = "https://api.livestyled.com/v3"
+        set(value) {
+            field = value
+            CoreConfiguration.apiUrl = value
+        }
     var graphApiUrl = "https://graphql-eu.realifetech.com/"
+        set(value) {
+            field = value
+            CoreConfiguration.graphApiUrl = value
+        }
 
     fun requireContext(): Context {
         return this.context

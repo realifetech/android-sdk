@@ -1,6 +1,7 @@
 package com.realifetech.sdk.communicate.network
 
-import com.realifetech.sdk.core.di.CoreProvider
+import com.realifetech.core_sdk.di.CoreProvider
+import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.general.General
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,7 +16,7 @@ internal object CommunicationApiNetwork {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             return OkHttpClient.Builder()
                 .addInterceptor(CoreProvider.oAuthInterceptor)
-                .addInterceptor(CoreProvider.deviceIdInterceptor)
+                .addInterceptor(CoreProvider.getDeviceIdInterceptor(RealifeTech.getGeneral().deviceIdentifier))
                 .addInterceptor(loggingInterceptor)
                 .build()
         }

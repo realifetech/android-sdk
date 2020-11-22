@@ -1,6 +1,0 @@
-mutation PutAnalyticEvent($input: AnalyticEvent!) {
-  putAnalyticEvent(input: $input) {
-    success
-    message
-  }
-}

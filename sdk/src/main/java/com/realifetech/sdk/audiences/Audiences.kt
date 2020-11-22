@@ -3,7 +3,8 @@ package com.realifetech.sdk.audiences
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.realifetech.BelongsToAudienceWithExternalIdQuery
-import com.realifetech.sdk.core.network.graphQl.GraphQlModule
+import com.realifetech.core_sdk.network.graphQl.GraphQlModule
+import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.utils.hasNetworkConnection
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,7 @@ class Audiences private constructor() {
         }
 
         GlobalScope.launch(Dispatchers.IO) {
-            val apolloClient = GraphQlModule.apolloClient
+            val apolloClient = GraphQlModule.getApolloClient(RealifeTech.getGeneral().configuration.graphApiUrl)
             var errorToReturn: Error?
             var belongsToAudienceResponse = false
 
