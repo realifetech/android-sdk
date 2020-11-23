@@ -1,4 +1,4 @@
-package com.realifetech.sdk.core.network
+package com.realifetech.core_sdk.network
 
 import retrofit2.Call
 import retrofit2.http.Body

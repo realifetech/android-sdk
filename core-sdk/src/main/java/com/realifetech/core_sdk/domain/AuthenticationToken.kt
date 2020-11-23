@@ -1,9 +1,8 @@
-package com.realifetech.sdk.core.domain
+package com.realifetech.core_sdk.domain
 
-import com.realifetech.sdk.core.data.AuthenticationTokenStorage
-import com.realifetech.sdk.general.General
+import com.realifetech.core_sdk.data.AuthenticationTokenStorage
 
-internal class AuthenticationToken(
+class AuthenticationToken(
     private val storage: AuthenticationTokenStorage,
     private val apiSource: ApiDataSource
 ) {
@@ -22,9 +21,8 @@ internal class AuthenticationToken(
     }
 
     private fun requestAccessTokenServer() {
-        val configuration = General.instance.configuration
         val accessTokenInfo =
-            apiSource.getAccessToken(configuration.clientSecret, configuration.appCode + "_0") ?: return
+            apiSource.getAccessToken(CoreConfiguration.clientSecret, CoreConfiguration.appCode + "_0") ?: return
         storage.accessToken = accessTokenInfo.token
         storage.expireAtMilliseconds = accessTokenInfo.expireAtMilliseconds
     }

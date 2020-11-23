@@ -1,4 +1,4 @@
-package com.realifetech.sdk.core.data
+package com.realifetech.core_sdk.data
 
 import java.util.*
 

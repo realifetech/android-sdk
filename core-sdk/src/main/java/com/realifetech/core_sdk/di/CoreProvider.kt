@@ -1,21 +1,20 @@
-package com.realifetech.sdk.core.di
+package com.realifetech.core_sdk.di
 
-import com.realifetech.sdk.core.data.AuthenticationBackendApiDataSource
-import com.realifetech.sdk.core.data.AuthenticationTokenStorage
-import com.realifetech.sdk.core.data.AuthenticationTokenPreferenceStorage
-import com.realifetech.sdk.core.domain.AuthenticationToken
-import com.realifetech.sdk.core.network.DeviceIdInterceptor
-import com.realifetech.sdk.core.network.OAuth2AuthenticationInterceptor
-import com.realifetech.sdk.core.network.graphQl.GraphQlHeadersInterceptor
+import com.realifetech.core_sdk.data.AuthenticationBackendApiDataSource
+import com.realifetech.core_sdk.data.AuthenticationTokenStorage
+import com.realifetech.core_sdk.data.AuthenticationTokenPreferenceStorage
+import com.realifetech.core_sdk.domain.AuthenticationToken
+import com.realifetech.core_sdk.network.DeviceIdInterceptor
+import com.realifetech.core_sdk.network.OAuth2AuthenticationInterceptor
+import com.realifetech.core_sdk.network.graphQl.GraphQlHeadersInterceptor
 
-internal object CoreProvider {
+object CoreProvider {
     val oAuthInterceptor: OAuth2AuthenticationInterceptor
         get() {
             return OAuth2AuthenticationInterceptor(authenticationToken)
         }
 
-    val deviceIdInterceptor: DeviceIdInterceptor
-        get() = DeviceIdInterceptor()
+    fun getDeviceIdInterceptor(deviceId: String): DeviceIdInterceptor = DeviceIdInterceptor(deviceId)
 
     val authenticationToken: AuthenticationToken
         get() {

@@ -1,4 +1,4 @@
-package com.realifetech.sdk.core.network
+package com.realifetech.core_sdk.network
 
 import com.google.gson.annotations.SerializedName
 

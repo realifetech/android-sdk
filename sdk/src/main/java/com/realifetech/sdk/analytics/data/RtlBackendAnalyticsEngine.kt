@@ -3,14 +3,11 @@ package com.realifetech.sdk.analytics.data
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
-import com.apollographql.apollo.coroutines.toDeferred
 import com.google.gson.Gson
 import com.realifetech.PutAnalyticEventMutation
 import com.realifetech.sdk.analytics.domain.AnalyticsEvent
 import com.realifetech.sdk.domain.Result
 import com.realifetech.type.AnalyticEvent
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
