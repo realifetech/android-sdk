@@ -1,8 +1,6 @@
 package com.realifetech.core_sdk.feature.widgets.domain
 
-import com.realifetech.GetWidgetsByScreenTypeQuery
-import com.realifetech.type.StyleSize
-import com.realifetech.type.StyleType
+import com.realifetech.fragment.FragmentWidget
 import com.realifetech.type.WidgetFetchType
 import com.realifetech.type.WidgetType
 
@@ -13,7 +11,7 @@ import com.realifetech.type.WidgetType
  */
 data class Widget(
     val id: String,
-    val style: GetWidgetsByScreenTypeQuery.Style?,
+    val style: FragmentWidget.Style?,
     val viewAllUrl: String,
 
     /**
@@ -33,16 +31,14 @@ data class Widget(
      */
     val contentIds: List<String>,
 
-    val params: List<GetWidgetsByScreenTypeQuery.Param>,
+    val params: List<FragmentWidget.Param>,
     /**
      * Note: When sending back to APIV3, they need to be in the same format as they are now.
      */
-    val engagementParam: List<GetWidgetsByScreenTypeQuery.EngagementParam>,
+    val engagementParam: List<FragmentWidget.EngagementParam>,
 
     /**
      * Contains translation for a title, if the widget has a title
      */
-    val titleTranslations: List<GetWidgetsByScreenTypeQuery.Translation>
+    val titleTranslations: List<FragmentWidget.Translation>
 )
-
-data class WidgetStyle(val type: StyleType?, val size: StyleSize?, val isPadded: Boolean)

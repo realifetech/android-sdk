@@ -6,9 +6,13 @@ import com.realifetech.type.ScreenType
 
 class WidgetsRepository(private val dataSource: DataSource) {
 
-    suspend fun getWidgetsForScreen(screenType: ScreenType) = dataSource.getWidgetsForScreen(screenType)
+    suspend fun getWidgetsByScreenType(screenType: ScreenType) = dataSource.getWidgetsByScreenType(screenType)
+
+    suspend fun getWidgetsByScreenId(id: String) = dataSource.getWidgetsByScreenId(id)
 
     interface DataSource {
-        suspend fun getWidgetsForScreen(screenType: ScreenType): Result<List<Widget>>
+        suspend fun getWidgetsByScreenType(screenType: ScreenType): Result<List<Widget>>
+
+        suspend fun getWidgetsByScreenId(id: String): Result<List<Widget>>
     }
 }
