@@ -9,7 +9,6 @@ import com.realifetech.core_sdk.domain.Result
 import com.realifetech.core_sdk.feature.widgets.di.WidgetsModuleProvider
 import com.realifetech.sample.R
 import com.realifetech.sample.data.DeviceConfigurationStorage
-import com.realifetech.sample.utils.hideKeyboard
 import com.realifetech.type.ScreenType
 import kotlinx.android.synthetic.main.activity_widgets_sample.*
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +46,7 @@ class WidgetsSampleActivity : AppCompatActivity() {
             val storage = DeviceConfigurationStorage(this)
             GlobalScope.launch(Dispatchers.IO) {
                 val widgetsRepo = WidgetsModuleProvider.provideWidgetsRepository(storage.graphQl)
-                val widgetsResult = widgetsRepo.getWidgetsForScreen(selectedType!!)
+                val widgetsResult = widgetsRepo.getWidgetsByScreenType(selectedType!!)
                 when (widgetsResult) {
                     is Result.Success -> {
 
