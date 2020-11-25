@@ -36,6 +36,10 @@
             android:name=".AudienceSampleActivity"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".widgets.WidgetsSampleActivity"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>
