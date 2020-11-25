@@ -138,4 +138,14 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
         app:layout_constraintStart_toEndOf="@+id/textView6" />
+
+    <Button
+        android:id="@+id/widgetsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="16dp"
+        android:text="Widgets"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/audienceButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

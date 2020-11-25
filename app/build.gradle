@@ -48,4 +48,5 @@ dependencies {
 
 //    implementation 'com.realifetech:sdk:1.0-rc11'
     implementation project(path: ':sdk')
+    implementation project(path: ':core-sdk')
 }
