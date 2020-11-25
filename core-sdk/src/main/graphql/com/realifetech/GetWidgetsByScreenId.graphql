@@ -1,0 +1,5 @@
+query GetWidgetsByScreenId($screenId: ID!) {
+    getWidgetsByScreenId(screenId: $screenId, pageSize: 10, page: 1) {
+        ... FragmentWidget
+    }
+}

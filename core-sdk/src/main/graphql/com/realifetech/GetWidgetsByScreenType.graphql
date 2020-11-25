@@ -1,32 +1,5 @@
 query GetWidgetsByScreenType($screenType: ScreenType!) {
     getWidgetsByScreenType(type: $screenType, pageSize: 10, page: 1) {
-        edges {
-            id
-            style {
-                type
-                size
-                padded
-            }
-            viewAllUrl
-            widgetType
-            variation {
-                fetchType
-                contentIds
-                params {
-                    key
-                    value
-                }
-                engagementParams {
-                    key
-                    value
-                }
-                translations {
-                    language
-                    title
-
-                }
-            }
-        }
-        nextPage
+        ... FragmentWidget
     }
 }
