@@ -1,6 +1,7 @@
 package com.realifetech.core_sdk.feature.widgets.domain
 
 import com.realifetech.fragment.FragmentWidget
+import com.realifetech.type.Language
 import com.realifetech.type.WidgetFetchType
 import com.realifetech.type.WidgetType
 
@@ -41,4 +42,8 @@ data class Widget(
      * Contains translation for a title, if the widget has a title
      */
     val titleTranslations: List<FragmentWidget.Translation>
-)
+) {
+    fun getTitle(targetLanguage: Language): String? {
+        return titleTranslations.firstOrNull { it.language == targetLanguage }?.title
+    }
+}
