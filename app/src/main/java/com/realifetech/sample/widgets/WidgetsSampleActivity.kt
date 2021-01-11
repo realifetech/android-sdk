@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.realifetech.core_sdk.domain.Result
+import com.realifetech.core_sdk.feature.widgets.WidgetsRepository
 import com.realifetech.core_sdk.feature.widgets.di.WidgetsModuleProvider
 import com.realifetech.sample.R
 import com.realifetech.sample.data.DeviceConfigurationStorage
@@ -41,49 +42,67 @@ class WidgetsSampleActivity : AppCompatActivity() {
             }
         }
 
-        queryWidgets.setOnClickListener {
-            if (selectedType == null) {
-                Toast.makeText(this, "Please select a type", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
+        val storage = DeviceConfigurationStorage(this)
+
+        GlobalScope.launch(Dispatchers.Main) {
+
+            val widgetsRepo = WidgetsModuleProvider.provideWidgetsRepository(
+                storage.graphQl,
+                withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
+            )
+
+            queryWidgets.setOnClickListener {
+                if (screenTypeSelected()) {
+                    queryWidgets(widgetsRepo)
+                }
+
             }
-
-            val storage = DeviceConfigurationStorage(this)
-
-            GlobalScope.launch(Dispatchers.Main) {
-
-                val widgetsRepo = WidgetsModuleProvider.provideWidgetsRepository(
-                    storage.graphQl,
-                    withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
-                )
-                widgetsRepo.getWidgetsByScreenTypeFlowable(selectedType!!)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread()).flatMapIterable {
-                        when (it) {
-                            is Result.Success -> {
-                                it.data
-                            }
-                            is Result.Error -> {
-                                throw  it.exception
-                            }
-                        }
-                    }.subscribeBy(
-                        {
-                            Toast.makeText(
-                                this@WidgetsSampleActivity,
-                                "Error loading: ${it.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }, {
-                            Log.d("Completion", "Completed")
-
-                        }, {
-                            Toast.makeText(
-                                this@WidgetsSampleActivity,
-                                "Widget loading: $it",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }).disposedBy(compositeDisposable)
+            queryScreenTitle.setOnClickListener {
+                if (screenTypeSelected()) {
+                    queryScreenTitle(widgetsRepo)
+                }
             }
+        }
+
+    }
+
+    private fun screenTypeSelected(): Boolean {
+        if (selectedType == null) {
+            Toast.makeText(this, "Please select a type", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
+    }
+
+    private fun queryWidgets(widgetsRepo: WidgetsRepository) {
+        widgetsRepo.getWidgetsByScreenTypeFlowable(selectedType!!)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).flatMapIterable {
+                when (it) {
+                    is Result.Success -> {
+                        it.data
+                    }
+                    is Result.Error -> {
+                        throw  it.exception
+                    }
+                }
+            }.subscribeBy(
+                {
+                    Toast.makeText(
+                        this@WidgetsSampleActivity,
+                        "Error loading: ${it.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }, {
+                    Log.d("Completion", "Completed")
+
+                }, {
+                    Toast.makeText(
+                        this@WidgetsSampleActivity,
+                        "Widget loading: $it",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }).disposedBy(compositeDisposable)
 
 // In case we have coroutines instead of RxJava, you can do the following
 
@@ -109,7 +128,35 @@ class WidgetsSampleActivity : AppCompatActivity() {
 //                    }
 //                }
 //            }
-        }
+    }
+
+    private fun queryScreenTitle(widgetsRepo: WidgetsRepository) {
+        widgetsRepo.getScreenByScreenTypeSingle(selectedType!!)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).map {
+                when (it) {
+                    is Result.Success -> {
+                        it.data
+                    }
+                    is Result.Error -> {
+                        throw  it.exception
+                    }
+                }
+            }.subscribeBy(
+                {
+                    Toast.makeText(
+                        this@WidgetsSampleActivity,
+                        "Error loading: ${it.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }, {
+                    Log.d("Completion", "Completed")
+                    Toast.makeText(
+                        this@WidgetsSampleActivity,
+                        "Screen Title translations loading: $it",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }).disposedBy(compositeDisposable)
     }
 
     override fun onDestroy() {
