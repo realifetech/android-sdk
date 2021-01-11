@@ -4,8 +4,9 @@ import com.realifetech.core_sdk.domain.Result
 import com.realifetech.core_sdk.feature.widgets.domain.Widget
 import com.realifetech.type.ScreenType
 import io.reactivex.Flowable
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.rx2.rxFlowable
+import kotlinx.coroutines.rx2.rxSingle
+
 
 class WidgetsRepository(private val dataSource: DataSource) {
 
@@ -13,7 +14,11 @@ class WidgetsRepository(private val dataSource: DataSource) {
         return rxFlowable { dataSource.getWidgetsByScreenId(id) }
     }
 
-    suspend fun getWidgetsByScreenType(screenType: ScreenType) = dataSource.getWidgetsByScreenType(screenType)
+    fun getWidgetsByScreenTypeFlowable(screenType: ScreenType): Flowable<Result<List<Widget>>> =
+        rxSingle { dataSource.getWidgetsByScreenType(screenType) }.toFlowable()
+
+    suspend fun getWidgetsByScreenType(screenType: ScreenType) =
+        dataSource.getWidgetsByScreenType(screenType)
 
     suspend fun getWidgetsByScreenId(id: String) = dataSource.getWidgetsByScreenId(id)
 
