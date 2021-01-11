@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.realifetech.core_sdk.domain.Result
+import com.realifetech.core_sdk.feature.screen.ScreenRepository
+import com.realifetech.core_sdk.feature.screen.di.ScreenModuleProvider
 import com.realifetech.core_sdk.feature.widgets.WidgetsRepository
 import com.realifetech.core_sdk.feature.widgets.di.WidgetsModuleProvider
 import com.realifetech.sample.R
@@ -50,6 +52,9 @@ class WidgetsSampleActivity : AppCompatActivity() {
                 storage.graphQl,
                 withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
             )
+            val screenRepo = ScreenModuleProvider.provideScreenRepository(
+                storage.graphQl,
+                withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier })
 
             queryWidgets.setOnClickListener {
                 if (screenTypeSelected()) {
@@ -59,7 +64,7 @@ class WidgetsSampleActivity : AppCompatActivity() {
             }
             queryScreenTitle.setOnClickListener {
                 if (screenTypeSelected()) {
-                    queryScreenTitle(widgetsRepo)
+                    queryScreenTitle(screenRepo)
                 }
             }
         }
@@ -130,8 +135,8 @@ class WidgetsSampleActivity : AppCompatActivity() {
 //            }
     }
 
-    private fun queryScreenTitle(widgetsRepo: WidgetsRepository) {
-        widgetsRepo.getScreenByScreenTypeSingle(selectedType!!)
+    private fun queryScreenTitle(screenRepo: ScreenRepository) {
+        screenRepo.getScreenByScreenTypeSingle(selectedType!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).map {
                 when (it) {
