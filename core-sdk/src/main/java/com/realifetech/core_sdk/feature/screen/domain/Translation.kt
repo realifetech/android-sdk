@@ -1,4 +1,4 @@
-package com.realifetech.core_sdk.feature.widgets.domain
+package com.realifetech.core_sdk.feature.screen.domain
 
 import com.realifetech.GetScreenByIdQuery
 import com.realifetech.GetScreenByScreenTypeQuery
