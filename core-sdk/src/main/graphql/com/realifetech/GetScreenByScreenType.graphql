@@ -1,0 +1,5 @@
+query getScreenByScreenType($type: ScreenType!) {
+    getScreenByScreenType(type: $type) {
+        translations { __typename language title }
+    }
+}

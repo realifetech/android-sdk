@@ -1,0 +1,5 @@
+query getScreenById($id: ID!) {
+    getScreenById(id: $id) {
+        translations { __typename language title }
+    }
+}
