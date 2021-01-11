@@ -4116,6 +4116,12 @@
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "LIST",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null
@@ -4207,6 +4213,12 @@
             },
             {
               "name": "Ticket",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "TicketProduct",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -4448,7 +4460,7 @@
         },
         {
           "kind": "OBJECT",
-            "name": "OrderEdge",
+          "name": "OrderEdge",
           "description": null,
           "fields": [
             {
@@ -8830,9 +8842,9 @@
   "extensions": {
     "tracing": {
       "version": 1,
-      "startTime": "2020-11-24T23:13:16.309Z",
-      "endTime": "2020-11-24T23:13:16.331Z",
-      "duration": 22543164,
+      "startTime": "2021-01-07T11:23:06.586Z",
+      "endTime": "2021-01-07T11:23:06.630Z",
+      "duration": 43493166,
       "execution": {
         "resolvers": []
       }
