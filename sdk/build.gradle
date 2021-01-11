@@ -13,7 +13,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0-rc20"
+        versionName "1.0-rc21"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -67,7 +67,7 @@ dependencies {
     implementation("com.apollographql.apollo:apollo-runtime:2.4.1")
     implementation("com.apollographql.apollo:apollo-coroutines-support:2.4.1")
 
-    implementation "com.realifetech:core-sdk:1.0-rc8"
+    implementation "com.realifetech:core-sdk:1.0-rc9"
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
