@@ -9,21 +9,43 @@ import kotlinx.coroutines.rx2.rxSingle
 
 class WidgetsRepository(private val dataSource: DataSource) {
 
-    fun getWidgetsByScreenIdFlowable(id: String): Flowable<Result<List<Widget>>> {
-        return rxSingle { dataSource.getWidgetsByScreenId(id) }.toFlowable()
+    fun getWidgetsByScreenIdFlowable(
+        id: String,
+        pageSize: Int,
+        page: Int
+    ): Flowable<Result<List<Widget>>> {
+        return rxSingle { dataSource.getWidgetsByScreenId(id, pageSize, page) }.toFlowable()
     }
 
-    fun getWidgetsByScreenTypeFlowable(screenType: ScreenType): Flowable<Result<List<Widget>>> =
-        rxSingle { dataSource.getWidgetsByScreenType(screenType) }.toFlowable()
+    fun getWidgetsByScreenTypeFlowable(
+        screenType: ScreenType,
+        pageSize: Int,
+        page: Int
+    ): Flowable<Result<List<Widget>>> =
+        rxSingle { dataSource.getWidgetsByScreenType(screenType, pageSize, page) }.toFlowable()
 
-    suspend fun getWidgetsByScreenType(screenType: ScreenType) =
-        dataSource.getWidgetsByScreenType(screenType)
+    suspend fun getWidgetsByScreenType(
+        screenType: ScreenType,
+        pageSize: Int,
+        page: Int
+    ) =
+        dataSource.getWidgetsByScreenType(screenType, pageSize, page)
 
-    suspend fun getWidgetsByScreenId(id: String) = dataSource.getWidgetsByScreenId(id)
+    suspend fun getWidgetsByScreenId(id: String, pageSize: Int, page: Int) =
+        dataSource.getWidgetsByScreenId(id, pageSize, page)
 
     interface DataSource {
-        suspend fun getWidgetsByScreenType(screenType: ScreenType): Result<List<Widget>>
+        suspend fun getWidgetsByScreenId(
+            id: String,
+            pageSize: Int,
+            page: Int
+        ): Result<List<Widget>>
 
-        suspend fun getWidgetsByScreenId(id: String): Result<List<Widget>>
+        suspend fun getWidgetsByScreenType(
+            screenType: ScreenType,
+            pageSize: Int,
+            page: Int
+        ): Result<List<Widget>>
+
     }
 }

@@ -45,12 +45,12 @@ class WidgetsSampleActivity : AppCompatActivity() {
         }
 
         val storage = DeviceConfigurationStorage(this)
-
         GlobalScope.launch(Dispatchers.Main) {
 
             val widgetsRepo = WidgetsModuleProvider.provideWidgetsRepository(
-                storage.graphQl,
-                withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
+                baseUrl = storage.graphQl,
+                context =this@WidgetsSampleActivity,
+                deviceId = withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
             )
             val screenRepo = ScreenModuleProvider.provideScreenRepository(
                 storage.graphQl,
@@ -80,7 +80,7 @@ class WidgetsSampleActivity : AppCompatActivity() {
     }
 
     private fun queryWidgets(widgetsRepo: WidgetsRepository) {
-        widgetsRepo.getWidgetsByScreenTypeFlowable(selectedType!!)
+        widgetsRepo.getWidgetsByScreenTypeFlowable(selectedType!!, 10, 1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).flatMapIterable {
                 when (it) {

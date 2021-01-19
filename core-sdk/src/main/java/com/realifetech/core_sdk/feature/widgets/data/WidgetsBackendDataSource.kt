@@ -15,9 +15,9 @@ import com.realifetech.type.ScreenType
 class WidgetsBackendDataSource(private val apolloClient: ApolloClient) :
     WidgetsRepository.DataSource {
 
-    override suspend fun getWidgetsByScreenType(screenType: ScreenType): Result<List<Widget>> {
+    override suspend fun getWidgetsByScreenType(screenType: ScreenType,pageSize:Int,page:Int): Result<List<Widget>> {
         return try {
-            val response = apolloClient.query(GetWidgetsByScreenTypeQuery(screenType)).await()
+            val response = apolloClient.query(GetWidgetsByScreenTypeQuery(screenType,pageSize,page)).await()
             response.data?.getWidgetsByScreenType?.fragments?.fragmentWidget.extractResponse(
                 response.errors
             )
@@ -26,9 +26,11 @@ class WidgetsBackendDataSource(private val apolloClient: ApolloClient) :
         }
     }
 
-    override suspend fun getWidgetsByScreenId(id: String): Result<List<Widget>> {
+    override suspend fun getWidgetsByScreenId(id: String,
+                                              pageSize: Int,
+                                              page: Int): Result<List<Widget>> {
         return try {
-            val response = apolloClient.query(GetWidgetsByScreenIdQuery(id)).await()
+            val response = apolloClient.query(GetWidgetsByScreenIdQuery(id,pageSize,page)).await()
             response.data?.getWidgetsByScreenId?.fragments?.fragmentWidget.extractResponse(response.errors)
         } catch (exception: ApolloHttpException) {
             Result.Error(exception)

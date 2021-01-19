@@ -4242,7 +4242,7 @@
               "deprecationReason": null
             },
             {
-              "name": "EventSelector",
+              "name": "SelectedEvent",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -4319,6 +4319,12 @@
             },
             {
               "name": "lineup",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "social",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -8842,9 +8848,9 @@
   "extensions": {
     "tracing": {
       "version": 1,
-      "startTime": "2021-01-07T11:23:06.586Z",
-      "endTime": "2021-01-07T11:23:06.630Z",
-      "duration": 43493166,
+      "startTime": "2021-01-18T15:31:17.171Z",
+      "endTime": "2021-01-18T15:31:17.190Z",
+      "duration": 19246149,
       "execution": {
         "resolvers": []
       }
