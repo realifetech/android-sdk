@@ -1,5 +1,5 @@
-query GetWidgetsByScreenType($screenType: ScreenType!) {
-    getWidgetsByScreenType(type: $screenType, pageSize: 10, page: 1) {
+query GetWidgetsByScreenType($screenType: ScreenType!,$pageSize: Int!, $page: Int!) {
+    getWidgetsByScreenType(type: $screenType, pageSize: $pageSize, page: $page) {
         ... FragmentWidget
     }
 }
