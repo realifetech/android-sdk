@@ -13,7 +13,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0-rc21"
+        versionName "1.0-rc25"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -48,7 +48,7 @@ task sourceJar(type: Jar) {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(path: ':core-sdk')
+//    implementation project(path: ':core-sdk')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -68,7 +68,7 @@ dependencies {
     implementation("com.apollographql.apollo:apollo-runtime:2.4.1")
     implementation("com.apollographql.apollo:apollo-coroutines-support:2.4.1")
 
-   // implementation "com.realifetech:core-sdk:1.0-rc9"
+    implementation "com.realifetech:core-sdk:1.0-rc12"
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
