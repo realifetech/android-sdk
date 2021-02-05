@@ -1,7 +1,7 @@
 package com.realifetech.core_sdk.feature.widgets
 
 import com.realifetech.core_sdk.domain.Result
-import com.realifetech.core_sdk.feature.widgets.domain.Widget
+import com.realifetech.core_sdk.feature.widgets.domain.WidgetEdge
 import com.realifetech.type.ScreenType
 import io.reactivex.Flowable
 import kotlinx.coroutines.rx2.rxSingle
@@ -13,7 +13,7 @@ class WidgetsRepository(private val dataSource: DataSource) {
         id: String,
         pageSize: Int,
         page: Int
-    ): Flowable<Result<List<Widget>>> {
+    ): Flowable<Result<WidgetEdge>> {
         return rxSingle { dataSource.getWidgetsByScreenId(id, pageSize, page) }.toFlowable()
     }
 
@@ -21,7 +21,7 @@ class WidgetsRepository(private val dataSource: DataSource) {
         screenType: ScreenType,
         pageSize: Int,
         page: Int
-    ): Flowable<Result<List<Widget>>> =
+    ): Flowable<Result<WidgetEdge>> =
         rxSingle { dataSource.getWidgetsByScreenType(screenType, pageSize, page) }.toFlowable()
 
     suspend fun getWidgetsByScreenType(
@@ -39,13 +39,13 @@ class WidgetsRepository(private val dataSource: DataSource) {
             id: String,
             pageSize: Int,
             page: Int
-        ): Result<List<Widget>>
+        ): Result<WidgetEdge>
 
         suspend fun getWidgetsByScreenType(
             screenType: ScreenType,
             pageSize: Int,
             page: Int
-        ): Result<List<Widget>>
+        ): Result<WidgetEdge>
 
     }
 }

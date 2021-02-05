@@ -9,15 +9,21 @@ import com.realifetech.GetWidgetsByScreenTypeQuery
 import com.realifetech.core_sdk.domain.Result
 import com.realifetech.core_sdk.feature.widgets.WidgetsRepository
 import com.realifetech.core_sdk.feature.widgets.domain.Widget
+import com.realifetech.core_sdk.feature.widgets.domain.WidgetEdge
 import com.realifetech.fragment.FragmentWidget
 import com.realifetech.type.ScreenType
 
 class WidgetsBackendDataSource(private val apolloClient: ApolloClient) :
     WidgetsRepository.DataSource {
 
-    override suspend fun getWidgetsByScreenType(screenType: ScreenType,pageSize:Int,page:Int): Result<List<Widget>> {
+    override suspend fun getWidgetsByScreenType(
+        screenType: ScreenType,
+        pageSize: Int,
+        page: Int
+    ): Result<WidgetEdge> {
         return try {
-            val response = apolloClient.query(GetWidgetsByScreenTypeQuery(screenType,pageSize,page)).await()
+            val response =
+                apolloClient.query(GetWidgetsByScreenTypeQuery(screenType, pageSize, page)).await()
             response.data?.getWidgetsByScreenType?.fragments?.fragmentWidget.extractResponse(
                 response.errors
             )
@@ -26,21 +32,24 @@ class WidgetsBackendDataSource(private val apolloClient: ApolloClient) :
         }
     }
 
-    override suspend fun getWidgetsByScreenId(id: String,
-                                              pageSize: Int,
-                                              page: Int): Result<List<Widget>> {
+    override suspend fun getWidgetsByScreenId(
+        id: String,
+        pageSize: Int,
+        page: Int
+    ): Result<WidgetEdge> {
         return try {
-            val response = apolloClient.query(GetWidgetsByScreenIdQuery(id,pageSize,page)).await()
+            val response = apolloClient.query(GetWidgetsByScreenIdQuery(id, pageSize, page)).await()
             response.data?.getWidgetsByScreenId?.fragments?.fragmentWidget.extractResponse(response.errors)
         } catch (exception: ApolloHttpException) {
             Result.Error(exception)
         }
     }
 
-    private fun FragmentWidget?.extractResponse(errors: List<Error>?): Result<List<Widget>> {
+    private fun FragmentWidget?.extractResponse(errors: List<Error>?): Result<WidgetEdge> {
         val extractedWidgets = this?.edges?.filterNotNull()
+        val nextPage = this?.nextPage
         return if (extractedWidgets != null) {
-            Result.Success(extractedWidgets.toWidgets())
+            Result.Success(WidgetEdge(extractedWidgets.toWidgets(), nextPage))
         } else {
             val errorMessage = errors?.firstOrNull()?.message ?: "Unknown error"
             Result.Error(RuntimeException(errorMessage))

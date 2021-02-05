@@ -11,6 +11,7 @@ import com.realifetech.core_sdk.feature.screen.ScreenRepository
 import com.realifetech.core_sdk.feature.screen.di.ScreenModuleProvider
 import com.realifetech.core_sdk.feature.widgets.WidgetsRepository
 import com.realifetech.core_sdk.feature.widgets.di.WidgetsModuleProvider
+import com.realifetech.core_sdk.feature.widgets.domain.WidgetEdge
 import com.realifetech.sample.R
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.utils.disposedBy
@@ -21,7 +22,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_widgets_sample.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WidgetsSampleActivity : AppCompatActivity() {
 
@@ -49,12 +53,14 @@ class WidgetsSampleActivity : AppCompatActivity() {
 
             val widgetsRepo = WidgetsModuleProvider.provideWidgetsRepository(
                 baseUrl = storage.graphQl,
-                context =this@WidgetsSampleActivity,
+                context = this@WidgetsSampleActivity,
                 deviceId = withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
             )
             val screenRepo = ScreenModuleProvider.provideScreenRepository(
                 storage.graphQl,
-                withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier })
+                withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier },
+                this@WidgetsSampleActivity
+            )
 
             queryWidgets.setOnClickListener {
                 if (screenTypeSelected()) {
@@ -82,7 +88,7 @@ class WidgetsSampleActivity : AppCompatActivity() {
     private fun queryWidgets(widgetsRepo: WidgetsRepository) {
         widgetsRepo.getWidgetsByScreenTypeFlowable(selectedType!!, 10, 1)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).flatMapIterable {
+            .observeOn(AndroidSchedulers.mainThread()).map {
                 when (it) {
                     is Result.Success -> {
                         it.data
@@ -91,7 +97,14 @@ class WidgetsSampleActivity : AppCompatActivity() {
                         throw  it.exception
                     }
                 }
-            }.subscribeBy(
+            }.doOnNext {
+                Toast.makeText(
+                    this@WidgetsSampleActivity,
+                    "Next Page: ${it.nextPage}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }.flatMapIterable(WidgetEdge::items)
+            .subscribeBy(
                 {
                     Toast.makeText(
                         this@WidgetsSampleActivity,
