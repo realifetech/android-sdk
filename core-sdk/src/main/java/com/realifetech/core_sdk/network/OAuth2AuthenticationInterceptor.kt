@@ -4,6 +4,7 @@ import com.realifetech.core_sdk.domain.AuthenticationToken
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
+import kotlin.jvm.Throws
 
 class OAuth2AuthenticationInterceptor(private val accessToken: AuthenticationToken) : Interceptor {
 
