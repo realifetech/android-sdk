@@ -3,6 +3,7 @@ package com.realifetech.core_sdk.network
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
+import kotlin.jvm.Throws
 
 class DeviceIdInterceptor   (private val deviceId: String) : Interceptor {
 

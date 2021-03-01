@@ -1,16 +1,16 @@
 package com.realifetech.sdk.general
 
+import android.content.Context
 import android.util.Log
-import androidx.annotation.WorkerThread
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
+import com.realifetech.core_sdk.domain.CoreConfiguration.context
 import com.realifetech.sdk.domain.LinearRetryPolicy
 import com.realifetech.sdk.domain.Result
 import com.realifetech.sdk.domain.RetryPolicy
 import com.realifetech.sdk.general.di.GeneralProvider
-import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.realifetech.sdk.general.domain.DeviceConfiguration
 import com.realifetech.sdk.general.domain.DeviceRegisterResponse
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
-import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class General private constructor() {
@@ -27,7 +27,7 @@ class General private constructor() {
         private set
 
     val deviceIdentifier: String
-        get() = AdvertisingIdClient.getAdvertisingIdInfo(configuration.requireContext()).id
+        get() = AdvertisingIdClient.getAdvertisingIdInfo(configuration.requireContext()).id + ":" + context.packageName
 
     private object Holder {
         val instance = General()
@@ -43,7 +43,8 @@ class General private constructor() {
         SdkInitializationPrecondition.checkContextInitialized()
 
         return try {
-            val deviceRegistration = GeneralProvider(configuration.requireContext()).provideDeviceRegistration()
+            val deviceRegistration =
+                GeneralProvider(configuration.requireContext()).provideDeviceRegistration()
 
             Log.d("General", "Sending register device request")
             val result = deviceRegistration.registerDevice()
