@@ -3,6 +3,7 @@ package com.realifetech.sdk
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.communicate.Communicate
+import com.realifetech.sdk.content.Content
 import com.realifetech.sdk.general.General
 
 object RealifeTech {
@@ -20,5 +21,9 @@ object RealifeTech {
 
     fun getAudience(): Audiences {
         return Audiences.instance
+    }
+
+    fun getContent(): Content {
+        return Content.instance
     }
 }
