@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">RealifeTech Sdk Sample</string>
+    <string name="general">General</string>
+    <string name="device_configuration">Device Configuration</string>
+    <string name="api_url">API URL</string>
+    <string name="graph_ql">GraphQL URL</string>
+    <string name="communicate">Communicate</string>
+    <string name="analytics">Analytics</string>
+    <string name="audience">Audience</string>
+    <string name="app_version">"App Version: "</string>
+    <string name="dash">-</string>
+    <string name="widgets">Widgets</string>
+    <string name="web_page">Web Page</string>
+    <string name="audio_guides_help">audioGuidesHelp</string>
+    <string name="tandc">tAndC</string>
+    <string name="privacy">privacy</string>
+    <string name="about">about</string>
+    <string name="about_company">aboutCompany</string>
+    <string name="purchaseHelp">purchasesHelp</string>
+    <string name="query_web_page">Query Web Page</string>
+    <string name="result">Result:</string>
+    <string name="error_in_loading">Error in loading: </string>
+    <string name="please_select_type">"Please select a type"</string>
 </resources>
