@@ -1,0 +1,6 @@
+query GetWebPageByType($type: WebPageType!){
+    getWebPageByType(type: $type) {
+        __typename
+        ...WebPage
+    }
+}
