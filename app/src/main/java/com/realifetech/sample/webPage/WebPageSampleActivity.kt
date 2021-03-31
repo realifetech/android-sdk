@@ -28,7 +28,6 @@ class WebPageSampleActivity : AppCompatActivity() {
                 R.id.privacy -> WebPageType.PRIVACY
                 R.id.about -> WebPageType.ABOUT
                 R.id.aboutCompany -> WebPageType.ABOUTCOMPANY
-                R.id.purchasesHelp -> WebPageType.PURCHASESHELP
                 else -> WebPageType.UNKNOWN__
             }
         }

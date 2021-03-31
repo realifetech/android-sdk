@@ -1,0 +1,6 @@
+mutation AddPaymentSourceToMyWallet($input: PaymentSourceInput!) {
+    addPaymentSourceToMyWallet(input: $input) {
+        __typename
+        ...PaymentSource
+    }
+}
