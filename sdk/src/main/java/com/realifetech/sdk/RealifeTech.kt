@@ -4,6 +4,7 @@ import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.content.Content
+import com.realifetech.sdk.feature.payment.Payment
 import com.realifetech.sdk.general.General
 
 object RealifeTech {
@@ -25,5 +26,9 @@ object RealifeTech {
 
     fun getContent(): Content {
         return Content.instance
+    }
+
+    fun getPayment(): Payment {
+        return Payment.instance
     }
 }
