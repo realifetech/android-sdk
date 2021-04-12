@@ -1,6 +1,9 @@
 package com.realifetech.core_sdk.feature.payment
 
 import com.realifetech.core_sdk.domain.Result
+import com.realifetech.core_sdk.feature.payment.data.PaymentIntentWrapper
+import com.realifetech.core_sdk.feature.payment.data.PaymentSourceWrapper
+import com.realifetech.core_sdk.feature.payment.data.toInputObject
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.fragment.PaymentSource
 import com.realifetech.fragment.PaymentSourceEdge
@@ -11,10 +14,11 @@ import kotlinx.coroutines.rx2.rxSingle
 
 class PaymentRepository(private val dataSource: DataSource) {
 
-    suspend fun addPaymentSource(input: PaymentSourceInput) = dataSource.addPaymentSource(input)
+    suspend fun addPaymentSource(input: PaymentSourceWrapper) =
+        dataSource.addPaymentSource(input.toInputObject())
 
-    fun addPaymentSourceSingle(input: PaymentSourceInput): Single<Result<PaymentSource>> {
-        return rxSingle { dataSource.addPaymentSource(input) }
+    fun addPaymentSourceSingle(input: PaymentSourceWrapper): Single<Result<PaymentSource>> {
+        return rxSingle { dataSource.addPaymentSource(input.toInputObject()) }
     }
 
     suspend fun getMyPaymentSources(pageSize: Int, page: Int?) =
@@ -24,21 +28,21 @@ class PaymentRepository(private val dataSource: DataSource) {
         return rxSingle { dataSource.getMyPaymentSources(pageSize, page) }
     }
 
-    suspend fun createPaymentIntent(input: PaymentIntentInput) =
-        dataSource.createPaymentIntent(input)
+    suspend fun createPaymentIntent(input: PaymentIntentWrapper) =
+        dataSource.createPaymentIntent(input.toInputObject())
 
-    fun createPaymentIntentSingle(input: PaymentIntentInput): Single<Result<PaymentIntent>> {
-        return rxSingle { dataSource.createPaymentIntent(input) }
+    fun createPaymentIntentSingle(input: PaymentIntentWrapper): Single<Result<PaymentIntent>> {
+        return rxSingle { dataSource.createPaymentIntent(input.toInputObject()) }
     }
 
-    suspend fun updatePaymentIntent(id: String, input: PaymentIntentInput) =
-        dataSource.updatePaymentIntent(id, input)
+    suspend fun updatePaymentIntent(id: String, input: PaymentIntentWrapper) =
+        dataSource.updatePaymentIntent(id, input.toInputObject())
 
     fun updatePaymentIntentSingle(
         id: String,
-        input: PaymentIntentInput
+        input: PaymentIntentWrapper
     ): Single<Result<PaymentIntent>> {
-        return rxSingle { dataSource.updatePaymentIntent(id, input) }
+        return rxSingle { dataSource.updatePaymentIntent(id, input.toInputObject()) }
     }
 
     interface DataSource {

@@ -1,6 +1,8 @@
 package com.realifetech.sdk.feature.payment
 
 import com.realifetech.core_sdk.domain.Result
+import com.realifetech.core_sdk.feature.payment.data.PaymentIntentWrapper
+import com.realifetech.core_sdk.feature.payment.data.PaymentSourceWrapper
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.fragment.PaymentSource
 import com.realifetech.fragment.PaymentSourceEdge
@@ -10,7 +12,7 @@ import io.reactivex.Single
 
 class Payment private constructor() {
 
-    fun addPaymentSource(input: PaymentSourceInput): Single<Result<PaymentSource>> {
+    fun addPaymentSource(input: PaymentSourceWrapper): Single<Result<PaymentSource>> {
         val paymentRepo = PaymentProvider().providePaymentRepository()
         return paymentRepo.addPaymentSourceSingle(input)
     }
@@ -20,14 +22,14 @@ class Payment private constructor() {
         return paymentRepo.getMyPaymentSourcesSingle(pageSize, page)
     }
 
-    fun createPaymentIntent(input: PaymentIntentInput): Single<Result<PaymentIntent>> {
+    fun createPaymentIntent(input: PaymentIntentWrapper): Single<Result<PaymentIntent>> {
         val paymentRepo = PaymentProvider().providePaymentRepository()
         return paymentRepo.createPaymentIntentSingle(input)
     }
 
     fun updatePaymentIntent(
         id: String,
-        input: PaymentIntentInput
+        input: PaymentIntentWrapper
     ): Single<Result<PaymentIntent>> {
         val paymentRepo = PaymentProvider().providePaymentRepository()
         return paymentRepo.updatePaymentIntentSingle(id, input)
