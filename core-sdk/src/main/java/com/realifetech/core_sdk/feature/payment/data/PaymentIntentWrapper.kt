@@ -7,19 +7,19 @@ import com.realifetech.type.PaymentIntentInput
 data class PaymentIntentWrapper(
     val orderType: OrderType,
     val orderId: String,
-    val paymentSource: PaymentSourceWrapper,
+    val paymentSource: PaymentSourceWrapper? = null,
     val amount: Int,
     val currency: String,
     val savePaymentSource: Boolean,
     val livemode: Boolean,
-    val cancellationReason: String,
-    val receiptEmail: String
+    val cancellationReason: String? = null,
+    val receiptEmail: String? = null
 )
 
 fun PaymentIntentWrapper.toInputObject() = PaymentIntentInput(
     orderType,
     orderId,
-    Input.optional(paymentSource.toInputObject()),
+    Input.optional(paymentSource?.toInputObject()),
     amount,
     currency,
     savePaymentSource,

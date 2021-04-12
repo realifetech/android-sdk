@@ -4,12 +4,12 @@ import com.apollographql.apollo.api.toInput
 import com.realifetech.type.PaymentSourceAddressInput
 
 data class PaymentSourceAddressWrapper(
-    val city: String,
-    val country: String,
-    val line1: String,
-    val line2: String,
-    val postalCode: String,
-    val state: String
+    val city: String? = null,
+    val country: String? = null,
+    val line1: String? = null,
+    val line2: String? = null,
+    val postalCode: String? = null,
+    val state: String? = null
 )
 
 fun PaymentSourceAddressWrapper.toInputObject() = PaymentSourceAddressInput(
