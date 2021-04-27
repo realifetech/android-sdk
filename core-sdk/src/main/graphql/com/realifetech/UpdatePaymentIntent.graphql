@@ -1,5 +1,5 @@
 mutation UpdatePaymentIntent($id: ID!, $input: PaymentIntentInput!) {
-    updatePaymentIntent(id: $id, input: $input) {
+    updateMyPaymentIntent(id: $id, input: $input) {
         __typename
         ...PaymentIntent
     }

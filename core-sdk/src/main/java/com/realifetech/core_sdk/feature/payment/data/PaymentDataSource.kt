@@ -58,7 +58,7 @@ class PaymentDataSource(private val apolloClient: ApolloClient) : PaymentReposit
     ): Result<PaymentIntent> {
         return try {
             val response = apolloClient.mutate(UpdatePaymentIntentMutation(id, input)).await()
-            response.data?.updatePaymentIntent?.fragments?.paymentIntent.extractResponse(response.errors)
+            response.data?.updateMyPaymentIntent?.fragments?.paymentIntent.extractResponse(response.errors)
         } catch (exception: ApolloHttpException) {
             Result.Error(exception)
         }
