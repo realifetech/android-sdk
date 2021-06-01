@@ -1,0 +1,7 @@
+query getFulfilmentPoints($pageSize: Int!, $page: Int = 1, $filters: FulfilmentPointFilter = null) {
+  getFulfilmentPoints(page: $page, pageSize: $pageSize, filters: $filters) {
+    edges {
+      ... FragmentFulfilmentPoint
+  	}
+  }
+}
