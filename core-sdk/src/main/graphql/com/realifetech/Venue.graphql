@@ -1,0 +1,21 @@
+fragment FragmentVenue on Venue {
+  id
+  label
+  name
+  status
+  isDefault
+  description
+  imageUrl
+  mapImageUrl
+  geoLat
+  geoLong
+  geoLatNorthWest
+  geoLongNorthWest
+  geoLatSouthEast
+  geoLongSouthEast
+  city
+  externalId
+  createdAt
+  updatedAt
+  venueIconUrl
+}
