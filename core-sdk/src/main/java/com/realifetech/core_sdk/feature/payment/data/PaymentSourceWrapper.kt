@@ -2,9 +2,7 @@ package com.realifetech.core_sdk.feature.payment.data
 
 import android.os.Parcelable
 import com.apollographql.apollo.api.Input
-import com.realifetech.fragment.PaymentSource
 import com.realifetech.type.PaymentSourceInput
-import com.realifetech.type.PaymentSourceType
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -19,3 +17,12 @@ fun PaymentSourceWrapper.toInputObject() = PaymentSourceInput(
     Input.optional(billingDetailsInput?.toInputObject()),
     Input.optional(card?.toInputObject())
 )
+
+fun List<PaymentSourceWrapper>.toInputList(): List<PaymentSourceInput> = map {
+    PaymentSourceInput(
+        Input.optional(it.id),
+        Input.optional(it.billingDetailsInput?.toInputObject()),
+        Input.optional(it.card?.toInputObject())
+    )
+}
+
