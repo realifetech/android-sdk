@@ -11,10 +11,8 @@ import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 object FulfilmentPointModuleProvider {
     fun provideFulfilmentPointRepository(
         baseUrl: String,
-        context: Context,
-        deviceId: String
+        context: Context
     ): FulfilmentPointRepository {
-        CoreConfiguration.deviceId = deviceId
         val client = GraphQlModule.getApolloClient(baseUrl, context)
         return FulfilmentPointRepository(FulfilmentPointBackendDataSource(client))
     }

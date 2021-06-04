@@ -7,6 +7,7 @@ import com.realifetech.core_sdk.feature.fulfilmentpoint.domain.FulfilmentPointCa
 import com.realifetech.core_sdk.feature.fulfilmentpoint.domain.FulfilmentPointCategoryEdge
 import com.realifetech.type.FulfilmentPointFilter
 import io.reactivex.Flowable
+import kotlinx.coroutines.rx2.rxFlowable
 import kotlinx.coroutines.rx2.rxSingle
 
 
@@ -15,7 +16,7 @@ class FulfilmentPointRepository(private val dataSource: DataSource) {
     fun getFulfilmentPoints(
         pageSize: Int,
         page: Int = 1,
-        filters: Input<FulfilmentPointFilter>
+        filters: Input<FulfilmentPointFilter>?
     ): Flowable<Result<List<FulfilmentPoint>>> {
         return rxSingle {
             dataSource.getFulfilmentPoints(
@@ -26,7 +27,11 @@ class FulfilmentPointRepository(private val dataSource: DataSource) {
         }.toFlowable()
     }
 
-    suspend fun getFulfilmentPointsById(id: String) = dataSource.getFulfilmentPointCategoryById(id)
+    suspend fun getFulfilmentPointsById(id: String) = dataSource.getFulfilmentPointById(id)
+
+    fun getFulfilmentPointsByIdFlowable(id: String) = rxFlowable<FulfilmentPoint> {
+        dataSource.getFulfilmentPointById(id)
+    }
 
     fun getFulfilmentPointCategories(
         pageSize: Int,
@@ -43,11 +48,15 @@ class FulfilmentPointRepository(private val dataSource: DataSource) {
     suspend fun getFulfilmentPointsCategoryById(id: String) =
         dataSource.getFulfilmentPointCategoryById(id)
 
+    fun getFulfilmentPointsCategoryByIdFlowable(id: String) = rxFlowable<FulfilmentPointCategory> {
+        dataSource.getFulfilmentPointCategoryById(id)
+    }
+
     interface DataSource {
         suspend fun getFulfilmentPoints(
             pageSize: Int,
             page: Int = 1,
-            filters: Input<FulfilmentPointFilter>
+            filters: Input<FulfilmentPointFilter>?
         ): Result<List<FulfilmentPoint>>
 
         suspend fun getFulfilmentPointById(

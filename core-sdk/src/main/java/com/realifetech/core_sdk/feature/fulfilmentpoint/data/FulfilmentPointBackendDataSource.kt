@@ -26,14 +26,14 @@ class FulfilmentPointBackendDataSource(private val apolloClient: ApolloClient) :
     override suspend fun getFulfilmentPoints(
         pageSize: Int,
         page: Int,
-        filters: Input<FulfilmentPointFilter>
+        filters: Input<FulfilmentPointFilter>?
     ): Result<List<FulfilmentPoint>> {
         return try {
             val response = apolloClient.query(
                 GetFulfilmentPointsQuery(
                     pageSize = pageSize,
                     page = page.toInput(),
-                    filters = filters
+                    filters = filters ?: FulfilmentPointFilter().toInput()
                 )
             ).await()
             response.data?.getFulfilmentPoints.extractResponse(response.errors)
