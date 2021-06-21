@@ -1,0 +1,63 @@
+fragment FragmentOrder on Order {
+    id
+    orderNumber
+    qrCodeUrl
+    collectionDate
+    status
+    state {
+        workingState
+        status
+        translations {
+            language
+            title
+            description
+        }
+    }
+    paymentStatus
+    grossAmount
+    discountAmount
+    netAmount
+    estimatedAt
+    createdAt
+    updatedAt
+    items {
+        id
+        product {
+            ...FragmentProduct
+        }
+        productVariant {
+            ...ProductVariant
+        }
+        fulfilmentPoint {
+            ...FragmentFulfilmentPoint
+        }
+        productModifierItems {
+            ...FragmentModifierItemSelection
+        }
+        price
+        modifierItemsPrice
+        quantity
+        totalPrice
+        title
+        subtitle
+        imageUrl
+    }
+    orderNotes {
+        id
+        note
+        author
+    }
+    timeslot {
+        ...FragmentTimeslot
+    }
+    fulfilmentPoint {
+        ...FragmentFulfilmentPoint
+    }
+    user {
+        ...FragmentUser
+    }
+    seatInfo {
+        ...FragmentSeatInfo
+    }
+    collectionPreferenceType
+}

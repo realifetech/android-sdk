@@ -1,0 +1,5 @@
+query getMyBasket {
+    getMyBasket {
+        ...FragmentBasket
+    }
+}

@@ -1,0 +1,4 @@
+fragment FragmentSeatInfo on SeatInfo {
+    key
+    value
+}

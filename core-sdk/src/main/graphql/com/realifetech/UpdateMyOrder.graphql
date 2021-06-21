@@ -1,0 +1,5 @@
+mutation updateMyOrder($id: ID!, $input: OrderUpdateInput) {
+    updateMyOrder(id: $id, input: $input) {
+        ...FragmentOrder
+    }
+}

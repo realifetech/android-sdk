@@ -1,0 +1,5 @@
+query getProductById($id: ID!) {
+    getProduct(id: $id) {
+        ...FragmentProduct
+    }
+}

@@ -1,0 +1,6 @@
+mutation deleteMyBasket {
+    deleteMyBasket {
+        success
+        message
+    }
+}

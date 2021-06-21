@@ -1,0 +1,5 @@
+mutation checkoutMyBasket($input: CheckoutInput) {
+    checkoutMyBasket(input: $input) {
+        ...FragmentOrder
+    }
+}

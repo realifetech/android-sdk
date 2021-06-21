@@ -1,6 +1,0 @@
-fragment WebPage on WebPage {
-    __typename
-    id
-    type
-    url
-}

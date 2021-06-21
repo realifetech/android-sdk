@@ -1,0 +1,8 @@
+query getFulfilmentPointCategories($pageSize: Int!, $page: Int = 1) {
+    getFulfilmentPointCategories(pageSize: $pageSize, page: $page) {
+        edges {
+            ...FragmentFulfilmentPointCategory
+        }
+        nextPage
+    }
+}
