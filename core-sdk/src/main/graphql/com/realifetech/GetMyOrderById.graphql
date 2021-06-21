@@ -1,0 +1,5 @@
+query getMyOrderById($id: ID!) {
+    getMyOrder(id: $id) {
+        ...FragmentOrder
+    }
+}

@@ -1,0 +1,4 @@
+fragment FragmentCollectionNotes on CollectionNotes {
+    VIRTUAL_QUEUE_PREORDER
+    VIRTUAL_QUEUE_CHECKIN
+}

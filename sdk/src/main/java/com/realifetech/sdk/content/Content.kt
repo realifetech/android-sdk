@@ -1,7 +1,7 @@
 package com.realifetech.sdk.content
 
 import com.realifetech.core_sdk.domain.Result
-import com.realifetech.fragment.WebPage
+import com.realifetech.fragment.FragmentWebPage
 import com.realifetech.sdk.content.di.ContentProvider
 import com.realifetech.type.WebPageType
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 
 class Content private constructor() {
 
-    fun getWebPage(webPage: WebPageType, callback: (error: Exception?, result: WebPage?) -> Unit) {
+    fun getWebPage(webPage: WebPageType, callback: (error: Exception?, result: FragmentWebPage?) -> Unit) {
         val webPageRepo = ContentProvider().provideWebPageRepository()
         GlobalScope.launch(Dispatchers.IO) {
             val result = webPageRepo.getWebPageByType(webPage)

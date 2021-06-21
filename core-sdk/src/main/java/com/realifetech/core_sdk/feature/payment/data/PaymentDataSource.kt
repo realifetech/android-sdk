@@ -8,12 +8,13 @@ import com.realifetech.AddPaymentSourceToMyWalletMutation
 import com.realifetech.CreatePaymentIntentMutation
 import com.realifetech.GetMyPaymentSourcesQuery
 import com.realifetech.UpdatePaymentIntentMutation
+import com.realifetech.core_sdk.data.payment.model.asModel
+import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.core_sdk.domain.Result
 import com.realifetech.core_sdk.feature.helper.extractResponse
 import com.realifetech.core_sdk.feature.payment.PaymentRepository
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.fragment.PaymentSource
-import com.realifetech.fragment.PaymentSourceEdge
 import com.realifetech.type.PaymentIntentInput
 import com.realifetech.type.PaymentSourceInput
 
@@ -30,12 +31,20 @@ class PaymentDataSource(private val apolloClient: ApolloClient) : PaymentReposit
         }
     }
 
-    override suspend fun getMyPaymentSources(pageSize: Int, page: Int?): Result<PaymentSourceEdge> {
+    override suspend fun getMyPaymentSources(
+        pageSize: Int,
+        page: Int?
+    ): Result<PaginatedObject<com.realifetech.core_sdk.data.payment.model.PaymentSource?>> {
         return try {
             val response =
                 apolloClient.query(GetMyPaymentSourcesQuery(pageSize, Input.fromNullable(page)))
                     .await()
-            response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge.extractResponse(
+            val paymentSources =
+                response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.edges?.map { it?.asModel }
+            val nextPage =
+                response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.nextPage
+            val paymentPaginatedObject = PaginatedObject(paymentSources, nextPage)
+            paymentPaginatedObject.extractResponse(
                 response.errors
             )
         } catch (exception: ApolloHttpException) {

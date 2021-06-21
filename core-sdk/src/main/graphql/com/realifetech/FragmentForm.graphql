@@ -1,0 +1,48 @@
+fragment FragmentForm on Form {
+  id
+  reference
+  imageUrl
+  completionButtonUrl
+  completionButtonTitle
+  showCompletionDate
+  allowUpdate
+  refreshOnSuccess
+  validationIntegration
+  expiresIn
+  translations {
+    language
+    title
+    description
+    submitButtonTitle
+    skipButtonTitle
+    completionButtonTitle
+    completionTitle
+    completionDescription
+  }
+  fields {
+    type
+    key
+    validationRegex
+    required
+    sortId
+    autoFill {
+      type
+      field
+    }
+    translations {
+      title
+      language
+      description
+      completionDescription
+      skipButtonTitle
+      completionTitle
+      completionButtonTitle
+      submitButtonTitle
+    }
+    selectOptions {
+      title
+      value
+      iconUrl
+    }
+  }
+}
