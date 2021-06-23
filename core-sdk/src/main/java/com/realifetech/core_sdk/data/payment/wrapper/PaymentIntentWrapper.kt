@@ -12,12 +12,11 @@ import kotlinx.android.parcel.Parcelize
 data class PaymentIntentWrapper(
     val orderType: OrderType,
     val orderId: String,
-    val paymentSource: PaymentSourceWrapper? = null,
-    val paymentCustomerWrapper: PaymentCustomerWrapper,
+    val paymentSource: PaymentSourceWrapper?,
     val amount: Int,
     val currency: String,
     val savePaymentSource: Boolean,
     val livemode: Boolean,
-    val cancellationReason: CancellationReason? = null,
-    val receiptEmail: String? = null
+    val cancellationReason: CancellationReason?,
+    val receiptEmail: String?
 ) : Parcelable

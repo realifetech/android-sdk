@@ -37,26 +37,24 @@ val CardWrapper.asInput
     get() =
         CardInput(brand, numberToken, expMonthToken, expYearToken, securityCode, last4)
 
-val PaymentCustomerWrapper.asInput
-    get() = PaymentCustomerInput(
-        Input.optional(id),
-        Input.optional(user),
-        Input.optional(externalId),
-        Input.optional(convertPaymentSourceWrapperToInput(paymentSources))
-    )
-
 val PaymentIntentWrapper.asInput
     get() = PaymentIntentInput(
         orderType,
         orderId,
         Input.optional(paymentSource?.asInput),
-        paymentCustomerWrapper.asInput,
         amount,
         currency,
         savePaymentSource,
         livemode,
         Input.optional(cancellationReason),
         Input.optional(receiptEmail)
+    )
+
+val PaymentIntentUpdateWrapper.asInput
+    get() = PaymentIntentUpdateInput(
+        Input.optional(status),
+        Input.optional(paymentSourceWrapper?.asInput),
+        Input.optional(savePaymentSource)
     )
 
 val PaymentSourceAddressWrapper.asInput
@@ -84,10 +82,11 @@ val PaymentSourceWrapper.asInput
         Input.optional(card?.asInput)
     )
 
-fun convertPaymentSourceWrapperToInput(items: List<PaymentSourceWrapper>): List<PaymentSourceInput> = items.map {
-    PaymentSourceInput(
-        Input.optional(it.id),
-        Input.optional(it.billingDetailsInput?.asInput),
-        Input.optional(it.card?.asInput)
-    )
-}
+fun convertPaymentSourceWrapperToInput(items: List<PaymentSourceWrapper>): List<PaymentSourceInput> =
+    items.map {
+        PaymentSourceInput(
+            Input.optional(it.id),
+            Input.optional(it.billingDetailsInput?.asInput),
+            Input.optional(it.card?.asInput)
+        )
+    }
