@@ -7,10 +7,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class PaymentSourceAddressWrapper(
-    val city: String? = null,
-    val country: String? = null,
-    val line1: String? = null,
-    val line2: String? = null,
-    val postalCode: String? = null,
-    val state: String? = null
+    val city: String?,
+    val country: String?,
+    val line1: String?,
+    val line2: String?,
+    val postalCode: String?,
+    val state: String?
 ):Parcelable

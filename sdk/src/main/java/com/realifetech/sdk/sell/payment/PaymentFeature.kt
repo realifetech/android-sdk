@@ -1,5 +1,6 @@
 package com.realifetech.sdk.sell.payment
 
+import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentUpdateWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentSourceWrapper
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
@@ -45,7 +46,7 @@ class PaymentFeature private constructor() {
 
     fun updatePaymentIntent(
         id: String,
-        input: PaymentIntentWrapper,
+        input: PaymentIntentUpdateWrapper,
         callback: (error: Exception?, response: PaymentIntent?) -> Unit
     ) {
         GlobalScope.launch(Dispatchers.IO) {

@@ -7,8 +7,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class PaymentSourceBillingDetailsWrapper(
-    val address: PaymentSourceAddressWrapper? = null,
-    val email: String? = null,
-    val name: String? = null,
-    val phone: String? = null
+    val address: PaymentSourceAddressWrapper?,
+    val email: String?,
+    val name: String?,
+    val phone: String?
 ) : Parcelable

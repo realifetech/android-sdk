@@ -17,6 +17,7 @@ import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.fragment.PaymentSource
 import com.realifetech.type.PaymentIntentInput
+import com.realifetech.type.PaymentIntentUpdateInput
 import com.realifetech.type.PaymentSourceInput
 
 class PaymentDataSource() : PaymentRepository.DataSource {
@@ -68,7 +69,7 @@ class PaymentDataSource() : PaymentRepository.DataSource {
 
     override suspend fun updatePaymentIntent(
         id: String,
-        input: PaymentIntentInput
+        input: PaymentIntentUpdateInput
     ): Result<PaymentIntent> {
         return try {
             val response = apolloClient.mutate(UpdatePaymentIntentMutation(id, input)).await()
