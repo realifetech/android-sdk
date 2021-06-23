@@ -4,7 +4,6 @@ import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.realifetech.BelongsToAudienceWithExternalIdQuery
 import com.realifetech.core_sdk.network.graphQl.GraphQlModule
-import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.utils.hasNetworkConnection
 import kotlinx.coroutines.Dispatchers
@@ -14,25 +13,32 @@ import kotlinx.coroutines.withContext
 
 class Audiences private constructor() {
 
-    fun deviceIsMemberOfAudience(externalAudienceId: String, callback: (error: Error?, result: Boolean) -> Unit) {
+    fun deviceIsMemberOfAudience(
+        externalAudienceId: String,
+        callback: (error: Error?, result: Boolean) -> Unit
+    ) {
         if (!General.instance.configuration.requireContext().hasNetworkConnection) {
             callback(Error("No Internet connection"), false)
             return
         }
 
         GlobalScope.launch(Dispatchers.IO) {
-            val apolloClient = GraphQlModule.getApolloClient(RealifeTech.getGeneral().configuration.graphApiUrl)
+            val apolloClient = GraphQlModule.apolloClient
             var errorToReturn: Error?
             var belongsToAudienceResponse = false
 
             try {
                 val responseServer =
-                    apolloClient.query(BelongsToAudienceWithExternalIdQuery(externalAudienceId)).await()
-                belongsToAudienceResponse = responseServer.data?.me?.device?.belongsToAudienceWithExternalId ?: false
+                    apolloClient.query(BelongsToAudienceWithExternalIdQuery(externalAudienceId))
+                        .await()
+                belongsToAudienceResponse =
+                    responseServer.data?.me?.device?.belongsToAudienceWithExternalId ?: false
                 val firstServerError = responseServer.errors?.firstOrNull()
-                errorToReturn = if (firstServerError != null) Error(firstServerError.message) else null
+                errorToReturn =
+                    if (firstServerError != null) Error(firstServerError.message) else null
             } catch (exception: ApolloHttpException) {
-                val errorMessage = "HTTP error with code = ${exception.code()} & message = ${exception.message()}"
+                val errorMessage =
+                    "HTTP error with code = ${exception.code()} & message = ${exception.message()}"
                 errorToReturn = Error(errorMessage)
             }
 

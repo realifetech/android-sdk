@@ -1,5 +1,6 @@
 package com.realifetech.sdk
 
+import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.communicate.Communicate
@@ -30,6 +31,10 @@ object RealifeTech {
 
     fun getSell(): Sell {
         return Sell.INSTANCE
+    }
+
+    fun clearAllCachedData() {
+        GraphQlModule.apolloClient.clearNormalizedCache()
     }
 
 }

@@ -1,9 +1,9 @@
 package com.realifetech.core_sdk.feature.payment.data
 
-import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.AddPaymentSourceToMyWalletMutation
 import com.realifetech.CreatePaymentIntentMutation
 import com.realifetech.GetMyPaymentSourcesQuery
@@ -13,12 +13,14 @@ import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.core_sdk.domain.Result
 import com.realifetech.core_sdk.feature.helper.extractResponse
 import com.realifetech.core_sdk.feature.payment.PaymentRepository
+import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.fragment.PaymentSource
 import com.realifetech.type.PaymentIntentInput
 import com.realifetech.type.PaymentSourceInput
 
-class PaymentDataSource(private val apolloClient: ApolloClient) : PaymentRepository.DataSource {
+class PaymentDataSource() : PaymentRepository.DataSource {
+    private val apolloClient = GraphQlModule.apolloClient
 
     override suspend fun addPaymentSource(input: PaymentSourceInput): Result<PaymentSource> {
         return try {
@@ -38,6 +40,9 @@ class PaymentDataSource(private val apolloClient: ApolloClient) : PaymentReposit
         return try {
             val response =
                 apolloClient.query(GetMyPaymentSourcesQuery(pageSize, Input.fromNullable(page)))
+                    .toBuilder()
+                    .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY)
+                    .build()
                     .await()
             val paymentSources =
                 response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.edges?.map { it?.asModel }

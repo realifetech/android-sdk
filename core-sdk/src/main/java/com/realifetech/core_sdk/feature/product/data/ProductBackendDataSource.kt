@@ -1,9 +1,9 @@
 package com.realifetech.core_sdk.feature.product.data
 
-import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.GetProductByIdQuery
 import com.realifetech.GetProductsQuery
 import com.realifetech.core_sdk.data.product.Product
@@ -12,10 +12,12 @@ import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.core_sdk.domain.Result
 import com.realifetech.core_sdk.feature.helper.extractResponse
 import com.realifetech.core_sdk.feature.product.ProductRepository
+import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.type.ProductFilter
 
-class ProductBackendDataSource(private val apolloClient: ApolloClient) :
+class ProductBackendDataSource() :
     ProductRepository.DataSource {
+    private val apolloClient = GraphQlModule.apolloClient
 
     override suspend fun getProducts(
         pageSize: Int,
@@ -25,6 +27,9 @@ class ProductBackendDataSource(private val apolloClient: ApolloClient) :
         return try {
             val response =
                 apolloClient.query(GetProductsQuery(pageSize, page.toInput(), filters.toInput()))
+                    .toBuilder()
+                    .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                    .build()
                     .await()
             val products =
                 response.data?.getProducts?.edges?.map { result -> result?.fragments?.fragmentProduct?.asModel }
@@ -40,6 +45,9 @@ class ProductBackendDataSource(private val apolloClient: ApolloClient) :
         return try {
             val response =
                 apolloClient.query(GetProductByIdQuery(id))
+                    .toBuilder()
+                    .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                    .build()
                     .await()
             response.data?.getProduct?.fragments?.fragmentProduct?.asModel
                 .extractResponse(response.errors)
