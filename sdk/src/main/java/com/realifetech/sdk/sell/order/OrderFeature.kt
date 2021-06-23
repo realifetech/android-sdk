@@ -10,7 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class OrderFeature private constructor() {
-    private val orderRepo = OrderProvider().provideOrderRepository(CoreConfiguration.context)
+    private val orderRepo = OrderProvider().provideOrderRepository()
 
     fun getOrders(
         pageSize: Int,

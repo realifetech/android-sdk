@@ -1,10 +1,10 @@
 package com.realifetech.core_sdk.feature.fulfilmentpoint.data
 
-import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.GetFulfilmentPointByIdQuery
 import com.realifetech.GetFulfilmentPointCategoriesQuery
 import com.realifetech.GetFulfilmentPointCategoryByIdQuery
@@ -16,10 +16,13 @@ import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.core_sdk.domain.Result
 import com.realifetech.core_sdk.feature.fulfilmentpoint.FulfilmentPointRepository
 import com.realifetech.core_sdk.feature.helper.extractResponse
+import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.type.FulfilmentPointFilter
 
-class FulfilmentPointBackendDataSource(private val apolloClient: ApolloClient) :
+class FulfilmentPointBackendDataSource() :
     FulfilmentPointRepository.DataSource {
+
+    private val apolloClient = GraphQlModule.apolloClient
 
     override suspend fun getFulfilmentPoints(
         pageSize: Int,
@@ -33,7 +36,11 @@ class FulfilmentPointBackendDataSource(private val apolloClient: ApolloClient) :
                     page = page.toInput(),
                     filters = filters ?: FulfilmentPointFilter().toInput()
                 )
-            ).await()
+            )
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .build()
+                .await()
             val fulfilmentPoints =
                 response.data?.getFulfilmentPoints?.edges?.map { result -> result?.fragments?.fragmentFulfilmentPoint?.asModel }
             val nextPage = response.data?.getFulfilmentPoints?.nextPage
@@ -47,7 +54,11 @@ class FulfilmentPointBackendDataSource(private val apolloClient: ApolloClient) :
     override suspend fun getFulfilmentPointById(id: String): Result<FulfilmentPoint> {
         return try {
             val response =
-                apolloClient.query(GetFulfilmentPointByIdQuery(id)).await()
+                apolloClient.query(GetFulfilmentPointByIdQuery(id))
+                    .toBuilder()
+                    .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                    .build()
+                    .await()
             response.data?.getFulfilmentPoint?.fragments?.fragmentFulfilmentPoint
                 .extractResponse(response.errors) { it.asModel }
         } catch (exception: ApolloHttpException) {
@@ -65,7 +76,11 @@ class FulfilmentPointBackendDataSource(private val apolloClient: ApolloClient) :
                     pageSize = pageSize,
                     page = page.toInput()
                 )
-            ).await()
+            )
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .build()
+                .await()
             val fulfilmentPointCategories =
                 response.data?.getFulfilmentPointCategories?.edges?.map { result -> result?.fragments?.fragmentFulfilmentPointCategory?.asModel }
             val nextPage = response.data?.getFulfilmentPointCategories?.nextPage
@@ -82,7 +97,11 @@ class FulfilmentPointBackendDataSource(private val apolloClient: ApolloClient) :
         return try {
             val response = apolloClient.query(
                 GetFulfilmentPointCategoryByIdQuery(id)
-            ).await()
+            )
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .build()
+                .await()
             response.data?.getFulfilmentPointCategory?.fragments?.fragmentFulfilmentPointCategory
                 .extractResponse(response.errors) {
                     it.asModel

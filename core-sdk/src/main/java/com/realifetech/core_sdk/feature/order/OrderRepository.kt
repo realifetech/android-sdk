@@ -1,20 +1,20 @@
 package com.realifetech.core_sdk.feature.order
 
-import android.content.Context
 import com.realifetech.core_sdk.data.order.database.asEntity
 import com.realifetech.core_sdk.data.order.database.asModel
 import com.realifetech.core_sdk.data.order.model.Order
 import com.realifetech.core_sdk.data.order.wrapper.OrderUpdateWrapper
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.core_sdk.database.order.OrdersSharedPreferencesManager
+import com.realifetech.core_sdk.domain.CoreConfiguration
 import com.realifetech.core_sdk.domain.Result
 import io.reactivex.Single
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.rx2.rxSingle
 
-class OrderRepository(private val dataSource: DataSource, context: Context) {
+class OrderRepository(private val dataSource: DataSource) {
 
-    private val localStorageManager = OrdersSharedPreferencesManager(context)
+    private val localStorageManager = OrdersSharedPreferencesManager(CoreConfiguration.context)
 
     suspend fun getOrders(pageSize: Int, page: Int) = dataSource.getOrders(pageSize, page)
 

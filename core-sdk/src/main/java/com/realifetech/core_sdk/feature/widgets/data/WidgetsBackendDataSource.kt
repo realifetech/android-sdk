@@ -1,20 +1,22 @@
 package com.realifetech.core_sdk.feature.widgets.data
 
-import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.GetWidgetsByScreenIdQuery
 import com.realifetech.GetWidgetsByScreenTypeQuery
 import com.realifetech.core_sdk.domain.Result
 import com.realifetech.core_sdk.feature.widgets.WidgetsRepository
 import com.realifetech.core_sdk.feature.widgets.domain.Widget
 import com.realifetech.core_sdk.feature.widgets.domain.WidgetEdge
+import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.fragment.FragmentWidget
 import com.realifetech.type.ScreenType
 
-class WidgetsBackendDataSource(private val apolloClient: ApolloClient) :
+class WidgetsBackendDataSource() :
     WidgetsRepository.DataSource {
+    private val apolloClient = GraphQlModule.apolloClient
 
     override suspend fun getWidgetsByScreenType(
         screenType: ScreenType,
@@ -23,7 +25,11 @@ class WidgetsBackendDataSource(private val apolloClient: ApolloClient) :
     ): Result<WidgetEdge> {
         return try {
             val response =
-                apolloClient.query(GetWidgetsByScreenTypeQuery(screenType, pageSize, page)).await()
+                apolloClient.query(GetWidgetsByScreenTypeQuery(screenType, pageSize, page))
+                    .toBuilder()
+                    .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                    .build()
+                    .await()
             response.data?.getWidgetsByScreenType?.fragments?.fragmentWidget.extractResponse(
                 response.errors
             )
@@ -38,7 +44,11 @@ class WidgetsBackendDataSource(private val apolloClient: ApolloClient) :
         page: Int
     ): Result<WidgetEdge> {
         return try {
-            val response = apolloClient.query(GetWidgetsByScreenIdQuery(id, pageSize, page)).await()
+            val response = apolloClient.query(GetWidgetsByScreenIdQuery(id, pageSize, page))
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .build()
+                .await()
             response.data?.getWidgetsByScreenId?.fragments?.fragmentWidget.extractResponse(response.errors)
         } catch (exception: ApolloHttpException) {
             Result.Error(exception)

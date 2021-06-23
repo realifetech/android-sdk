@@ -1,9 +1,9 @@
 package com.realifetech.core_sdk.feature.basket.data
 
-import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.*
 import com.realifetech.core_sdk.data.basket.model.Basket
 import com.realifetech.core_sdk.data.basket.model.asModel
@@ -14,16 +14,22 @@ import com.realifetech.core_sdk.data.shared.`object`.asModel
 import com.realifetech.core_sdk.domain.Result
 import com.realifetech.core_sdk.feature.basket.BasketRepository
 import com.realifetech.core_sdk.feature.helper.extractResponse
+import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.fragment.FragmentMutationResponse
 import com.realifetech.type.BasketInput
 import com.realifetech.type.CheckoutInput
 
-class BasketDataSource(private val apolloClient: ApolloClient) :
+class BasketDataSource() :
     BasketRepository.DataSource {
+    private val apolloClient = GraphQlModule.apolloClient
 
     override suspend fun getBasket(): Result<Basket> {
         return try {
-            val response = apolloClient.query(GetMyBasketQuery()).await()
+            val response = apolloClient.query(GetMyBasketQuery())
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY)
+                .build()
+                .await()
             response.data?.getMyBasket?.fragments?.fragmentBasket?.asModel
                 .extractResponse(response.errors)
         } catch (exception: ApolloHttpException) {
