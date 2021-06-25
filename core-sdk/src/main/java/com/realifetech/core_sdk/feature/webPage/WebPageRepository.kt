@@ -1,20 +1,21 @@
 package com.realifetech.core_sdk.feature.webPage
 
-import com.realifetech.core_sdk.domain.Result
 import com.realifetech.fragment.FragmentWebPage
 import com.realifetech.type.WebPageType
-import io.reactivex.Flowable
-import kotlinx.coroutines.rx2.rxSingle
 
 class WebPageRepository(private val dataSource: DataSource) {
 
-    fun getWebPageByTypeFlowable(type: WebPageType): Flowable<Result<FragmentWebPage>> {
-        return rxSingle { dataSource.getWebPageByType(type) }.toFlowable()
+    fun getWebPageByType(
+        type: WebPageType,
+        callback: (error: Exception?, result: FragmentWebPage?) -> Unit
+    ) {
+        dataSource.getWebPageByType(type, callback)
     }
 
-    suspend fun getWebPageByType(type: WebPageType) = dataSource.getWebPageByType(type)
-
     interface DataSource {
-        suspend fun getWebPageByType(type: WebPageType): Result<FragmentWebPage>
+        fun getWebPageByType(
+            type: WebPageType,
+            callback: (error: Exception?, result: FragmentWebPage?) -> Unit
+        )
     }
 }

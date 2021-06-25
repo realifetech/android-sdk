@@ -1,7 +1,9 @@
 package com.realifetech.core_sdk.feature.payment.data
 
+import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Input
-import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo.api.Response
+import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.AddPaymentSourceToMyWalletMutation
@@ -10,8 +12,6 @@ import com.realifetech.GetMyPaymentSourcesQuery
 import com.realifetech.UpdatePaymentIntentMutation
 import com.realifetech.core_sdk.data.payment.model.asModel
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
-import com.realifetech.core_sdk.domain.Result
-import com.realifetech.core_sdk.feature.helper.extractResponse
 import com.realifetech.core_sdk.feature.payment.PaymentRepository
 import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.fragment.PaymentIntent
@@ -23,59 +23,108 @@ import com.realifetech.type.PaymentSourceInput
 class PaymentDataSource() : PaymentRepository.DataSource {
     private val apolloClient = GraphQlModule.apolloClient
 
-    override suspend fun addPaymentSource(input: PaymentSourceInput): Result<PaymentSource> {
-        return try {
-            val response = apolloClient.mutate(AddPaymentSourceToMyWalletMutation(input)).await()
-            response.data?.addPaymentSourceToMyWallet?.fragments?.paymentSource.extractResponse(
-                response.errors
-            )
+    override fun addPaymentSource(
+        input: PaymentSourceInput,
+        callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
+    ) {
+        try {
+            val response = apolloClient.mutate(AddPaymentSourceToMyWalletMutation(input))
+            response.enqueue(object :
+                ApolloCall.Callback<AddPaymentSourceToMyWalletMutation.Data>() {
+                override fun onResponse(response: Response<AddPaymentSourceToMyWalletMutation.Data>) {
+                    callback.invoke(
+                        null,
+                        response.data?.addPaymentSourceToMyWallet?.fragments?.paymentSource
+                    )
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
         } catch (exception: ApolloHttpException) {
-            Result.Error(exception)
+            callback.invoke(exception, null)
         }
     }
 
-    override suspend fun getMyPaymentSources(
+    override fun getMyPaymentSources(
         pageSize: Int,
-        page: Int?
-    ): Result<PaginatedObject<com.realifetech.core_sdk.data.payment.model.PaymentSource?>> {
-        return try {
+        page: Int?,
+        callback: (error: Exception?, response: PaginatedObject<com.realifetech.core_sdk.data.payment.model.PaymentSource?>?) -> Unit
+    ) {
+        try {
             val response =
                 apolloClient.query(GetMyPaymentSourcesQuery(pageSize, Input.fromNullable(page)))
                     .toBuilder()
                     .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY)
                     .build()
-                    .await()
-            val paymentSources =
-                response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.edges?.map { it?.asModel }
-            val nextPage =
-                response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.nextPage
-            val paymentPaginatedObject = PaginatedObject(paymentSources, nextPage)
-            paymentPaginatedObject.extractResponse(
-                response.errors
-            )
+            response.enqueue(object : ApolloCall.Callback<GetMyPaymentSourcesQuery.Data>() {
+                override fun onResponse(response: Response<GetMyPaymentSourcesQuery.Data>) {
+                    val paymentSources =
+                        response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.edges?.map { it?.asModel }
+                    val nextPage =
+                        response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.nextPage
+                    val paymentPaginatedObject = PaginatedObject(paymentSources, nextPage)
+                    callback.invoke(null, paymentPaginatedObject)
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
         } catch (exception: ApolloHttpException) {
-            Result.Error(exception)
+            callback.invoke(exception, null)
         }
     }
 
-    override suspend fun createPaymentIntent(input: PaymentIntentInput): Result<PaymentIntent> {
-        return try {
-            val response = apolloClient.mutate(CreatePaymentIntentMutation(input)).await()
-            response.data?.createPaymentIntent?.fragments?.paymentIntent.extractResponse(response.errors)
+    override fun createPaymentIntent(
+        input: PaymentIntentInput,
+        callback: (error: Exception?, response: PaymentIntent?) -> Unit
+    ) {
+        try {
+            val response = apolloClient.mutate(CreatePaymentIntentMutation(input))
+            response.enqueue(object : ApolloCall.Callback<CreatePaymentIntentMutation.Data>() {
+                override fun onResponse(response: Response<CreatePaymentIntentMutation.Data>) {
+                    callback.invoke(
+                        null,
+                        response.data?.createPaymentIntent?.fragments?.paymentIntent
+                    )
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
         } catch (exception: ApolloHttpException) {
-            Result.Error(exception)
+            callback.invoke(exception, null)
         }
     }
 
-    override suspend fun updatePaymentIntent(
+    override fun updatePaymentIntent(
         id: String,
-        input: PaymentIntentUpdateInput
-    ): Result<PaymentIntent> {
-        return try {
-            val response = apolloClient.mutate(UpdatePaymentIntentMutation(id, input)).await()
-            response.data?.updateMyPaymentIntent?.fragments?.paymentIntent.extractResponse(response.errors)
+        input: PaymentIntentUpdateInput,
+        callback: (error: Exception?, response: PaymentIntent?) -> Unit
+    ) {
+        try {
+            val response = apolloClient.mutate(UpdatePaymentIntentMutation(id, input))
+            response.enqueue(object : ApolloCall.Callback<UpdatePaymentIntentMutation.Data>() {
+                override fun onResponse(response: Response<UpdatePaymentIntentMutation.Data>) {
+                    callback.invoke(
+                        null,
+                        response.data?.updateMyPaymentIntent?.fragments?.paymentIntent
+                    )
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
         } catch (exception: ApolloHttpException) {
-            Result.Error(exception)
+            callback.invoke(exception, null)
         }
     }
 

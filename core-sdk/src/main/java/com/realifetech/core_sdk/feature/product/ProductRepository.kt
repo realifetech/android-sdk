@@ -2,23 +2,29 @@ package com.realifetech.core_sdk.feature.product
 
 import com.realifetech.core_sdk.data.product.Product
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
-import com.realifetech.core_sdk.domain.Result
 import com.realifetech.type.ProductFilter
 
 class ProductRepository(private val dataSource: DataSource) {
 
-    suspend fun getProductById(id: String) = dataSource.getProductById(id)
+    fun getProductById(id: String, callback: (error: Exception?, product: Product?) -> Unit) =
+        dataSource.getProductById(id, callback)
 
-    suspend fun getProducts(pageSize: Int, page: Int, filters: ProductFilter) =
-        dataSource.getProducts(pageSize, page, filters)
+    fun getProducts(
+        pageSize: Int,
+        page: Int,
+        filters: ProductFilter,
+        callback: (error: Exception?, response: PaginatedObject<Product?>?) -> Unit
+    ) =
+        dataSource.getProducts(pageSize, page, filters, callback)
 
     interface DataSource {
-        suspend fun getProducts(
+        fun getProducts(
             pageSize: Int,
             page: Int,
-            filters: ProductFilter
-        ): Result<PaginatedObject<Product?>>
+            filters: ProductFilter,
+            callback: (error: Exception?, response: PaginatedObject<Product?>?) -> Unit
+        )
 
-        suspend fun getProductById(id: String): Result<Product>
+        fun getProductById(id: String, callback: (error: Exception?, product: Product?) -> Unit)
     }
 }
