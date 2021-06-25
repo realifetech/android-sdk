@@ -3,31 +3,54 @@ package com.realifetech.core_sdk.feature.basket
 import com.realifetech.core_sdk.data.basket.model.*
 import com.realifetech.core_sdk.data.order.model.Order
 import com.realifetech.core_sdk.data.shared.`object`.StandardResponse
-import com.realifetech.core_sdk.domain.Result
 import com.realifetech.type.BasketInput
 import com.realifetech.type.CheckoutInput
 
 class BasketRepository(private val dataSource: DataSource) {
 
-    suspend fun getBasket() =
-        dataSource.getBasket()
+    fun getBasket(callback: (error: Exception?, basket: Basket?) -> Unit) {
+        dataSource.getBasket(callback)
+    }
 
-    suspend fun createMyBasket(basket: BasketRequest) =
-        dataSource.createMyBasket(basket.asInputObject)
+    fun createMyBasket(
+        basket: BasketRequest,
+        callback: (error: Exception?, basket: Basket?) -> Unit
+    ) {
+        dataSource.createMyBasket(basket.asInputObject, callback)
+    }
 
-    suspend fun updateMyBasket(basket: BasketRequest) =
-        dataSource.updateMyBasket(basket.asInputObject)
+    fun updateMyBasket(
+        basket: BasketRequest,
+        callback: (error: Exception?, basket: Basket?) -> Unit
+    ) {
+        dataSource.updateMyBasket(basket.asInputObject, callback)
+    }
 
-    suspend fun deleteMyBasket() = dataSource.deleteMyBasket()
+    fun deleteMyBasket(callback: (error: Exception?, response: StandardResponse?) -> Unit) =
+        dataSource.deleteMyBasket(callback)
 
-    suspend fun checkoutMyBasket(checkoutRequest: CheckoutRequest) =
-        dataSource.checkoutMyBasket(checkoutRequest.asInput)
+    fun checkoutMyBasket(
+        checkoutRequest: CheckoutRequest,
+        callback: (error: Exception?, order: Order?) -> Unit
+    ) =
+        dataSource.checkoutMyBasket(checkoutRequest.asInput, callback)
 
     interface DataSource {
-        suspend fun getBasket(): Result<Basket>
-        suspend fun createMyBasket(basketInput: BasketInput): Result<Basket>
-        suspend fun updateMyBasket(basketInput: BasketInput): Result<Basket>
-        suspend fun deleteMyBasket(): Result<StandardResponse>
-        suspend fun checkoutMyBasket(checkoutInput: CheckoutInput): Result<Order>
+        fun getBasket(callback: (error: Exception?, basket: Basket?) -> Unit)
+        fun createMyBasket(
+            basketInput: BasketInput,
+            callback: (error: Exception?, basket: Basket?) -> Unit
+        )
+
+        fun updateMyBasket(
+            basketInput: BasketInput,
+            callback: (error: Exception?, basket: Basket?) -> Unit
+        )
+
+        fun deleteMyBasket(callback: (error: Exception?, response: StandardResponse?) -> Unit)
+        fun checkoutMyBasket(
+            checkoutInput: CheckoutInput,
+            callback: (error: Exception?, order: Order?) -> Unit
+        )
     }
 }

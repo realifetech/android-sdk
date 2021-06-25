@@ -6,10 +6,6 @@ import com.realifetech.core_sdk.data.payment.wrapper.PaymentSourceWrapper
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.fragment.PaymentSource
-import com.realifetech.sdk.general.utils.executeCallback
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class PaymentFeature private constructor() {
     private val paymentRepo = PaymentProvider().providePaymentRepository()
@@ -18,30 +14,21 @@ class PaymentFeature private constructor() {
         input: PaymentSourceWrapper,
         callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
     ) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val result = paymentRepo.addPaymentSource(input)
-            executeCallback(result, callback)
-        }
+        paymentRepo.addPaymentSource(input, callback)
     }
 
     fun getMyPaymentSources(
         pageSize: Int, page: Int?,
         callback: (error: Exception?, response: PaginatedObject<com.realifetech.core_sdk.data.payment.model.PaymentSource?>?) -> Unit
     ) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val result = paymentRepo.getMyPaymentSources(pageSize, page)
-            executeCallback(result, callback)
-        }
+        paymentRepo.getMyPaymentSources(pageSize, page, callback)
     }
 
     fun createPaymentIntent(
         input: PaymentIntentWrapper,
         callback: (error: Exception?, response: PaymentIntent?) -> Unit
     ) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val result = paymentRepo.createPaymentIntent(input)
-            executeCallback(result, callback)
-        }
+        paymentRepo.createPaymentIntent(input, callback)
     }
 
     fun updatePaymentIntent(
@@ -49,10 +36,7 @@ class PaymentFeature private constructor() {
         input: PaymentIntentUpdateWrapper,
         callback: (error: Exception?, response: PaymentIntent?) -> Unit
     ) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val result = paymentRepo.updatePaymentIntent(id, input)
-            executeCallback(result, callback)
-        }
+        paymentRepo.updatePaymentIntent(id, input, callback)
     }
 
     private object Holder {

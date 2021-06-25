@@ -1,8 +1,10 @@
 package com.realifetech.core_sdk.feature.fulfilmentpoint.data
 
+import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Input
+import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
-import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.GetFulfilmentPointByIdQuery
@@ -24,12 +26,13 @@ class FulfilmentPointBackendDataSource() :
 
     private val apolloClient = GraphQlModule.apolloClient
 
-    override suspend fun getFulfilmentPoints(
+    override fun getFulfilmentPoints(
         pageSize: Int,
         page: Int,
-        filters: Input<FulfilmentPointFilter>?
-    ): Result<PaginatedObject<FulfilmentPoint?>> {
-        return try {
+        filters: Input<FulfilmentPointFilter>?,
+        callback: (error: Exception?, response: PaginatedObject<FulfilmentPoint?>?) -> Unit
+    ) {
+        try {
             val response = apolloClient.query(
                 GetFulfilmentPointsQuery(
                     pageSize = pageSize,
@@ -40,37 +43,60 @@ class FulfilmentPointBackendDataSource() :
                 .toBuilder()
                 .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                 .build()
-                .await()
-            val fulfilmentPoints =
-                response.data?.getFulfilmentPoints?.edges?.map { result -> result?.fragments?.fragmentFulfilmentPoint?.asModel }
-            val nextPage = response.data?.getFulfilmentPoints?.nextPage
-            val paginatedObject = PaginatedObject(fulfilmentPoints, nextPage)
-            paginatedObject.extractResponse(response.errors)
+            response.enqueue(object : ApolloCall.Callback<GetFulfilmentPointsQuery.Data>() {
+                override fun onResponse(response: Response<GetFulfilmentPointsQuery.Data>) {
+                    val fulfilmentPoints =
+                        response.data?.getFulfilmentPoints?.edges?.map { result -> result?.fragments?.fragmentFulfilmentPoint?.asModel }
+                    val nextPage = response.data?.getFulfilmentPoints?.nextPage
+                    val paginatedObject = PaginatedObject(fulfilmentPoints, nextPage)
+                    paginatedObject.extractResponse(response.errors)
+                    callback.invoke(null, paginatedObject)
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
         } catch (exception: ApolloHttpException) {
-            Result.Error(exception)
+            callback.invoke(exception, null)
         }
     }
 
-    override suspend fun getFulfilmentPointById(id: String): Result<FulfilmentPoint> {
-        return try {
+    override fun getFulfilmentPointById(
+        id: String,
+        callback: (error: Exception?, fulfilmentPoint: FulfilmentPoint?) -> Unit
+    ) {
+        try {
             val response =
                 apolloClient.query(GetFulfilmentPointByIdQuery(id))
                     .toBuilder()
                     .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                     .build()
-                    .await()
-            response.data?.getFulfilmentPoint?.fragments?.fragmentFulfilmentPoint
-                .extractResponse(response.errors) { it.asModel }
+            response.enqueue(object : ApolloCall.Callback<GetFulfilmentPointByIdQuery.Data>() {
+                override fun onResponse(response: Response<GetFulfilmentPointByIdQuery.Data>) {
+                    callback.invoke(
+                        null,
+                        response.data?.getFulfilmentPoint?.fragments?.fragmentFulfilmentPoint?.asModel
+                    )
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
         } catch (exception: ApolloHttpException) {
-            Result.Error(exception)
+            callback.invoke(exception, null)
         }
     }
 
-    override suspend fun getFulfilmentPointCategories(
+    override fun getFulfilmentPointCategories(
         pageSize: Int,
-        page: Int
-    ): Result<PaginatedObject<FulfilmentPointCategory?>> {
-        return try {
+        page: Int,
+        callback: (error: Exception?, response: PaginatedObject<FulfilmentPointCategory?>?) -> Unit
+    ) {
+        try {
             val response = apolloClient.query(
                 GetFulfilmentPointCategoriesQuery(
                     pageSize = pageSize,
@@ -80,34 +106,54 @@ class FulfilmentPointBackendDataSource() :
                 .toBuilder()
                 .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                 .build()
-                .await()
-            val fulfilmentPointCategories =
-                response.data?.getFulfilmentPointCategories?.edges?.map { result -> result?.fragments?.fragmentFulfilmentPointCategory?.asModel }
-            val nextPage = response.data?.getFulfilmentPointCategories?.nextPage
-            val paginatedObject = PaginatedObject(fulfilmentPointCategories, nextPage)
-            paginatedObject.extractResponse(response.errors)
+            response.enqueue(object :
+                ApolloCall.Callback<GetFulfilmentPointCategoriesQuery.Data>() {
+                override fun onResponse(response: Response<GetFulfilmentPointCategoriesQuery.Data>) {
+                    val fulfilmentPointCategories =
+                        response.data?.getFulfilmentPointCategories?.edges?.map { result -> result?.fragments?.fragmentFulfilmentPointCategory?.asModel }
+                    val nextPage = response.data?.getFulfilmentPointCategories?.nextPage
+                    val paginatedObject = PaginatedObject(fulfilmentPointCategories, nextPage)
+                    paginatedObject.extractResponse(response.errors)
+                    callback.invoke(null, paginatedObject)
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
         } catch (exception: ApolloHttpException) {
-            Result.Error(exception)
+            callback.invoke(exception, null)
         }
     }
 
-    override suspend fun getFulfilmentPointCategoryById(
-        id: String
-    ): Result<FulfilmentPointCategory> {
-        return try {
+    override fun getFulfilmentPointCategoryById(
+        id: String,
+        callback: (error: Exception?, fulfilmentPointCategory: FulfilmentPointCategory?) -> Unit
+    ) {
+        try {
             val response = apolloClient.query(
                 GetFulfilmentPointCategoryByIdQuery(id)
             )
                 .toBuilder()
                 .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                 .build()
-                .await()
-            response.data?.getFulfilmentPointCategory?.fragments?.fragmentFulfilmentPointCategory
-                .extractResponse(response.errors) {
-                    it.asModel
+            response.enqueue(object :
+                ApolloCall.Callback<GetFulfilmentPointCategoryByIdQuery.Data>() {
+                override fun onResponse(response: Response<GetFulfilmentPointCategoryByIdQuery.Data>) {
+                    callback.invoke(
+                        null,
+                        response.data?.getFulfilmentPointCategory?.fragments?.fragmentFulfilmentPointCategory?.asModel
+                    )
                 }
+
+                override fun onFailure(e: ApolloException) {
+                    callback(e, null)
+                }
+
+            })
         } catch (exception: ApolloHttpException) {
-            Result.Error(exception)
+            callback.invoke(exception, null)
         }
     }
 }

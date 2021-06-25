@@ -2,11 +2,7 @@ package com.realifetech.sdk.sell.product
 
 import com.realifetech.core_sdk.data.product.Product
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
-import com.realifetech.sdk.general.utils.executeCallback
 import com.realifetech.type.ProductFilter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class ProductFeature private constructor() {
     private val productRepo = ProductProvider().provideProductRepository()
@@ -17,20 +13,14 @@ class ProductFeature private constructor() {
         filters: ProductFilter,
         callback: (error: Exception?, response: PaginatedObject<Product?>?) -> Unit
     ) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val result = productRepo.getProducts(pageSize, page, filters)
-            executeCallback(result, callback)
-        }
+        productRepo.getProducts(pageSize, page, filters, callback)
     }
 
     fun getProductById(
         id: String,
         callback: (error: Exception?, product: Product?) -> Unit
     ) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val result = productRepo.getProductById(id)
-            executeCallback(result, callback)
-        }
+        productRepo.getProductById(id, callback)
     }
 
     private object Holder {
