@@ -5,6 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class SeatInfo(
-    val key: String?,
-    val value: String?
+    val row: String?,
+    val seat: String?,
+    val block: String?,
+    val table: String?
 ) : Parcelable

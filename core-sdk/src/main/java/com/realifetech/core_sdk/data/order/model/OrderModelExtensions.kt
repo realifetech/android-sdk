@@ -3,7 +3,6 @@ package com.realifetech.core_sdk.data.order.model
 import com.realifetech.core_sdk.data.basket.model.asModel
 import com.realifetech.core_sdk.data.fulfilmentPoint.asModel
 import com.realifetech.core_sdk.data.product.asModel
-import com.realifetech.core_sdk.data.shared.`object`.asEnum
 import com.realifetech.core_sdk.data.shared.`object`.asModel
 import com.realifetech.fragment.FragmentOrder
 import com.realifetech.fragment.FragmentSeatInfo
@@ -24,8 +23,8 @@ val FragmentOrder.asModel: Order
         estimatedAt = estimatedAt,
         createdAt = createdAt,
         updatedAt = updatedAt,
-        collectionPreferenceType = collectionPreferenceType?.asEnum,
-        seatInfo = seatInfo?.map { it?.fragments?.fragmentSeatInfo?.asModel },
+        collectionPreferenceType = collectionPreferenceType,
+        seatInfo = seatInfo?.fragments?.fragmentSeatInfo?.asModel,
         items = items?.map { it?.asModel }?.toMutableList(),
         orderNotes = orderNotes?.map { it?.asModel },
         timeSlot = timeslot?.fragments?.fragmentTimeslot?.asModel,
@@ -33,12 +32,12 @@ val FragmentOrder.asModel: Order
         user = user?.fragments?.fragmentUser?.asModel
     )
 
-
 val FragmentSeatInfo.asModel: SeatInfo
-    get() = SeatInfo(key = key, value = value)
+    get() = SeatInfo(row = row, seat = seat, block = block, table = table)
 
 val FragmentUser.asModel: User
-    get() = User(id = id,
+    get() = User(
+        id = id,
         email = email,
         token = token,
         authType = authType,
@@ -50,7 +49,8 @@ val FragmentUser.asModel: User
         gender = gender,
         phone = phone,
         dob = dob,
-        userConsent = userConsent)
+        userConsent = userConsent
+    )
 
 val FragmentOrder.OrderNote.asModel: OrderNote
     get() = OrderNote(

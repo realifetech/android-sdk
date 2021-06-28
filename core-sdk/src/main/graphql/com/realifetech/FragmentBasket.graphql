@@ -3,8 +3,7 @@ fragment FragmentBasket on Basket {
     discountAmount
     netAmount
     seatInfo {
-        key
-        value
+        ...FragmentSeatInfo
     }
     timeslot {
         ...FragmentTimeslot
