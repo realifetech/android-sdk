@@ -1,7 +1,6 @@
 package com.realifetech.sdk.analytics.di
 
 import com.realifetech.core_sdk.network.graphQl.GraphQlModule
-import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.analytics.data.AnalyticsDatabaseStorageDataSource
 import com.realifetech.sdk.analytics.data.AnalyticsEngine
 import com.realifetech.sdk.analytics.data.AnalyticsStorage
@@ -15,6 +14,6 @@ internal object AnalyticsProvider {
     }
 
     fun provideAnalyticsEngine(): AnalyticsEngine {
-        return RtlBackendAnalyticsEngine(GraphQlModule.getApolloClient(RealifeTech.getGeneral().configuration.graphApiUrl))
+        return RtlBackendAnalyticsEngine(GraphQlModule.apolloClient)
     }
 }

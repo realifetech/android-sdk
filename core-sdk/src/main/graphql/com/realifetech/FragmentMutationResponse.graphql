@@ -1,0 +1,4 @@
+fragment FragmentMutationResponse on MutationResponse {
+    success
+    message
+}

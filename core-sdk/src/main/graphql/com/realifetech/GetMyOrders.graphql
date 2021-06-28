@@ -1,0 +1,8 @@
+query getMyOrders($pageSize: Int!, $page: Int = 1) {
+    getMyOrders(pageSize: $pageSize, page: $page) {
+        edges {
+            ...FragmentOrder
+        }
+        nextPage
+    }
+}

@@ -1,4 +1,4 @@
-mutation UpdatePaymentIntent($id: ID!, $input: PaymentIntentInput!) {
+mutation UpdatePaymentIntent($id: ID!, $input: PaymentIntentUpdateInput!) {
     updateMyPaymentIntent(id: $id, input: $input) {
         __typename
         ...PaymentIntent

@@ -1,11 +1,12 @@
 package com.realifetech.sdk
 
+import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.content.Content
-import com.realifetech.sdk.feature.payment.Payment
 import com.realifetech.sdk.general.General
+import com.realifetech.sdk.sell.Sell
 
 object RealifeTech {
     fun getGeneral(): General {
@@ -28,7 +29,12 @@ object RealifeTech {
         return Content.instance
     }
 
-    fun getPayment(): Payment {
-        return Payment.instance
+    fun getSell(): Sell {
+        return Sell.INSTANCE
     }
+
+    fun clearAllCachedData() {
+        GraphQlModule.apolloClient.clearNormalizedCache()
+    }
+
 }

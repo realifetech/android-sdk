@@ -1,57 +1,65 @@
 package com.realifetech.core_sdk.feature.payment
 
-import com.realifetech.core_sdk.domain.Result
-import com.realifetech.core_sdk.feature.payment.data.PaymentIntentWrapper
-import com.realifetech.core_sdk.feature.payment.data.PaymentSourceWrapper
-import com.realifetech.core_sdk.feature.payment.data.toInputObject
+import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentUpdateWrapper
+import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentWrapper
+import com.realifetech.core_sdk.data.payment.wrapper.PaymentSourceWrapper
+import com.realifetech.core_sdk.data.payment.wrapper.asInput
+import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.fragment.PaymentSource
-import com.realifetech.fragment.PaymentSourceEdge
 import com.realifetech.type.PaymentIntentInput
+import com.realifetech.type.PaymentIntentUpdateInput
 import com.realifetech.type.PaymentSourceInput
-import io.reactivex.Single
-import kotlinx.coroutines.rx2.rxSingle
 
 class PaymentRepository(private val dataSource: DataSource) {
 
-    suspend fun addPaymentSource(input: PaymentSourceWrapper) =
-        dataSource.addPaymentSource(input.toInputObject())
+    fun addPaymentSource(
+        input: PaymentSourceWrapper,
+        callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
+    ) =
+        dataSource.addPaymentSource(input.asInput, callback)
 
-    fun addPaymentSourceSingle(input: PaymentSourceWrapper): Single<Result<PaymentSource>> {
-        return rxSingle { dataSource.addPaymentSource(input.toInputObject()) }
-    }
+    fun getMyPaymentSources(
+        pageSize: Int, page: Int?,
+        callback: (error: Exception?, response: PaginatedObject<com.realifetech.core_sdk.data.payment.model.PaymentSource?>?) -> Unit
+    ) =
+        dataSource.getMyPaymentSources(pageSize, page, callback)
 
-    suspend fun getMyPaymentSources(pageSize: Int, page: Int?) =
-        dataSource.getMyPaymentSources(pageSize, page)
+    fun createPaymentIntent(
+        input: PaymentIntentWrapper,
+        callback: (error: Exception?, response: PaymentIntent?) -> Unit
+    ) =
+        dataSource.createPaymentIntent(input.asInput, callback)
 
-    fun getMyPaymentSourcesSingle(pageSize: Int, page: Int?): Single<Result<PaymentSourceEdge>> {
-        return rxSingle { dataSource.getMyPaymentSources(pageSize, page) }
-    }
-
-    suspend fun createPaymentIntent(input: PaymentIntentWrapper) =
-        dataSource.createPaymentIntent(input.toInputObject())
-
-    fun createPaymentIntentSingle(input: PaymentIntentWrapper): Single<Result<PaymentIntent>> {
-        return rxSingle { dataSource.createPaymentIntent(input.toInputObject()) }
-    }
-
-    suspend fun updatePaymentIntent(id: String, input: PaymentIntentWrapper) =
-        dataSource.updatePaymentIntent(id, input.toInputObject())
-
-    fun updatePaymentIntentSingle(
+    fun updatePaymentIntent(
         id: String,
-        input: PaymentIntentWrapper
-    ): Single<Result<PaymentIntent>> {
-        return rxSingle { dataSource.updatePaymentIntent(id, input.toInputObject()) }
-    }
+        input: PaymentIntentUpdateWrapper,
+        callback: (error: Exception?, response: PaymentIntent?) -> Unit
+    ) =
+        dataSource.updatePaymentIntent(id, input.asInput, callback)
+
 
     interface DataSource {
-        suspend fun addPaymentSource(input: PaymentSourceInput): Result<PaymentSource>
-        suspend fun getMyPaymentSources(pageSize: Int, page: Int?): Result<PaymentSourceEdge>
-        suspend fun createPaymentIntent(input: PaymentIntentInput): Result<PaymentIntent>
-        suspend fun updatePaymentIntent(
+        fun addPaymentSource(
+            input: PaymentSourceInput,
+            callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
+        )
+
+        fun getMyPaymentSources(
+            pageSize: Int,
+            page: Int?,
+            callback: (error: Exception?, response: PaginatedObject<com.realifetech.core_sdk.data.payment.model.PaymentSource?>?) -> Unit
+        )
+
+        fun createPaymentIntent(
+            input: PaymentIntentInput,
+            callback: (error: Exception?, response: PaymentIntent?) -> Unit
+        )
+
+        fun updatePaymentIntent(
             id: String,
-            input: PaymentIntentInput
-        ): Result<PaymentIntent>
+            input: PaymentIntentUpdateInput,
+            callback: (error: Exception?, response: PaymentIntent?) -> Unit
+        )
     }
 }

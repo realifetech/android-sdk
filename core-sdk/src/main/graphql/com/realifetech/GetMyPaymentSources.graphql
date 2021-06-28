@@ -7,6 +7,7 @@ query GetMyPaymentSources($pageSize: Int!, $page: Int) {
 
 fragment PaymentSourceEdge on PaymentSourceEdge {
     __typename
+    nextPage
     edges {
         __typename
         id

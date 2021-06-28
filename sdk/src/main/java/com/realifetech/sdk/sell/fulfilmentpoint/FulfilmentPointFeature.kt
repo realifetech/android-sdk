@@ -1,0 +1,51 @@
+package com.realifetech.sdk.sell.fulfilmentpoint
+
+import com.apollographql.apollo.api.toInput
+import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPoint
+import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPointCategory
+import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
+import com.realifetech.type.FulfilmentPointFilter
+
+class FulfilmentPointFeature private constructor() {
+    private val fulfilmentPointRepo = FulfilmentPointProvider().provideFulfilmentPointRepository()
+
+    fun getFulfilmentPoints(
+        pageSize: Int,
+        page: Int,
+        filters: FulfilmentPointFilter?,
+        callback: (error: Exception?, response: PaginatedObject<FulfilmentPoint?>?) -> Unit
+    ) {
+        fulfilmentPointRepo.getFulfilmentPoints(pageSize, page, filters.toInput(), callback)
+    }
+
+    fun getFulfilmentPointById(
+        id: String,
+        callback: (error: Exception?, fulfilmentPoint: FulfilmentPoint?) -> Unit
+    ) {
+        fulfilmentPointRepo.getFulfilmentPointById(id, callback)
+    }
+
+    fun getFulfilmentPointCategories(
+        pageSize: Int,
+        page: Int,
+        callback: (error: Exception?, response: PaginatedObject<FulfilmentPointCategory?>?) -> Unit
+    ) {
+        fulfilmentPointRepo.getFulfilmentPointCategories(pageSize, page, callback)
+
+    }
+
+    fun getFulfilmentPointCategoryById(
+        id: String,
+        callback: (error: Exception?, fulfilmentPointCategory: FulfilmentPointCategory?) -> Unit
+    ) {
+        fulfilmentPointRepo.getFulfilmentPointCategoryById(id, callback)
+    }
+
+    private object Holder {
+        val instance = FulfilmentPointFeature()
+    }
+
+    companion object {
+        val INSTANCE: FulfilmentPointFeature by lazy { Holder.instance }
+    }
+}

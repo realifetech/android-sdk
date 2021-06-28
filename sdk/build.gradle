@@ -13,7 +13,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0-rc45"
+        versionName "1.0-rc99"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -64,12 +64,14 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.1'
+
     // GraphQL
     implementation("com.apollographql.apollo:apollo-runtime:2.4.1")
     implementation("com.apollographql.apollo:apollo-coroutines-support:2.4.1")
 
-    implementation "com.realifetech:core-sdk:1.0-rc26"
-//    implementation project(path: ':core-sdk')
+    implementation "com.realifetech:core-sdk:1.0-rc76"
+    //implementation project(path: ':core-sdk')
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
