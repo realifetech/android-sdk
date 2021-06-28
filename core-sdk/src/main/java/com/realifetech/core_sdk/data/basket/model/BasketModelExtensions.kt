@@ -5,7 +5,6 @@ import com.apollographql.apollo.api.toInput
 import com.realifetech.core_sdk.data.fulfilmentPoint.asModel
 import com.realifetech.core_sdk.data.product.ProductModifierItemSelection
 import com.realifetech.core_sdk.data.product.asModel
-import com.realifetech.core_sdk.data.shared.`object`.asEnum
 import com.realifetech.core_sdk.data.shared.`object`.asModel
 import com.realifetech.fragment.FragmentBasket
 import com.realifetech.fragment.FragmentModifierItemSelection
@@ -16,15 +15,20 @@ val FragmentBasket.asModel: Basket
         discountAmount = discountAmount,
         grossAmount = grossAmount,
         netAmount = netAmount,
-        seatInfo = seatInfo?.map { it?.asModel },
+        seatInfo = seatInfo?.asModel,
         timeslot = timeslot?.fragments?.fragmentTimeslot?.asModel,
         collectionDate = collectionDate,
-        collectionPreferenceType = collectionPreferenceType?.asEnum,
+        collectionPreferenceType = collectionPreferenceType,
         items = items?.mapNotNull { it?.asModel }
     )
 
 val FragmentBasket.SeatInfo.asModel
-    get() = SeatInfo(key = key, value = value)
+    get() = SeatInfo(
+        row = fragments.fragmentSeatInfo.row,
+        seat = fragments.fragmentSeatInfo.seat,
+        block = fragments.fragmentSeatInfo.block,
+        table = fragments.fragmentSeatInfo.table
+    )
 
 val FragmentBasket.Item.asModel: BasketItem
     get() = BasketItem(
@@ -51,9 +55,9 @@ val BasketRequest.asInputObject: BasketInput
         collectionDate = collectionDate.toInput(),
         collectionPreferenceType = collectionPreferenceType.toInput(),
         timeslot = timeslotId.toInput(),
-        fulfilmentPoint = fulfilmentPoint.toInput(),
-        seatInfo = seatInfo?.map { it?.asInput }.toInput(),
-        items = convertBasketItemsToInput(items).toInput()
+        fulfilmentPoint = fulfilmentPoint.orEmpty(),
+        seatInfo = seatInfo?.asInput.toInput(),
+        items = convertBasketItemsToInput(items).orEmpty()
     )
 
 fun convertBasketItemsToInput(basketItems: List<BasketRequestItem?>?): List<BasketItemInput?>? =
@@ -84,6 +88,8 @@ fun List<com.realifetech.core_sdk.data.basket.model.ProductModifierItemSelection
 
 val SeatInfo.asInput
     get() = SeatInfoInput(
-        Input.optional(key),
-        Input.optional(value)
+        row = Input.optional(row),
+        seat = Input.optional(seat),
+        block = Input.optional(block),
+        table = Input.optional(table)
     )

@@ -1,4 +1,6 @@
 fragment FragmentSeatInfo on SeatInfo {
-    key
-    value
+    row
+    seat
+    block
+    table
 }

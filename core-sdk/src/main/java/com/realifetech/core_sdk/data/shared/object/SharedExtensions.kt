@@ -1,6 +1,5 @@
 package com.realifetech.core_sdk.data.shared.`object`
 
-import com.realifetech.core_sdk.data.basket.model.CollectionPreferenceType
 import com.realifetech.fragment.FragmentMutationResponse
 import com.realifetech.fragment.FragmentTimeslot
 import com.realifetech.type.Language
@@ -34,7 +33,4 @@ val FragmentTimeslot.Translation.asModel: TimeSlotTranslation
         description = description,
         collectionNote = collectionNote
     )
-
-val String.asEnum: CollectionPreferenceType?
-    get() = CollectionPreferenceType.values().firstOrNull { it.name == this }
 

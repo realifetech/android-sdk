@@ -1,9 +1,9 @@
 package com.realifetech.core_sdk.data.order.model
 
 import android.os.Parcelable
-import com.realifetech.core_sdk.data.basket.model.CollectionPreferenceType
 import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPoint
 import com.realifetech.core_sdk.data.shared.`object`.TimeSlot
+import com.realifetech.type.CollectionPreferenceType
 import com.realifetech.type.OrderStatus
 import kotlinx.android.parcel.Parcelize
 
@@ -23,7 +23,7 @@ data class Order(
     val createdAt: String?,
     val updatedAt: String?,
     val collectionPreferenceType: CollectionPreferenceType?,
-    val seatInfo: List<SeatInfo?>?,
+    val seatInfo: SeatInfo?,
     val items: List<OrderItem?>?,
     val orderNotes: List<OrderNote?>?,
     val timeSlot: TimeSlot?,
