@@ -1,4 +1,4 @@
-fragment PaymentSource on PaymentSource {
+fragment FragmentPaymentSource on PaymentSource {
     __typename
     id
     type
