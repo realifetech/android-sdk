@@ -1,4 +1,4 @@
-package com.realifetech.core_sdk.network
+package com.realifetech.core_sdk.data.auth
 
 import com.google.gson.annotations.SerializedName
 import java.util.*
@@ -10,4 +10,13 @@ data class OAuthTokenResponse(
     @SerializedName("scope") val scope: String,
     @SerializedName("refresh_token") val refreshToken: String,
     @SerializedName("refresh_expiry") val refreshExpiry: Date?
-)
+) {
+    val isTokenExpired: Boolean
+        get() {
+            refreshExpiry?.let {
+                val timeNow = Calendar.getInstance().timeInMillis
+                return timeNow >= it.time
+            }
+            return true
+        }
+}

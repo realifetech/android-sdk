@@ -2,7 +2,6 @@ package com.realifetech.sdk.analytics
 
 import com.realifetech.sdk.analytics.data.AnalyticsEngine
 import com.realifetech.sdk.analytics.data.AnalyticsStorage
-import com.realifetech.sdk.analytics.data.RtlBackendAnalyticsEngine
 import com.realifetech.sdk.analytics.di.AnalyticsProvider
 import com.realifetech.sdk.analytics.domain.AnalyticsEvent
 import com.realifetech.sdk.domain.LinearRetryPolicy

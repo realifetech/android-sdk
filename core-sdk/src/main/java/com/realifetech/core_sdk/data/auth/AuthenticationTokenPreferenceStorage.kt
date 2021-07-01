@@ -1,4 +1,4 @@
-package com.realifetech.core_sdk.data
+package com.realifetech.core_sdk.data.auth
 
 import android.content.SharedPreferences
 import android.preference.PreferenceManager

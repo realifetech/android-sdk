@@ -1,4 +1,4 @@
-package com.realifetech.core_sdk.data
+package com.realifetech.core_sdk.data.auth
 
 import java.util.*
 

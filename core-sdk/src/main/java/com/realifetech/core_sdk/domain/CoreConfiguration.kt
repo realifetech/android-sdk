@@ -1,7 +1,9 @@
 package com.realifetech.core_sdk.domain
 
+import android.annotation.SuppressLint
 import android.content.Context
 
+@SuppressLint("StaticFieldLeak")
 object CoreConfiguration {
     lateinit var context: Context
     var appCode: String = ""

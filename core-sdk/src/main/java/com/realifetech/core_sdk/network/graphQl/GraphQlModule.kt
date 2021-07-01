@@ -25,6 +25,7 @@ object GraphQlModule {
             .okHttpClient(
                 OkHttpClient.Builder()
                     .addInterceptor(CoreProvider.graphQlInterceptor)
+                    .authenticator(CoreProvider.oAuth2Authenticator)
                     .addInterceptor(loggingInterceptor)
                     .build()
             )
