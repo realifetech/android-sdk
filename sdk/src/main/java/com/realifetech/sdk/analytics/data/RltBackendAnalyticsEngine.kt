@@ -14,7 +14,7 @@ import java.util.*
 /**
  * Analytics engine which will send the events to RealifeTech backend using GraphQL
  */
-internal class RtlBackendAnalyticsEngine(private val apolloClient: ApolloClient) : AnalyticsEngine {
+internal class RltBackendAnalyticsEngine(private val apolloClient: ApolloClient) : AnalyticsEngine {
     override suspend fun logEvent(event: AnalyticsEvent): Result<Boolean> {
         val newInfoConverted = event.new?.let { Gson().toJson(it) }
         val oldInfoConverted = event.old?.let { Gson().toJson(it) }

@@ -14,6 +14,8 @@ val FragmentMutationResponse.asModel: StandardResponse
 val String.toLanguage: Language?
     get() = Language.values().firstOrNull { it.name == this }
 
+val String.toBearerFormat
+    get() = "Bearer $this"
 val FragmentTimeslot.asModel: TimeSlot
     get() = TimeSlot(
         id = id,
