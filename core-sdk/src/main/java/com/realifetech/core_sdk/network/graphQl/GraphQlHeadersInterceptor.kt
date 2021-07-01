@@ -1,6 +1,7 @@
 package com.realifetech.core_sdk.network.graphQl
 
 import android.util.Log
+import com.realifetech.core_sdk.data.shared.`object`.toBearerFormat
 import com.realifetech.core_sdk.domain.AuthenticationToken
 import com.realifetech.core_sdk.domain.CoreConfiguration
 import okhttp3.Interceptor
@@ -15,7 +16,7 @@ class GraphQlHeadersInterceptor(private val accessToken: AuthenticationToken) : 
 
         val request = chain.request().newBuilder()
             .addHeader("X-LS-DeviceId", CoreConfiguration.deviceId)
-            .addHeader("Authorization", "Bearer $token")
+            .addHeader("Authorization", token.toBearerFormat)
             .build()
 
         return chain.proceed(request)

@@ -1,10 +1,10 @@
 package com.realifetech.core_sdk.network
 
+import com.realifetech.core_sdk.data.shared.`object`.toBearerFormat
 import com.realifetech.core_sdk.domain.AuthenticationToken
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
-import kotlin.jvm.Throws
 
 class OAuth2AuthenticationInterceptor(private val accessToken: AuthenticationToken) : Interceptor {
 
@@ -16,7 +16,7 @@ class OAuth2AuthenticationInterceptor(private val accessToken: AuthenticationTok
         accessToken.ensureActive()
         val token = accessToken.accessToken
         if (token.isNotEmpty()) {
-            newBuilder.header(AUTHORIZATION, "Bearer $token")
+            newBuilder.header(AUTHORIZATION, token.toBearerFormat)
         }
 
         return chain.proceed(newBuilder.build())
