@@ -52,14 +52,10 @@ class WidgetsSampleActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
 
             val widgetsRepo = WidgetsModuleProvider.provideWidgetsRepository(
-                baseUrl = storage.graphQl,
-                context = this@WidgetsSampleActivity,
                 deviceId = withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
             )
             val screenRepo = ScreenModuleProvider.provideScreenRepository(
-                storage.graphQl,
-                withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier },
-                this@WidgetsSampleActivity
+                withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
             )
 
             queryWidgets.setOnClickListener {

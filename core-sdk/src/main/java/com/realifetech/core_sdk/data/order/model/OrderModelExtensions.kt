@@ -49,7 +49,7 @@ val FragmentUser.asModel: User
         gender = gender,
         phone = phone,
         dob = dob,
-        userConsent = userConsent
+        userConsent = userConsent?.asModel
     )
 
 val FragmentOrder.OrderNote.asModel: OrderNote
@@ -88,4 +88,11 @@ val FragmentOrder.Item.asModel: OrderItem
         title = title,
         subTitle = subtitle,
         imageUrl = imageUrl
+    )
+
+val FragmentUser.UserConsent.asModel: UserConsent
+    get() = UserConsent(
+        id = id,
+        marketingConsent = marketingConsent,
+        analysisConsent = analysisConsent
     )

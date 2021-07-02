@@ -11,5 +11,9 @@ fragment FragmentUser on User {
     gender
     phone
     dob
-    userConsent
+    userConsent {
+        id
+        marketingConsent
+        analysisConsent
+    }
 }

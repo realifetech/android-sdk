@@ -72,14 +72,16 @@ val FragmentForm.SelectOption.asModel: SelectOption
     get() = SelectOption(title = title, value = value, iconUrl = iconUrl)
 
 val FragmentForm.Translation1.asModel: FieldTranslation
-    get() = FieldTranslation(title = title,
+    get() = FieldTranslation(
+        title = title,
         language = language,
         description = description,
         completionDescription = completionDescription,
         skipButtonTitle = skipButtonTitle,
         completionTitle = completionTitle,
         completionButtonTitle = completionButtonTitle,
-        submitButtonTitle = submitButtonTitle)
+        submitButtonTitle = submitButtonTitle
+    )
 
 val FragmentForm.AutoFill.asModel: AutoFill
     get() = AutoFill(type = type, field = field_)
@@ -102,7 +104,7 @@ val FragmentFulfilmentPoint.Translation.asModel: FulfilmentPointTranslation
         title = title,
         description = description,
         collectionNote = collectionNote,
-        collectionNotes = collectionNotes?.map { it?.fragments?.fragmentCollectionNotes?.asModel }
+        collectionNotes = collectionNotes?.fragments?.fragmentCollectionNotes?.asModel
     )
 
 val FragmentCollectionNotes.asModel: CollectionNotes
@@ -133,9 +135,3 @@ val FragmentFulfilmentPointCategory.asModel: FulfilmentPointCategory
         updatedAt = updatedAt,
         translations = translations?.mapNotNull { it?.asModel }
     )
-
-val FulfilmentPoint.virtualQueuePrOrder: String?
-    get() = getTranslationForUserLanguage()?.collectionNotes?.firstOrNull()?.virtualQueuePreOrder
-
-val FulfilmentPoint.virtualQueueCheckin: String?
-    get() = getTranslationForUserLanguage()?.collectionNotes?.firstOrNull()?.virtualQueueCheckin

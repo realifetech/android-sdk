@@ -6,16 +6,13 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
-import com.realifetech.AddPaymentSourceToMyWalletMutation
-import com.realifetech.CreatePaymentIntentMutation
-import com.realifetech.GetMyPaymentSourcesQuery
-import com.realifetech.UpdatePaymentIntentMutation
+import com.realifetech.*
+import com.realifetech.core_sdk.data.payment.model.PaymentSource
 import com.realifetech.core_sdk.data.payment.model.asModel
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.core_sdk.feature.payment.PaymentRepository
 import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.fragment.PaymentIntent
-import com.realifetech.fragment.PaymentSource
 import com.realifetech.type.PaymentIntentInput
 import com.realifetech.type.PaymentIntentUpdateInput
 import com.realifetech.type.PaymentSourceInput
@@ -34,7 +31,7 @@ class PaymentDataSource() : PaymentRepository.DataSource {
                 override fun onResponse(response: Response<AddPaymentSourceToMyWalletMutation.Data>) {
                     callback.invoke(
                         null,
-                        response.data?.addPaymentSourceToMyWallet?.fragments?.paymentSource
+                        response.data?.addPaymentSourceToMyWallet?.fragments?.fragmentPaymentSource?.asModel
                     )
                 }
 
@@ -51,7 +48,7 @@ class PaymentDataSource() : PaymentRepository.DataSource {
     override fun getMyPaymentSources(
         pageSize: Int,
         page: Int?,
-        callback: (error: Exception?, response: PaginatedObject<com.realifetech.core_sdk.data.payment.model.PaymentSource?>?) -> Unit
+        callback: (error: Exception?, response: PaginatedObject<PaymentSource?>?) -> Unit
     ) {
         try {
             val response =
@@ -128,4 +125,28 @@ class PaymentDataSource() : PaymentRepository.DataSource {
         }
     }
 
+    override fun deleteMyPaymentSource(
+        id: String,
+        callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
+    ) {
+        try {
+            val response = apolloClient.mutate(DeleteMyPaymentSourceMutation(id))
+            response.enqueue(object :
+                ApolloCall.Callback<DeleteMyPaymentSourceMutation.Data>() {
+                override fun onResponse(response: Response<DeleteMyPaymentSourceMutation.Data>) {
+                    callback.invoke(
+                        null,
+                        response.data?.deleteMyPaymentSource?.fragments?.fragmentPaymentSource?.asModel
+                    )
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
+        } catch (exception: ApolloHttpException) {
+            callback.invoke(exception, null)
+        }
+    }
 }

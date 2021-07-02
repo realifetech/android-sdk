@@ -1,11 +1,11 @@
 package com.realifetech.sdk.sell.payment
 
+import com.realifetech.core_sdk.data.payment.model.PaymentSource
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentUpdateWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentSourceWrapper
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.fragment.PaymentIntent
-import com.realifetech.fragment.PaymentSource
 
 class PaymentFeature private constructor() {
     private val paymentRepo = PaymentProvider().providePaymentRepository()
@@ -19,7 +19,7 @@ class PaymentFeature private constructor() {
 
     fun getMyPaymentSources(
         pageSize: Int, page: Int?,
-        callback: (error: Exception?, response: PaginatedObject<com.realifetech.core_sdk.data.payment.model.PaymentSource?>?) -> Unit
+        callback: (error: Exception?, response: PaginatedObject<PaymentSource?>?) -> Unit
     ) {
         paymentRepo.getMyPaymentSources(pageSize, page, callback)
     }
@@ -37,6 +37,13 @@ class PaymentFeature private constructor() {
         callback: (error: Exception?, response: PaymentIntent?) -> Unit
     ) {
         paymentRepo.updatePaymentIntent(id, input, callback)
+    }
+
+    fun deletePaymentSource(
+        id: String,
+        callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
+    ) {
+        paymentRepo.deleteMyPaymentSource(id, callback)
     }
 
     private object Holder {
