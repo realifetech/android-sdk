@@ -50,29 +50,30 @@ class WidgetsSampleActivity : AppCompatActivity() {
 
         val storage = DeviceConfigurationStorage(this)
         GlobalScope.launch(Dispatchers.Main) {
+            //TODO: FIX Below ISSUES
 
-            val widgetsRepo = WidgetsModuleProvider.provideWidgetsRepository(
-                baseUrl = storage.graphQl,
-                context = this@WidgetsSampleActivity,
-                deviceId = withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
-            )
-            val screenRepo = ScreenModuleProvider.provideScreenRepository(
-                storage.graphQl,
-                withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier },
-                this@WidgetsSampleActivity
-            )
-
-            queryWidgets.setOnClickListener {
-                if (screenTypeSelected()) {
-                    queryWidgets(widgetsRepo)
-                }
-
-            }
-            queryScreenTitle.setOnClickListener {
-                if (screenTypeSelected()) {
-                    queryScreenTitle(screenRepo)
-                }
-            }
+//            val widgetsRepo = WidgetsModuleProvider.provideWidgetsRepository(
+//                baseUrl = storage.graphQl,
+//                context = this@WidgetsSampleActivity,
+//                deviceId = withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
+//            )
+//            val screenRepo = ScreenModuleProvider.provideScreenRepository(
+//                storage.graphQl,
+//                withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier },
+//                this@WidgetsSampleActivity
+//            )
+//
+//            queryWidgets.setOnClickListener {
+//                if (screenTypeSelected()) {
+//                    queryWidgets(widgetsRepo)
+//                }
+//
+//            }
+//            queryScreenTitle.setOnClickListener {
+//                if (screenTypeSelected()) {
+//                    queryScreenTitle(screenRepo)
+//                }
+//            }
         }
 
     }

@@ -33,36 +33,38 @@ class WebPageSampleActivity : AppCompatActivity() {
         }
 
         queryWebPage.setOnClickListener {
-            selectedType?.let { webPage ->
-                val storage = DeviceConfigurationStorage(this)
-                val webPageRepo =
-                    WebPageModuleProvider.provideWebPageRepository(storage.graphQl)
-                webPageRepo.getWebPageByTypeFlowable(webPage).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread()).subscribe({
-                        when (it) {
-                            is Result.Success -> {
-                                result.text = it.data.url
-                            }
-                            is Result.Error -> {
-                                Toast.makeText(
-                                    this@WebPageSampleActivity,
-                                    "${this@WebPageSampleActivity.getString(R.string.error_in_loading)}${it.exception.message}",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    }, {
-                        Toast.makeText(
-                            this@WebPageSampleActivity,
-                            "${this@WebPageSampleActivity.getString(R.string.error_in_loading)}${it}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    })
-            } ?: run {
-                Toast.makeText(this, this.getString(R.string.please_select_type), Toast.LENGTH_LONG)
-                    .show()
-                return@setOnClickListener
-            }
+            //TODO: FIX Below ISSUES
+
+//            selectedType?.let { webPage ->
+//                val storage = DeviceConfigurationStorage(this)
+//                val webPageRepo =
+//                    WebPageModuleProvider.provideWebPageRepository(storage.graphQl)
+//                webPageRepo.getWebPageByTypeFlowable(webPage).subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread()).subscribe({
+//                        when (it) {
+//                            is Result.Success -> {
+//                                result.text = it.data.url
+//                            }
+//                            is Result.Error -> {
+//                                Toast.makeText(
+//                                    this@WebPageSampleActivity,
+//                                    "${this@WebPageSampleActivity.getString(R.string.error_in_loading)}${it.exception.message}",
+//                                    Toast.LENGTH_LONG
+//                                ).show()
+//                            }
+//                        }
+//                    }, {
+//                        Toast.makeText(
+//                            this@WebPageSampleActivity,
+//                            "${this@WebPageSampleActivity.getString(R.string.error_in_loading)}${it}",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                    })
+//            } ?: run {
+//                Toast.makeText(this, this.getString(R.string.please_select_type), Toast.LENGTH_LONG)
+//                    .show()
+//                return@setOnClickListener
+//            }
         }
     }
 
