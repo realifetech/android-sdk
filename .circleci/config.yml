@@ -1,0 +1,112 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
+orbs:
+  android: circleci/android@1.0.3
+commands:
+  init_parameters:
+    steps:
+      - run:
+          name: init params
+          command: ./.scripts/environmentSetup.sh  << pipeline.git.branch >>
+  execute_build:
+    steps:
+      - run:
+          name: Assemble Release build
+          command: ./.scripts/executeBuild.sh
+jobs:
+  unit-test:
+    executor:
+      name: android/android-machine
+    steps:
+      - checkout
+      - android/restore-gradle-cache
+      - android/restore-build-cache
+      - android/run-tests:
+          test-command: ./gradlew testDebugUnitTest  --stacktrace --no-daemon
+      - store_artifacts:
+          name: Upload coverage APP result
+          path: app/build/reports
+          destination: reports-app
+      - store_artifacts:
+          name: Upload coverage SDK result
+          path: sdk/build/reports
+          destination: reports-sdk
+      - android/save-gradle-cache
+      - android/save-build-cache
+  lint-test:
+    executor:
+      name: android/android-machine
+    steps:
+      - checkout
+      - android/restore-gradle-cache
+      - android/restore-build-cache
+      - android/run-tests:
+          test-command: ./gradlew lintDebug --stacktrace
+      - store_artifacts:
+          name: Upload coverage APP result
+          path: app/build/reports
+          destination: reports-app
+      - store_artifacts:
+          name: Upload coverage SDK result
+          path: sdk/build/reports
+          destination: reports-sdk
+      - android/save-gradle-cache
+      - android/save-build-cache
+  build:
+    executor:
+      name: android/android-machine
+    steps:
+      - checkout
+      - android/restore-gradle-cache
+      - android/restore-build-cache
+      - init_parameters
+      - execute_build
+      - store_artifacts:
+          name: Store SDK .aar
+          path: sdk/build/outputs/aar
+          destination: aar
+      - store_artifacts:
+          name: Store CORE-SDK .aar
+          path: core-sdk/build/outputs/aar
+          destination: aar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  deploy:
+    executor:
+      name: android/android-machine
+    steps:
+      - attach_workspace:
+          at: .
+      - init_parameters
+      - run:
+          name: Assemble Release build
+          command: ./.scripts/executeDeploy.sh << pipeline.git.branch >>
+workflows:
+  realifetech_SDK:
+    jobs:
+      - unit-test
+      - lint-test
+      - build:
+          filters:
+            branches:
+              only:
+                - develop
+                - /^release\/.+$/
+                - /^hotfix\/.+$/
+                - master
+      - deploy:
+          requires:
+            - build
+            - unit-test
+            - lint-test
+          filters:
+            branches:
+              only:
+                - develop
+                - /^release\/.+$/
+                - /^hotfix\/.+$/
+                - master
