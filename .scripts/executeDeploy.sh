@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-if [[ "${CORE_CHANGED}" == "changed" || "${SDK_CHANGED}" == "changed" ]]; then
+if [[  "${CORE_CHANGED}" == "changed" || "${SDK_CHANGED}" == "changed"  || "${RELEASE_CREATED}" == "created" || $1 == "master" ]]; then
   if [[ $1 == "master" ]]; then
     tag_version=$(./gradlew -q echoSdkVersion)
     echo "$tag_version"
