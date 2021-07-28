@@ -10,5 +10,5 @@ data class FulfilmentPointTranslation(
     val title: String?,
     val description: String?,
     val collectionNote: String?,
-    val collectionNotes: List<CollectionNotes?>?
+    val collectionNotes: CollectionNotes?
 ) : Parcelable, Translation

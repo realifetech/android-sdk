@@ -1,6 +1,7 @@
 package com.realifetech.core_sdk.data.order.model
 
 import android.os.Parcelable
+import com.realifetech.fragment.FragmentUser
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -17,5 +18,5 @@ data class User(
     val gender: String?,
     val phone: String?,
     val dob: String?,
-    val userConsent: String?
+    val userConsent: UserConsent?
 ) : Parcelable

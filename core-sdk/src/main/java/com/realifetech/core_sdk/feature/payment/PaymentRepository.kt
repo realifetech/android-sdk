@@ -1,12 +1,12 @@
 package com.realifetech.core_sdk.feature.payment
 
+import com.realifetech.core_sdk.data.payment.model.PaymentSource
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentUpdateWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentSourceWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.asInput
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.fragment.PaymentIntent
-import com.realifetech.fragment.PaymentSource
 import com.realifetech.type.PaymentIntentInput
 import com.realifetech.type.PaymentIntentUpdateInput
 import com.realifetech.type.PaymentSourceInput
@@ -21,7 +21,7 @@ class PaymentRepository(private val dataSource: DataSource) {
 
     fun getMyPaymentSources(
         pageSize: Int, page: Int?,
-        callback: (error: Exception?, response: PaginatedObject<com.realifetech.core_sdk.data.payment.model.PaymentSource?>?) -> Unit
+        callback: (error: Exception?, response: PaginatedObject<PaymentSource?>?) -> Unit
     ) =
         dataSource.getMyPaymentSources(pageSize, page, callback)
 
@@ -38,6 +38,13 @@ class PaymentRepository(private val dataSource: DataSource) {
     ) =
         dataSource.updatePaymentIntent(id, input.asInput, callback)
 
+    fun deleteMyPaymentSource(
+        id: String,
+        callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
+    ) {
+        dataSource.deleteMyPaymentSource(id, callback)
+    }
+
 
     interface DataSource {
         fun addPaymentSource(
@@ -48,7 +55,7 @@ class PaymentRepository(private val dataSource: DataSource) {
         fun getMyPaymentSources(
             pageSize: Int,
             page: Int?,
-            callback: (error: Exception?, response: PaginatedObject<com.realifetech.core_sdk.data.payment.model.PaymentSource?>?) -> Unit
+            callback: (error: Exception?, response: PaginatedObject<PaymentSource?>?) -> Unit
         )
 
         fun createPaymentIntent(
@@ -60,6 +67,11 @@ class PaymentRepository(private val dataSource: DataSource) {
             id: String,
             input: PaymentIntentUpdateInput,
             callback: (error: Exception?, response: PaymentIntent?) -> Unit
+        )
+
+        fun deleteMyPaymentSource(
+            id: String,
+            callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
         )
     }
 }
