@@ -145,7 +145,7 @@ Use the following function to log an analytic event
 
 ```kotlin
 Realifetech.getAnalytics().logEvent(type, action, newDictionary, oldDictionary) { error ->
-    // What should happen on completion 
+    // What should happen on completion
 }
 ```
 
@@ -156,7 +156,7 @@ val type = "user"
 val action = "externalLogin"
 val newDictionary = mapOf("userId" to "a3890e983e", "provider" to "ticketmaster")
 Realifetech.getAnalytics().logEvent(type, action, newDictionary, null) { error ->
-    // What should happen on completion 
+    // What should happen on completion
 }
 ```
 

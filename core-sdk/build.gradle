@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "com.apollographql.apollo"
 apply plugin: "maven-publish"
+apply plugin: "net.thauvin.erik.gradle.semver"
 
 android {
     compileSdkVersion 30
@@ -13,7 +14,6 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0-rc83"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -46,7 +46,13 @@ task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier "sources"
 }
-
+task echoVersion(type: Exec) {
+    commandLine 'echo', "${-> project.version}"
+}
+semver {
+    properties = "core.properties"
+    keysPrefix = "core."
+}
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -81,10 +87,12 @@ project.afterEvaluate {
                 url = uri("https://maven.pkg.github.com/realifetech/android-sdk")
                 credentials {
                     Properties properties = new Properties()
-                    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-                    username = properties.getProperty("gpr.user") ?: System.getenv("GITHUB_USER")
-                    password = properties.getProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                    File propertiesFile = project.rootProject.file('local.properties')
+                    if (propertiesFile.exists()) {
+                        properties.load(propertiesFile.newDataInputStream())
+                    }
+                    username = properties?.getProperty("gpr.user") ?: System.getenv("GITHUB_USER")
+                    password = properties?.getProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
                 }
             }
         }
@@ -93,13 +101,12 @@ project.afterEvaluate {
             library(MavenPublication) {
                 groupId "com.realifetech"
                 artifactId "core-sdk"
-                version android.defaultConfig.versionName
+                version project.version
                 artifact("$buildDir/outputs/aar/core-sdk-release.aar")
                 artifact(sourceJar)
 
                 pom.withXml {
                     def dependenciesNode = asNode().appendNode('dependencies')
-
                     //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
                     configurations.implementation.allDependencies.each {
                         if (it.group != null) {
