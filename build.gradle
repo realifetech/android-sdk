@@ -8,13 +8,19 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath("com.apollographql.apollo:apollo-gradle-plugin:2.5.5")
-
+        classpath "com.apollographql.apollo:apollo-gradle-plugin:2.5.5"
+        classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
-
+plugins {
+    id "net.thauvin.erik.gradle.semver" version "1.0.4"
+}
+def sdkProps = new Properties()
+file("./sdk/sdk.properties").withInputStream { sdkProps.load(it) }
+def coreProps = new Properties()
+file("./core-sdk/core.properties").withInputStream { coreProps.load(it) }
 allprojects {
     repositories {
         google()
@@ -26,15 +32,29 @@ allprojects {
 
             credentials {
                 Properties properties = new Properties()
-                properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-                username = properties.getProperty("gpr.user") ?: System.getenv("GITHUB_USER")
-                password = properties.getProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                File propertiesFile = project.rootProject.file('local.properties')
+                if (propertiesFile.exists()) {
+                    properties.load(propertiesFile.newDataInputStream())
+                }
+                username = properties?.getProperty("gpr.user") ?: System.getenv("GITHUB_USER")
+                password = properties?.getProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
             }
         }
     }
 }
 
+subprojects {
+    apply from: "$project.rootDir/tools/script-pmd.gradle"
+    apply from: "$project.rootDir/tools/script-jacoco.gradle"
+}
+ext {
+    room_version = "2.2.5"
+    core_version = coreProps.getProperty("core.semver")
+    sdk_version = sdkProps.getProperty("sdk.semver")
+}
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+task echoVersion(type: Exec) {
+    commandLine 'echo', "${-> project.version}"
 }
