@@ -11,6 +11,7 @@ elif [[ $1 =~ ^release\/.+$ || $1 =~ /^hotfix\/.+$/ ]]; then
   fi
 echo "export SDK_CHANGED=$(git diff --quiet HEAD "$( git rev-parse --short @~)" -- sdk || echo changed)" >> "$BASH_ENV";
 echo "export CORE_CHANGED=$(git diff --quiet HEAD "$( git rev-parse --short @~)" -- core-sdk || echo changed)" >> "$BASH_ENV";
+echo "export RELEASE_CREATED=$([ -z "$( git cherry -v develop )" ] && echo "created")" >> "$BASH_ENV";
 source $BASH_ENV
 echo "$CORE_CHANGED"
 echo "$SDK_CHANGED"
