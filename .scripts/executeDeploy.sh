@@ -13,6 +13,9 @@ if [[  "${CORE_CHANGED}" == "changed" || "${SDK_CHANGED}" == "changed"  || "${RE
   fi
   if [[ "${CORE_CHANGED}" == "changed" ]]; then
     ./gradlew core-sdk:publishLibraryPublicationToGitHubPackagesRepository
+    ./gradlew -D sdk.prerelease="$VERSION_SUFFIX"
+    ./gradlew sdk:increment"$VERSION_TARGET"
+    ./gradlew sdk:assembleRelease
   fi
   ./gradlew sdk:publishLibraryPublicationToGitHubPackagesRepository
   ./.scripts/commitAndPush.sh
