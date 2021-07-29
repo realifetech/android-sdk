@@ -5,10 +5,11 @@ if [[ "${CORE_CHANGED}" == "changed" ]]; then
   ./gradlew -D core-sdk.prerelease="$VERSION_SUFFIX"
   ./gradlew core-sdk:increment"$VERSION_TARGET"
   ./gradlew core-sdk:assembleRelease
-  fi
+  else
   ./gradlew -D sdk.prerelease="$VERSION_SUFFIX"
   ./gradlew sdk:increment"$VERSION_TARGET"
   ./gradlew sdk:assembleRelease
+  fi
 else
   echo "its just sample app change, nothing to publish mate, we are done here."
 fi
