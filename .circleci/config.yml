@@ -24,7 +24,7 @@ jobs:
       - android/restore-gradle-cache
       - android/restore-build-cache
       - android/run-tests:
-          test-command: ./gradlew testDebugUnitTest  --stacktrace --no-daemon
+          test-command: ./gradlew codeCoverageReport  --stacktrace --no-daemon
       - store_artifacts:
           name: Upload coverage APP result
           path: app/build/reports
