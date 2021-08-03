@@ -27,12 +27,17 @@ jobs:
           test-command: ./gradlew codeCoverageReport  --stacktrace --no-daemon
       - store_artifacts:
           name: Upload coverage APP result
-          path: app/build/reports
+          path: app/build/reports/jacoco/codeCoverageReport/html
           destination: reports-app
       - store_artifacts:
           name: Upload coverage SDK result
-          path: sdk/build/reports
+          path: sdk/build/reports/jacoco/codeCoverageReport/html
           destination: reports-sdk
+      - store_artifacts:
+          name: Upload coverage CORE-SDK result
+          path: core-sdk/build/reports/jacoco/codeCoverageReport/html
+          destination: reports-app
+      - store_test_results
       - android/save-gradle-cache
       - android/save-build-cache
   lint-test:
