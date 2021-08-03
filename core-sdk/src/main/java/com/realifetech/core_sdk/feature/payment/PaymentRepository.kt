@@ -6,6 +6,7 @@ import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentSourceWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.asInput
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
+import com.realifetech.core_sdk.domain.Result
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.type.PaymentIntentInput
 import com.realifetech.type.PaymentIntentUpdateInput
@@ -38,6 +39,10 @@ class PaymentRepository(private val dataSource: DataSource) {
     ) =
         dataSource.updatePaymentIntent(id, input.asInput, callback)
 
+    fun getMyPaymentIntent(
+        id: String
+    ): Result<PaymentIntent>? = dataSource.getMyPaymentIntent(id)
+
     fun deleteMyPaymentSource(
         id: String,
         callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
@@ -68,6 +73,10 @@ class PaymentRepository(private val dataSource: DataSource) {
             input: PaymentIntentUpdateInput,
             callback: (error: Exception?, response: PaymentIntent?) -> Unit
         )
+
+        fun getMyPaymentIntent(
+            id: String
+        ): Result<PaymentIntent>?
 
         fun deleteMyPaymentSource(
             id: String,
