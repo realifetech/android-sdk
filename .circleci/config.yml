@@ -37,7 +37,8 @@ jobs:
           name: Upload coverage CORE-SDK result
           path: core-sdk/build/reports/jacoco/codeCoverageReport/html
           destination: reports-app
-      - store_test_results
+      - store_test_results:
+          path: core-sdk/build/test-results
       - android/save-gradle-cache
       - android/save-build-cache
   lint-test:
