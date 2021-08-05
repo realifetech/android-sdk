@@ -7,7 +7,6 @@ import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.GetMyPaymentIntentQuery
-import com.realifetech.core_sdk.domain.Result
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.type.OrderType
 import com.realifetech.type.PaymentStatus
@@ -62,15 +61,17 @@ class PaymentDataSourceTest {
         } returns paymentIntent
         every {
             apolloClient.query(GetMyPaymentIntentQuery(PAYMENT_INTENT_ID)).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY).build().enqueue(capture(getMyPaymentIntentSlot))
+                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY).build()
+                .enqueue(capture(getMyPaymentIntentSlot))
         } answers {
             getMyPaymentIntentSlot.captured.onResponse(responseData)
         }
         // When
-        val result = paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID)
-        // Then
-        Assert.assertEquals(Result.Success(paymentIntent), result)
-        print(result)
+        paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
+            // Then
+            Assert.assertEquals(response, paymentIntent)
+            print(response)
+        }
     }
 
     @Test
@@ -87,9 +88,11 @@ class PaymentDataSourceTest {
             getMyPaymentIntentSlot.captured.onResponse(responseData)
         }
         // When
-        val result = paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID)
-        // Then
-        assert(result is Result.Error)
+        paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
+            //Then
+            assert(error is ApolloHttpException)
+            Assert.assertEquals(null, response)
+        }
     }
 
     @Test
@@ -103,9 +106,11 @@ class PaymentDataSourceTest {
             getMyPaymentIntentSlot.captured.onFailure(ApolloException("Error"))
         }
         // When
-        val result = paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID)
-        // Then
-        assert(result is Result.Error)
+        paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
+            // Then
+            assert(error is ApolloException)
+            Assert.assertEquals(null, response)
+        }
     }
 
     @Test
@@ -118,34 +123,40 @@ class PaymentDataSourceTest {
         } answers {
             getMyPaymentIntentSlot.captured.onResponse(responseData)
         }
+        val callback = { error: Exception?, response: PaymentIntent? ->
+            // Then
+            assert(error is Exception)
+            Assert.assertSame(null,response)
+        }
         // When
         //Null fragments
         every {
             responseData.data?.getMyPaymentIntent?.fragments
         } returns null
-        val resultNullFragment = paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID)
+        paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
+            callback(error, response)
+        }
         //Null paymentIntent
         every {
             responseData.data?.getMyPaymentIntent?.fragments?.paymentIntent
         } returns null
-        val resultNullPayment = paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID)
+        paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
+            callback(error, response)
+        }
         //Null getMyPaymentIntent
         every {
             responseData.data?.getMyPaymentIntent
         } returns null
-        val resultNullGetMyPayment = paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID)
+        paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
+            callback(error, response)
+        }
         //Null getMyPaymentIntent
         every {
             responseData.data
         } returns null
-        val resultNullData = paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID)
-
-        // Then
-        assert(resultNullPayment is Result.Error)
-        assert(resultNullFragment is Result.Error)
-        assert(resultNullGetMyPayment is Result.Error)
-        assert(resultNullData is Result.Error)
-
+        paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
+            callback(error, response)
+        }
     }
 
     companion object {

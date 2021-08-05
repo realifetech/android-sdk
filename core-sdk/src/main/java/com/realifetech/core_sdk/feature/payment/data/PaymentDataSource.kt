@@ -127,9 +127,9 @@ class PaymentDataSource(val apolloClient: ApolloClient) : PaymentRepository.Data
     }
 
     override fun getMyPaymentIntent(
-        id: String
-    ): Result<PaymentIntent>? {
-        var result: Result<PaymentIntent>? = null
+        id: String,
+        callback: (error: Exception?, response: PaymentIntent?) -> Unit
+    ) {
         try {
             val response = apolloClient.query(GetMyPaymentIntentQuery(id))
                 .toBuilder()
@@ -139,20 +139,19 @@ class PaymentDataSource(val apolloClient: ApolloClient) : PaymentRepository.Data
                 ApolloCall.Callback<GetMyPaymentIntentQuery.Data>() {
                 override fun onResponse(response: Response<GetMyPaymentIntentQuery.Data>) {
                     response.data?.getMyPaymentIntent?.fragments?.paymentIntent?.let {
-                        result = Result.Success(it)
+                        callback.invoke(null,it)
                     } ?: run {
-                        result = Result.Error(Exception())
+                        callback.invoke(Exception(),null)
                     }
                 }
 
                 override fun onFailure(e: ApolloException) {
-                    result = Result.Error(e)
+                    callback.invoke(e,null)
                 }
             })
         } catch (exception: ApolloHttpException) {
-            result = Result.Error(exception)
+            callback.invoke(exception,null)
         }
-        return result
     }
 
     override fun deleteMyPaymentSource(
