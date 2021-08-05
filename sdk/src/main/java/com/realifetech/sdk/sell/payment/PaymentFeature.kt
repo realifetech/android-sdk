@@ -39,6 +39,12 @@ class PaymentFeature private constructor() {
         paymentRepo.updatePaymentIntent(id, input, callback)
     }
 
+    fun getMyPaymentIntent(
+        id: String
+    ) {
+        paymentRepo.getMyPaymentIntent(id)
+    }
+
     fun deletePaymentSource(
         id: String,
         callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
