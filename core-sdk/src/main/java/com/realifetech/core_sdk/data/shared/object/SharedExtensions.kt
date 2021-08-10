@@ -1,7 +1,9 @@
 package com.realifetech.core_sdk.data.shared.`object`
 
+import com.apollographql.apollo.api.Input
 import com.realifetech.fragment.FragmentMutationResponse
 import com.realifetech.fragment.FragmentTimeslot
+import com.realifetech.type.FilterParam
 import com.realifetech.type.Language
 
 val FragmentMutationResponse.asModel: StandardResponse
@@ -35,4 +37,7 @@ val FragmentTimeslot.Translation.asModel: TimeSlotTranslation
         description = description,
         collectionNote = collectionNote
     )
+
+val FilterParamWrapper.asInput: FilterParam
+    get() = FilterParam(Input.optional(key), value)
 
