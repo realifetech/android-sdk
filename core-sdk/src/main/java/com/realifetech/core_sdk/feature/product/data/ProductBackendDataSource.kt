@@ -1,6 +1,7 @@
 package com.realifetech.core_sdk.feature.product.data
 
 import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.exception.ApolloException
@@ -10,7 +11,9 @@ import com.realifetech.GetProductByIdQuery
 import com.realifetech.GetProductsQuery
 import com.realifetech.core_sdk.data.product.Product
 import com.realifetech.core_sdk.data.product.asModel
+import com.realifetech.core_sdk.data.shared.`object`.FilterParamWrapper
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
+import com.realifetech.core_sdk.data.shared.`object`.asInput
 import com.realifetech.core_sdk.feature.product.ProductRepository
 import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.type.ProductFilter
@@ -23,11 +26,19 @@ class ProductBackendDataSource() :
         pageSize: Int,
         page: Int,
         filters: ProductFilter,
+        params: List<FilterParamWrapper>?,
         callback: (error: Exception?, response: PaginatedObject<Product?>?) -> Unit
     ) {
         try {
             val response =
-                apolloClient.query(GetProductsQuery(pageSize, page.toInput(), filters.toInput()))
+                apolloClient.query(
+                    GetProductsQuery(
+                        pageSize,
+                        page.toInput(),
+                        filters.toInput(),
+                        Input.optional(params?.map { it.asInput })
+                    )
+                )
                     .toBuilder()
                     .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                     .build()
@@ -52,11 +63,17 @@ class ProductBackendDataSource() :
 
     override fun getProductById(
         id: String,
+        params: List<FilterParamWrapper>?,
         callback: (error: Exception?, product: Product?) -> Unit
     ) {
         try {
             val response =
-                apolloClient.query(GetProductByIdQuery(id))
+                apolloClient.query(
+                    GetProductByIdQuery(
+                        id,
+                        Input.optional(params?.map { it.asInput })
+                    )
+                )
                     .toBuilder()
                     .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                     .build()

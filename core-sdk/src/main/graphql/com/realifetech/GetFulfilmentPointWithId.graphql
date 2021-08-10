@@ -1,5 +1,5 @@
-query getFulfilmentPointById($id: ID!) {
-  getFulfilmentPoint(id: $id) {
+query getFulfilmentPointById($id: ID!, $params: [FilterParam!] = null) {
+  getFulfilmentPoint(id: $id, params: $params) {
 		...FragmentFulfilmentPoint
   }
 }

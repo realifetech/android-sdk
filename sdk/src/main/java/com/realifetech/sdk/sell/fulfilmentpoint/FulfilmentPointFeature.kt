@@ -3,6 +3,7 @@ package com.realifetech.sdk.sell.fulfilmentpoint
 import com.apollographql.apollo.api.toInput
 import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPoint
 import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPointCategory
+import com.realifetech.core_sdk.data.shared.`object`.FilterParamWrapper
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.type.FulfilmentPointFilter
 
@@ -13,16 +14,18 @@ class FulfilmentPointFeature private constructor() {
         pageSize: Int,
         page: Int,
         filters: FulfilmentPointFilter?,
+        params: List<FilterParamWrapper>?,
         callback: (error: Exception?, response: PaginatedObject<FulfilmentPoint?>?) -> Unit
     ) {
-        fulfilmentPointRepo.getFulfilmentPoints(pageSize, page, filters.toInput(), callback)
+        fulfilmentPointRepo.getFulfilmentPoints(pageSize, page, filters.toInput(), params, callback)
     }
 
     fun getFulfilmentPointById(
         id: String,
+        params: List<FilterParamWrapper>?,
         callback: (error: Exception?, fulfilmentPoint: FulfilmentPoint?) -> Unit
     ) {
-        fulfilmentPointRepo.getFulfilmentPointById(id, callback)
+        fulfilmentPointRepo.getFulfilmentPointById(id, params, callback)
     }
 
     fun getFulfilmentPointCategories(

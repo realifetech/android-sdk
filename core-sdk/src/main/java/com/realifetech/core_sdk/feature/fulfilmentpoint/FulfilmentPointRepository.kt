@@ -3,6 +3,7 @@ package com.realifetech.core_sdk.feature.fulfilmentpoint
 import com.apollographql.apollo.api.Input
 import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPoint
 import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPointCategory
+import com.realifetech.core_sdk.data.shared.`object`.FilterParamWrapper
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.type.FulfilmentPointFilter
 
@@ -12,21 +13,24 @@ class FulfilmentPointRepository(private val dataSource: DataSource) {
         pageSize: Int,
         page: Int,
         filters: Input<FulfilmentPointFilter>?,
+        params: List<FilterParamWrapper>?,
         callback: (error: Exception?, response: PaginatedObject<FulfilmentPoint?>?) -> Unit
     ) {
         dataSource.getFulfilmentPoints(
             pageSize = pageSize,
             page = page,
             filters = filters,
+            params = params,
             callback = callback
         )
     }
 
     fun getFulfilmentPointById(
         id: String,
+        params: List<FilterParamWrapper>?,
         callback: (error: Exception?, fulfilmentPoint: FulfilmentPoint?) -> Unit
     ) {
-        dataSource.getFulfilmentPointById(id, callback)
+        dataSource.getFulfilmentPointById(id, params, callback)
     }
 
     fun getFulfilmentPointCategories(
@@ -49,11 +53,13 @@ class FulfilmentPointRepository(private val dataSource: DataSource) {
             pageSize: Int,
             page: Int,
             filters: Input<FulfilmentPointFilter>?,
+            params: List<FilterParamWrapper>?,
             callback: (error: Exception?, response: PaginatedObject<FulfilmentPoint?>?) -> Unit
         )
 
         fun getFulfilmentPointById(
             id: String,
+            params: List<FilterParamWrapper>?,
             callback: (error: Exception?, fulfilmentPoint: FulfilmentPoint?) -> Unit
         )
 

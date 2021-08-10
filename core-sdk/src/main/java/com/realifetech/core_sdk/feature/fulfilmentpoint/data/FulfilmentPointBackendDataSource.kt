@@ -14,8 +14,9 @@ import com.realifetech.GetFulfilmentPointsQuery
 import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPoint
 import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPointCategory
 import com.realifetech.core_sdk.data.fulfilmentPoint.asModel
+import com.realifetech.core_sdk.data.shared.`object`.FilterParamWrapper
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
-import com.realifetech.core_sdk.domain.Result
+import com.realifetech.core_sdk.data.shared.`object`.asInput
 import com.realifetech.core_sdk.feature.fulfilmentpoint.FulfilmentPointRepository
 import com.realifetech.core_sdk.feature.helper.extractResponse
 import com.realifetech.core_sdk.network.graphQl.GraphQlModule
@@ -30,6 +31,7 @@ class FulfilmentPointBackendDataSource() :
         pageSize: Int,
         page: Int,
         filters: Input<FulfilmentPointFilter>?,
+        params: List<FilterParamWrapper>?,
         callback: (error: Exception?, response: PaginatedObject<FulfilmentPoint?>?) -> Unit
     ) {
         try {
@@ -37,7 +39,8 @@ class FulfilmentPointBackendDataSource() :
                 GetFulfilmentPointsQuery(
                     pageSize = pageSize,
                     page = page.toInput(),
-                    filters = filters ?: FulfilmentPointFilter().toInput()
+                    filters = filters ?: FulfilmentPointFilter().toInput(),
+                    params = Input.optional(params?.map { it.asInput })
                 )
             )
                 .toBuilder()
@@ -65,11 +68,17 @@ class FulfilmentPointBackendDataSource() :
 
     override fun getFulfilmentPointById(
         id: String,
+        params: List<FilterParamWrapper>?,
         callback: (error: Exception?, fulfilmentPoint: FulfilmentPoint?) -> Unit
     ) {
         try {
             val response =
-                apolloClient.query(GetFulfilmentPointByIdQuery(id))
+                apolloClient.query(
+                    GetFulfilmentPointByIdQuery(
+                        id,
+                        Input.optional(params?.map { it.asInput })
+                    )
+                )
                     .toBuilder()
                     .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                     .build()
