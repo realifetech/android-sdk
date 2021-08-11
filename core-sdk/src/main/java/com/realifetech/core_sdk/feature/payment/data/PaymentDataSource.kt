@@ -17,7 +17,7 @@ import com.realifetech.type.PaymentIntentInput
 import com.realifetech.type.PaymentIntentUpdateInput
 import com.realifetech.type.PaymentSourceInput
 
-class PaymentDataSource(val apolloClient: ApolloClient) : PaymentRepository.DataSource {
+class PaymentDataSource(private val apolloClient: ApolloClient) : PaymentRepository.DataSource {
 
 
     override fun addPaymentSource(

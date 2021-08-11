@@ -14,12 +14,13 @@ import com.realifetech.core_sdk.data.payment.model.asModel
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentUpdateWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.asInput
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
-import com.realifetech.core_sdk.feature.payment.data.mocks.PaymentIntentMocks.paymentIntent
-import com.realifetech.core_sdk.feature.payment.data.mocks.PaymentIntentMocks.paymentIntentInput
-import com.realifetech.core_sdk.feature.payment.data.mocks.PaymentSourcesMocks.emptyPaymentSources
-import com.realifetech.core_sdk.feature.payment.data.mocks.PaymentSourcesMocks.paymentSource
-import com.realifetech.core_sdk.feature.payment.data.mocks.PaymentSourcesMocks.paymentSourceInput
-import com.realifetech.core_sdk.feature.payment.data.mocks.PaymentSourcesMocks.paymentSources
+import com.realifetech.core_sdk.feature.payment.mocks.PaymentIntentMocks.paymentIntent
+import com.realifetech.core_sdk.feature.payment.mocks.PaymentIntentMocks.paymentIntentInput
+import com.realifetech.core_sdk.feature.payment.mocks.PaymentIntentMocks.paymentIntentUpdateInput
+import com.realifetech.core_sdk.feature.payment.mocks.PaymentSourcesMocks.emptyPaymentSources
+import com.realifetech.core_sdk.feature.payment.mocks.PaymentSourcesMocks.paymentSource
+import com.realifetech.core_sdk.feature.payment.mocks.PaymentSourcesMocks.paymentSourceInput
+import com.realifetech.core_sdk.feature.payment.mocks.PaymentSourcesMocks.paymentSources
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.type.UpdatePaymentStatus
 import io.mockk.CapturingSlot
@@ -51,12 +52,6 @@ class PaymentDataSourceTest {
     private lateinit var deletePaymentSourceSlot: CapturingSlot<ApolloCall.Callback<DeleteMyPaymentSourceMutation.Data>>
     private lateinit var addPaymentSourceSlot: CapturingSlot<ApolloCall.Callback<AddPaymentSourceToMyWalletMutation.Data>>
 
-
-    private val paymentIntentUpdateInput = PaymentIntentUpdateWrapper(
-        UpdatePaymentStatus.CANCELED,
-        null,
-        null
-    ).asInput
 
     @Before
     fun setUp() {
