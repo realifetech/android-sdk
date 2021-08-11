@@ -1,14 +1,16 @@
-package com.realifetech.core_sdk.feature.payment.data.mocks
+package com.realifetech.core_sdk.feature.payment.mocks
 
+import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentUpdateWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentWrapper
 import com.realifetech.core_sdk.data.payment.wrapper.asInput
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.type.OrderType
 import com.realifetech.type.PaymentStatus
+import com.realifetech.type.UpdatePaymentStatus
 
 object PaymentIntentMocks {
 
-     val paymentIntent = PaymentIntent(
+    val paymentIntent = PaymentIntent(
         "PaymentIntent",
         "",
         OrderType.FOOD_AND_BEVERAGE,
@@ -23,7 +25,7 @@ object PaymentIntentMocks {
         null,
         null
     )
-     val paymentIntentInput = PaymentIntentWrapper(
+    val paymentIntentWrapper = PaymentIntentWrapper(
         OrderType.FOOD_AND_BEVERAGE,
         "123",
         null,
@@ -33,8 +35,15 @@ object PaymentIntentMocks {
         false,
         null,
         null,
-    ).asInput
+    )
+    val paymentIntentInput = paymentIntentWrapper.asInput
 
+    val paymentIntentUpdateWrapper = PaymentIntentUpdateWrapper(
+        UpdatePaymentStatus.CANCELED,
+        null,
+        null
+    )
+    val paymentIntentUpdateInput = paymentIntentUpdateWrapper.asInput
 
 
 }

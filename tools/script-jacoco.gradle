@@ -1,5 +1,9 @@
 apply plugin: 'jacoco'
 
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 def androidExclusion = [
         '**/databinding/**/*.*',
         '**/android/databinding/*Binding.*',
@@ -19,7 +23,9 @@ def androidExclusion = [
         '**/*ViewHolder*.*',
         '**/*Module*.*',
         '**/fragment/*.*',
-        '**/type/*.*'
+        '**/type/*.*',
+        '**/model/*.*',
+        '**/wrapper/*.*'
 ]
 task codeCoverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     group = "Reporting"
@@ -28,7 +34,7 @@ task codeCoverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
         xml.enabled = true
         html.enabled = true
     }
-    getClassDirectories().from( fileTree(
+    getClassDirectories().from(fileTree(
             dir: "${project.buildDir}/tmp/kotlin-classes/debug",
             excludes: androidExclusion))
     getSourceDirectories().from(files("${project.projectDir}/src/main/java"))
