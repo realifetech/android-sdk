@@ -16,6 +16,7 @@ def androidExclusion = [
         '**/Dagger*Component.*',
         '**/Dagger*Component$Builder.*',
         '**/*Module_*Factory.*',
+        '**/*Provider*.*',
         '**/*Fragment*.*',
         '**/*Activity*.*',
         '**/*Adapter*.*',
