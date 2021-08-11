@@ -65,7 +65,9 @@ dependencies {
     implementation "androidx.room:room-runtime:$rootProject.ext.room_version"
     kapt "androidx.room:room-compiler:$rootProject.ext.room_version"
     implementation "androidx.room:room-ktx:$rootProject.ext.room_version"
-
+    testImplementation "org.mockito:mockito-core:$rootProject.ext.mockito_version"
+    testImplementation "org.mockito:mockito-inline:$rootProject.ext.mockito_inline_version"
+    testImplementation "io.mockk:mockk:$rootProject.ext.mockk_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.1'
 
     // GraphQL
