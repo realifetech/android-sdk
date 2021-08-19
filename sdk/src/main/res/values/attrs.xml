@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="rlt_margin_xs">2dp</dimen>
+    <dimen name="rlt_margin_s">4dp</dimen>
+    <dimen name="rlt_margin_m">8dp</dimen>
+    <dimen name="rlt_margin_l">16dp</dimen>
+    <dimen name="rlt_margin_xl">24dp</dimen>
+    <dimen name="rlt_margin_xxl">32dp</dimen>
+    <dimen name="rlt_margin_xxxl">48dp</dimen>
+</resources>

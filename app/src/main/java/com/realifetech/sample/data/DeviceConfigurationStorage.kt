@@ -20,6 +20,12 @@ class DeviceConfigurationStorage(private val context: Context) {
             preferences.edit { putString("GRAPH_URL", value) }
         }
 
+    var orderingJourney: String
+        get() = preferences.getString("ORDERING_JOURNEY", "").orEmpty()
+        set(value) {
+            preferences.edit { putString("ORDERING_JOURNEY", value) }
+        }
+
     var clientSecret: String
         get() = preferences.getString("ClientSecret", "").orEmpty()
         set(value) {

@@ -1,8 +1,11 @@
 package com.realifetech.sample
 
 import android.app.Application
+import android.graphics.Color
+import androidx.core.content.ContextCompat
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sdk.RealifeTech
+import com.realifetech.sdk.general.data.color.ColorType
 
 class SampleApplication : Application() {
     override fun onCreate() {
@@ -23,5 +26,11 @@ class SampleApplication : Application() {
             clientSecret = storage.clientSecret
             appCode = storage.clientId
         }
+//  Set Colors via code
+        // EXAMPLE 1
+//        RealifeTech.getGeneral().setColor(Color.parseColor("#000"), ColorType.PRIMARY)
+        //EXAMPLE 2
+//        RealifeTech.getGeneral()
+//            .setColor(ContextCompat.getColor(this, R.color.colorAccent), ColorType.ON_PRIMARY)
     }
 }

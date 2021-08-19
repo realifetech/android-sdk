@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="RLT_AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/RLT_SDK_Color_Primary</item>
+        <item name="colorOnPrimary">@color/RLT_SDK_Color_OnPrimary</item>
+        <item name="colorSurface">@color/RLT_SDK_Color_Surface</item>
+        <item name="colorOnSurface">@color/RLT_SDK_Color_OnSurface</item>
+    </style>
+
+    <style name="RLT.Material.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_marginEnd">@dimen/rlt_margin_l</item>
+        <item name="android:layout_marginTop">@dimen/rlt_margin_m</item>
+        <item name="android:layout_marginStart">@dimen/rlt_margin_l</item>
+    </style>
+
+</resources>

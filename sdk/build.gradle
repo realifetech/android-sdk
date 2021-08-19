@@ -8,17 +8,19 @@ apply plugin: "net.thauvin.erik.gradle.semver"
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
-
+    buildFeatures {
+        viewBinding true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -63,6 +65,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
     implementation "com.google.android.gms:play-services-ads:16.0.0"
     implementation "androidx.room:room-runtime:$rootProject.ext.room_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "androidx.room:room-compiler:$rootProject.ext.room_version"
     implementation "androidx.room:room-ktx:$rootProject.ext.room_version"
     testImplementation "org.mockito:mockito-core:$rootProject.ext.mockito_version"
@@ -70,15 +73,16 @@ dependencies {
     testImplementation "io.mockk:mockk:$rootProject.ext.mockk_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.1'
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$rootProject.ext.coroutines_version"
     // GraphQL
-    implementation("com.apollographql.apollo:apollo-runtime:2.5.5")
-    implementation("com.apollographql.apollo:apollo-coroutines-support:2.5.5")
-
-    implementation "com.realifetech:core-sdk:$rootProject.ext.core_version"
-    //implementation project(path: ':core-sdk')
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation"com.apollographql.apollo:apollo-runtime:$rootProject.ext.graphql_version"
+    implementation"com.apollographql.apollo:apollo-coroutines-support:$rootProject.ext.graphql_version"
+    //Material UI
+    implementation "com.google.android.material:material:$rootProject.ext.material_version"
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraint_version"
+//    implementation "com.realifetech:core-sdk:$rootProject.ext.core_version"
+    implementation project(path: ':core-sdk')
+    testImplementation "junit:junit:$rootProject.ext.junit_version"
 }
 
 project.afterEvaluate {
