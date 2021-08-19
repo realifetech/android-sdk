@@ -11,8 +11,6 @@ import com.realifetech.*
 import com.realifetech.GetMyPaymentSourcesQuery.Data
 import com.realifetech.core_sdk.data.payment.model.PaymentSource
 import com.realifetech.core_sdk.data.payment.model.asModel
-import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentUpdateWrapper
-import com.realifetech.core_sdk.data.payment.wrapper.asInput
 import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
 import com.realifetech.core_sdk.feature.payment.mocks.PaymentIntentMocks.paymentIntent
 import com.realifetech.core_sdk.feature.payment.mocks.PaymentIntentMocks.paymentIntentInput
@@ -22,7 +20,6 @@ import com.realifetech.core_sdk.feature.payment.mocks.PaymentSourcesMocks.paymen
 import com.realifetech.core_sdk.feature.payment.mocks.PaymentSourcesMocks.paymentSourceInput
 import com.realifetech.core_sdk.feature.payment.mocks.PaymentSourcesMocks.paymentSources
 import com.realifetech.fragment.PaymentIntent
-import com.realifetech.type.UpdatePaymentStatus
 import io.mockk.CapturingSlot
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -56,6 +53,10 @@ class PaymentDataSourceTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+        initMockedFields()
+    }
+
+    private fun initMockedFields() {
         paymentDataSource = PaymentDataSource(apolloClient)
         // init getPaymentIntent mocked response data & capture
         getPaymentData = mockk()
@@ -83,13 +84,8 @@ class PaymentDataSourceTest {
         every {
             getPaymentData.data?.getMyPaymentIntent?.fragments?.paymentIntent
         } returns paymentIntent
-        every {
-            apolloClient.query(GetMyPaymentIntentQuery(PAYMENT_INTENT_ID)).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY).build()
-                .enqueue(capture(getPaymentIntentSlot))
-        } answers {
-            getPaymentIntentSlot.captured.onResponse(getPaymentData)
-        }
+
+        getPaymentIntentSuccessAnswer()
         // When
         paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
             // Then
@@ -104,13 +100,9 @@ class PaymentDataSourceTest {
         every {
             getPaymentData.data
         } throws ApolloHttpException(any())
-        every {
-            apolloClient.query(GetMyPaymentIntentQuery(PAYMENT_INTENT_ID)).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY).build()
-                .enqueue(capture(getPaymentIntentSlot))
-        } answers {
-            getPaymentIntentSlot.captured.onResponse(getPaymentData)
-        }
+
+        getPaymentIntentSuccessAnswer()
+
         // When
         paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
             //Then
@@ -140,13 +132,7 @@ class PaymentDataSourceTest {
     @Test
     fun `get My Payment Intent results with null response`() = runBlocking {
         //Given
-        every {
-            apolloClient.query(GetMyPaymentIntentQuery(PAYMENT_INTENT_ID)).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY).build()
-                .enqueue(capture(getPaymentIntentSlot))
-        } answers {
-            getPaymentIntentSlot.captured.onResponse(getPaymentData)
-        }
+        getPaymentIntentSuccessAnswer()
         val callback = { error: Exception?, response: PaymentIntent? ->
             // Then
             assert(error is Exception)
@@ -183,27 +169,29 @@ class PaymentDataSourceTest {
         }
     }
 
+    private fun getPaymentIntentSuccessAnswer() {
+        every {
+            apolloClient.query(GetMyPaymentIntentQuery(PAYMENT_INTENT_ID)).toBuilder()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY).build()
+                .enqueue(capture(getPaymentIntentSlot))
+        } answers {
+            getPaymentIntentSlot.captured.onResponse(getPaymentData)
+        }
+    }
+
     @Test
     fun `delete Payment Source successfully`() = runBlocking {
         //Given
         every {
             deletePaymentSourceData.data?.deleteMyPaymentSource?.fragments?.fragmentPaymentSource
         } returns paymentSource
-        every {
-            apolloClient.mutate(
-                DeleteMyPaymentSourceMutation(
-                    PAYMENT_INTENT_ID
-                )
-            )
-                .enqueue(capture(deletePaymentSourceSlot))
-        } answers {
-            deletePaymentSourceSlot.captured.onResponse(deletePaymentSourceData)
-        }
+        deletePaymentSourceSuccessAnswer()
         // When
         paymentDataSource.deleteMyPaymentSource(
             PAYMENT_INTENT_ID
         ) { error, response ->
             // Then
+            Assert.assertEquals(null, error)
             Assert.assertEquals(response, paymentSource.asModel)
             print(response)
         }
@@ -215,16 +203,7 @@ class PaymentDataSourceTest {
         every {
             deletePaymentSourceData.data
         } throws ApolloHttpException(any())
-        every {
-            apolloClient.mutate(
-                DeleteMyPaymentSourceMutation(
-                    PAYMENT_INTENT_ID
-                )
-            )
-                .enqueue(capture(deletePaymentSourceSlot))
-        } answers {
-            deletePaymentSourceSlot.captured.onResponse(deletePaymentSourceData)
-        }
+        deletePaymentSourceSuccessAnswer()
         // When
         paymentDataSource.deleteMyPaymentSource(
             PAYMENT_INTENT_ID
@@ -260,16 +239,8 @@ class PaymentDataSourceTest {
 
     @Test
     fun `delete Payment Source results with null response`() = runBlocking {
-        every {
-            apolloClient.mutate(
-                DeleteMyPaymentSourceMutation(
-                    PAYMENT_INTENT_ID
-                )
-            )
-                .enqueue(capture(deletePaymentSourceSlot))
-        } answers {
-            deletePaymentSourceSlot.captured.onResponse(deletePaymentSourceData)
-        }
+        // Given
+        deletePaymentSourceSuccessAnswer()
         val callback = { error: Exception?, response: PaymentSource? ->
             assert(error is Exception)
             Assert.assertSame(null, response)
@@ -319,23 +290,26 @@ class PaymentDataSourceTest {
 
     }
 
+    private fun deletePaymentSourceSuccessAnswer() {
+        every {
+            apolloClient.mutate(
+                DeleteMyPaymentSourceMutation(
+                    PAYMENT_INTENT_ID
+                )
+            )
+                .enqueue(capture(deletePaymentSourceSlot))
+        } answers {
+            deletePaymentSourceSlot.captured.onResponse(deletePaymentSourceData)
+        }
+    }
+
     @Test
     fun `update Payment Intent successfully`() = runBlocking {
         //Given
         every {
             updatePaymentData.data?.updateMyPaymentIntent?.fragments?.paymentIntent
         } returns paymentIntent
-        every {
-            apolloClient.mutate(
-                UpdatePaymentIntentMutation(
-                    PAYMENT_INTENT_ID,
-                    paymentIntentUpdateInput
-                )
-            )
-                .enqueue(capture(updatePaymentIntentSlot))
-        } answers {
-            updatePaymentIntentSlot.captured.onResponse(updatePaymentData)
-        }
+        updatePaymentIntentSuccessAnswer()
         // When
         paymentDataSource.updatePaymentIntent(
             PAYMENT_INTENT_ID,
@@ -353,17 +327,7 @@ class PaymentDataSourceTest {
         every {
             updatePaymentData.data
         } throws ApolloHttpException(any())
-        every {
-            apolloClient.mutate(
-                UpdatePaymentIntentMutation(
-                    PAYMENT_INTENT_ID,
-                    paymentIntentUpdateInput
-                )
-            )
-                .enqueue(capture(updatePaymentIntentSlot))
-        } answers {
-            updatePaymentIntentSlot.captured.onResponse(updatePaymentData)
-        }
+        updatePaymentIntentSuccessAnswer()
         // When
         paymentDataSource.updatePaymentIntent(
             PAYMENT_INTENT_ID,
@@ -402,17 +366,8 @@ class PaymentDataSourceTest {
 
     @Test
     fun `update Payment Intent results with null response`() = runBlocking {
-        every {
-            apolloClient.mutate(
-                UpdatePaymentIntentMutation(
-                    PAYMENT_INTENT_ID,
-                    paymentIntentUpdateInput
-                )
-            )
-                .enqueue(capture(updatePaymentIntentSlot))
-        } answers {
-            updatePaymentIntentSlot.captured.onResponse(updatePaymentData)
-        }
+        // Given
+        updatePaymentIntentSuccessAnswer()
         val callback = { error: Exception?, response: PaymentIntent? ->
             assert(error is Exception)
             Assert.assertSame(null, response)
@@ -466,22 +421,27 @@ class PaymentDataSourceTest {
 //        verifyNull(callback, updatePaymentData.data)
     }
 
+    private fun updatePaymentIntentSuccessAnswer() {
+        every {
+            apolloClient.mutate(
+                UpdatePaymentIntentMutation(
+                    PAYMENT_INTENT_ID,
+                    paymentIntentUpdateInput
+                )
+            )
+                .enqueue(capture(updatePaymentIntentSlot))
+        } answers {
+            updatePaymentIntentSlot.captured.onResponse(updatePaymentData)
+        }
+    }
+
     @Test
     fun `create Payment Intent successfully`() = runBlocking {
         //Given
         every {
             createPaymentData.data?.createPaymentIntent?.fragments?.paymentIntent
         } returns paymentIntent
-        every {
-            apolloClient.mutate(
-                CreatePaymentIntentMutation(
-                    paymentIntentInput
-                )
-            )
-                .enqueue(capture(createPaymentIntentSlot))
-        } answers {
-            createPaymentIntentSlot.captured.onResponse(createPaymentData)
-        }
+        createPaymentIntentSuccessAnswer()
         // When
         paymentDataSource.createPaymentIntent(
             paymentIntentInput
@@ -498,16 +458,7 @@ class PaymentDataSourceTest {
         every {
             createPaymentData.data
         } throws ApolloHttpException(any())
-        every {
-            apolloClient.mutate(
-                CreatePaymentIntentMutation(
-                    paymentIntentInput
-                )
-            )
-                .enqueue(capture(createPaymentIntentSlot))
-        } answers {
-            createPaymentIntentSlot.captured.onResponse(createPaymentData)
-        }
+        createPaymentIntentSuccessAnswer()
         // When
         paymentDataSource.createPaymentIntent(
             paymentIntentInput
@@ -543,16 +494,8 @@ class PaymentDataSourceTest {
 
     @Test
     fun `create Payment Intent results with null response`() = runBlocking {
-        every {
-            apolloClient.mutate(
-                CreatePaymentIntentMutation(
-                    paymentIntentInput
-                )
-            )
-                .enqueue(capture(createPaymentIntentSlot))
-        } answers {
-            createPaymentIntentSlot.captured.onResponse(createPaymentData)
-        }
+        // Given
+        createPaymentIntentSuccessAnswer()
         val callback = { error: Exception?, response: PaymentIntent? ->
             assert(error is Exception)
             Assert.assertSame(null, response)
@@ -602,18 +545,26 @@ class PaymentDataSourceTest {
 //        verifyNull(callback, updatePaymentData.data)
     }
 
+    private fun createPaymentIntentSuccessAnswer() {
+        every {
+            apolloClient.mutate(
+                CreatePaymentIntentMutation(
+                    paymentIntentInput
+                )
+            )
+                .enqueue(capture(createPaymentIntentSlot))
+        } answers {
+            createPaymentIntentSlot.captured.onResponse(createPaymentData)
+        }
+    }
+
     @Test
     fun `add Payment Source successfully`() = runBlocking {
         //Given
         every {
             addPaymentSourceData.data?.addPaymentSourceToMyWallet?.fragments?.fragmentPaymentSource
         } returns paymentSource
-        every {
-            apolloClient.mutate(AddPaymentSourceToMyWalletMutation(paymentSourceInput))
-                .enqueue(capture(addPaymentSourceSlot))
-        } answers {
-            addPaymentSourceSlot.captured.onResponse(addPaymentSourceData)
-        }
+        addPaymentSourceSuccessAnswer()
         // When
         paymentDataSource.addPaymentSource(
             paymentSourceInput
@@ -630,16 +581,7 @@ class PaymentDataSourceTest {
         every {
             addPaymentSourceData.data
         } throws ApolloHttpException(any())
-        every {
-            apolloClient.mutate(
-                AddPaymentSourceToMyWalletMutation(
-                    paymentSourceInput
-                )
-            )
-                .enqueue(capture(addPaymentSourceSlot))
-        } answers {
-            addPaymentSourceSlot.captured.onResponse(addPaymentSourceData)
-        }
+        addPaymentSourceSuccessAnswer()
         // When
         paymentDataSource.addPaymentSource(
             paymentSourceInput
@@ -675,14 +617,8 @@ class PaymentDataSourceTest {
 
     @Test
     fun `add Payment Source results with null response`() = runBlocking {
-        every {
-            apolloClient.mutate(
-                AddPaymentSourceToMyWalletMutation(paymentSourceInput)
-            )
-                .enqueue(capture(addPaymentSourceSlot))
-        } answers {
-            addPaymentSourceSlot.captured.onResponse(addPaymentSourceData)
-        }
+        // Given
+        addPaymentSourceSuccessAnswer()
         val callback = { error: Exception?, response: PaymentSource? ->
             assert(error is Exception)
             Assert.assertSame(null, response)
@@ -732,6 +668,15 @@ class PaymentDataSourceTest {
 
     }
 
+    private fun addPaymentSourceSuccessAnswer() {
+        every {
+            apolloClient.mutate(AddPaymentSourceToMyWalletMutation(paymentSourceInput))
+                .enqueue(capture(addPaymentSourceSlot))
+        } answers {
+            addPaymentSourceSlot.captured.onResponse(addPaymentSourceData)
+        }
+    }
+
     @Test
     fun `get Payment Sources successfully`() = runBlocking {
         //Given
@@ -741,15 +686,7 @@ class PaymentDataSourceTest {
         every {
             getPaymentSourcesData.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.nextPage
         } returns NEXT_PAGE
-        every {
-            apolloClient.query(GetMyPaymentSourcesQuery(PAGE_SIZE, Input.fromNullable(PAGE)))
-                .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY)
-                .build()
-                .enqueue(capture(getPaymentSourcesSlot))
-        } answers {
-            getPaymentSourcesSlot.captured.onResponse(getPaymentSourcesData)
-        }
+        getPaymentSourceSuccessAnswer()
         // When
         paymentDataSource.getMyPaymentSources(
             PAGE_SIZE, PAGE
@@ -771,19 +708,7 @@ class PaymentDataSourceTest {
         every {
             getPaymentSourcesData.data
         } throws ApolloHttpException(any())
-        every {
-            apolloClient.query(
-                GetMyPaymentSourcesQuery(
-                    PAGE_SIZE,
-                    Input.fromNullable(PAGE)
-                )
-            ).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY)
-                .build()
-                .enqueue(capture(getPaymentSourcesSlot))
-        } answers {
-            getPaymentSourcesSlot.captured.onResponse(getPaymentSourcesData)
-        }
+        getPaymentSourceSuccessAnswer()
         // When
         paymentDataSource.getMyPaymentSources(
             PAGE_SIZE,
@@ -824,16 +749,8 @@ class PaymentDataSourceTest {
 
     @Test
     fun `get Payment Sources results with null response`() = runBlocking {
-        every {
-            apolloClient.query(
-                GetMyPaymentSourcesQuery(PAGE_SIZE, Input.fromNullable(PAGE))
-            ).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY)
-                .build()
-                .enqueue(capture(getPaymentSourcesSlot))
-        } answers {
-            getPaymentSourcesSlot.captured.onResponse(getPaymentSourcesData)
-        }
+        // Given
+        getPaymentSourceSuccessAnswer()
         val callback = { error: Exception?, response: PaginatedObject<PaymentSource?>? ->
             assert(error is Exception)
             Assert.assertSame(null, response)
@@ -923,6 +840,18 @@ class PaymentDataSourceTest {
             callback(error, response)
         }
 
+    }
+
+    private fun getPaymentSourceSuccessAnswer() {
+        every {
+            apolloClient.query(GetMyPaymentSourcesQuery(PAGE_SIZE, Input.fromNullable(PAGE)))
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY)
+                .build()
+                .enqueue(capture(getPaymentSourcesSlot))
+        } answers {
+            getPaymentSourcesSlot.captured.onResponse(getPaymentSourcesData)
+        }
     }
 
     companion object {
