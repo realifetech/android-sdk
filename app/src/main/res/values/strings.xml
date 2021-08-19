@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">RealifeTech Sdk Sample</string>
+    <string name="app_name">RealifeTech Sdk</string>
     <string name="general">General</string>
     <string name="device_configuration">Device Configuration</string>
     <string name="api_url">API URL</string>
     <string name="graph_ql">GraphQL URL</string>
+    <string name="ordering_journey_url">Ordering Journey URL</string>
     <string name="communicate">Communicate</string>
     <string name="analytics">Analytics</string>
     <string name="audience">Audience</string>
@@ -11,6 +12,7 @@
     <string name="dash">-</string>
     <string name="widgets">Widgets</string>
     <string name="web_page">Web Page</string>
+    <string name="ordering_journey">Ordering Journey</string>
     <string name="audio_guides_help">audioGuidesHelp</string>
     <string name="tandc">tAndC</string>
     <string name="privacy">privacy</string>

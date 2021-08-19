@@ -2,15 +2,23 @@ package com.realifetech.sdk.general
 
 import android.content.Context
 import android.util.Log
+import androidx.annotation.ColorInt
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.realifetech.core_sdk.domain.CoreConfiguration.context
 import com.realifetech.sdk.domain.LinearRetryPolicy
 import com.realifetech.sdk.domain.Result
 import com.realifetech.sdk.domain.RetryPolicy
+import com.realifetech.sdk.general.data.color.ColorType
+import com.realifetech.sdk.general.data.color.ColorType.*
 import com.realifetech.sdk.general.di.GeneralProvider
 import com.realifetech.sdk.general.domain.DeviceConfiguration
 import com.realifetech.sdk.general.domain.DeviceRegisterResponse
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
+import com.realifetech.sdk.utils.ColorPallet.colorNeutral
+import com.realifetech.sdk.utils.ColorPallet.colorOnPrimary
+import com.realifetech.sdk.utils.ColorPallet.colorOnSurface
+import com.realifetech.sdk.utils.ColorPallet.colorPrimary
+import com.realifetech.sdk.utils.ColorPallet.colorSurface
 import java.util.concurrent.TimeUnit
 
 class General private constructor() {
@@ -55,6 +63,17 @@ class General private constructor() {
         } catch (exception: Exception) {
             Log.e("General", exception.message, exception)
             Result.Error(exception)
+        }
+    }
+
+
+    fun setColor(@ColorInt color: Int, forType: ColorType) {
+        when (forType) {
+            PRIMARY -> colorPrimary = color
+            ON_PRIMARY -> colorOnPrimary = color
+            SURFACE -> colorSurface = color
+            ON_SURFACE -> colorOnSurface = color
+            NEUTRAL -> colorNeutral = color
         }
     }
 

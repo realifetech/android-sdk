@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="RLT_SDK_Color_Primary" type="color">#FFF</color>
+    <color name="RLT_SDK_Color_OnPrimary" type="color">#000</color>
+    <color name="RLT_SDK_Color_Surface" type="color">#f7f7f7</color>
+    <color name="RLT_SDK_Color_OnSurface" type="color">#083C62</color>
+    <color name="RLT_SDK_Color_Neutral" type="color">#BDBBBB</color>
+</resources>
