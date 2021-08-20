@@ -28,7 +28,7 @@ object Sell {
         return FulfilmentPointFeature.INSTANCE
     }
 
-    fun createOrderingJourneyViewController() {
+    fun createOrderingJourneyFragment() {
         return WebOrderingFeature.startActivity()
     }
 

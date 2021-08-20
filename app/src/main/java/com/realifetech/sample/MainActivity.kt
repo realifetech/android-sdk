@@ -17,11 +17,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         appVersionTextView.text = BuildConfig.VERSION_NAME
-        toolbar.setTitle(R.string.app_name)
-        apiUrlEditTextView.setText(RealifeTech.getGeneral().configuration.apiUrl)
-        graphQlUrlEditTextView.setText(RealifeTech.getGeneral().configuration.graphApiUrl)
-        orderingUrlEditTextView.setText(RealifeTech.getGeneral().configuration.webOrderingJourneyUrl)
+        initTextViews()
+        onTextViewsChanged()
+        onClickButtons()
+    }
 
+    private fun onClickButtons() {
+        generalButton.setOnClickListener { GeneralSampleActivity.start(this) }
+        communicateButton.setOnClickListener { CommunicationSampleActivity.start(this) }
+        analyticsButton.setOnClickListener { AnalyticsSampleActivity.start(this) }
+        audienceButton.setOnClickListener { AudienceSampleActivity.start(this) }
+        widgetsButton.setOnClickListener { WidgetsSampleActivity.start(this) }
+        webPage.setOnClickListener { WebPageSampleActivity.start(this) }
+        ordering_journey.setOnClickListener { Sell.createOrderingJourneyFragment() }
+    }
+
+    private fun onTextViewsChanged() {
         val storage = DeviceConfigurationStorage(this)
         apiUrlEditTextView.doOnTextChanged { text, _, _, _ ->
             RealifeTech.getGeneral().configuration.apiUrl = text.toString()
@@ -35,12 +46,12 @@ class MainActivity : AppCompatActivity() {
             RealifeTech.getGeneral().configuration.webOrderingJourneyUrl = text.toString()
             storage.orderingJourney = text.toString()
         }
-        generalButton.setOnClickListener { GeneralSampleActivity.start(this) }
-        communicateButton.setOnClickListener { CommunicationSampleActivity.start(this) }
-        analyticsButton.setOnClickListener { AnalyticsSampleActivity.start(this) }
-        audienceButton.setOnClickListener { AudienceSampleActivity.start(this) }
-        widgetsButton.setOnClickListener { WidgetsSampleActivity.start(this) }
-        webPage.setOnClickListener { WebPageSampleActivity.start(this) }
-        ordering_journey.setOnClickListener { Sell.createOrderingJourneyViewController() }
+    }
+
+    private fun initTextViews() {
+        toolbar.setTitle(R.string.app_name)
+        apiUrlEditTextView.setText(RealifeTech.getGeneral().configuration.apiUrl)
+        graphQlUrlEditTextView.setText(RealifeTech.getGeneral().configuration.graphApiUrl)
+        orderingUrlEditTextView.setText(RealifeTech.getGeneral().configuration.webOrderingJourneyUrl)
     }
 }
