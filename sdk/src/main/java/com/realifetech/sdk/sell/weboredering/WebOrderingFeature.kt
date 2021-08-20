@@ -2,7 +2,9 @@ package com.realifetech.sdk.sell.weboredering
 
 import android.content.Intent
 import com.realifetech.core_sdk.domain.CoreConfiguration.context
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 object WebOrderingFeature {
 
     fun startActivity() {
