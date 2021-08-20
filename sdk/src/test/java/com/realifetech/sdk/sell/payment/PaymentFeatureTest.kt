@@ -50,7 +50,6 @@ class PaymentFeatureTest {
             //Then
             assertEquals(null, error)
             assertEquals(paymentSource.asModel, response)
-            print(response)
         }
     }
 
@@ -85,7 +84,6 @@ class PaymentFeatureTest {
             //Then
             assertEquals(null, error)
             assertEquals(paginatedObject, response)
-            print(response)
         }
     }
 
@@ -118,7 +116,6 @@ class PaymentFeatureTest {
             //Then
             assertEquals(null, error)
             assertEquals(paymentIntent, response)
-            print(response)
         }
     }
 
@@ -158,7 +155,6 @@ class PaymentFeatureTest {
         ) { error, response ->
             assertEquals(null, error)
             assertEquals(paymentIntent, response)
-            print(response)
         }
     }
 
@@ -197,7 +193,6 @@ class PaymentFeatureTest {
         paymentFeature.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
             assertEquals(null, error)
             assertEquals(paymentIntent, response)
-            print(response)
         }
     }
 
@@ -229,7 +224,6 @@ class PaymentFeatureTest {
         paymentFeature.deletePaymentSource(PAYMENT_INTENT_ID) { error, response ->
             assertEquals(null, error)
             assertEquals(paymentSource.asModel, response)
-            print(response)
         }
     }
 
