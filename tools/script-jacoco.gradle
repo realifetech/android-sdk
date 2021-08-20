@@ -20,6 +20,7 @@ def androidExclusion = [
         '**/*Fragment*.*',
         '**/*Activity*.*',
         '**/ColorPallet*.*',
+        '**/WebOrderingFeature*.*',
         '**/NetworkUtil*.*',
         '**/ViewExtensions*.*',
         '**/*Adapter*.*',

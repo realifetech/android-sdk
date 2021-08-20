@@ -5,7 +5,10 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.realifetech.realifetech_sdk.R.id
 import com.realifetech.realifetech_sdk.databinding.ActivityWebOrderingBinding
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class WebOrderingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWebOrderingBinding

@@ -10,20 +10,29 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.realifetech.core_sdk.domain.CoreConfiguration
 import com.realifetech.realifetech_sdk.R
 import com.realifetech.realifetech_sdk.databinding.FragmentWebOrderingBinding
 import com.realifetech.sdk.utils.ColorPallet.colorOnPrimary
 import com.realifetech.sdk.utils.ColorPallet.colorPrimary
 import com.realifetech.sdk.utils.ColorPallet.colorSurface
+import com.realifetech.sdk.utils.clicks
 import com.realifetech.sdk.utils.isNetworkAvailable
 import com.realifetech.sdk.utils.setTaggableOnSurfaceTint
 import com.realifetech.sdk.utils.tint
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class WebOrderingFragment : Fragment() {
 
     private var _binding: FragmentWebOrderingBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var viewModel: WebOrderingViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,8 +43,22 @@ class WebOrderingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(WebOrderingViewModel::class.java)
+        listenToViewModel()
         setupToolbar()
         setupNavBar()
+    }
+
+    private fun listenToViewModel() {
+        binding.apply {
+            viewModel.screenState.observe(viewLifecycleOwner, { screen ->
+                when (screen) {
+                    WebOrderingViewModel.ScreenState.WebViewGoBack -> webView.goBack()
+                    WebOrderingViewModel.ScreenState.WebViewGoForward -> webView.goForward()
+                    WebOrderingViewModel.ScreenState.WebViewRefresh -> webView.reload()
+                }
+            })
+        }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -46,14 +69,10 @@ class WebOrderingFragment : Fragment() {
     private fun setupNavBar() {
         binding.apply {
             navigationLayout.setBackgroundColor(colorSurface)
-            navForward.apply {
-                setTaggableOnSurfaceTint()
-                setOnClickListener { webView.goForward() }
-            }
-            navBack.apply {
-                setTaggableOnSurfaceTint()
-                setOnClickListener { webView.goBack() }
-            }
+            navForward.setTaggableOnSurfaceTint()
+            viewModel.handleNavForward(navForward.clicks())
+            navBack.setTaggableOnSurfaceTint()
+            viewModel.handleNavBack(navBack.clicks())
         }
     }
 
@@ -86,19 +105,8 @@ class WebOrderingFragment : Fragment() {
                 isHapticFeedbackEnabled = false
                 isLongClickable = false
                 settings.apply {
-                    javaScriptEnabled = true
-                    domStorageEnabled = true
-                    builtInZoomControls = true
-                    useWideViewPort = true
-                    loadWithOverviewMode = true
-                    allowFileAccess = true
-                    CookieManager.getInstance().removeAllCookies(null)
-                    CookieManager.getInstance().flush()
-                    if (!isNetworkAvailable()) {
-                        cacheMode = LOAD_CACHE_ELSE_NETWORK
-                    }
+                    setupSettings()
                 }
-
             }
             webView.webViewClient = getWebViewClient()
             webView.loadUrl(CoreConfiguration.webOrderingJourneyUrl)
@@ -118,11 +126,22 @@ class WebOrderingFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         val refreshMenuItem = menu.findItem(R.id.refresh_web)
-        refreshMenuItem.setOnMenuItemClickListener {
-            binding.webView.reload()
-            true
-        }
+        viewModel.handleRefresh(refreshMenuItem.clicks())
         super.onPrepareOptionsMenu(menu)
+    }
+
+    private fun WebSettings.setupSettings() {
+        javaScriptEnabled = true
+        domStorageEnabled = true
+        builtInZoomControls = true
+        useWideViewPort = true
+        loadWithOverviewMode = true
+        allowFileAccess = true
+        CookieManager.getInstance().removeAllCookies(null)
+        CookieManager.getInstance().flush()
+        if (!isNetworkAvailable()) {
+            cacheMode = LOAD_CACHE_ELSE_NETWORK
+        }
     }
 
     private fun FragmentWebOrderingBinding.getWebViewClient() =
