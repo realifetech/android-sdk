@@ -53,7 +53,6 @@ class PaymentRepositoryTest {
             //Then
             Assert.assertEquals(null, error)
             Assert.assertEquals(paymentSource.asModel, response)
-            print(response)
         }
     }
 
@@ -88,7 +87,6 @@ class PaymentRepositoryTest {
         //Then
             Assert.assertEquals(null, error)
             Assert.assertEquals(paginatedObject, response)
-            print(response)
         }
     }
 
@@ -121,7 +119,6 @@ class PaymentRepositoryTest {
             //Then
             Assert.assertEquals(null, error)
             Assert.assertEquals(paymentIntent, response)
-            print(response)
         }
     }
 
@@ -161,7 +158,6 @@ class PaymentRepositoryTest {
         ) { error, response ->
             Assert.assertEquals(null, error)
             Assert.assertEquals(paymentIntent, response)
-            print(response)
         }
     }
 
@@ -200,7 +196,6 @@ class PaymentRepositoryTest {
         paymentRepository.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
             Assert.assertEquals(null, error)
             Assert.assertEquals(paymentIntent, response)
-            print(response)
         }
     }
 
@@ -232,7 +227,6 @@ class PaymentRepositoryTest {
         paymentRepository.deleteMyPaymentSource(PAYMENT_INTENT_ID) { error, response ->
             Assert.assertEquals(null, error)
             Assert.assertEquals(paymentSource.asModel, response)
-            print(response)
         }
     }
 

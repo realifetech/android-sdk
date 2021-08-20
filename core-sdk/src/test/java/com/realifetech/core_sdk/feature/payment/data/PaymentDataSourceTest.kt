@@ -90,7 +90,6 @@ class PaymentDataSourceTest {
         paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
             // Then
             Assert.assertEquals(response, paymentIntent)
-            print(response)
         }
     }
 
@@ -193,7 +192,6 @@ class PaymentDataSourceTest {
             // Then
             Assert.assertEquals(null, error)
             Assert.assertEquals(response, paymentSource.asModel)
-            print(response)
         }
     }
 
@@ -317,7 +315,6 @@ class PaymentDataSourceTest {
         ) { error, response ->
             // Then
             Assert.assertEquals(response, paymentIntent)
-            print(response)
         }
     }
 
@@ -448,7 +445,6 @@ class PaymentDataSourceTest {
         ) { error, response ->
             // Then
             Assert.assertEquals(response, paymentIntent)
-            print(response)
         }
     }
 
@@ -571,7 +567,6 @@ class PaymentDataSourceTest {
         ) { error, response ->
             // Then
             Assert.assertEquals(response, paymentSource.asModel)
-            print(response)
         }
     }
 
@@ -698,7 +693,6 @@ class PaymentDataSourceTest {
                     NEXT_PAGE
                 )
             )
-            print(response)
         }
     }
 
@@ -798,7 +792,6 @@ class PaymentDataSourceTest {
                 ), response
             )
             Assert.assertEquals(null, error)
-            print(response)
         }
         every {
             getPaymentSourcesData.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.edges
@@ -815,7 +808,6 @@ class PaymentDataSourceTest {
                 ), response
             )
             Assert.assertEquals(null, error)
-            print(response)
         }
         //Null getMyPaymentSources
         every {
