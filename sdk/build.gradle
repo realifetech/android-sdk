@@ -82,8 +82,8 @@ dependencies {
     //Material UI
     implementation "com.google.android.material:material:$rootProject.ext.material_version"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraint_version"
-//    implementation "com.realifetech:core-sdk:$rootProject.ext.core_version"
-    implementation project(path: ':core-sdk')
+    implementation "com.realifetech:core-sdk:$rootProject.ext.core_version"
+//    implementation project(path: ':core-sdk')
     testImplementation "junit:junit:$rootProject.ext.junit_version"
 }
 
