@@ -25,6 +25,7 @@ class SampleApplication : Application() {
             graphApiUrl = storage.graphQl
             clientSecret = storage.clientSecret
             appCode = storage.clientId
+            webOrderingJourneyUrl=storage.orderingJourney
         }
 //  Set Colors via code
         // EXAMPLE 1
