@@ -1,5 +1,6 @@
 package com.realifetech.sdk
 
+import com.realifetech.core_sdk.domain.CoreConfiguration
 import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
@@ -31,6 +32,10 @@ object RealifeTech {
 
     fun getSell(): Sell {
         return Sell.INSTANCE
+    }
+
+    fun set(webOrderingJourneyUrl: String) {
+        CoreConfiguration.webOrderingJourneyUrl = webOrderingJourneyUrl
     }
 
     fun clearAllCachedData() {

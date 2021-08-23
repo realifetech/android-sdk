@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             storage.graphQl = text.toString()
         }
         orderingUrlEditTextView.doOnTextChanged { text, _, _, _ ->
-            RealifeTech.getSell().configuration.webOrderingJourneyUrl = text.toString()
+            RealifeTech.set(text.toString())
             storage.orderingJourney = text.toString()
         }
     }
@@ -52,6 +52,6 @@ class MainActivity : AppCompatActivity() {
         toolbar.setTitle(R.string.app_name)
         apiUrlEditTextView.setText(RealifeTech.getGeneral().configuration.apiUrl)
         graphQlUrlEditTextView.setText(RealifeTech.getGeneral().configuration.graphApiUrl)
-        orderingUrlEditTextView.setText(RealifeTech.getSell().configuration.webOrderingJourneyUrl)
+        orderingUrlEditTextView.setText(RealifeTech.getGeneral().configuration.webOrderingJourneyUrl)
     }
 }
