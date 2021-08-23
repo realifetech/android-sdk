@@ -1,5 +1,6 @@
 package com.realifetech.sdk.sell
 
+import com.realifetech.sdk.sell.domain.SellConfiguration
 import com.realifetech.sdk.sell.basket.BasketFeature
 import com.realifetech.sdk.sell.fulfilmentpoint.FulfilmentPointFeature
 import com.realifetech.sdk.sell.order.OrderFeature
@@ -8,6 +9,9 @@ import com.realifetech.sdk.sell.product.ProductFeature
 import com.realifetech.sdk.sell.weboredering.WebOrderingFeature
 
 object Sell {
+
+    val configuration = SellConfiguration()
+
     fun getPayment(): PaymentFeature {
         return PaymentFeature.INSTANCE
     }

@@ -36,11 +36,6 @@ class DeviceConfiguration {
             field = value
             CoreConfiguration.graphApiUrl = value
         }
-    var webOrderingJourneyUrl = "https://ordering.realifetech.com/"
-        set(value) {
-            field = value
-            CoreConfiguration.webOrderingJourneyUrl = value
-        }
 
     fun requireContext(): Context {
         return this.context
