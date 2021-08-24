@@ -1,8 +1,8 @@
 package com.realifetech.sdk.sell.product
 
-import com.realifetech.core_sdk.data.product.Product
-import com.realifetech.core_sdk.data.shared.`object`.FilterParamWrapper
-import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.core.data.product.Product
+import com.realifetech.sdk.core.data.shared.`object`.FilterParamWrapper
+import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
 import com.realifetech.type.ProductFilter
 
 class ProductFeature private constructor() {

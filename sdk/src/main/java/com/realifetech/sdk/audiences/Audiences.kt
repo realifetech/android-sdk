@@ -3,7 +3,7 @@ package com.realifetech.sdk.audiences
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.realifetech.BelongsToAudienceWithExternalIdQuery
-import com.realifetech.core_sdk.network.graphQl.GraphQlModule
+import com.realifetech.sdk.core.network.graphQl.GraphQlModule
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.utils.hasNetworkConnection
 import kotlinx.coroutines.Dispatchers

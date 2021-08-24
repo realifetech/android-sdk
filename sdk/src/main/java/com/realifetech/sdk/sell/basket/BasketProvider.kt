@@ -1,7 +1,7 @@
 package com.realifetech.sdk.sell.basket
 
-import com.realifetech.core_sdk.feature.basket.BasketRepository
-import com.realifetech.core_sdk.feature.basket.di.BasketModuleProvider
+import com.realifetech.sdk.sell.basket.domain.BasketRepository
+import com.realifetech.sdk.sell.basket.di.BasketModuleProvider
 
 internal class BasketProvider {
     fun provideBasketRepository(): BasketRepository {

@@ -18,8 +18,6 @@ plugins {
 }
 def sdkProps = new Properties()
 file("./sdk/sdk.properties").withInputStream { sdkProps.load(it) }
-def coreProps = new Properties()
-file("./core-sdk/core.properties").withInputStream { coreProps.load(it) }
 allprojects {
     repositories {
         google()
@@ -55,7 +53,6 @@ ext {
     constraint_version="2.1.0"
     junit_version="4.13.2"
     coroutines_version="1.4.1"
-    core_version = coreProps.getProperty("core.semver")
     sdk_version = sdkProps.getProperty("sdk.semver")
 }
 task clean(type: Delete) {

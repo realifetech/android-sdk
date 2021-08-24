@@ -2,7 +2,6 @@ package com.realifetech.sdk.sell.weboredering
 
 import android.view.MenuItem
 import android.view.View
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

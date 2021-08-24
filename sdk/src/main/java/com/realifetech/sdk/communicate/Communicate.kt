@@ -2,7 +2,7 @@ package com.realifetech.sdk.communicate
 
 import com.realifetech.sdk.communicate.di.CommunicateProvider
 import com.realifetech.sdk.communicate.domain.TokenBody
-import com.realifetech.sdk.domain.Result
+import com.realifetech.sdk.core.domain.Result
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.utils.hasNetworkConnection
 

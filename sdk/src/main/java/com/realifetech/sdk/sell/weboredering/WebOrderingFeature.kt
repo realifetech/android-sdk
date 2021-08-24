@@ -1,7 +1,7 @@
 package com.realifetech.sdk.sell.weboredering
 
 import android.content.Intent
-import com.realifetech.core_sdk.domain.CoreConfiguration.context
+import com.realifetech.sdk.core.domain.CoreConfiguration.context
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

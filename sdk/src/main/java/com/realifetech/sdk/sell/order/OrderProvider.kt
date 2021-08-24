@@ -1,7 +1,7 @@
 package com.realifetech.sdk.sell.order
 
-import com.realifetech.core_sdk.feature.order.OrderRepository
-import com.realifetech.core_sdk.feature.order.di.OrderModuleProvider
+import com.realifetech.sdk.sell.order.domain.OrderRepository
+import com.realifetech.sdk.sell.order.di.OrderModuleProvider
 
 internal class OrderProvider {
     fun provideOrderRepository(): OrderRepository {

@@ -3,7 +3,7 @@ package com.realifetech.sdk.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import com.realifetech.core_sdk.domain.CoreConfiguration.context
+import com.realifetech.sdk.core.domain.CoreConfiguration.context
 
 // require context, should be tested using UI test
 internal fun isNetworkAvailable(): Boolean {

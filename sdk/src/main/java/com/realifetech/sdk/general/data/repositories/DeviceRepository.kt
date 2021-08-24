@@ -1,7 +1,7 @@
 package com.realifetech.sdk.general.data.repositories
 
 import android.util.Log
-import com.realifetech.sdk.domain.Result
+import com.realifetech.sdk.core.domain.Result
 import com.realifetech.sdk.domain.RetryPolicy
 import com.realifetech.sdk.general.domain.DeviceRegisterResponse
 

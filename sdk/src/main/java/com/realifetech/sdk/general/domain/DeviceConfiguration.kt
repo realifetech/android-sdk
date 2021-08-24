@@ -1,7 +1,7 @@
 package com.realifetech.sdk.general.domain
 
 import android.content.Context
-import com.realifetech.core_sdk.domain.CoreConfiguration
+import com.realifetech.sdk.core.domain.CoreConfiguration
 import com.realifetech.sdk.communicate.Communicate
 import kotlin.concurrent.thread
 

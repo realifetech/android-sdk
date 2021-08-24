@@ -2,7 +2,7 @@ package com.realifetech.sdk.utils
 
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
-import com.realifetech.core_sdk.domain.CoreConfiguration
+import com.realifetech.sdk.core.domain.CoreConfiguration
 import com.realifetech.realifetech_sdk.R
 
 // require context, should be tested using UI test

@@ -1,7 +1,7 @@
 package com.realifetech.sdk.communicate.network
 
-import com.realifetech.core_sdk.di.CoreProvider
 import com.realifetech.sdk.RealifeTech
+import com.realifetech.sdk.core.di.CoreProvider
 import com.realifetech.sdk.general.General
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

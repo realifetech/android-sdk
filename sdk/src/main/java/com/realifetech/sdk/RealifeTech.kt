@@ -1,11 +1,11 @@
 package com.realifetech.sdk
 
-import com.realifetech.core_sdk.domain.CoreConfiguration
-import com.realifetech.core_sdk.network.graphQl.GraphQlModule
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.content.Content
+import com.realifetech.sdk.core.domain.CoreConfiguration
+import com.realifetech.sdk.core.network.graphQl.GraphQlModule
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.sell.Sell
 

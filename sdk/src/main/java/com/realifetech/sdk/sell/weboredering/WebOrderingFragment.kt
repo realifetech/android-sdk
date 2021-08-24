@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.realifetech.core_sdk.domain.CoreConfiguration
+import com.realifetech.sdk.core.domain.CoreConfiguration
 import com.realifetech.realifetech_sdk.R
 import com.realifetech.realifetech_sdk.databinding.FragmentWebOrderingBinding
 import com.realifetech.sdk.utils.ColorPallet.colorOnPrimary
@@ -21,8 +21,6 @@ import com.realifetech.sdk.utils.clicks
 import com.realifetech.sdk.utils.isNetworkAvailable
 import com.realifetech.sdk.utils.setTaggableOnSurfaceTint
 import com.realifetech.sdk.utils.tint
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi

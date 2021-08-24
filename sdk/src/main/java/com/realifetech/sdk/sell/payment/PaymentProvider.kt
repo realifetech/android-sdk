@@ -1,7 +1,7 @@
 package com.realifetech.sdk.sell.payment
 
-import com.realifetech.core_sdk.feature.payment.PaymentRepository
-import com.realifetech.core_sdk.feature.payment.di.PaymentModuleProvider
+import com.realifetech.sdk.sell.payment.domain.PaymentRepository
+import com.realifetech.sdk.sell.payment.di.PaymentModuleProvider
 
 internal class PaymentProvider() {
     fun providePaymentRepository(): PaymentRepository {

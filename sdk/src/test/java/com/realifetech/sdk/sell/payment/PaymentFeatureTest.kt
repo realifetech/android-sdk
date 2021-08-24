@@ -1,9 +1,9 @@
 package com.realifetech.sdk.sell.payment
 
-import com.realifetech.core_sdk.data.payment.model.PaymentSource
-import com.realifetech.core_sdk.data.payment.model.asModel
-import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
-import com.realifetech.core_sdk.feature.payment.PaymentRepository
+import com.realifetech.sdk.core.data.payment.model.PaymentSource
+import com.realifetech.sdk.core.data.payment.model.asModel
+import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.sell.payment.domain.PaymentRepository
 import com.realifetech.fragment.PaymentIntent
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntent
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntentUpdateWrapper
