@@ -1,10 +1,10 @@
 package com.realifetech.sdk.sell.fulfilmentpoint
 
 import com.apollographql.apollo.api.toInput
-import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPoint
-import com.realifetech.core_sdk.data.fulfilmentPoint.FulfilmentPointCategory
-import com.realifetech.core_sdk.data.shared.`object`.FilterParamWrapper
-import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.core.data.fulfilmentPoint.FulfilmentPoint
+import com.realifetech.sdk.core.data.fulfilmentPoint.FulfilmentPointCategory
+import com.realifetech.sdk.core.data.shared.`object`.FilterParamWrapper
+import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
 import com.realifetech.type.FulfilmentPointFilter
 
 class FulfilmentPointFeature private constructor() {

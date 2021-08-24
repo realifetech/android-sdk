@@ -5,7 +5,7 @@ import com.realifetech.sdk.analytics.data.AnalyticsStorage
 import com.realifetech.sdk.analytics.di.AnalyticsProvider
 import com.realifetech.sdk.analytics.domain.AnalyticsEvent
 import com.realifetech.sdk.domain.LinearRetryPolicy
-import com.realifetech.sdk.domain.Result
+import com.realifetech.sdk. core.domain.Result
 import com.realifetech.sdk.domain.RetryPolicy
 import com.realifetech.sdk.general.General
 import kotlinx.coroutines.Dispatchers

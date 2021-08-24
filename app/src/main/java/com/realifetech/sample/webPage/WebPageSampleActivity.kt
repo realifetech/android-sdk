@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.realifetech.core_sdk.feature.webPage.di.WebPageModuleProvider
+import com.realifetech.sdk.content.webPage.di.WebPageModuleProvider
 import com.realifetech.sample.R
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.type.WebPageType

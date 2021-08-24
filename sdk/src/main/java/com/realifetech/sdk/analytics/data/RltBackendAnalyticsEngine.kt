@@ -6,7 +6,7 @@ import com.apollographql.apollo.coroutines.await
 import com.google.gson.Gson
 import com.realifetech.PutAnalyticEventMutation
 import com.realifetech.sdk.analytics.domain.AnalyticsEvent
-import com.realifetech.sdk.domain.Result
+import com.realifetech.sdk.core.domain.Result
 import com.realifetech.type.AnalyticEvent
 import java.text.SimpleDateFormat
 import java.util.*

@@ -4,9 +4,9 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.ColorInt
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
-import com.realifetech.core_sdk.domain.CoreConfiguration.context
+import com.realifetech.sdk.core.domain.CoreConfiguration.context
 import com.realifetech.sdk.domain.LinearRetryPolicy
-import com.realifetech.sdk.domain.Result
+import com.realifetech.sdk.core.domain.Result
 import com.realifetech.sdk.domain.RetryPolicy
 import com.realifetech.sdk.general.data.color.ColorType
 import com.realifetech.sdk.general.data.color.ColorType.*

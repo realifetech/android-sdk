@@ -1,11 +1,11 @@
 package com.realifetech.sdk.sell.payment
 
-import com.realifetech.core_sdk.data.payment.model.PaymentSource
-import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentUpdateWrapper
-import com.realifetech.core_sdk.data.payment.wrapper.PaymentIntentWrapper
-import com.realifetech.core_sdk.data.payment.wrapper.PaymentSourceWrapper
-import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
-import com.realifetech.core_sdk.feature.payment.PaymentRepository
+import com.realifetech.sdk.core.data.payment.model.PaymentSource
+import com.realifetech.sdk.core.data.payment.wrapper.PaymentIntentUpdateWrapper
+import com.realifetech.sdk.core.data.payment.wrapper.PaymentIntentWrapper
+import com.realifetech.sdk.core.data.payment.wrapper.PaymentSourceWrapper
+import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.sell.payment.domain.PaymentRepository
 import com.realifetech.fragment.PaymentIntent
 
 class PaymentFeature internal constructor(private val paymentRepo: PaymentRepository) {

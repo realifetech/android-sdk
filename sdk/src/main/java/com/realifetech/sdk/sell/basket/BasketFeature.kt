@@ -1,10 +1,10 @@
 package com.realifetech.sdk.sell.basket
 
-import com.realifetech.core_sdk.data.basket.model.Basket
-import com.realifetech.core_sdk.data.basket.model.BasketRequest
-import com.realifetech.core_sdk.data.basket.model.CheckoutRequest
-import com.realifetech.core_sdk.data.order.model.Order
-import com.realifetech.core_sdk.data.shared.`object`.StandardResponse
+import com.realifetech.sdk.core.data.basket.model.Basket
+import com.realifetech.sdk.core.data.basket.model.BasketRequest
+import com.realifetech.sdk.core.data.basket.model.CheckoutRequest
+import com.realifetech.sdk.core.data.order.model.Order
+import com.realifetech.sdk.core.data.shared.`object`.StandardResponse
 
 class BasketFeature private constructor() {
     private val basketRepo = BasketProvider().provideBasketRepository()

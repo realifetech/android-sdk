@@ -1,6 +1,6 @@
 package com.realifetech.sdk.general.utils
 
-import com.realifetech.core_sdk.domain.Result
+import com.realifetech.sdk.core.domain.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

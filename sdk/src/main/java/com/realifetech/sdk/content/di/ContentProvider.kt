@@ -1,7 +1,8 @@
 package com.realifetech.sdk.content.di
 
-import com.realifetech.core_sdk.feature.webPage.WebPageRepository
-import com.realifetech.core_sdk.feature.webPage.di.WebPageModuleProvider
+import com.realifetech.sdk.content.webPage.di.WebPageModuleProvider
+import com.realifetech.sdk.content.webPage.domain.WebPageRepository
+
 
 internal class ContentProvider() {
     fun provideWebPageRepository(): WebPageRepository {

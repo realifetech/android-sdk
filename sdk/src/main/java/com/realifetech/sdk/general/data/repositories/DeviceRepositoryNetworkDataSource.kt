@@ -1,7 +1,7 @@
 package com.realifetech.sdk.general.data.repositories
 
 import com.realifetech.sdk.domain.NetworkException
-import com.realifetech.sdk.domain.Result
+import com.realifetech.sdk.core.domain.Result
 import com.realifetech.sdk.general.data.DeviceInfo
 import com.realifetech.sdk.general.domain.DeviceRegisterRequest
 import com.realifetech.sdk.general.domain.DeviceRegisterResponse

@@ -1,6 +1,5 @@
 package com.realifetech.sdk.analytics.di
-
-import com.realifetech.core_sdk.network.graphQl.GraphQlModule
+import com.realifetech.sdk.core.network.graphQl.GraphQlModule
 import com.realifetech.sdk.analytics.data.AnalyticsDatabaseStorageDataSource
 import com.realifetech.sdk.analytics.data.AnalyticsEngine
 import com.realifetech.sdk.analytics.data.AnalyticsStorage

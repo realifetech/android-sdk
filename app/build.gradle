@@ -53,5 +53,4 @@ dependencies {
     implementation("com.apollographql.apollo:apollo-coroutines-support:2.5.5")
 //    implementation "com.realifetech:sdk:$rootProject.ext.sdk_version"
     implementation project(path: ':sdk')
-    implementation project(path: ':core-sdk')
 }

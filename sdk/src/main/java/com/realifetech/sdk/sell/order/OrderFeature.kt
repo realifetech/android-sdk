@@ -1,8 +1,8 @@
 package com.realifetech.sdk.sell.order
 
-import com.realifetech.core_sdk.data.order.model.Order
-import com.realifetech.core_sdk.data.order.wrapper.OrderUpdateWrapper
-import com.realifetech.core_sdk.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.core.data.order.model.Order
+import com.realifetech.sdk.core.data.order.wrapper.OrderUpdateWrapper
+import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
 
 class OrderFeature private constructor() {
     private val orderRepo = OrderProvider().provideOrderRepository()

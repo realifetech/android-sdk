@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-if [[  "${CORE_CHANGED}" == "changed" || "${SDK_CHANGED}" == "changed"  || "${RELEASE_CREATED}" == "created" || $1 == "master" ]]; then
+if [[  "${SDK_CHANGED}" == "changed"  || "${RELEASE_CREATED}" == "created" || $1 == "master" ]]; then
   if [[ $1 == "master" ]]; then
     tag_version=$(./gradlew -q echoSdkVersion)
     echo "$tag_version"
@@ -10,12 +10,6 @@ if [[  "${CORE_CHANGED}" == "changed" || "${SDK_CHANGED}" == "changed"  || "${RE
       -H "Authorization: token ${GITHUB_TOKEN}" \
       https://api.github.com/repos/realifetech/android-sdk/releases \
       -d "{\"tag_name\":\"$tag_version\",\"target_commitish\": \"master\",\"name\": \"$tag_version\",\"body\": \"Description of the release\",\"draft\": false,\"prerelease\": false}"
-  fi
-  if [[ "${CORE_CHANGED}" == "changed" ]]; then
-    ./gradlew core-sdk:publishLibraryPublicationToGitHubPackagesRepository
-    ./gradlew -D sdk.prerelease="$VERSION_SUFFIX"
-    ./gradlew sdk:increment"$VERSION_TARGET"
-    ./gradlew sdk:assembleRelease
   fi
   ./gradlew sdk:publishLibraryPublicationToGitHubPackagesRepository
   ./.scripts/commitAndPush.sh

@@ -1,4 +1,3 @@
-include ':core-sdk'
 include ':sdk'
 include ':app'
 rootProject.name = "Sample"
