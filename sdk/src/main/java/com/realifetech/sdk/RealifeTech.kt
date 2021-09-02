@@ -6,10 +6,7 @@ import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.content.Content
 import com.realifetech.sdk.core.data.config.CoreConfiguration
-import com.realifetech.sdk.core.domain.RLTConfiguration
-import com.realifetech.sdk.di.core.CoreModule
-import com.realifetech.sdk.di.core.DaggerCoreComponent
-import com.realifetech.sdk.di.features.modules.*
+import com.realifetech.sdk.di.Injector
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.sell.Sell
 
@@ -17,18 +14,8 @@ object RealifeTech : BaseRealifetech() {
 
 
     fun configureSdk(context: Context, configuration: CoreConfiguration) {
-        RLTConfiguration.set(configuration)
-        val coreComponent = DaggerCoreComponent.builder()
-            .coreModule(CoreModule(context))
-            .build()
-        coreComponent.newFeaturesComponent(
-            FeatureModule,
-            GeneralModule,
-            CommunicateModule,
-            SellModule,
-            AnalyticsModule(),
-            ContentModule
-        ).inject(this)
+        Injector.initialize(context).inject(this)
+        this.configuration.set(configuration)
     }
 
     fun getGeneral(): General {
@@ -56,7 +43,7 @@ object RealifeTech : BaseRealifetech() {
     }
 
     fun set(webOrderingJourneyUrl: String) {
-        RLTConfiguration.ORDERING_JOURNEY_URL = webOrderingJourneyUrl
+        configuration.webOrderingJourneyUrl = webOrderingJourneyUrl
     }
 
     fun clearAllCachedData() {

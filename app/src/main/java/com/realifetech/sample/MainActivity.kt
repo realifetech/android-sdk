@@ -7,7 +7,6 @@ import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.webPage.WebPageSampleActivity
 import com.realifetech.sample.widgets.WidgetsSampleActivity
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.core.domain.RLTConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -17,10 +16,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val storage = DeviceConfigurationStorage(this)
         appVersionTextView.text = BuildConfig.VERSION_NAME
-        initTextViews()
-        onTextViewsChanged()
+        initTextViews(storage)
+        onTextViewsChanged(storage)
         onClickButtons()
     }
 
@@ -36,14 +35,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onTextViewsChanged() {
-        val storage = DeviceConfigurationStorage(this)
+    private fun onTextViewsChanged(storage: DeviceConfigurationStorage) {
         apiUrlEditTextView.doOnTextChanged { text, _, _, _ ->
-            RLTConfiguration.API_URL = text.toString()
-            RLTConfiguration.API_URL = text.toString()
+            RealifeTech.configuration.apiUrl = text.toString()
+            storage.apiUrl = text.toString()
         }
         graphQlUrlEditTextView.doOnTextChanged { text, _, _, _ ->
-            RLTConfiguration.GRAPHQL_URL = text.toString()
+            RealifeTech.configuration.graphQl = text.toString()
             storage.graphQl = text.toString()
         }
         orderingUrlEditTextView.doOnTextChanged { text, _, _, _ ->
@@ -52,10 +50,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initTextViews() {
+    private fun initTextViews(storage: DeviceConfigurationStorage) {
         toolbar.setTitle(R.string.app_name)
-        apiUrlEditTextView.setText(RLTConfiguration.API_URL)
-        graphQlUrlEditTextView.setText(RLTConfiguration.GRAPHQL_URL)
-        orderingUrlEditTextView.setText(RLTConfiguration.ORDERING_JOURNEY_URL)
+        apiUrlEditTextView.setText(storage.apiUrl)
+        graphQlUrlEditTextView.setText(storage.graphQl)
+        orderingUrlEditTextView.setText(storage.orderingJourney)
     }
 }

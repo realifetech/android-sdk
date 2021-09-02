@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.isVisible
 import com.realifetech.sdk.RealifeTech
-import kotlinx.android.synthetic.main.activity_analytics_sample.*
-import kotlinx.android.synthetic.main.activity_analytics_sample.sendEventButton
 import kotlinx.android.synthetic.main.activity_analytics_sample.typeEditText
 import kotlinx.android.synthetic.main.activity_audience_sample.*
 import kotlinx.android.synthetic.main.activity_communication_sample.operationTextView

@@ -1,19 +1,21 @@
 package com.realifetech.sdk.core.data.auth
 
-import com.realifetech.sdk.core.domain.AuthenticationToken
 import com.realifetech.sdk.core.data.token.AccessTokenBody
-import com.realifetech.sdk.core.network.AuthorizationApiNetwork
 import com.realifetech.sdk.core.data.token.RefreshTokenBody
+import com.realifetech.sdk.core.domain.ApiDataSource
+import com.realifetech.sdk.core.domain.AuthenticationToken
+import com.realifetech.sdk.core.network.AuthorizationApiNetwork
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-internal class AuthenticationBackendApiDataSource : AuthenticationToken.ApiDataSource {
+class AuthenticationBackendApiDataSource(private val authorizationApiNetwork: AuthorizationApiNetwork) :
+    ApiDataSource {
     override fun getAccessToken(
         clientSecret: String,
         clientId: String
     ): AuthenticationToken.AccessTokenInfo? {
         val responseBody =
-            AuthorizationApiNetwork.get()
+            authorizationApiNetwork.get()
                 .getAuthToken(AccessTokenBody(clientSecret = clientSecret, clientId = clientId))
                 .execute().body()
         return if (responseBody != null) {
@@ -31,7 +33,7 @@ internal class AuthenticationBackendApiDataSource : AuthenticationToken.ApiDataS
         clientId: String,
         refreshToken: String
     ): OAuthTokenResponse? {
-        val tokenResponse = AuthorizationApiNetwork.get()
+        val tokenResponse = authorizationApiNetwork.get()
             .refreshAuthToken(
                 RefreshTokenBody(
                     clientSecret = clientSecret,

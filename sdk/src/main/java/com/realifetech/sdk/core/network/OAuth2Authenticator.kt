@@ -6,8 +6,10 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import javax.inject.Inject
 
-class OAuth2Authenticator(private val accessToken: AuthenticationToken) : Authenticator {
+class OAuth2Authenticator @Inject constructor(private val accessToken: AuthenticationToken) :
+    Authenticator {
     override fun authenticate(route: Route?, response: Response): Request {
         accessToken.ensureActive()
         return response.request

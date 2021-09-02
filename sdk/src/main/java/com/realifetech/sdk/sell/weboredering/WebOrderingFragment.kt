@@ -13,14 +13,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.realifetech.realifetech_sdk.R
 import com.realifetech.realifetech_sdk.databinding.FragmentWebOrderingBinding
-import com.realifetech.sdk.core.domain.RLTConfiguration
+import com.realifetech.sdk.core.database.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.utils.ColorPallet
+import com.realifetech.sdk.di.Injector
 import com.realifetech.sdk.utils.NetworkUtil
 import com.realifetech.sdk.utils.clicks
 import com.realifetech.sdk.utils.setTaggableOnSurfaceTint
 import com.realifetech.sdk.utils.tint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
+
 
 @ExperimentalCoroutinesApi
 class WebOrderingFragment : Fragment() {
@@ -32,9 +34,17 @@ class WebOrderingFragment : Fragment() {
     lateinit var colorPallet: ColorPallet
 
     @Inject
+    lateinit var configuation: ConfigurationStorage
+
+    @Inject
     internal lateinit var networkUtil: NetworkUtil
 
     private lateinit var viewModel: WebOrderingViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Injector.getComponent().inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,7 +122,7 @@ class WebOrderingFragment : Fragment() {
                 }
             }
             webView.webViewClient = getWebViewClient()
-            webView.loadUrl(RLTConfiguration.ORDERING_JOURNEY_URL)
+            webView.loadUrl(configuation.webOrderingJourneyUrl)
         }
     }
 
@@ -136,7 +146,7 @@ class WebOrderingFragment : Fragment() {
     private fun WebSettings.setupSettings() {
         javaScriptEnabled = true
         domStorageEnabled = true
-        builtInZoomControls = true
+        builtInZoomControls = false
         useWideViewPort = true
         loadWithOverviewMode = true
         allowFileAccess = true
@@ -175,7 +185,6 @@ class WebOrderingFragment : Fragment() {
                 webView.isVisible = false
                 if (webView.settings.cacheMode != LOAD_CACHE_ELSE_NETWORK) {
                     webView.settings.cacheMode = LOAD_CACHE_ELSE_NETWORK
-                    view?.loadUrl(error?.description.toString())
                 }
             }
 

@@ -7,8 +7,9 @@ import com.realifetech.sdk.sell.payment.PaymentFeature
 import com.realifetech.sdk.sell.product.ProductFeature
 import com.realifetech.sdk.sell.weboredering.WebOrderingFeature
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
 
-class Sell(
+class Sell @Inject constructor(
     private val paymentFeature: PaymentFeature,
     private val productFeature: ProductFeature,
     private val basketFeature: BasketFeature,

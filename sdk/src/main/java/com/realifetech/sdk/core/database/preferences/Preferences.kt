@@ -2,21 +2,23 @@ package com.realifetech.sdk.core.database.preferences
 
 import android.content.Context
 import android.util.Log
+import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.realifetech.sdk.core.data.auth.OAuthTokenResponse
+import com.realifetech.sdk.core.data.config.CoreConfiguration
 import javax.inject.Inject
 
 class Preferences @Inject constructor(context: Context) : AbstractPreferences(context) {
 
     var deviceId: String
-        get() = preferences.getString(DEVICE_ID, DEFAULT_EMPTY_STRING) ?: DEFAULT_EMPTY_STRING
+        get() = preferences.getString(DEVICE_ID, EMPTY) ?: EMPTY
         set(deviceId) {
             preferences.edit().putString(DEVICE_ID, deviceId).apply()
         }
     var rltToken: OAuthTokenResponse?
         get() {
-            val jsonToken = preferences.getString(OAUTH_TOKEN, DEFAULT_EMPTY_STRING)
+            val jsonToken = preferences.getString(OAUTH_TOKEN, EMPTY)
             try {
                 return Gson().fromJson(jsonToken, OAuthTokenResponse::class.java)
             } catch (e: JsonSyntaxException) {
@@ -35,7 +37,7 @@ class Preferences @Inject constructor(context: Context) : AbstractPreferences(co
         }
 
     companion object {
-        private const val DEFAULT_EMPTY_STRING = ""
+
         private const val OAUTH_TOKEN = "oauth-token"
         private const val DEVICE_ID = "device_id"
     }
