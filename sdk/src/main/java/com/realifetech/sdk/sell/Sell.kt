@@ -6,35 +6,39 @@ import com.realifetech.sdk.sell.order.OrderFeature
 import com.realifetech.sdk.sell.payment.PaymentFeature
 import com.realifetech.sdk.sell.product.ProductFeature
 import com.realifetech.sdk.sell.weboredering.WebOrderingFeature
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-object Sell {
+class Sell(
+    private val paymentFeature: PaymentFeature,
+    private val productFeature: ProductFeature,
+    private val basketFeature: BasketFeature,
+    private val orderFeature: OrderFeature,
+    private val fulfilmentPointFeature: FulfilmentPointFeature,
+    private val webOrderingFeature: WebOrderingFeature
+) {
     fun getPayment(): PaymentFeature {
-        return PaymentFeature.INSTANCE
+        return paymentFeature
     }
 
     fun getProduct(): ProductFeature {
-        return ProductFeature.INSTANCE
+        return productFeature
     }
 
     fun getBasket(): BasketFeature {
-        return BasketFeature.INSTANCE
+        return basketFeature
     }
 
     fun getOrder(): OrderFeature {
-        return OrderFeature.INSTANCE
+        return orderFeature
     }
 
     fun getFulfilmentPoint(): FulfilmentPointFeature {
-        return FulfilmentPointFeature.INSTANCE
+        return fulfilmentPointFeature
     }
 
+    @ExperimentalCoroutinesApi
     fun createOrderingJourneyFragment() {
-        return WebOrderingFeature.startActivity()
+        return webOrderingFeature.startActivity()
     }
 
-    private object Holder {
-        val instance = Sell
-    }
-
-    val INSTANCE: Sell by lazy { Holder.instance }
 }

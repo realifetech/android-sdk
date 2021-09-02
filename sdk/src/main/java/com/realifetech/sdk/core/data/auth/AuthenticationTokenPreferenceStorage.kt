@@ -1,14 +1,15 @@
 package com.realifetech.sdk.core.data.auth
 
+import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import androidx.core.content.edit
-import com.realifetech.sdk.core.domain.CoreConfiguration
+import androidx.preference.PreferenceManager
 
-class AuthenticationTokenPreferenceStorage : AuthenticationTokenStorage.DataSource {
+class AuthenticationTokenPreferenceStorage(val context: Context) :
+    AuthenticationTokenStorage.DataSource {
 
     private val preferenceManager: SharedPreferences
-        get() = PreferenceManager.getDefaultSharedPreferences(CoreConfiguration.context)
+        get() = PreferenceManager.getDefaultSharedPreferences(context)
 
     override var accessToken: String
         get() = preferenceManager.getString(ACCESS_TOKEN_KEY, "").orEmpty()

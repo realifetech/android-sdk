@@ -5,9 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.realifetech.sdk.content.webPage.di.WebPageModuleProvider
 import com.realifetech.sample.R
 import com.realifetech.sample.data.DeviceConfigurationStorage
+import com.realifetech.sdk.RealifeTech
 import com.realifetech.type.WebPageType
 import kotlinx.android.synthetic.main.activity_web_page_sample.*
 
@@ -32,9 +32,7 @@ class WebPageSampleActivity : AppCompatActivity() {
         queryWebPage.setOnClickListener {
             selectedType?.let { webPage ->
                 val storage = DeviceConfigurationStorage(this)
-                val webPageRepo =
-                    WebPageModuleProvider.provideWebPageRepository()
-                webPageRepo.getWebPageByType(webPage) { error, webPage ->
+                RealifeTech.getContent().getWebPage(webPage) { error, webPage ->
                     webPage?.let {
                         result.text = webPage.url
                     }

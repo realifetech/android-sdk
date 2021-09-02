@@ -1,15 +1,19 @@
 package com.realifetech.sdk.core.database.preferences
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
-
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.realifetech.sdk.core.data.auth.OAuthTokenResponse
-import com.realifetech.sdk.core.domain.CoreConfiguration.context
+import javax.inject.Inject
 
-object Preferences {
+class Preferences @Inject constructor(context: Context) : AbstractPreferences(context) {
+
+    var deviceId: String
+        get() = preferences.getString(DEVICE_ID, DEFAULT_EMPTY_STRING) ?: DEFAULT_EMPTY_STRING
+        set(deviceId) {
+            preferences.edit().putString(DEVICE_ID, deviceId).apply()
+        }
     var rltToken: OAuthTokenResponse?
         get() {
             val jsonToken = preferences.getString(OAUTH_TOKEN, DEFAULT_EMPTY_STRING)
@@ -29,15 +33,10 @@ object Preferences {
                 }
             }
         }
-    private val preferences: SharedPreferences =
-        context.getSharedPreferences(getPreferencesName(), Context.MODE_PRIVATE)
 
-
-    private fun getPreferencesName(): String {
-        return CONCERT_LIVE_PREFERENCES + context.packageName
+    companion object {
+        private const val DEFAULT_EMPTY_STRING = ""
+        private const val OAUTH_TOKEN = "oauth-token"
+        private const val DEVICE_ID = "device_id"
     }
-
-    private const val CONCERT_LIVE_PREFERENCES = "LiveStyledPreferences"
-    private const val DEFAULT_EMPTY_STRING = ""
-    private const val OAUTH_TOKEN = "oauth-token"
 }

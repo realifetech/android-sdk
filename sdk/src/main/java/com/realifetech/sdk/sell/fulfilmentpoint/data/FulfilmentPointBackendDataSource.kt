@@ -1,6 +1,7 @@
 package com.realifetech.sdk.sell.fulfilmentpoint.data
 
 import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
@@ -17,15 +18,13 @@ import com.realifetech.sdk.core.data.fulfilmentPoint.asModel
 import com.realifetech.sdk.core.data.shared.`object`.FilterParamWrapper
 import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
 import com.realifetech.sdk.core.data.shared.`object`.asInput
-import com.realifetech.sdk.sell.fulfilmentpoint.domain.FulfilmentPointRepository
-import com.realifetech.sdk.core.network.graphQl.GraphQlModule
 import com.realifetech.sdk.core.utils.extractResponse
+import com.realifetech.sdk.sell.fulfilmentpoint.domain.FulfilmentPointRepository
 import com.realifetech.type.FulfilmentPointFilter
+import javax.inject.Inject
 
-class FulfilmentPointBackendDataSource() :
+class FulfilmentPointBackendDataSource @Inject constructor(private val apolloClient: ApolloClient) :
     FulfilmentPointRepository.DataSource {
-
-    private val apolloClient = GraphQlModule.apolloClient
 
     override fun getFulfilmentPoints(
         pageSize: Int,

@@ -1,9 +1,9 @@
 package com.realifetech.sdk.core.data.auth
 
 import com.realifetech.sdk.core.domain.AuthenticationToken
-import com.realifetech.sdk.core.network.AccessTokenBody
+import com.realifetech.sdk.core.data.token.AccessTokenBody
 import com.realifetech.sdk.core.network.AuthorizationApiNetwork
-import com.realifetech.sdk.core.network.RefreshTokenBody
+import com.realifetech.sdk.core.data.token.RefreshTokenBody
 import java.util.*
 import java.util.concurrent.TimeUnit
 

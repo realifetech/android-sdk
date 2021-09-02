@@ -1,6 +1,7 @@
 package com.realifetech.sdk.sell.basket.data
 
 import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
@@ -13,13 +14,12 @@ import com.realifetech.sdk.core.data.order.model.Order
 import com.realifetech.sdk.core.data.order.model.asModel
 import com.realifetech.sdk.core.data.shared.`object`.StandardResponse
 import com.realifetech.sdk.sell.basket.domain.BasketRepository
-import com.realifetech.sdk.core.network.graphQl.GraphQlModule
 import com.realifetech.type.BasketInput
 import com.realifetech.type.CheckoutInput
+import javax.inject.Inject
 
-class BasketDataSource() :
+class BasketDataSource @Inject constructor(private val apolloClient: ApolloClient) :
     BasketRepository.DataSource {
-    private val apolloClient = GraphQlModule.apolloClient
 
     override fun getBasket(callback: (error: Exception?, basket: Basket?) -> Unit) {
         try {

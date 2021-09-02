@@ -5,8 +5,9 @@ import com.realifetech.sdk.core.data.order.model.Order
 import com.realifetech.sdk.core.data.shared.`object`.StandardResponse
 import com.realifetech.type.BasketInput
 import com.realifetech.type.CheckoutInput
+import javax.inject.Inject
 
-class BasketRepository(private val dataSource: DataSource) {
+class BasketRepository @Inject constructor(private val dataSource: DataSource) {
 
     fun getBasket(callback: (error: Exception?, basket: Basket?) -> Unit) {
         dataSource.getBasket(callback)

@@ -1,13 +1,14 @@
 package com.realifetech.sdk.content.widgets.domain
 
-import com.realifetech.sdk.core.domain.Result
 import com.realifetech.sdk.content.widgets.data.WidgetEdge
+import com.realifetech.sdk.core.utils.Result
 import com.realifetech.type.ScreenType
 import io.reactivex.Flowable
 import kotlinx.coroutines.rx2.rxSingle
+import javax.inject.Inject
 
 
-class WidgetsRepository(private val dataSource: DataSource) {
+class WidgetsRepository @Inject constructor(private val dataSource: WidgetsDataSource) {
 
     fun getWidgetsByScreenIdFlowable(
         id: String,
@@ -34,18 +35,5 @@ class WidgetsRepository(private val dataSource: DataSource) {
     suspend fun getWidgetsByScreenId(id: String, pageSize: Int, page: Int) =
         dataSource.getWidgetsByScreenId(id, pageSize, page)
 
-    interface DataSource {
-        suspend fun getWidgetsByScreenId(
-            id: String,
-            pageSize: Int,
-            page: Int
-        ): Result<WidgetEdge>
 
-        suspend fun getWidgetsByScreenType(
-            screenType: ScreenType,
-            pageSize: Int,
-            page: Int
-        ): Result<WidgetEdge>
-
-    }
 }

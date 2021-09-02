@@ -1,11 +1,10 @@
 package com.realifetech.sdk.sell.weboredering
 
+import android.content.Context
 import android.content.Intent
-import com.realifetech.sdk.core.domain.CoreConfiguration.context
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
-object WebOrderingFeature {
+class WebOrderingFeature @Inject constructor(private val context: Context) {
 
     fun startActivity() {
         val intent = Intent(context, WebOrderingActivity::class.java)

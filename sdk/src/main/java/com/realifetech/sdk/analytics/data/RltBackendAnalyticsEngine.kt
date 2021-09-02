@@ -6,15 +6,17 @@ import com.apollographql.apollo.coroutines.await
 import com.google.gson.Gson
 import com.realifetech.PutAnalyticEventMutation
 import com.realifetech.sdk.analytics.domain.AnalyticsEvent
-import com.realifetech.sdk.core.domain.Result
+import com.realifetech.sdk.core.utils.Result
 import com.realifetech.type.AnalyticEvent
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Analytics engine which will send the events to RealifeTech backend using GraphQL
  */
-internal class RltBackendAnalyticsEngine(private val apolloClient: ApolloClient) : AnalyticsEngine {
+internal class RltBackendAnalyticsEngine @Inject constructor(private val apolloClient: ApolloClient) :
+    AnalyticsEngine {
     override suspend fun logEvent(event: AnalyticsEvent): Result<Boolean> {
         val newInfoConverted = event.new?.let { Gson().toJson(it) }
         val oldInfoConverted = event.old?.let { Gson().toJson(it) }
@@ -39,7 +41,11 @@ internal class RltBackendAnalyticsEngine(private val apolloClient: ApolloClient)
                     Result.Success(false)
                 }
                 else -> {
-                    Result.Error(Exception(response.errors?.firstOrNull()?.message ?: "Unknown error"))
+                    Result.Error(
+                        Exception(
+                            response.errors?.firstOrNull()?.message ?: "Unknown error"
+                        )
+                    )
                 }
             }
         } catch (e: Exception) {

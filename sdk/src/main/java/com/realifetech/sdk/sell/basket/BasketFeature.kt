@@ -5,9 +5,10 @@ import com.realifetech.sdk.core.data.basket.model.BasketRequest
 import com.realifetech.sdk.core.data.basket.model.CheckoutRequest
 import com.realifetech.sdk.core.data.order.model.Order
 import com.realifetech.sdk.core.data.shared.`object`.StandardResponse
+import com.realifetech.sdk.sell.basket.domain.BasketRepository
+import javax.inject.Inject
 
-class BasketFeature private constructor() {
-    private val basketRepo = BasketProvider().provideBasketRepository()
+class BasketFeature @Inject constructor(private val basketRepo: BasketRepository) {
 
     fun getMyBasket(callback: (error: Exception?, basket: Basket?) -> Unit) {
         basketRepo.getBasket(callback)
@@ -36,13 +37,5 @@ class BasketFeature private constructor() {
         callback: (error: Exception?, order: Order?) -> Unit
     ) {
         basketRepo.checkoutMyBasket(input, callback)
-    }
-
-    private object Holder {
-        val instance = BasketFeature()
-    }
-
-    companion object {
-        val INSTANCE: BasketFeature by lazy { Holder.instance }
     }
 }

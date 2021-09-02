@@ -1,29 +1,32 @@
 package com.realifetech.sdk.audiences
 
+import android.content.Context
+import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.realifetech.BelongsToAudienceWithExternalIdQuery
-import com.realifetech.sdk.core.network.graphQl.GraphQlModule
-import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.utils.hasNetworkConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class Audiences private constructor() {
+class Audiences @Inject constructor(
+    private val apolloClient: ApolloClient,
+    private val context: Context
+) {
 
     fun deviceIsMemberOfAudience(
         externalAudienceId: String,
         callback: (error: Error?, result: Boolean) -> Unit
     ) {
-        if (!General.instance.configuration.requireContext().hasNetworkConnection) {
+        if (!context.hasNetworkConnection) {
             callback(Error("No Internet connection"), false)
             return
         }
 
         GlobalScope.launch(Dispatchers.IO) {
-            val apolloClient = GraphQlModule.apolloClient
             var errorToReturn: Error?
             var belongsToAudienceResponse = false
 
@@ -46,13 +49,5 @@ class Audiences private constructor() {
                 callback(errorToReturn, belongsToAudienceResponse)
             }
         }
-    }
-
-    private object Holder {
-        val instance = Audiences()
-    }
-
-    companion object {
-        val instance: Audiences by lazy { Holder.instance }
     }
 }

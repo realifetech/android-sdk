@@ -1,6 +1,6 @@
 package com.realifetech.sdk.core.network
 
-import com.realifetech.sdk.core.domain.CoreConfiguration
+import com.realifetech.sdk.core.domain.RLTConfiguration
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -17,13 +17,13 @@ internal object AuthorizationApiNetwork {
                 .build()
         }
 
-    fun get(): AuthorizationApiService {
+    fun get(): RealifetechApiV3Service {
         val retrofit = Retrofit.Builder()
             .client(httpClient)
-            .baseUrl(CoreConfiguration.finalApiUrl)
+            .baseUrl(RLTConfiguration.finalApiUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        return retrofit.create(AuthorizationApiService::class.java)
+        return retrofit.create(RealifetechApiV3Service::class.java)
     }
 }
