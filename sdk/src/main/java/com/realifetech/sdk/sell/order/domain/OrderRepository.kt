@@ -4,11 +4,11 @@ import com.realifetech.sdk.core.data.order.model.Order
 import com.realifetech.sdk.core.data.order.wrapper.OrderUpdateWrapper
 import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
 import com.realifetech.sdk.core.database.order.OrdersSharedPreferencesManager
-import com.realifetech.sdk.core.domain.CoreConfiguration
 
-class OrderRepository(private val dataSource: DataSource) {
-
-    private val localStorageManager = OrdersSharedPreferencesManager(CoreConfiguration.context)
+class OrderRepository(
+    private val dataSource: DataSource,
+    private val localStorageManager: OrdersSharedPreferencesManager
+) {
 
     fun getOrders(
         pageSize: Int,

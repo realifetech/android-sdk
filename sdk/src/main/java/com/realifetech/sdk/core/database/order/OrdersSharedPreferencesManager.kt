@@ -8,8 +8,9 @@ import com.realifetech.sdk.core.database.shared.getListFromSharedPreferences
 import com.realifetech.sdk.core.database.shared.saveListToSharedPreferences
 import io.reactivex.Maybe
 import io.reactivex.Single
+import javax.inject.Inject
 
-class OrdersSharedPreferencesManager(private val context: Context) :
+class OrdersSharedPreferencesManager @Inject constructor(private val context: Context) :
     OrdersLocalStorageManager,
     SharedPreferencesManager<OrderEntity, Order> {
 

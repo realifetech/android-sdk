@@ -8,16 +8,18 @@ import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.*
+import com.realifetech.fragment.PaymentIntent
 import com.realifetech.sdk.core.data.payment.model.PaymentSource
 import com.realifetech.sdk.core.data.payment.model.asModel
 import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
 import com.realifetech.sdk.sell.payment.domain.PaymentRepository
-import com.realifetech.fragment.PaymentIntent
 import com.realifetech.type.PaymentIntentInput
 import com.realifetech.type.PaymentIntentUpdateInput
 import com.realifetech.type.PaymentSourceInput
+import javax.inject.Inject
 
-class PaymentDataSource(private val apolloClient: ApolloClient) : PaymentRepository.DataSource {
+class PaymentDataSource @Inject constructor(private val apolloClient: ApolloClient) :
+    PaymentRepository.DataSource {
 
 
     override fun addPaymentSource(
@@ -65,7 +67,10 @@ class PaymentDataSource(private val apolloClient: ApolloClient) : PaymentReposit
                     response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.let { sourceEdge ->
                         callback.invoke(
                             null,
-                            PaginatedObject(sourceEdge.edges?.map { it?.asModel}, sourceEdge.nextPage)
+                            PaginatedObject(
+                                sourceEdge.edges?.map { it?.asModel },
+                                sourceEdge.nextPage
+                            )
                         )
                     } ?: run {
                         callback.invoke(Exception(), null)

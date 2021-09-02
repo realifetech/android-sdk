@@ -6,7 +6,7 @@ import com.realifetech.sdk.analytics.domain.PendingAnalyticsEvent
 /**
  * Manages the storage of the [AnalyticsEvent] in database and extraction of it in the form of [PendingAnalyticsEvent]
  */
-internal class AnalyticsStorage(private val dataSource: DataSource) {
+class AnalyticsStorage(private val dataSource: DataSource) {
 
     fun save(event: AnalyticsEvent) = dataSource.save(event)
 

@@ -3,10 +3,11 @@ package com.realifetech.sdk.sell.product
 import com.realifetech.sdk.core.data.product.Product
 import com.realifetech.sdk.core.data.shared.`object`.FilterParamWrapper
 import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.sell.product.domain.ProductRepository
 import com.realifetech.type.ProductFilter
+import javax.inject.Inject
 
-class ProductFeature private constructor() {
-    private val productRepo = ProductProvider().provideProductRepository()
+class ProductFeature @Inject constructor(private val productRepo: ProductRepository) {
 
     fun getProducts(
         pageSize: Int,
@@ -26,11 +27,4 @@ class ProductFeature private constructor() {
         productRepo.getProductById(id, params, callback)
     }
 
-    private object Holder {
-        val instance = ProductFeature()
-    }
-
-    companion object {
-        val INSTANCE: ProductFeature by lazy { Holder.instance }
-    }
 }

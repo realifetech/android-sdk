@@ -6,8 +6,9 @@ import com.realifetech.sdk.core.data.fulfilmentPoint.FulfilmentPointCategory
 import com.realifetech.sdk.core.data.shared.`object`.FilterParamWrapper
 import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
 import com.realifetech.type.FulfilmentPointFilter
+import javax.inject.Inject
 
-class FulfilmentPointRepository(private val dataSource: DataSource) {
+class FulfilmentPointRepository @Inject constructor(private val dataSource: DataSource) {
 
     fun getFulfilmentPoints(
         pageSize: Int,

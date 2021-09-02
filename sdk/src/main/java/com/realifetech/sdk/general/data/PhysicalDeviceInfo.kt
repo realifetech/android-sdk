@@ -4,22 +4,25 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.os.Build
 import android.util.DisplayMetrics
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.realifetech.realifetech_sdk.BuildConfig
-import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.utils.isWifiConnected
 import com.realifetech.sdk.general.utils.isWifiOn
+import javax.inject.Inject
 
 /**
  * Returns information about the current device & based on the passed [Context]
  */
-open class PhysicalDeviceInfo(private val context: Context) : DeviceInfo {
+open class PhysicalDeviceInfo @Inject constructor(
+    private val context: Context
+) : DeviceInfo {
 
     private val displayMetrics: DisplayMetrics by lazy {
         context.resources.displayMetrics
     }
 
     override val deviceId: String
-        get() = General.instance.deviceIdentifier
+        get() = AdvertisingIdClient.getAdvertisingIdInfo(context).id + ":" + context.packageName
 
     override val appVersionName: String
         get() = "SDK_${BuildConfig.VERSION_NAME}"

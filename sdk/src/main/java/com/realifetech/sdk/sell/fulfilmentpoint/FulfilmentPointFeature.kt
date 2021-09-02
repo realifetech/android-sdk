@@ -5,10 +5,11 @@ import com.realifetech.sdk.core.data.fulfilmentPoint.FulfilmentPoint
 import com.realifetech.sdk.core.data.fulfilmentPoint.FulfilmentPointCategory
 import com.realifetech.sdk.core.data.shared.`object`.FilterParamWrapper
 import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.sell.fulfilmentpoint.domain.FulfilmentPointRepository
 import com.realifetech.type.FulfilmentPointFilter
+import javax.inject.Inject
 
-class FulfilmentPointFeature private constructor() {
-    private val fulfilmentPointRepo = FulfilmentPointProvider().provideFulfilmentPointRepository()
+class FulfilmentPointFeature @Inject constructor(private val fulfilmentPointRepo: FulfilmentPointRepository) {
 
     fun getFulfilmentPoints(
         pageSize: Int,
@@ -42,13 +43,5 @@ class FulfilmentPointFeature private constructor() {
         callback: (error: Exception?, fulfilmentPointCategory: FulfilmentPointCategory?) -> Unit
     ) {
         fulfilmentPointRepo.getFulfilmentPointCategoryById(id, callback)
-    }
-
-    private object Holder {
-        val instance = FulfilmentPointFeature()
-    }
-
-    companion object {
-        val INSTANCE: FulfilmentPointFeature by lazy { Holder.instance }
     }
 }

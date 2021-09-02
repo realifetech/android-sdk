@@ -3,9 +3,10 @@ package com.realifetech.sdk.sell.order
 import com.realifetech.sdk.core.data.order.model.Order
 import com.realifetech.sdk.core.data.order.wrapper.OrderUpdateWrapper
 import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.sell.order.domain.OrderRepository
+import javax.inject.Inject
 
-class OrderFeature private constructor() {
-    private val orderRepo = OrderProvider().provideOrderRepository()
+class OrderFeature @Inject constructor(private val orderRepo: OrderRepository) {
 
     fun getOrders(
         pageSize: Int,
@@ -28,13 +29,5 @@ class OrderFeature private constructor() {
         callback: (error: Exception?, order: Order?) -> Unit
     ) {
         orderRepo.updateMyOrder(id, input, callback)
-    }
-
-    private object Holder {
-        val instance = OrderFeature()
-    }
-
-    companion object {
-        val INSTANCE: OrderFeature by lazy { Holder.instance }
     }
 }

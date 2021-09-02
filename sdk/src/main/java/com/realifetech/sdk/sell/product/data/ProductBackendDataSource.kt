@@ -1,6 +1,7 @@
 package com.realifetech.sdk.sell.product.data
 
 import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
@@ -15,12 +16,11 @@ import com.realifetech.sdk.core.data.shared.`object`.FilterParamWrapper
 import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
 import com.realifetech.sdk.core.data.shared.`object`.asInput
 import com.realifetech.sdk.sell.product.domain.ProductRepository
-import com.realifetech.sdk.core.network.graphQl.GraphQlModule
 import com.realifetech.type.ProductFilter
+import javax.inject.Inject
 
-class ProductBackendDataSource() :
+class ProductBackendDataSource @Inject constructor(private val apolloClient: ApolloClient) :
     ProductRepository.DataSource {
-    private val apolloClient = GraphQlModule.apolloClient
 
     override fun getProducts(
         pageSize: Int,

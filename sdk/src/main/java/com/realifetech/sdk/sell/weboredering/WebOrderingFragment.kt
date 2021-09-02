@@ -11,23 +11,28 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.realifetech.sdk.core.domain.CoreConfiguration
 import com.realifetech.realifetech_sdk.R
 import com.realifetech.realifetech_sdk.databinding.FragmentWebOrderingBinding
-import com.realifetech.sdk.utils.ColorPallet.colorOnPrimary
-import com.realifetech.sdk.utils.ColorPallet.colorPrimary
-import com.realifetech.sdk.utils.ColorPallet.colorSurface
+import com.realifetech.sdk.core.domain.RLTConfiguration
+import com.realifetech.sdk.core.utils.ColorPallet
+import com.realifetech.sdk.utils.NetworkUtil
 import com.realifetech.sdk.utils.clicks
-import com.realifetech.sdk.utils.isNetworkAvailable
 import com.realifetech.sdk.utils.setTaggableOnSurfaceTint
 import com.realifetech.sdk.utils.tint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 class WebOrderingFragment : Fragment() {
 
     private var _binding: FragmentWebOrderingBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var colorPallet: ColorPallet
+
+    @Inject
+    internal lateinit var networkUtil: NetworkUtil
 
     private lateinit var viewModel: WebOrderingViewModel
 
@@ -66,10 +71,10 @@ class WebOrderingFragment : Fragment() {
 
     private fun setupNavBar() {
         binding.apply {
-            navigationLayout.setBackgroundColor(colorSurface)
-            navForward.setTaggableOnSurfaceTint()
+            navigationLayout.setBackgroundColor(colorPallet.colorSurface)
+            navForward.setTaggableOnSurfaceTint(colorPallet)
             viewModel.handleNavForward(navForward.clicks())
-            navBack.setTaggableOnSurfaceTint()
+            navBack.setTaggableOnSurfaceTint(colorPallet)
             viewModel.handleNavBack(navBack.clicks())
         }
     }
@@ -79,11 +84,11 @@ class WebOrderingFragment : Fragment() {
             val activity = activity as? AppCompatActivity
             activity?.setSupportActionBar(toolbar)
             activity?.supportActionBar?.apply {
-                this.setBackgroundDrawable(ColorDrawable(colorPrimary))
+                this.setBackgroundDrawable(ColorDrawable(colorPallet.colorPrimary))
                 context?.let {
                     setHomeAsUpIndicator(
                         ContextCompat.getDrawable(it, R.drawable.ic_close_rlt)?.apply {
-                            tint(colorOnPrimary)
+                            tint(colorPallet.colorOnPrimary)
                         })
                 }
                 setDisplayHomeAsUpEnabled(true)
@@ -107,7 +112,7 @@ class WebOrderingFragment : Fragment() {
                 }
             }
             webView.webViewClient = getWebViewClient()
-            webView.loadUrl(CoreConfiguration.webOrderingJourneyUrl)
+            webView.loadUrl(RLTConfiguration.ORDERING_JOURNEY_URL)
         }
     }
 
@@ -116,7 +121,7 @@ class WebOrderingFragment : Fragment() {
         context?.let {
             menu.findItem(R.id.refresh_web)
                 .setIcon(ContextCompat.getDrawable(it, R.drawable.ic_refresh_rlt)?.apply {
-                    tint(colorOnPrimary)
+                    tint(colorPallet.colorOnPrimary)
                 })
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -137,7 +142,7 @@ class WebOrderingFragment : Fragment() {
         allowFileAccess = true
         CookieManager.getInstance().removeAllCookies(null)
         CookieManager.getInstance().flush()
-        if (!isNetworkAvailable()) {
+        if (!networkUtil.isNetworkAvailable()) {
             cacheMode = LOAD_CACHE_ELSE_NETWORK
         }
     }
@@ -155,7 +160,7 @@ class WebOrderingFragment : Fragment() {
 
             override fun onLoadResource(view: WebView, url: String) {
                 webView.settings.cacheMode =
-                    if (isNetworkAvailable()) LOAD_DEFAULT else LOAD_CACHE_ELSE_NETWORK
+                    if (networkUtil.isNetworkAvailable()) LOAD_DEFAULT else LOAD_CACHE_ELSE_NETWORK
                 webView.visibility = View.VISIBLE
                 navForward.isEnabled = webView.canGoForward()
                 navBack.isEnabled = webView.canGoBack()

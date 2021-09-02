@@ -1,10 +1,11 @@
 package com.realifetech.sdk.general.domain
 
-import com.realifetech.sdk.general.General
+import android.content.Context
+import javax.inject.Inject
 
-object SdkInitializationPrecondition {
+class SdkInitializationPrecondition @Inject constructor(private val context: Context?) {
     fun checkContextInitialized() {
-        if (General.instance.configuration.context == null) {
+        if (context == null) {
             throw RuntimeException("Application context shouldn't be null. Ensure you are configuring the SDK by passing the Context first")
         }
     }

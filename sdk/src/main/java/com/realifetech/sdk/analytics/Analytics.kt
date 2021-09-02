@@ -1,13 +1,12 @@
 package com.realifetech.sdk.analytics
 
+import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.analytics.data.AnalyticsEngine
 import com.realifetech.sdk.analytics.data.AnalyticsStorage
-import com.realifetech.sdk.analytics.di.AnalyticsProvider
 import com.realifetech.sdk.analytics.domain.AnalyticsEvent
-import com.realifetech.sdk.domain.LinearRetryPolicy
-import com.realifetech.sdk. core.domain.Result
-import com.realifetech.sdk.domain.RetryPolicy
-import com.realifetech.sdk.general.General
+import com.realifetech.sdk.core.domain.LinearRetryPolicy
+import com.realifetech.sdk.core.domain.RetryPolicy
+import com.realifetech.sdk.core.utils.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -15,15 +14,16 @@ import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class Analytics private constructor() {
+class Analytics(
+    private val engine: AnalyticsEngine,
+    private val storage: AnalyticsStorage
+) {
 
     private val retryPolicy: RetryPolicy = LinearRetryPolicy(RETRY_TIME_MILLISECONDS) {
         GlobalScope.launch(Dispatchers.IO) {
             sendPendingEvents()
         }
     }
-    private val engine: AnalyticsEngine = AnalyticsProvider.provideAnalyticsEngine()
-    private val storage: AnalyticsStorage = AnalyticsProvider.provideAnalyticsStorage()
 
     /**
      * Logs an event using the [AnalyticsEngine] provided and is calling the [completion] when finishes. If the [completion]
@@ -43,8 +43,7 @@ class Analytics private constructor() {
 
         GlobalScope.launch(Dispatchers.IO) {
             val event = AnalyticsEvent(type, action, new, old, Calendar.getInstance().timeInMillis)
-
-            val errorResponse = if (General.instance.isSdkReady) {
+            val errorResponse = if (RealifeTech.getGeneral().isSdkReady) {
                 val result = engine.logEvent(event)
 
                 val error = if (result is Result.Error) {
@@ -87,13 +86,7 @@ class Analytics private constructor() {
         }
     }
 
-    private object Holder {
-        val instance = Analytics()
-    }
-
     companion object {
         private val RETRY_TIME_MILLISECONDS = TimeUnit.SECONDS.toMillis(45)
-
-        val instance: Analytics by lazy { Holder.instance }
     }
 }

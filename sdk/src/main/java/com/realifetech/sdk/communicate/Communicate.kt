@@ -1,23 +1,28 @@
 package com.realifetech.sdk.communicate
 
-import com.realifetech.sdk.communicate.di.CommunicateProvider
-import com.realifetech.sdk.communicate.domain.TokenBody
-import com.realifetech.sdk.core.domain.Result
-import com.realifetech.sdk.general.General
+import android.content.Context
+import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
+import com.realifetech.sdk.communicate.data.TokenBody
+import com.realifetech.sdk.core.network.RealifetechApiV3Service
+import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.general.utils.hasNetworkConnection
 
-class Communicate {
-
-    private val tokenStorage = CommunicateProvider.tokenStorage
+class Communicate (
+    private val tokenStorage: PushNotificationsTokenStorage,
+    private val realifetechApiV3Service: RealifetechApiV3Service,
+    private val context: Context
+) {
 
     fun registerForPushNotifications(token: String): Result<Boolean> {
         tokenStorage.pendingToken = token
 
-        if (!General.instance.configuration.requireContext().hasNetworkConnection) {
+        if (!context.hasNetworkConnection) {
             return Result.Error(java.lang.RuntimeException("No Internet connection"))
         }
 
-        val response = CommunicateProvider.provideApiService().pushNotifications(ID, TokenBody(GOOGLE, token)).execute()
+        val response =
+            realifetechApiV3Service.pushNotifications(ID, TokenBody(GOOGLE, token))
+                .execute()
         return if (response.isSuccessful) {
             tokenStorage.removePendingToken()
             Result.Success(true)
@@ -32,13 +37,9 @@ class Communicate {
         }
     }
 
-    private object Holder {
-        val instance = Communicate()
-    }
 
     companion object {
         private const val ID = "me"
         private const val GOOGLE = "GOOGLE"
-        val instance: Communicate by lazy { Holder.instance }
     }
 }

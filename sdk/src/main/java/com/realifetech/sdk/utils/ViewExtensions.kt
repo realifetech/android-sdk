@@ -8,8 +8,7 @@ import android.widget.ImageView
 import androidx.annotation.CheckResult
 import androidx.annotation.ColorInt
 import androidx.core.graphics.drawable.DrawableCompat
-import com.realifetech.sdk.utils.ColorPallet.colorNeutral
-import com.realifetech.sdk.utils.ColorPallet.colorOnSurface
+import com.realifetech.sdk.core.utils.ColorPallet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
@@ -24,10 +23,10 @@ fun Drawable.tint(@ColorInt colorId: Int) {
     }
 }
 
-fun ImageView.setTaggableOnSurfaceTint() {
+fun ImageView.setTaggableOnSurfaceTint(colorPallet: ColorPallet) {
     val states: Array<IntArray> =
         arrayOf(intArrayOf(android.R.attr.state_enabled), intArrayOf())
-    val colors: IntArray = intArrayOf(colorOnSurface, colorNeutral)
+    val colors: IntArray = intArrayOf(colorPallet.colorOnSurface, colorPallet.colorNeutral)
     imageTintList = ColorStateList(states, colors)
 }
 

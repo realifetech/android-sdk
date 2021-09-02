@@ -6,16 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.realifetech.sdk.core.domain.Result
-import com.realifetech.sdk.content.screen.domain.ScreenRepository
-import com.realifetech.sdk.content.screen.di.ScreenModuleProvider
-import com.realifetech.sdk.content.widgets.domain.WidgetsRepository
-import com.realifetech.sdk.content.widgets.di.WidgetsModuleProvider
-import com.realifetech.sdk.content.widgets.data.WidgetEdge
 import com.realifetech.sample.R
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.utils.disposedBy
 import com.realifetech.sdk.RealifeTech
+import com.realifetech.sdk.content.widgets.data.WidgetEdge
+import com.realifetech.sdk.core.utils.Result
 import com.realifetech.type.ScreenType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -25,7 +21,6 @@ import kotlinx.android.synthetic.main.activity_widgets_sample.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class WidgetsSampleActivity : AppCompatActivity() {
 
@@ -51,22 +46,16 @@ class WidgetsSampleActivity : AppCompatActivity() {
         val storage = DeviceConfigurationStorage(this)
         GlobalScope.launch(Dispatchers.Main) {
 
-            val widgetsRepo = WidgetsModuleProvider.provideWidgetsRepository(
-                deviceId = withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
-            )
-            val screenRepo = ScreenModuleProvider.provideScreenRepository(
-                withContext(Dispatchers.IO) { RealifeTech.getGeneral().deviceIdentifier }
-            )
 
             queryWidgets.setOnClickListener {
                 if (screenTypeSelected()) {
-                    queryWidgets(widgetsRepo)
+                    queryWidgets()
                 }
 
             }
             queryScreenTitle.setOnClickListener {
                 if (screenTypeSelected()) {
-                    queryScreenTitle(screenRepo)
+                    queryScreenTitle()
                 }
             }
         }
@@ -81,8 +70,8 @@ class WidgetsSampleActivity : AppCompatActivity() {
         return true
     }
 
-    private fun queryWidgets(widgetsRepo: WidgetsRepository) {
-        widgetsRepo.getWidgetsByScreenTypeFlowable(selectedType!!, 10, 1)
+    private fun queryWidgets() {
+        RealifeTech.getContent().getWidgetsByScreenType(selectedType!!, 10, 1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).map {
                 when (it) {
@@ -144,8 +133,8 @@ class WidgetsSampleActivity : AppCompatActivity() {
 //            }
     }
 
-    private fun queryScreenTitle(screenRepo: ScreenRepository) {
-        screenRepo.getScreenByScreenTypeSingle(selectedType!!)
+    private fun queryScreenTitle() {
+        RealifeTech.getContent().getScreenTitleByScreenType(selectedType!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).map {
                 when (it) {

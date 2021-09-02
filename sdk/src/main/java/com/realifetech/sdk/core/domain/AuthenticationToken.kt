@@ -2,16 +2,17 @@ package com.realifetech.sdk.core.domain
 
 import com.realifetech.sdk.core.data.auth.AuthenticationTokenStorage
 import com.realifetech.sdk.core.data.auth.OAuthTokenResponse
-import com.realifetech.sdk.core.database.preferences.Preferences.rltToken
+import com.realifetech.sdk.core.database.preferences.Preferences
 
 class AuthenticationToken(
     private val storage: AuthenticationTokenStorage,
-    private val apiSource: ApiDataSource
+    private val apiSource: ApiDataSource,
+    private val preferences: Preferences
 ) {
 
     val accessToken: String
         get() {
-            var token = rltToken?.accessToken
+            var token = preferences.rltToken?.accessToken
             if (token.isNullOrBlank())
                 token = storage.accessToken
             return token
@@ -22,7 +23,7 @@ class AuthenticationToken(
      * call to refresh it. Otherwise we will do nothing.
      */
     fun ensureActive() {
-        rltToken?.let {
+        preferences.rltToken?.let {
             if (!it.isTokenExpired) return
             requestRefreshTokenServer(it.refreshToken)
         } ?: run {
@@ -34,8 +35,8 @@ class AuthenticationToken(
     private fun requestAccessTokenServer() {
         val accessTokenInfo =
             apiSource.getAccessToken(
-                CoreConfiguration.clientSecret,
-                CoreConfiguration.appCode + "_0"
+                RLTConfiguration.CLIENT_SECRET,
+                RLTConfiguration.APP_CODE + "_0"
             ) ?: return
         storage.accessToken = accessTokenInfo.token
         storage.expireAtMilliseconds = accessTokenInfo.expireAtMilliseconds
@@ -44,11 +45,11 @@ class AuthenticationToken(
     private fun requestRefreshTokenServer(refreshToken: String) {
         val tokenResponse =
             apiSource.refreshToken(
-                CoreConfiguration.clientSecret,
-                CoreConfiguration.appCode + "_0",
+                RLTConfiguration.CLIENT_SECRET,
+                RLTConfiguration.APP_CODE + "_0",
                 refreshToken
             ) ?: return
-        rltToken = tokenResponse
+        preferences.rltToken = tokenResponse
     }
 
     interface ApiDataSource {

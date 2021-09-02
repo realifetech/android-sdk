@@ -1,6 +1,7 @@
 package com.realifetech.sdk.sell.order.data
 
 import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.exception.ApolloException
@@ -15,10 +16,10 @@ import com.realifetech.sdk.core.data.order.wrapper.OrderUpdateWrapper
 import com.realifetech.sdk.core.data.order.wrapper.asInput
 import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
 import com.realifetech.sdk.sell.order.domain.OrderRepository
-import com.realifetech.sdk.core.network.graphQl.GraphQlModule
+import javax.inject.Inject
 
-class OrderBackendDataSource() : OrderRepository.DataSource {
-    private val apolloClient = GraphQlModule.apolloClient
+class OrderBackendDataSource @Inject constructor(private val apolloClient: ApolloClient) :
+    OrderRepository.DataSource {
 
     override fun getOrders(
         pageSize: Int,

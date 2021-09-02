@@ -9,7 +9,7 @@ import androidx.core.widget.doOnTextChanged
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.utils.hideKeyboard
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.core.domain.Result
+import com.realifetech.sdk.core.utils.Result
 import kotlinx.android.synthetic.main.activity_communication_sample.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

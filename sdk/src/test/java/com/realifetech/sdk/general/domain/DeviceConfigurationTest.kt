@@ -1,5 +1,6 @@
 package com.realifetech.sdk.general.domain
 
+import com.realifetech.sdk.core.domain.RLTConfiguration
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -7,15 +8,14 @@ class DeviceConfigurationTest {
 
     @Test
     fun getWebOrderingJourneyUrl() {
-        val webOrderingUrl = DeviceConfiguration().webOrderingJourneyUrl
+        val webOrderingUrl = RLTConfiguration.ORDERING_JOURNEY_URL
         assertEquals(DEFAULT_URL, webOrderingUrl)
     }
 
     @Test
     fun setWebOrderingJourneyUrl() {
-        val configuration = DeviceConfiguration()
-        configuration.webOrderingJourneyUrl = DIFFERENT_URL
-        val webOrderingUrl = configuration.webOrderingJourneyUrl
+        RLTConfiguration.ORDERING_JOURNEY_URL = DIFFERENT_URL
+        val webOrderingUrl = RLTConfiguration.ORDERING_JOURNEY_URL
         assertEquals(DIFFERENT_URL, webOrderingUrl)
     }
 
