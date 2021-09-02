@@ -1,24 +1,21 @@
 package com.realifetech.sdk.general
 
-import android.content.Context
 import android.util.Log
 import androidx.annotation.ColorInt
-import com.realifetech.sdk.core.domain.RLTConfiguration
-import com.realifetech.sdk.core.utils.Result
-import com.realifetech.sdk.general.data.PhysicalDeviceInfo
 import com.realifetech.sdk.core.data.color.ColorType
 import com.realifetech.sdk.core.data.color.ColorType.*
-import com.realifetech.sdk.general.domain.DeviceRepository
-import com.realifetech.sdk.general.data.DeviceRegisterResponse
-import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
+import com.realifetech.sdk.core.database.preferences.Preferences
 import com.realifetech.sdk.core.utils.ColorPallet
-
+import com.realifetech.sdk.core.utils.Result
+import com.realifetech.sdk.general.data.DeviceRegisterResponse
+import com.realifetech.sdk.general.domain.DeviceRepository
+import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
 import javax.inject.Inject
 
-class General (
+class General @Inject constructor(
     private val deviceRepository: DeviceRepository,
     private val sdkInitializationPrecondition: SdkInitializationPrecondition,
-    private val physicalDeviceInfo: PhysicalDeviceInfo,
+    private val preferences: Preferences,
     private val colorPallet: ColorPallet
 ) {
 
@@ -26,13 +23,9 @@ class General (
         private set
 
     val deviceIdentifier: String
-        get() = physicalDeviceInfo.deviceId
+        get() = preferences.deviceId
 
-    /**
-     * It will register the device to the backend.
-     *
-     * @throws RuntimeException if the SDK wasn't initialized first with [Context]. See [RLTConfiguration.context]
-     */
+
     @Synchronized
     fun registerDevice(): Result<DeviceRegisterResponse> {
         sdkInitializationPrecondition.checkContextInitialized()

@@ -5,6 +5,6 @@
     <color name="colorPrimaryDark">#012d4C</color>
     <color name="colorAccent">#CD2F5F</color>
     <!-- set colors via xml -->
-        <color name="RLT_SDK_Color_Primary" type="color">@color/colorPrimary</color>
-        <color name="RLT_SDK_Color_OnPrimary" type="color">@color/colorOnPrimary</color>
+<!--        <color name="RLT_SDK_Color_Primary" type="color">@color/colorPrimary</color>-->
+<!--        <color name="RLT_SDK_Color_OnPrimary" type="color">@color/colorOnPrimary</color>-->
 </resources>

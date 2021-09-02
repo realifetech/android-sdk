@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 // require context, should be tested using UI test
 
-class ColorPallet (private val context: Context) {
+class ColorPallet (context: Context) {
     // Color Primary
 
 

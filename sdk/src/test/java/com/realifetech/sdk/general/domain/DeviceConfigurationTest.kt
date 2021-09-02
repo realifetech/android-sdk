@@ -1,6 +1,5 @@
 package com.realifetech.sdk.general.domain
 
-import com.realifetech.sdk.core.domain.RLTConfiguration
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

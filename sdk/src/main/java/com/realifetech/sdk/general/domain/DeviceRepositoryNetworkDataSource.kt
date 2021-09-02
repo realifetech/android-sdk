@@ -1,5 +1,6 @@
 package com.realifetech.sdk.general.domain
 
+import com.realifetech.sdk.core.database.preferences.Preferences
 import com.realifetech.sdk.core.domain.NetworkException
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.Result
@@ -7,9 +8,10 @@ import com.realifetech.sdk.general.data.DeviceInfo
 import com.realifetech.sdk.general.data.DeviceRegisterRequest
 import com.realifetech.sdk.general.data.DeviceRegisterResponse
 
-internal class DeviceRepositoryNetworkDataSource (
+internal class DeviceRepositoryNetworkDataSource(
     private val realifetechApiV3Service: RealifetechApiV3Service,
-    private val deviceInfo: DeviceInfo
+    private val deviceInfo: DeviceInfo,
+    private val preferences: Preferences,
 ) : DeviceNetworkDataSource {
 
     private val registerRequest: DeviceRegisterRequest
@@ -34,6 +36,7 @@ internal class DeviceRepositoryNetworkDataSource (
         val networkResponse = realifetechApiV3Service.registerDevice(registerRequest).execute()
         return if (networkResponse.isSuccessful) {
             val response = networkResponse.body() ?: DeviceRegisterResponse(-1, "", "")
+            preferences.deviceId = deviceInfo.deviceId
             Result.Success(response)
         } else {
             val errorMessage = networkResponse.errorBody()?.string().orEmpty()

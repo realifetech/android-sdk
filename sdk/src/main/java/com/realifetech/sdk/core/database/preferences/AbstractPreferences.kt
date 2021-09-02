@@ -16,6 +16,7 @@ abstract class AbstractPreferences(private val context: Context) {
 
     companion object {
         private const val REALIFETECH_PREFERENCES = "LiveStyledPreferences"
+        internal const val EMPTY = ""
 
     }
 
