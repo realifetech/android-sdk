@@ -1,11 +1,11 @@
 package com.realifetech.sdk.di.features.modules
 
 import android.content.Context
-import com.realifetech.sdk.core.database.preferences.Preferences
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.general.data.PhysicalDeviceInfo
-import com.realifetech.sdk.general.domain.DeviceNetworkDataSource
-import com.realifetech.sdk.general.domain.DeviceRepositoryNetworkDataSource
+import com.realifetech.sdk.general.data.DeviceNetworkDataSource
+import com.realifetech.sdk.general.data.DeviceNetworkDataSourceImpl
 import dagger.Module
 import dagger.Provides
 
@@ -16,11 +16,11 @@ object GeneralModule {
     fun deviceRepositoryNetworkDataSource(
         realifetechApiV3Service: RealifetechApiV3Service,
         context: Context,
-        preferences: Preferences
-    ): DeviceNetworkDataSource = DeviceRepositoryNetworkDataSource(
+        configuration: ConfigurationStorage
+    ): DeviceNetworkDataSource = DeviceNetworkDataSourceImpl(
         realifetechApiV3Service,
         PhysicalDeviceInfo(context),
-        preferences
+        configuration
     )
 
 }

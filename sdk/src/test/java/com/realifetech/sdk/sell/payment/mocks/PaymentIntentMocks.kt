@@ -1,9 +1,9 @@
 package com.realifetech.sdk.sell.payment.mocks
 
-import com.realifetech.sdk.core.data.payment.wrapper.PaymentIntentUpdateWrapper
-import com.realifetech.sdk.core.data.payment.wrapper.PaymentIntentWrapper
+import com.realifetech.sdk.core.data.model.payment.wrapper.PaymentIntentUpdateWrapper
+import com.realifetech.sdk.core.data.model.payment.wrapper.PaymentIntentWrapper
 import com.realifetech.fragment.PaymentIntent
-import com.realifetech.sdk.core.data.payment.wrapper.asInput
+import com.realifetech.sdk.core.data.model.payment.wrapper.asInput
 import com.realifetech.type.OrderType
 import com.realifetech.type.PaymentStatus
 import com.realifetech.type.UpdatePaymentStatus

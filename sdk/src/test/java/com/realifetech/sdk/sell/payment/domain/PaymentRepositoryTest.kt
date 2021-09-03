@@ -1,9 +1,10 @@
 package com.realifetech.sdk.sell.payment.domain
 
 import com.realifetech.fragment.PaymentIntent
-import com.realifetech.sdk.core.data.payment.model.PaymentSource
-import com.realifetech.sdk.core.data.payment.model.asModel
-import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.core.data.model.payment.model.PaymentSource
+import com.realifetech.sdk.core.data.model.payment.model.asModel
+import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
+import com.realifetech.sdk.sell.payment.data.PaymentDataSourceImpl
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntent
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntentUpdateInput
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntentUpdateWrapper
@@ -23,17 +24,17 @@ import org.junit.Test
 class PaymentRepositoryTest {
 
     @RelaxedMockK
-    private lateinit var paymentDataSource: com.realifetech.sdk.sell.payment.data.PaymentDataSource
+    private lateinit var paymentDataSource: PaymentDataSourceImpl
     private lateinit var paymentIntentSlot: CapturingSlot<(error: Exception?, response: PaymentIntent?) -> Unit>
     private lateinit var paymentSourceSlot: CapturingSlot<(error: Exception?, response: PaymentSource?) -> Unit>
     private lateinit var paginatedObjectSlot: CapturingSlot<(error: Exception?, response: PaginatedObject<PaymentSource?>?) -> Unit>
-    private lateinit var paymentRepository: com.realifetech.sdk.sell.payment.domain.PaymentRepository
+    private lateinit var paymentRepository: PaymentRepository
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         paymentRepository =
-            com.realifetech.sdk.sell.payment.domain.PaymentRepository(paymentDataSource)
+            PaymentRepository(paymentDataSource)
         paymentIntentSlot = CapturingSlot()
         paymentSourceSlot = CapturingSlot()
         paginatedObjectSlot = CapturingSlot()

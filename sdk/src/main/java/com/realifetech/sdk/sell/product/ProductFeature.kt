@@ -1,8 +1,8 @@
 package com.realifetech.sdk.sell.product
 
-import com.realifetech.sdk.core.data.product.Product
-import com.realifetech.sdk.core.data.shared.`object`.FilterParamWrapper
-import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.core.data.model.product.Product
+import com.realifetech.sdk.core.data.model.shared.`object`.FilterParamWrapper
+import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.sell.product.domain.ProductRepository
 import com.realifetech.type.ProductFilter
 import javax.inject.Inject

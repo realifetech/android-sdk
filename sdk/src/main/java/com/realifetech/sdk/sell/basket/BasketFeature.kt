@@ -1,10 +1,10 @@
 package com.realifetech.sdk.sell.basket
 
-import com.realifetech.sdk.core.data.basket.model.Basket
-import com.realifetech.sdk.core.data.basket.model.BasketRequest
-import com.realifetech.sdk.core.data.basket.model.CheckoutRequest
-import com.realifetech.sdk.core.data.order.model.Order
-import com.realifetech.sdk.core.data.shared.`object`.StandardResponse
+import com.realifetech.sdk.core.data.model.basket.Basket
+import com.realifetech.sdk.core.data.model.basket.BasketRequest
+import com.realifetech.sdk.core.data.model.basket.CheckoutRequest
+import com.realifetech.sdk.core.data.model.order.model.Order
+import com.realifetech.sdk.core.data.model.shared.`object`.StandardResponse
 import com.realifetech.sdk.sell.basket.domain.BasketRepository
 import javax.inject.Inject
 

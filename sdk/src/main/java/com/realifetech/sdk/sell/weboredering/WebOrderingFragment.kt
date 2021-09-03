@@ -13,13 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.realifetech.realifetech_sdk.R
 import com.realifetech.realifetech_sdk.databinding.FragmentWebOrderingBinding
-import com.realifetech.sdk.core.database.configuration.ConfigurationStorage
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.utils.ColorPallet
 import com.realifetech.sdk.di.Injector
-import com.realifetech.sdk.utils.NetworkUtil
-import com.realifetech.sdk.utils.clicks
-import com.realifetech.sdk.utils.setTaggableOnSurfaceTint
-import com.realifetech.sdk.utils.tint
+import com.realifetech.sdk.core.utils.NetworkUtil
+import com.realifetech.sdk.core.utils.clicks
+import com.realifetech.sdk.core.utils.setTaggableOnSurfaceTint
+import com.realifetech.sdk.core.utils.tint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 

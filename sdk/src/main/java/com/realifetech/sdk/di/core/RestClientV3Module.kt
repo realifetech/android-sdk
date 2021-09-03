@@ -1,11 +1,13 @@
 package com.realifetech.sdk.di.core
 
-import com.realifetech.sdk.core.data.auth.AuthenticationBackendApiDataSource
-import com.realifetech.sdk.core.database.configuration.ConfigurationStorage
-import com.realifetech.sdk.core.domain.AuthApiDataSource
-import com.realifetech.sdk.core.network.AuthorizationApiNetwork
+import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
+import com.realifetech.sdk.core.data.database.preferences.platform.PlatformPreferences
+import com.realifetech.sdk.core.data.datasource.AuthApiDataSource
+import com.realifetech.sdk.core.data.datasource.AuthApiDataSourceImpl
 import com.realifetech.sdk.core.network.DeviceIdInterceptor
 import com.realifetech.sdk.core.network.OAuth2AuthenticationInterceptor
+import com.realifetech.sdk.core.network.OAuth2Authenticator
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import dagger.Module
 import dagger.Provides
@@ -23,12 +25,14 @@ object RestClientV3Module {
     @Named("client-V3")
     internal fun httpClient(
         deviceIdInterceptor: DeviceIdInterceptor,
-        oAuthInterceptor: OAuth2AuthenticationInterceptor
+        platformPreferences: PlatformPreferences,
+        authTokenStorage: AuthTokenStorage,
     ): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
-            .addInterceptor(oAuthInterceptor)
+            .addInterceptor(OAuth2AuthenticationInterceptor(authTokenStorage, platformPreferences))
+            .authenticator(OAuth2Authenticator())
             .addInterceptor(deviceIdInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
@@ -50,13 +54,13 @@ object RestClientV3Module {
 
     @CoreScope
     @Provides
-    internal fun realifetechApiV3Service(retrofit: Retrofit): RealifetechApiV3Service {
+    fun realifetechApiV3Service(retrofit: Retrofit): RealifetechApiV3Service {
         return retrofit.create(RealifetechApiV3Service::class.java)
     }
 
     @CoreScope
     @Provides
-    internal fun authenticationBackendApiDataSource(configurationStorage: ConfigurationStorage): AuthApiDataSource =
-        AuthenticationBackendApiDataSource(AuthorizationApiNetwork(configurationStorage))
+    internal fun authenticationBackendApiDataSource(realifetechApiV3Service: RealifetechApiV3Service): AuthApiDataSource =
+        AuthApiDataSourceImpl(realifetechApiV3Service)
 
 }

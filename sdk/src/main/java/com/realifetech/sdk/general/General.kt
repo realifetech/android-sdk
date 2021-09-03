@@ -2,12 +2,12 @@ package com.realifetech.sdk.general
 
 import android.util.Log
 import androidx.annotation.ColorInt
-import com.realifetech.sdk.core.data.color.ColorType
-import com.realifetech.sdk.core.data.color.ColorType.*
-import com.realifetech.sdk.core.database.preferences.Preferences
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
+import com.realifetech.sdk.core.data.model.color.ColorType
+import com.realifetech.sdk.core.data.model.color.ColorType.*
+import com.realifetech.sdk.core.data.model.device.DeviceRegisterResponse
 import com.realifetech.sdk.core.utils.ColorPallet
 import com.realifetech.sdk.core.utils.Result
-import com.realifetech.sdk.general.data.DeviceRegisterResponse
 import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
 import javax.inject.Inject
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class General @Inject constructor(
     private val deviceRepository: DeviceRepository,
     private val sdkInitializationPrecondition: SdkInitializationPrecondition,
-    private val preferences: Preferences,
+    private val configuration: ConfigurationStorage,
     private val colorPallet: ColorPallet
 ) {
 
@@ -23,7 +23,7 @@ class General @Inject constructor(
         private set
 
     val deviceIdentifier: String
-        get() = preferences.deviceId
+        get() = configuration.deviceId
 
 
     @Synchronized

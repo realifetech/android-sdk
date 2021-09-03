@@ -2,11 +2,11 @@ package com.realifetech.sdk.di.features.modules
 
 import android.content.Context
 import com.realifetech.sdk.analytics.Analytics
-import com.realifetech.sdk.analytics.data.AnalyticsEngine
-import com.realifetech.sdk.analytics.data.AnalyticsStorage
+import com.realifetech.sdk.analytics.domain.AnalyticsEngine
+import com.realifetech.sdk.analytics.domain.AnalyticsStorage
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
-import com.realifetech.sdk.core.database.preferences.Preferences
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.ColorPallet
 import com.realifetech.sdk.di.features.FeatureScope
@@ -67,8 +67,8 @@ object FeatureModule {
     internal fun general(
         deviceRepository: DeviceRepository,
         sdkInitializationPrecondition: SdkInitializationPrecondition,
-        preferences: Preferences,
+        configuration: ConfigurationStorage,
         colorPallet: ColorPallet
     ): General =
-        General(deviceRepository, sdkInitializationPrecondition, preferences, colorPallet)
+        General(deviceRepository, sdkInitializationPrecondition, configuration, colorPallet)
 }

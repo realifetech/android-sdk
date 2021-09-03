@@ -1,8 +1,8 @@
 package com.realifetech.sdk.sell.order
 
-import com.realifetech.sdk.core.data.order.model.Order
-import com.realifetech.sdk.core.data.order.wrapper.OrderUpdateWrapper
-import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.core.data.model.order.model.Order
+import com.realifetech.sdk.core.data.model.order.wrapper.OrderUpdateWrapper
+import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.sell.order.domain.OrderRepository
 import javax.inject.Inject
 

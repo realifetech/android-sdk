@@ -2,7 +2,7 @@ package com.realifetech.sdk.communicate.domain
 
 import android.content.Context
 import androidx.core.content.edit
-import com.realifetech.sdk.core.database.preferences.AbstractPreferences
+import com.realifetech.sdk.core.data.database.preferences.AbstractPreferences
 import javax.inject.Inject
 
 class PushNotificationsTokenPreferenceStorage @Inject constructor(context: Context) :

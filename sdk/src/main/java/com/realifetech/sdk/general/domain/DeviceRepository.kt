@@ -4,7 +4,8 @@ import android.util.Log
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.core.domain.LinearRetryPolicy
 import com.realifetech.sdk.core.domain.RetryPolicy
-import com.realifetech.sdk.general.data.DeviceRegisterResponse
+import com.realifetech.sdk.core.data.model.device.DeviceRegisterResponse
+import com.realifetech.sdk.general.data.DeviceNetworkDataSource
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
