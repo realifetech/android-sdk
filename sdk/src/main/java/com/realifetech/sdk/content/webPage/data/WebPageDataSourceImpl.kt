@@ -1,4 +1,4 @@
-package com.realifetech.sdk.content.webPage.domain
+package com.realifetech.sdk.content.webPage.data
 
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.ApolloClient
@@ -9,7 +9,6 @@ import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.GetWebPageByTypeQuery
 import com.realifetech.fragment.FragmentWebPage
 import com.realifetech.type.WebPageType
-import javax.inject.Inject
 
 class WebPageDataSourceImpl (private val apolloClient: ApolloClient) :
     WebPageDataSource {

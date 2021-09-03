@@ -9,6 +9,7 @@ import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.database.preferences.Preferences
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.ColorPallet
+import com.realifetech.sdk.di.features.FeatureScope
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
@@ -25,6 +26,7 @@ import dagger.Provides
 @Module
 object FeatureModule {
 
+    @FeatureScope
     @Provides
     fun analytics(
         analyticsEngine: AnalyticsEngine,
@@ -32,6 +34,7 @@ object FeatureModule {
     ): Analytics =
         Analytics(analyticsEngine, analyticsStorage)
 
+    @FeatureScope
     @Provides
     fun sell(
         paymentFeature: PaymentFeature,
@@ -50,6 +53,7 @@ object FeatureModule {
         webOrderingFeature
     )
 
+    @FeatureScope
     @Provides
     internal fun communicate(
         tokenStorage: PushNotificationsTokenStorage,
@@ -58,7 +62,8 @@ object FeatureModule {
     ): Communicate =
         Communicate(tokenStorage, realifetechApiV3Service, context)
 
-
+    @FeatureScope
+    @Provides
     internal fun general(
         deviceRepository: DeviceRepository,
         sdkInitializationPrecondition: SdkInitializationPrecondition,

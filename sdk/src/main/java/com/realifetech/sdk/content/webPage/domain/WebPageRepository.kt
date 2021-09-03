@@ -1,6 +1,7 @@
 package com.realifetech.sdk.content.webPage.domain
 
 import com.realifetech.fragment.FragmentWebPage
+import com.realifetech.sdk.content.webPage.data.WebPageDataSource
 import com.realifetech.type.WebPageType
 import javax.inject.Inject
 

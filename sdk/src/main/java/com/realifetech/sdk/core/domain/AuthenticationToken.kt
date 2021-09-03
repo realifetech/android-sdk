@@ -1,14 +1,13 @@
 package com.realifetech.sdk.core.domain
 
 import com.realifetech.sdk.core.data.auth.AuthenticationTokenStorage
-import com.realifetech.sdk.core.data.auth.OAuthTokenResponse
 import com.realifetech.sdk.core.database.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.database.preferences.Preferences
 import javax.inject.Inject
 
 class AuthenticationToken @Inject constructor(
     private val storage: AuthenticationTokenStorage,
-    private val apiSource: ApiDataSource,
+    private val authApiSource: AuthApiDataSource,
     private val preferences: Preferences,
     private val configurationStorage: ConfigurationStorage
 ) {
@@ -35,7 +34,7 @@ class AuthenticationToken @Inject constructor(
 
     private fun requestAccessTokenServer() {
         val accessTokenInfo =
-            apiSource.getAccessToken(
+            authApiSource.getAccessToken(
                 configurationStorage.clientSecret,
                 configurationStorage.appCode + SUFFIX
             ) ?: return
@@ -45,7 +44,7 @@ class AuthenticationToken @Inject constructor(
 
     private fun requestRefreshTokenServer(refreshToken: String) {
         val tokenResponse =
-            apiSource.refreshToken(
+            authApiSource.refreshToken(
                 configurationStorage.clientSecret,
                 configurationStorage.appCode + SUFFIX,
                 refreshToken
