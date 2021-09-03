@@ -5,8 +5,8 @@ import android.graphics.Color
 import androidx.core.content.ContextCompat
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.core.data.color.ColorType
-import com.realifetech.sdk.core.data.config.CoreConfiguration
+import com.realifetech.sdk.core.data.model.color.ColorType
+import com.realifetech.sdk.core.data.model.config.CoreConfiguration
 
 class SampleApplication : Application() {
     override fun onCreate() {

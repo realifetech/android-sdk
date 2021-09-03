@@ -1,11 +1,12 @@
 package com.realifetech.sdk.sell.product.domain
 
-import com.realifetech.sdk.core.data.product.Product
-import com.realifetech.sdk.core.data.shared.`object`.FilterParamWrapper
-import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.core.data.model.product.Product
+import com.realifetech.sdk.core.data.model.shared.`object`.FilterParamWrapper
+import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
+import com.realifetech.sdk.sell.product.data.ProductDataSource
 import com.realifetech.type.ProductFilter
 
-class ProductRepository(private val dataSource: DataSource) {
+class ProductRepository(private val dataSource: ProductDataSource) {
 
     fun getProductById(
         id: String,
@@ -23,19 +24,4 @@ class ProductRepository(private val dataSource: DataSource) {
     ) =
         dataSource.getProducts(pageSize, page, filters, params, callback)
 
-    interface DataSource {
-        fun getProducts(
-            pageSize: Int,
-            page: Int,
-            filters: ProductFilter,
-            params: List<FilterParamWrapper>?,
-            callback: (error: Exception?, response: PaginatedObject<Product?>?) -> Unit
-        )
-
-        fun getProductById(
-            id: String,
-            params: List<FilterParamWrapper>?,
-            callback: (error: Exception?, product: Product?) -> Unit
-        )
-    }
 }

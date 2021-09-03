@@ -15,9 +15,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.mockito.Mock
+import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
 
-@FlowPreview
 @ExperimentalCoroutinesApi
 class WebOrderingViewModelTest {
     @get:Rule
@@ -38,6 +38,7 @@ class WebOrderingViewModelTest {
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         viewModel = WebOrderingViewModel()
+        view = mock(View::class.java)
 
     }
 

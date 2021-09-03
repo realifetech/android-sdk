@@ -9,9 +9,9 @@ import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.*
 import com.realifetech.GetMyPaymentSourcesQuery.Data
-import com.realifetech.sdk.core.data.payment.model.PaymentSource
-import com.realifetech.sdk.core.data.payment.model.asModel
-import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.core.data.model.payment.model.PaymentSource
+import com.realifetech.sdk.core.data.model.payment.model.asModel
+import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntent
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntentInput
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntentUpdateInput
@@ -35,7 +35,7 @@ class PaymentDataSourceTest {
 
     @RelaxedMockK
     private lateinit var apolloClient: ApolloClient
-    private lateinit var paymentDataSource: PaymentDataSource
+    private lateinit var paymentDataSource: PaymentDataSourceImpl
     private lateinit var getPaymentData: Response<GetMyPaymentIntentQuery.Data>
     private lateinit var updatePaymentData: Response<UpdatePaymentIntentMutation.Data>
     private lateinit var createPaymentData: Response<CreatePaymentIntentMutation.Data>
@@ -57,7 +57,7 @@ class PaymentDataSourceTest {
     }
 
     private fun initMockedFields() {
-        paymentDataSource = PaymentDataSource(apolloClient)
+        paymentDataSource = PaymentDataSourceImpl(apolloClient)
         // init getPaymentIntent mocked response data & capture
         getPaymentData = mockk()
         getPaymentIntentSlot = CapturingSlot()

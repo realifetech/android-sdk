@@ -1,12 +1,13 @@
 package com.realifetech.sdk.sell.order.domain
 
-import com.realifetech.sdk.core.data.order.model.Order
-import com.realifetech.sdk.core.data.order.wrapper.OrderUpdateWrapper
-import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
-import com.realifetech.sdk.core.database.order.OrdersSharedPreferencesManager
+import com.realifetech.sdk.core.data.model.order.model.Order
+import com.realifetech.sdk.core.data.model.order.wrapper.OrderUpdateWrapper
+import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
+import com.realifetech.sdk.sell.order.data.database.OrdersSharedPreferencesManager
+import com.realifetech.sdk.sell.order.data.datasource.OrderDataSource
 
 class OrderRepository(
-    private val dataSource: DataSource,
+    private val dataSource: OrderDataSource,
     private val localStorageManager: OrdersSharedPreferencesManager
 ) {
 
@@ -41,20 +42,5 @@ class OrderRepository(
 //                is Result.Success -> localStorageManager.addItem(it.data.asEntity)
 //            }
 //        }
-    }
-
-    interface DataSource {
-        fun getOrders(
-            pageSize: Int,
-            page: Int,
-            callback: (error: Exception?, response: PaginatedObject<Order?>?) -> Unit
-        )
-
-        fun getOrderById(id: String, callback: (error: Exception?, order: Order?) -> Unit)
-        fun updateMyOrder(
-            id: String,
-            orderUpdateWrapper: OrderUpdateWrapper,
-            callback: (error: Exception?, order: Order?) -> Unit
-        )
     }
 }

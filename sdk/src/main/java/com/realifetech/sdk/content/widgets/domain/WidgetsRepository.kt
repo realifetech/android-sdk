@@ -1,6 +1,7 @@
 package com.realifetech.sdk.content.widgets.domain
 
-import com.realifetech.sdk.content.widgets.data.WidgetEdge
+import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
+import com.realifetech.sdk.content.widgets.data.datasource.WidgetsDataSource
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.type.ScreenType
 import io.reactivex.Flowable

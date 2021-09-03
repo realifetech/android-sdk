@@ -2,11 +2,11 @@ package com.realifetech.sdk.core.network
 
 import com.realifetech.sdk.communicate.data.TokenBody
 import com.realifetech.sdk.communicate.data.RegisterPushNotificationsResponse
-import com.realifetech.sdk.core.data.auth.OAuthTokenResponse
-import com.realifetech.sdk.core.data.token.AccessTokenBody
-import com.realifetech.sdk.core.data.token.RefreshTokenBody
-import com.realifetech.sdk.general.data.DeviceRegisterRequest
-import com.realifetech.sdk.general.data.DeviceRegisterResponse
+import com.realifetech.sdk.core.data.model.auth.OAuthTokenResponse
+import com.realifetech.sdk.core.data.model.token.AccessTokenBody
+import com.realifetech.sdk.core.data.model.token.RefreshTokenBody
+import com.realifetech.sdk.core.data.model.device.DeviceRegisterRequest
+import com.realifetech.sdk.core.data.model.device.DeviceRegisterResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

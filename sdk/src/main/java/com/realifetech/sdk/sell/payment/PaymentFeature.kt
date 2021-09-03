@@ -1,11 +1,11 @@
 package com.realifetech.sdk.sell.payment
 
 import com.realifetech.fragment.PaymentIntent
-import com.realifetech.sdk.core.data.payment.model.PaymentSource
-import com.realifetech.sdk.core.data.payment.wrapper.PaymentIntentUpdateWrapper
-import com.realifetech.sdk.core.data.payment.wrapper.PaymentIntentWrapper
-import com.realifetech.sdk.core.data.payment.wrapper.PaymentSourceWrapper
-import com.realifetech.sdk.core.data.shared.`object`.PaginatedObject
+import com.realifetech.sdk.core.data.model.payment.model.PaymentSource
+import com.realifetech.sdk.core.data.model.payment.wrapper.PaymentIntentUpdateWrapper
+import com.realifetech.sdk.core.data.model.payment.wrapper.PaymentIntentWrapper
+import com.realifetech.sdk.core.data.model.payment.wrapper.PaymentSourceWrapper
+import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.sell.payment.domain.PaymentRepository
 import javax.inject.Inject
 

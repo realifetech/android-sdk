@@ -1,6 +1,7 @@
 package com.realifetech.sdk.content.screen.domain
 
-import com.realifetech.sdk.content.screen.data.Translation
+import com.realifetech.sdk.content.screen.data.datasource.ScreensDataSource
+import com.realifetech.sdk.content.screen.data.model.Translation
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.type.ScreenType
 import io.reactivex.Single

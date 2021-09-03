@@ -10,7 +10,7 @@ import com.realifetech.sample.R
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.utils.disposedBy
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.content.widgets.data.WidgetEdge
+import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.type.ScreenType
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -1,10 +1,9 @@
 package com.realifetech.sdk.di.core
 
 import android.content.Context
-import com.realifetech.sdk.core.data.auth.AuthenticationTokenPreferenceStorage
-import com.realifetech.sdk.core.data.auth.AuthenticationTokenStorage
-import com.realifetech.sdk.core.database.configuration.ConfigurationStorage
-import com.realifetech.sdk.core.database.preferences.Preferences
+import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
+import com.realifetech.sdk.core.data.database.preferences.platform.PlatformPreferences
 import com.realifetech.sdk.core.utils.ColorPallet
 import dagger.Module
 import dagger.Provides
@@ -18,20 +17,19 @@ class CoreModule(private val context: Context) {
 
     @CoreScope
     @Provides
-    internal fun colorPallet(context: Context): ColorPallet =ColorPallet(context)
+    internal fun colorPallet(context: Context): ColorPallet = ColorPallet(context)
 
     @CoreScope
     @Provides
-    fun preference(context: Context) = Preferences(context)
+    fun preference(context: Context) = PlatformPreferences(context)
 
     @CoreScope
     @Provides
     fun configurationStorage(context: Context) = ConfigurationStorage(context)
 
-    //TODO: to be removed
+
     @CoreScope
     @Provides
-    fun authenticationTokenStorage(context: Context): AuthenticationTokenStorage =
-        AuthenticationTokenStorage(AuthenticationTokenPreferenceStorage(context))
+    fun authTokenStorage(context: Context) = AuthTokenStorage(context)
 
 }

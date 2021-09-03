@@ -25,7 +25,7 @@ open class PhysicalDeviceInfo @Inject constructor(
         get() = AdvertisingIdClient.getAdvertisingIdInfo(context).id + ":" + context.packageName
 
     override val appVersionName: String
-        get() = "SDK_${BuildConfig.VERSION_NAME}"
+        get() = "SDK_${BuildConfig.LIBRARY_PACKAGE_NAME}"
 
     override val osVersion: String
         get() = Build.VERSION.RELEASE

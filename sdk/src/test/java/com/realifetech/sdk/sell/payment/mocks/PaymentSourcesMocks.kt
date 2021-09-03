@@ -2,8 +2,8 @@ package com.realifetech.sdk.sell.payment.mocks
 
 import com.realifetech.fragment.FragmentPaymentSource
 import com.realifetech.fragment.PaymentSourceEdge.Edge
-import com.realifetech.sdk.core.data.payment.wrapper.PaymentSourceWrapper
-import com.realifetech.sdk.core.data.payment.wrapper.asInput
+import com.realifetech.sdk.core.data.model.payment.wrapper.PaymentSourceWrapper
+import com.realifetech.sdk.core.data.model.payment.wrapper.asInput
 import com.realifetech.type.PaymentSourceType
 
 object PaymentSourcesMocks {
