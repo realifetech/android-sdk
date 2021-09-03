@@ -1,4 +1,4 @@
-package com.realifetech.sdk.content.webPage.domain
+package com.realifetech.sdk.content.webPage.data
 
 import com.realifetech.fragment.FragmentWebPage
 import com.realifetech.type.WebPageType

@@ -17,12 +17,10 @@ object GeneralModule {
         realifetechApiV3Service: RealifetechApiV3Service,
         context: Context,
         preferences: Preferences
-    ): DeviceNetworkDataSource {
-        return DeviceRepositoryNetworkDataSource(
-            realifetechApiV3Service,
-            PhysicalDeviceInfo(context),
-            preferences
-        )
-    }
+    ): DeviceNetworkDataSource = DeviceRepositoryNetworkDataSource(
+        realifetechApiV3Service,
+        PhysicalDeviceInfo(context),
+        preferences
+    )
 
 }

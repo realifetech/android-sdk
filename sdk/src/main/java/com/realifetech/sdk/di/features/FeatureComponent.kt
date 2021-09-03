@@ -12,7 +12,6 @@ import dagger.Subcomponent
 )
 interface FeatureComponent {
 
-
     fun inject(realifetech: BaseRealifetech)
     fun inject(webOrderingFragment: WebOrderingFragment)
 }

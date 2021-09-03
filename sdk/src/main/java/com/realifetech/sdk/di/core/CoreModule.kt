@@ -14,15 +14,11 @@ class CoreModule(private val context: Context) {
 
     @CoreScope
     @Provides
-    internal fun context(): Context {
-        return context
-    }
+    internal fun context(): Context = context
 
     @CoreScope
     @Provides
-    internal fun colorPallet(context: Context): ColorPallet {
-        return ColorPallet(context)
-    }
+    internal fun colorPallet(context: Context): ColorPallet =ColorPallet(context)
 
     @CoreScope
     @Provides
@@ -32,6 +28,7 @@ class CoreModule(private val context: Context) {
     @Provides
     fun configurationStorage(context: Context) = ConfigurationStorage(context)
 
+    //TODO: to be removed
     @CoreScope
     @Provides
     fun authenticationTokenStorage(context: Context): AuthenticationTokenStorage =

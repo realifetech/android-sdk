@@ -2,14 +2,14 @@ package com.realifetech.sdk.core.data.auth
 
 import com.realifetech.sdk.core.data.token.AccessTokenBody
 import com.realifetech.sdk.core.data.token.RefreshTokenBody
-import com.realifetech.sdk.core.domain.ApiDataSource
+import com.realifetech.sdk.core.domain.AuthApiDataSource
 import com.realifetech.sdk.core.domain.AuthenticationToken
 import com.realifetech.sdk.core.network.AuthorizationApiNetwork
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class AuthenticationBackendApiDataSource(private val authorizationApiNetwork: AuthorizationApiNetwork) :
-    ApiDataSource {
+    AuthApiDataSource {
     override fun getAccessToken(
         clientSecret: String,
         clientId: String

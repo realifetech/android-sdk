@@ -2,7 +2,7 @@ package com.realifetech.sdk.di.core
 
 import com.realifetech.sdk.core.data.auth.AuthenticationBackendApiDataSource
 import com.realifetech.sdk.core.database.configuration.ConfigurationStorage
-import com.realifetech.sdk.core.domain.ApiDataSource
+import com.realifetech.sdk.core.domain.AuthApiDataSource
 import com.realifetech.sdk.core.network.AuthorizationApiNetwork
 import com.realifetech.sdk.core.network.DeviceIdInterceptor
 import com.realifetech.sdk.core.network.OAuth2AuthenticationInterceptor
@@ -56,7 +56,7 @@ object RestClientV3Module {
 
     @CoreScope
     @Provides
-    internal fun authenticationBackendApiDataSource(configurationStorage: ConfigurationStorage): ApiDataSource =
+    internal fun authenticationBackendApiDataSource(configurationStorage: ConfigurationStorage): AuthApiDataSource =
         AuthenticationBackendApiDataSource(AuthorizationApiNetwork(configurationStorage))
 
 }
