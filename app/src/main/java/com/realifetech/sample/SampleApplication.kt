@@ -31,9 +31,9 @@ class SampleApplication : Application() {
 
 //  Set Colors via code
         // EXAMPLE 1
-        RealifeTech.getGeneral().setColor(Color.parseColor("#012d4C"), ColorType.PRIMARY)
+//        RealifeTech.getGeneral().setColor(Color.parseColor("#012d4C"), ColorType.PRIMARY)
         //EXAMPLE 2
-        RealifeTech.getGeneral()
-            .setColor(ContextCompat.getColor(this, R.color.colorAccent), ColorType.ON_PRIMARY)
+//        RealifeTech.getGeneral()
+//            .setColor(ContextCompat.getColor(this, R.color.colorAccent), ColorType.ON_PRIMARY)
     }
 }
