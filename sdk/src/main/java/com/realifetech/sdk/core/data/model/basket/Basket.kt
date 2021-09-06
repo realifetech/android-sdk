@@ -7,7 +7,7 @@ data class Basket(
     val grossAmount: Int?,
     val discountAmount: Int?,
     val netAmount: Int?,
-    val seatInfo: SeatInfo?,
+    val seatInfo: LinkedHashMap<String, String>?,
     val timeslot: TimeSlot?,
     val collectionDate: String?,
     val collectionPreferenceType: CollectionPreferenceType?,

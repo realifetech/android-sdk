@@ -23,7 +23,7 @@ data class Order(
     val createdAt: String?,
     val updatedAt: String?,
     val collectionPreferenceType: CollectionPreferenceType?,
-    val seatInfo: SeatInfo?,
+    val seatInfo: LinkedHashMap<String, String>?,
     val items: List<OrderItem?>?,
     val orderNotes: List<OrderNote?>?,
     val timeSlot: TimeSlot?,

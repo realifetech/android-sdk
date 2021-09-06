@@ -2,9 +2,7 @@ fragment FragmentBasket on Basket {
     grossAmount
     discountAmount
     netAmount
-    seatInfo {
-        ...FragmentSeatInfo
-    }
+    seatInfo
     timeslot {
         ...FragmentTimeslot
     }

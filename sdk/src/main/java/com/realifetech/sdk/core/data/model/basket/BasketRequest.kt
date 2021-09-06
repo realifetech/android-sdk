@@ -8,5 +8,5 @@ data class BasketRequest(
     val items: MutableList<BasketRequestItem>,
     val collectionPreferenceType: CollectionPreferenceType?,
     val fulfilmentPoint: String?,
-    val seatInfo: SeatInfo?
+    val seatInfo: Map<String, String>?
 )

@@ -1,12 +1,11 @@
 package com.realifetech.sdk.core.data.model.order.model
 
+import com.realifetech.fragment.FragmentOrder
+import com.realifetech.fragment.FragmentUser
 import com.realifetech.sdk.core.data.model.basket.asModel
 import com.realifetech.sdk.core.data.model.fulfilmentPoint.asModel
 import com.realifetech.sdk.core.data.model.product.asModel
 import com.realifetech.sdk.core.data.model.shared.`object`.asModel
-import com.realifetech.fragment.FragmentOrder
-import com.realifetech.fragment.FragmentSeatInfo
-import com.realifetech.fragment.FragmentUser
 
 val FragmentOrder.asModel: Order
     get() = Order(
@@ -24,16 +23,13 @@ val FragmentOrder.asModel: Order
         createdAt = createdAt,
         updatedAt = updatedAt,
         collectionPreferenceType = collectionPreferenceType,
-        seatInfo = seatInfo?.fragments?.fragmentSeatInfo?.asModel,
+        seatInfo = seatInfo as? LinkedHashMap<String, String>?,
         items = items?.map { it?.asModel }?.toMutableList(),
         orderNotes = orderNotes?.map { it?.asModel },
         timeSlot = timeslot?.fragments?.fragmentTimeslot?.asModel,
         fulfilmentPoint = fulfilmentPoint?.fragments?.fragmentFulfilmentPoint?.asModel,
         user = user?.fragments?.fragmentUser?.asModel
     )
-
-val FragmentSeatInfo.asModel: SeatInfo
-    get() = SeatInfo(row = row, seat = seat, block = block, table = table)
 
 val FragmentUser.asModel: User
     get() = User(
