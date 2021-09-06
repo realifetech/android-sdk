@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.realifetech.fragment.FragmentWebPage
 import com.realifetech.sample.R
-import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.type.WebPageType
 import io.reactivex.Observable

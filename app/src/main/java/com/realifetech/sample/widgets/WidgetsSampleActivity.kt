@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.realifetech.sample.R
-import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.utils.disposedBy
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
@@ -43,7 +42,6 @@ class WidgetsSampleActivity : AppCompatActivity() {
             }
         }
 
-        val storage = DeviceConfigurationStorage(this)
         GlobalScope.launch(Dispatchers.Main) {
 
 

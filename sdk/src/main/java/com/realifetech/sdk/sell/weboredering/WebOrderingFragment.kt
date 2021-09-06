@@ -20,6 +20,7 @@ import com.realifetech.sdk.core.utils.NetworkUtil
 import com.realifetech.sdk.core.utils.clicks
 import com.realifetech.sdk.core.utils.setTaggableOnSurfaceTint
 import com.realifetech.sdk.core.utils.tint
+import kotlinx.android.synthetic.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
@@ -197,7 +198,9 @@ class WebOrderingFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.webView.clearFindViewByIdCache()
         _binding = null
+
     }
 
     companion object {
