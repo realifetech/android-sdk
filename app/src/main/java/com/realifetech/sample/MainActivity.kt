@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             storage.apiUrl = text.toString()
         }
         graphQlUrlEditTextView.doOnTextChanged { text, _, _, _ ->
-            RealifeTech.configuration.graphQl = text.toString()
+            RealifeTech.configuration.graphApiUrl = text.toString()
             storage.graphQl = text.toString()
         }
         orderingUrlEditTextView.doOnTextChanged { text, _, _, _ ->

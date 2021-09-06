@@ -2,29 +2,30 @@ package com.realifetech.sdk.core.data.database.preferences.configuration
 
 import android.content.Context
 import androidx.core.content.edit
-import com.realifetech.sdk.core.data.model.config.CoreConfiguration
+import com.realifetech.sdk.core.data.constants.ConfigConstants
 import com.realifetech.sdk.core.data.database.preferences.AbstractPreferences
+import com.realifetech.sdk.core.data.model.config.CoreConfiguration
 
 class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
 
     var apiUrl: String
-        get() = preferences.getString(API_URL, "https://api.livestyled.com/v3/").orEmpty()
+        get() = preferences.getString(API_URL, ConfigConstants.apiUrl).orEmpty()
         set(value) {
-            val finalUrl = if (value.endsWith("/")) {
+            val finalUrl = if (value.endsWith(BACK_SLASH)) {
                 value
             } else {
                 "$value/"
             }
             preferences.edit { putString(API_URL, finalUrl) }
         }
-    var graphQl: String
-        get() = preferences.getString(GRAPHQL_URL, "https://graphql-eu.realifetech.com/").orEmpty()
+    var graphApiUrl: String
+        get() = preferences.getString(GRAPHQL_URL, ConfigConstants.graphApiUrl).orEmpty()
         set(value) {
             preferences.edit { putString(GRAPHQL_URL, value) }
         }
 
     var webOrderingJourneyUrl: String
-        get() = preferences.getString(ORDERING_JOURNEY_URL, "https://ordering.realifetech.com/")
+        get() = preferences.getString(ORDERING_JOURNEY_URL, ConfigConstants.webOrderingJourneyUrl)
             .orEmpty()
         set(value) {
             preferences.edit { putString(ORDERING_JOURNEY_URL, value) }
@@ -46,7 +47,7 @@ class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
             appCode = it.appCode
             clientSecret = it.clientSecret
             apiUrl = it.apiUrl
-            graphQl = it.graphApiUrl
+            graphApiUrl = it.graphApiUrl
             webOrderingJourneyUrl = it.webOrderingJourneyUrl
         }
     }
@@ -64,5 +65,6 @@ class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
         private const val API_URL = "api_url"
         private const val GRAPHQL_URL = "graphql_url"
         private const val DEVICE_ID = "device_id"
+        private const val BACK_SLASH = "/"
     }
 }
