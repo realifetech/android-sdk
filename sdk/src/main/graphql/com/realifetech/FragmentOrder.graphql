@@ -56,8 +56,6 @@ fragment FragmentOrder on Order {
     user {
         ...FragmentUser
     }
-    seatInfo {
-        ...FragmentSeatInfo
-    }
+    seatInfo
     collectionPreferenceType
 }

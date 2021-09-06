@@ -14,7 +14,7 @@ val FragmentMutationResponse.asModel: StandardResponse
     )
 
 val String.toLanguage: Language?
-    get() = Language.values().firstOrNull { it.name == this }
+    get() = Language.values().firstOrNull { it.rawValue == this }
 
 val String.toBearerFormat
     get() = "Bearer $this"
