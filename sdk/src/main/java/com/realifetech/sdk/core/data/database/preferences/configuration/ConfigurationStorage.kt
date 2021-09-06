@@ -9,14 +9,16 @@ import com.realifetech.sdk.core.data.model.config.CoreConfiguration
 class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
 
     var apiUrl: String
-        get() = preferences.getString(API_URL, ConfigConstants.apiUrl).orEmpty()
-        set(value) {
-            val finalUrl = if (value.endsWith(BACK_SLASH)) {
+        get() {
+            val value = preferences.getString(API_URL, ConfigConstants.apiUrl).orEmpty()
+            return if (value.endsWith(BACK_SLASH)) {
                 value
             } else {
                 "$value/"
             }
-            preferences.edit { putString(API_URL, finalUrl) }
+        }
+        set(value) {
+            preferences.edit { putString(API_URL, value) }
         }
     var graphApiUrl: String
         get() = preferences.getString(GRAPHQL_URL, ConfigConstants.graphApiUrl).orEmpty()
