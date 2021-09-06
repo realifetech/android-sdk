@@ -1,7 +1,6 @@
 package com.realifetech.sdk.core.data.database.preferences.platform
 
 import android.content.Context
-import android.util.Log
 import com.google.gson.Gson
 import com.realifetech.sdk.core.data.database.preferences.AbstractPreferences
 import com.realifetech.sdk.core.data.model.auth.OAuthTokenResponse
@@ -19,8 +18,6 @@ class PlatformPreferences @Inject constructor(context: Context) : AbstractPrefer
     var rltToken: OAuthTokenResponse?
         get() {
             val jsonToken = preferences.getString(OAUTH_TOKEN, EMPTY)
-            Log.e("Batata", jsonToken.toString())
-
             return null
         }
         set(rltToken) {
