@@ -1,11 +1,8 @@
 package com.realifetech.sample
 
 import android.app.Application
-import android.graphics.Color
-import androidx.core.content.ContextCompat
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.core.data.model.color.ColorType
 import com.realifetech.sdk.core.data.model.config.CoreConfiguration
 
 class SampleApplication : Application() {
@@ -15,7 +12,7 @@ class SampleApplication : Application() {
         val storage = DeviceConfigurationStorage(this)
         // Prefill the storage with default values from the configuration
         if (storage.graphQl.isBlank() && storage.apiUrl.isBlank() && storage.orderingJourney.isBlank()) {
-            val configuration = CoreConfiguration("LS", "client_secrete")
+            val configuration = CoreConfiguration(EMPTY, EMPTY)
             storage.graphQl = configuration.graphApiUrl
             storage.apiUrl = configuration.apiUrl
             storage.orderingJourney = configuration.webOrderingJourneyUrl
@@ -35,5 +32,9 @@ class SampleApplication : Application() {
         //EXAMPLE 2
 //        RealifeTech.getGeneral()
 //            .setColor(ContextCompat.getColor(this, R.color.colorAccent), ColorType.ON_PRIMARY)
+    }
+
+    companion object {
+        private const val EMPTY = ""
     }
 }

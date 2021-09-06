@@ -48,7 +48,7 @@ class GraphQlModule {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         val apolloClient = ApolloClient.builder()
-            .serverUrl(configurationStorage.graphQl)
+            .serverUrl(configurationStorage.graphApiUrl)
             .okHttpClient(okHttpClient)
         apolloClient.normalizedCache(
             SqlNormalizedCacheFactory(
