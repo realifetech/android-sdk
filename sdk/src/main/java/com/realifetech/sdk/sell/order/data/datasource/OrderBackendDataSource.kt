@@ -32,11 +32,15 @@ class OrderBackendDataSource @Inject constructor(private val apolloClient: Apoll
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetMyOrdersQuery.Data>() {
                 override fun onResponse(response: Response<GetMyOrdersQuery.Data>) {
-                    val orders =
-                        response.data?.getMyOrders?.edges?.map { result -> result?.fragments?.fragmentOrder?.asModel }
-                    val nextPage = response.data?.getMyOrders?.nextPage
-                    val paginatedObject = PaginatedObject(orders, nextPage)
-                    callback.invoke(null, paginatedObject)
+                    response.data?.getMyOrders?.let {
+                        callback.invoke(
+                            null,
+                            PaginatedObject(
+                                it.edges?.map { result -> result?.fragments?.fragmentOrder?.asModel },
+                                it.nextPage
+                            )
+                        )
+                    } ?: run { callback.invoke(null, null) }
                 }
 
                 override fun onFailure(e: ApolloException) {
@@ -57,8 +61,10 @@ class OrderBackendDataSource @Inject constructor(private val apolloClient: Apoll
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetMyOrderByIdQuery.Data>() {
                 override fun onResponse(response: Response<GetMyOrderByIdQuery.Data>) {
-                    val order = response.data?.getMyOrder?.fragments?.fragmentOrder?.asModel
-                    callback.invoke(null, order)
+                    response.data?.getMyOrder?.fragments?.fragmentOrder?.let {
+                        return callback.invoke(null, it.asModel)
+                    } ?: run { callback.invoke(null, null) }
+
                 }
 
                 override fun onFailure(e: ApolloException) {
@@ -85,8 +91,13 @@ class OrderBackendDataSource @Inject constructor(private val apolloClient: Apoll
             )
             response.enqueue(object : ApolloCall.Callback<UpdateMyOrderMutation.Data>() {
                 override fun onResponse(response: Response<UpdateMyOrderMutation.Data>) {
-                    val order = response.data?.updateMyOrder?.fragments?.fragmentOrder?.asModel
-                    callback.invoke(null, order)
+                    response.data?.updateMyOrder?.fragments?.fragmentOrder?.let {
+                        callback.invoke(
+                            null,
+                            it.asModel
+                        )
+                    } ?: run { callback.invoke(null, null) }
+
                 }
 
                 override fun onFailure(e: ApolloException) {
