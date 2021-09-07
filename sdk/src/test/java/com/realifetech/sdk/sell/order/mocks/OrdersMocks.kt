@@ -35,7 +35,7 @@ object OrdersMocks {
     private fun generateOrder(orderId: String) =
         FragmentOrder(
             "",
-            "orderId",
+            orderId,
             orderId,
             "",
             "",
