@@ -7,6 +7,7 @@ import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.webPage.WebPageSampleActivity
 import com.realifetech.sample.widgets.WidgetsSampleActivity
 import com.realifetech.sdk.RealifeTech
+import com.realifetech.sdk.core.data.model.config.CoreConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -39,15 +40,31 @@ class MainActivity : AppCompatActivity() {
         apiUrlEditTextView.doOnTextChanged { text, _, _, _ ->
             RealifeTech.configuration.apiUrl = text.toString()
             storage.apiUrl = text.toString()
+            reconfigureSDK(storage)
+
         }
         graphQlUrlEditTextView.doOnTextChanged { text, _, _, _ ->
             RealifeTech.configuration.graphApiUrl = text.toString()
             storage.graphQl = text.toString()
+            reconfigureSDK(storage)
         }
         orderingUrlEditTextView.doOnTextChanged { text, _, _, _ ->
             RealifeTech.set(text.toString())
             storage.orderingJourney = text.toString()
+            reconfigureSDK(storage)
         }
+    }
+
+    private fun reconfigureSDK(storage: DeviceConfigurationStorage) {
+        val configuration = CoreConfiguration(
+            apiUrl = storage.apiUrl,
+            graphApiUrl = storage.graphQl,
+            clientSecret = storage.clientSecret,
+            appCode = storage.appCode,
+            webOrderingJourneyUrl = storage.orderingJourney
+        )
+        RealifeTech.configureSdk(applicationContext, configuration)
+
     }
 
     private fun initTextViews(storage: DeviceConfigurationStorage) {
