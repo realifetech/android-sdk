@@ -4,12 +4,13 @@ import android.content.Context
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.data.database.preferences.platform.PlatformPreferences
+import com.realifetech.sdk.core.data.model.config.CoreConfiguration
 import com.realifetech.sdk.core.utils.ColorPallet
 import dagger.Module
 import dagger.Provides
 
 @Module
-class CoreModule(private val context: Context) {
+class CoreModule(private val context: Context, private val configuration: CoreConfiguration) {
 
     @CoreScope
     @Provides
@@ -25,7 +26,11 @@ class CoreModule(private val context: Context) {
 
     @CoreScope
     @Provides
-    fun configurationStorage(context: Context) = ConfigurationStorage(context)
+    fun configurationStorage(context: Context): ConfigurationStorage {
+        val configStorage = ConfigurationStorage(context)
+        configStorage.set(configuration)
+        return configStorage
+    }
 
 
     @CoreScope

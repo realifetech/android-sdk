@@ -14,8 +14,7 @@ object RealifeTech : BaseRealifetech() {
 
 
     fun configureSdk(context: Context, configuration: CoreConfiguration) {
-        Injector.initialize(context).inject(this)
-        this.configuration.set(configuration)
+        Injector.initialize(context, configuration).inject(this)
     }
 
     fun getGeneral(): General {

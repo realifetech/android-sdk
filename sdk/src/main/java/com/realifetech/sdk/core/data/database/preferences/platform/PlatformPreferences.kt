@@ -1,7 +1,9 @@
 package com.realifetech.sdk.core.data.database.preferences.platform
 
 import android.content.Context
+import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.realifetech.sdk.core.data.database.preferences.AbstractPreferences
 import com.realifetech.sdk.core.data.model.auth.OAuthTokenResponse
 import javax.inject.Inject
@@ -17,7 +19,12 @@ class PlatformPreferences @Inject constructor(context: Context) : AbstractPrefer
 
     var rltToken: OAuthTokenResponse?
         get() {
-            val jsonToken = preferences.getString(OAUTH_TOKEN, EMPTY)
+            val jsonToken = preferences.getString(OAUTH_TOKEN, DEFAULT_EMPTY_STRING)
+            try {
+                return Gson().fromJson(jsonToken, OAuthTokenResponse::class.java)
+            } catch (e: JsonSyntaxException) {
+                Log.e(this.javaClass.name, "Couldn't getOAuthToken: %s", e)
+            }
             return null
         }
         set(rltToken) {
@@ -33,5 +40,6 @@ class PlatformPreferences @Inject constructor(context: Context) : AbstractPrefer
     companion object {
         private const val OAUTH_TOKEN = "oauth-token"
         private const val REALIFETECH_PREFERENCES = "LiveStyledPreferences"
+        private const val DEFAULT_EMPTY_STRING = ""
     }
 }

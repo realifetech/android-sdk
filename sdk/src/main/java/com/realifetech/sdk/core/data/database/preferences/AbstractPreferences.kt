@@ -3,12 +3,15 @@ package com.realifetech.sdk.core.data.database.preferences
 import android.content.Context
 import android.content.SharedPreferences
 
- open class AbstractPreferences(private val context: Context) {
+open class AbstractPreferences(private val context: Context) {
 
     open val preferencesStorageName: String = SDK_PREFERENCES
 
-    internal val preferences: SharedPreferences =
-        context.getSharedPreferences(getPreferencesName(), Context.MODE_PRIVATE)
+   internal val preferences: SharedPreferences
+        get() = context.getSharedPreferences(
+            getPreferencesName(),
+            Context.MODE_PRIVATE
+        )
 
 
     private fun getPreferencesName(): String {
