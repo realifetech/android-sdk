@@ -1,10 +1,10 @@
 package com.realifetech.sdk.analytics.data.datasource
 
-import com.realifetech.sdk.analytics.data.model.AnalyticsEvent
+import com.realifetech.sdk.analytics.data.model.AnalyticEventWrapper
 import com.realifetech.sdk.analytics.data.database.Entity.PendingAnalyticsEvent
 
 interface AnalyticsStorageDataSource  {
-    fun save(event: AnalyticsEvent)
+    fun save(event: AnalyticEventWrapper)
 
     fun getAll(): List<PendingAnalyticsEvent>
 

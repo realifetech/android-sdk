@@ -1,6 +1,6 @@
 package com.realifetech.sdk.analytics.data.model
 
-data class AnalyticsEvent(
+data class AnalyticEventWrapper(
     val type: String,
     val action: String,
     val new: Map<String, Any>?,
