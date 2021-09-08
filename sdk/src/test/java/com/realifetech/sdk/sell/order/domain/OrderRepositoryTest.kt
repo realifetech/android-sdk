@@ -1,11 +1,8 @@
 package com.realifetech.sdk.sell.order.domain
 
-import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.data.model.order.model.Order
 import com.realifetech.sdk.core.data.model.order.model.asModel
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
-import com.realifetech.sdk.sell.order.OrderFeature
-import com.realifetech.sdk.sell.order.data.database.OrdersSharedPreferencesManager
 import com.realifetech.sdk.sell.order.data.datasource.OrderBackendDataSource
 import com.realifetech.sdk.sell.order.mocks.OrdersMocks
 import io.mockk.CapturingSlot
@@ -21,8 +18,8 @@ class OrderRepositoryTest {
 
     @RelaxedMockK
     private lateinit var orderDataSource: OrderBackendDataSource
+
     @RelaxedMockK
-    private lateinit var orderLocalStorage: OrdersSharedPreferencesManager
     private lateinit var orderSlot: CapturingSlot<(error: Exception?, order: Order?) -> Unit>
     private lateinit var paginatedObjectSlot: CapturingSlot<(error: Exception?, response: PaginatedObject<Order?>?) -> Unit>
     private lateinit var orderRepository: OrderRepository
@@ -30,7 +27,7 @@ class OrderRepositoryTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        orderRepository = OrderRepository(orderDataSource,orderLocalStorage)
+        orderRepository = OrderRepository(orderDataSource)
         orderSlot = CapturingSlot()
         paginatedObjectSlot = CapturingSlot()
     }

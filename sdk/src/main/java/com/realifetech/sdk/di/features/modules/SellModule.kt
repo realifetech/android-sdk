@@ -1,6 +1,5 @@
 package com.realifetech.sdk.di.features.modules
 
-import com.realifetech.sdk.sell.order.data.database.OrdersSharedPreferencesManager
 import com.realifetech.sdk.sell.basket.data.BasketDataSourceImpl
 import com.realifetech.sdk.sell.basket.domain.BasketRepository
 import com.realifetech.sdk.sell.fulfilmentpoint.data.FulfilmentPointDataSourceImpl
@@ -34,8 +33,7 @@ object SellModule {
 
     @Provides
     fun orderRepository(
-        dataSource: OrderBackendDataSource,
-        localStorageManager: OrdersSharedPreferencesManager
-    ) = OrderRepository(dataSource, localStorageManager)
+        dataSource: OrderBackendDataSource
+    ) = OrderRepository(dataSource)
 
 }
