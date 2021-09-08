@@ -1,9 +1,9 @@
 package com.realifetech.sdk.analytics.data.datasource
 
 import com.realifetech.sdk.analytics.data.database.PendingAnalyticEventsDao
-import com.realifetech.sdk.analytics.mocks.AnalayticsMocks.analyticsEvent1
-import com.realifetech.sdk.analytics.mocks.AnalayticsMocks.event1
-import com.realifetech.sdk.analytics.mocks.AnalayticsMocks.events
+import com.realifetech.sdk.analytics.mocks.AnalyticsMocks.analyticEventWrapper
+import com.realifetech.sdk.analytics.mocks.AnalyticsMocks.event1
+import com.realifetech.sdk.analytics.mocks.AnalyticsMocks.events
 import io.mockk.*
 import org.junit.Assert
 import org.junit.Before
@@ -31,7 +31,7 @@ class AnalyticsStorageDataSourceImplTest {
     @Test
     fun `save event was called and generates pendingEvent successfully`() {
         every { myDao.save(event1) } just Runs
-        analyticsStorageDataSource.save(analyticsEvent1)
+        analyticsStorageDataSource.save(analyticEventWrapper)
         verify { myDao.save(event1) } // Test was called once
     }
 

@@ -1,12 +1,11 @@
 package com.realifetech.sdk.analytics
 
 import com.realifetech.sdk.RealifeTech
+import com.realifetech.sdk.analytics.data.model.AnalyticEventWrapper
 import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
-import com.realifetech.sdk.analytics.data.model.AnalyticsEvent
 import com.realifetech.sdk.core.domain.LinearRetryPolicy
 import com.realifetech.sdk.core.domain.RetryPolicy
-import com.realifetech.sdk.core.utils.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -40,26 +39,25 @@ class Analytics(
         old: Map<String, Any>?,
         completion: ((error: Exception?) -> Unit)?
     ) {
-
         GlobalScope.launch(Dispatchers.IO) {
-            val event = AnalyticsEvent(type, action, new, old, Calendar.getInstance().timeInMillis)
-            val errorResponse = if (RealifeTech.getGeneral().isSdkReady) {
-                val result = engine.logEvent(event)
-
-                val error = if (result is Result.Error) {
-                    storage.save(event)
-                    retryPolicy.execute()
-                    result.exception
-                } else {
-                    retryPolicy.cancel()
-                    null
+            val event =
+                AnalyticEventWrapper(type, action, new, old, Calendar.getInstance().timeInMillis)
+            var errorResponse: Exception? = null
+            if (RealifeTech.getGeneral().isSdkReady) {
+                engine.logEvent(event) { error, response ->
+                    error?.let {
+                        storage.save(event)
+                        retryPolicy.execute()
+                        errorResponse = it
+                    }?.run {
+                        errorResponse = null
+                        retryPolicy.cancel()
+                    }
                 }
-                error
             } else {
                 storage.save(event)
-                RuntimeException("The SDK is not ready yet")
+                errorResponse = RuntimeException("The SDK is not ready yet")
             }
-
             withContext(Dispatchers.Main) {
                 completion?.invoke(errorResponse)
             }
@@ -77,11 +75,11 @@ class Analytics(
             retryPolicy.cancel()
             return
         }
-
         allPendingEvents.forEach { pendingEvent ->
-            val result = engine.logEvent(pendingEvent.event)
-            if (result is Result.Success) {
-                storage.remove(pendingEvent)
+            engine.logEvent(pendingEvent.event) { error, response ->
+                if (error == null) {
+                    storage.remove(pendingEvent)
+                }
             }
         }
     }

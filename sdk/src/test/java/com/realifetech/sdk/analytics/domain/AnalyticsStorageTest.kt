@@ -1,9 +1,9 @@
 package com.realifetech.sdk.analytics.domain
 
 import com.realifetech.sdk.analytics.data.datasource.AnalyticsStorageDataSource
-import com.realifetech.sdk.analytics.mocks.AnalayticsMocks.analyticsEvent1
-import com.realifetech.sdk.analytics.mocks.AnalayticsMocks.event1
-import com.realifetech.sdk.analytics.mocks.AnalayticsMocks.events
+import com.realifetech.sdk.analytics.mocks.AnalyticsMocks.analyticEventWrapper
+import com.realifetech.sdk.analytics.mocks.AnalyticsMocks.event1
+import com.realifetech.sdk.analytics.mocks.AnalyticsMocks.events
 import io.mockk.*
 import org.junit.Assert
 import org.junit.Before
@@ -30,9 +30,9 @@ class AnalyticsStorageTest {
 
     @Test
     fun `save event was called and generates pendingEvent successfully`() {
-        every { dataSource.save(analyticsEvent1) } just Runs
-        analyticsStorage.save(analyticsEvent1)
-        verify { dataSource.save(analyticsEvent1) }
+        every { dataSource.save(analyticEventWrapper) } just Runs
+        analyticsStorage.save(analyticEventWrapper)
+        verify { dataSource.save(analyticEventWrapper) }
     }
 
     @Test

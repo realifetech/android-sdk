@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.realifetech.sdk.analytics.data.database.Entity.PendingAnalyticsEvent
-import com.realifetech.sdk.analytics.data.model.AnalyticsEvent
+import com.realifetech.sdk.analytics.data.model.AnalyticEventWrapper
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -17,7 +17,7 @@ import java.io.IOException
 class PendingAnalyticEventsDatabaseTest {
     private lateinit var analyticEventsDao: PendingAnalyticEventsDao
     private lateinit var db: PendingAnalyticEventsDatabase
-    private val event = AnalyticsEvent(
+    private val event = AnalyticEventWrapper(
         "type",
         "action",
         null,
