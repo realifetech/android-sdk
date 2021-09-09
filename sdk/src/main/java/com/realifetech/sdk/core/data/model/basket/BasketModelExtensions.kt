@@ -74,7 +74,7 @@ val CheckoutRequest.asInput
             Input.optional(language.toLanguage)
         )
 
-fun List<com.realifetech.sdk.core.data.model.basket.ProductModifierItemSelection?>.toInputList(): List<ProductModifierItemSelectionInput?> =
+fun List<ProductModifierItemSelectionRequest?>.toInputList(): List<ProductModifierItemSelectionInput?> =
     map {
         ProductModifierItemSelectionInput(
             Input.optional(it?.productModifierItemId),

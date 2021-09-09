@@ -5,5 +5,5 @@ data class BasketRequestItem(
     val productVariant: String?,
     val fulfilmentPoint: String?,
     val quantity: Int?,
-    val productModifierItems: List<ProductModifierItemSelection?>?
+    val productModifierItems: List<ProductModifierItemSelectionRequest?>?
 )
