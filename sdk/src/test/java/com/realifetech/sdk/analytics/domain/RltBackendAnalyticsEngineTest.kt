@@ -7,11 +7,9 @@ import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.realifetech.PutAnalyticEventMutation
 import com.realifetech.sdk.analytics.mocks.AnalyticsMocks
-import io.mockk.CapturingSlot
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import com.realifetech.sdk.analytics.mocks.AnalyticsMocks.event1
+import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
@@ -22,6 +20,10 @@ class RltBackendAnalyticsEngineTest {
 
     @RelaxedMockK
     lateinit var apolloClient: ApolloClient
+
+    @RelaxedMockK
+    lateinit var storage: AnalyticsStorage
+
     private lateinit var rltBackendAnalyticsEngine: RltBackendAnalyticsEngine
     private lateinit var response: Response<PutAnalyticEventMutation.Data>
     private lateinit var captureSlot: CapturingSlot<ApolloCall.Callback<PutAnalyticEventMutation.Data>>
@@ -29,7 +31,7 @@ class RltBackendAnalyticsEngineTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        rltBackendAnalyticsEngine = RltBackendAnalyticsEngine(apolloClient)
+        rltBackendAnalyticsEngine = RltBackendAnalyticsEngine(apolloClient, storage)
         response = mockk()
         captureSlot = CapturingSlot()
     }
@@ -48,6 +50,53 @@ class RltBackendAnalyticsEngineTest {
     }
 
     @Test
+    fun `when retry log pending event result success `() = runBlocking {
+        every {
+            response.data
+        } returns AnalyticsMocks.successData
+        every { storage.getAll() } returns listOf(event1)
+        putEventSuccessfully()
+        rltBackendAnalyticsEngine.sendPendingEvents {
+            Assert.assertEquals(false, it)
+        }
+        verify {
+            storage.getAll()
+            storage.remove(event1)
+        }
+    }
+
+    @Test
+    fun `when retry log pending event but no pending events`() = runBlocking {
+        every {
+            response.data
+        } returns AnalyticsMocks.successData
+        every { storage.getAll() } returns listOf()
+        putEventSuccessfully()
+        rltBackendAnalyticsEngine.sendPendingEvents {
+            Assert.assertEquals(true, it)
+        }
+        verify {
+            storage.getAll()
+        }
+    }
+
+    @Test
+    fun `when retry log pending event but error thrown`() = runBlocking {
+        every {
+            response.data
+        } throws ApolloHttpException(any())
+        every { storage.getAll() } returns listOf(event1)
+        putEventSuccessfully()
+        rltBackendAnalyticsEngine.sendPendingEvents {
+            Assert.assertEquals(true, it)
+        }
+        verify {
+            storage.getAll()
+        }
+    }
+
+
+    @Test
     fun `log Event results with exception`() = runBlocking {
         every {
             response.data
@@ -57,7 +106,7 @@ class RltBackendAnalyticsEngineTest {
             assert(error is ApolloHttpException)
             Assert.assertEquals(false, response)
         }
-
+        verify { storage.save(AnalyticsMocks.analyticEventWrapper) }
     }
 
     @Test
@@ -75,7 +124,7 @@ class RltBackendAnalyticsEngineTest {
             assert(error is ApolloException)
             Assert.assertEquals(false, response)
         }
-
+        verify { storage.save(AnalyticsMocks.analyticEventWrapper) }
     }
 
     @Test
@@ -98,6 +147,7 @@ class RltBackendAnalyticsEngineTest {
         rltBackendAnalyticsEngine.logEvent(AnalyticsMocks.analyticEventWrapper) { error, response ->
             callback(error, response)
         }
+        verify { storage.save(AnalyticsMocks.analyticEventWrapper) }
     }
 
 

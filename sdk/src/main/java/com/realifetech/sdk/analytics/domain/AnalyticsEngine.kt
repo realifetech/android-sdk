@@ -7,4 +7,6 @@ interface AnalyticsEngine {
         event: AnalyticEventWrapper,
         callback: (error: Exception?, response: Boolean) -> Unit
     )
+
+    suspend fun sendPendingEvents(callback: (isEmpty: Boolean) -> Unit)
 }

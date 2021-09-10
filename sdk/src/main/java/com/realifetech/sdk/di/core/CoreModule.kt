@@ -6,6 +6,7 @@ import com.realifetech.sdk.core.data.database.preferences.configuration.Configur
 import com.realifetech.sdk.core.data.database.preferences.platform.PlatformPreferences
 import com.realifetech.sdk.core.data.model.config.CoreConfiguration
 import com.realifetech.sdk.core.utils.ColorPallet
+import com.realifetech.sdk.core.utils.TimeUtil
 import dagger.Module
 import dagger.Provides
 
@@ -19,6 +20,11 @@ class CoreModule(private val context: Context, private val configuration: CoreCo
     @CoreScope
     @Provides
     internal fun colorPallet(context: Context): ColorPallet = ColorPallet(context)
+
+    @CoreScope
+    @Provides
+    internal fun timeUtil(): TimeUtil = TimeUtil()
+
 
     @CoreScope
     @Provides

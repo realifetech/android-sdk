@@ -4,6 +4,7 @@ import com.realifetech.PutAnalyticEventMutation
 import com.realifetech.sdk.analytics.data.database.Entity.PendingAnalyticsEvent
 import com.realifetech.sdk.analytics.data.model.AnalyticEventWrapper
 import com.realifetech.sdk.analytics.data.model.asAnalyticEvent
+import java.util.*
 
 object AnalyticsMocks {
 
@@ -14,11 +15,9 @@ object AnalyticsMocks {
         event1,
         event2
     )
-    val emptyEvents = listOf<PendingAnalyticsEvent>()
     val analyticEventWrapper = event1.event
     val analyticEvent = analyticEventWrapper.asAnalyticEvent()
-    val successData =
-        PutAnalyticEventMutation.Data(
+    val successData = PutAnalyticEventMutation.Data(
             PutAnalyticEventMutation.PutAnalyticEvent(
                 "",
                 true,
@@ -31,7 +30,7 @@ object AnalyticsMocks {
             action,
             null,
             null,
-            System.currentTimeMillis()
+            1234
         )
     )
 

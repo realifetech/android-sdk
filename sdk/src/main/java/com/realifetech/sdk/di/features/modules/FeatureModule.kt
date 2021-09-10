@@ -9,6 +9,7 @@ import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.ColorPallet
+import com.realifetech.sdk.core.utils.TimeUtil
 import com.realifetech.sdk.di.features.FeatureScope
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.domain.DeviceRepository
@@ -22,17 +23,10 @@ import com.realifetech.sdk.sell.product.ProductFeature
 import com.realifetech.sdk.sell.weboredering.WebOrderingFeature
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.Dispatchers
 
 @Module
 object FeatureModule {
-
-    @FeatureScope
-    @Provides
-    fun analytics(
-        analyticsEngine: AnalyticsEngine,
-        analyticsStorage: AnalyticsStorage
-    ): Analytics =
-        Analytics(analyticsEngine, analyticsStorage)
 
     @FeatureScope
     @Provides
@@ -71,4 +65,15 @@ object FeatureModule {
         colorPallet: ColorPallet
     ): General =
         General(deviceRepository, sdkInitializationPrecondition, configuration, colorPallet)
+
+    @FeatureScope
+    @Provides
+    fun analytics(
+        analyticsEngine: AnalyticsEngine,
+        analyticsStorage: AnalyticsStorage,
+        general: General,
+        timeUtil: TimeUtil
+    ): Analytics =
+        Analytics(analyticsEngine, analyticsStorage, general, Dispatchers.IO,Dispatchers.Main,timeUtil)
+
 }

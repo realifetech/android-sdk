@@ -3,12 +3,12 @@ package com.realifetech.sdk.sell.weboredering
 import android.view.MenuItem
 import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.realifetech.sdk.sell.utils.CoroutinesTestRule
+import com.realifetech.sdk.sell.utils.MainCoroutineRule
 import com.realifetech.sdk.sell.weboredering.WebOrderingViewModel.ScreenState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -24,7 +24,7 @@ class WebOrderingViewModelTest {
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
 
     @get:Rule
-    val testCoroutineRule = CoroutinesTestRule()
+    val testCoroutineRule = MainCoroutineRule()
 
     private lateinit var viewModel: WebOrderingViewModel
 
@@ -44,7 +44,7 @@ class WebOrderingViewModelTest {
 
 
     @Test
-    fun handleNavBack() = testCoroutineRule.runBlockingTest {
+    fun handleNavBack() = runBlockingTest {
         val navBackListener = Channel<View>()
         viewModel.handleNavBack(navBackListener.consumeAsFlow())
         navBackListener.send(view)
@@ -53,7 +53,7 @@ class WebOrderingViewModelTest {
     }
 
     @Test
-    fun handleNavForward() = testCoroutineRule.runBlockingTest {
+    fun handleNavForward() = runBlockingTest {
         val navForwardListener = Channel<View>()
         viewModel.handleNavForward(navForwardListener.consumeAsFlow())
         navForwardListener.send(view)
@@ -63,7 +63,7 @@ class WebOrderingViewModelTest {
     }
 
     @Test
-    fun handleRefresh() = testCoroutineRule.runBlockingTest {
+    fun handleRefresh() = runBlockingTest {
         val navForwardListener = Channel<MenuItem>()
         viewModel.handleRefresh(navForwardListener.consumeAsFlow())
         navForwardListener.send(menuItem)
