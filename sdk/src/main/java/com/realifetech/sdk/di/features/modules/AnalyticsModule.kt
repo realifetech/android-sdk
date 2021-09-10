@@ -31,8 +31,8 @@ class AnalyticsModule {
     }
 
     @Provides
-    fun provideAnalyticsEngine(apolloClient: ApolloClient): AnalyticsEngine {
-        return RltBackendAnalyticsEngine(apolloClient)
+    fun provideAnalyticsEngine(apolloClient: ApolloClient,analyticsStorage: AnalyticsStorage): AnalyticsEngine {
+        return RltBackendAnalyticsEngine(apolloClient,analyticsStorage)
     }
 
 
