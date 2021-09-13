@@ -11,10 +11,12 @@ fun AnalyticEventWrapper.asAnalyticEvent() = AnalyticEvent(
     this.action,
     Input.optional(this.new?.let { Gson().toJson(it) }),
     Input.optional(this.old?.let { Gson().toJson(it) }),
-    "1.0",
+    EVENT_VERSION,
     SimpleDateFormat(
-        "yyyy-MM-d'T'HH:mm:ssXXX",
+        DATE_FORMAT,
         Locale.getDefault()
     ).format(Date(this.creationTimeMillisecondsSince1970))
 )
 
+private const val EVENT_VERSION = "1.0"
+private const val DATE_FORMAT = "yyyy-MM-d'T'HH:mm:ssXXX"
