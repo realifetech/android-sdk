@@ -11,6 +11,8 @@ object BasketMocks {
     val basketRequest =
         BasketRequest(null, null, mutableListOf(generateBasketItemRequest()), null, null, null)
 
+    val basketRequestInput = basketRequest.asInputObject
+    val checkoutRequestInput= checkoutRequest.asInput
     private fun generateBasketItem(itemId: String) =
         BasketItem(itemId, 50, 2, 1, 52, null, null, null, null)
 

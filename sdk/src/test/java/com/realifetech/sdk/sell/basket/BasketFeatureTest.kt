@@ -17,12 +17,6 @@ import org.junit.Test
 
 class BasketFeatureTest {
 
-
-    @Test
-    fun updateMyBasket() {
-    }
-
-
     @RelaxedMockK
     private lateinit var basketRepository: BasketRepository
     private lateinit var basketSlot: CapturingSlot<(error: Exception?, order: Basket?) -> Unit>
