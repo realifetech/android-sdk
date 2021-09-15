@@ -26,8 +26,9 @@ class BasketRepository @Inject constructor(private val dataSource: BasketDataSou
         dataSource.updateMyBasket(basket.asInputObject, callback)
     }
 
-    fun deleteMyBasket(callback: (error: Exception?, response: StandardResponse?) -> Unit) =
+    fun deleteMyBasket(callback: (error: Exception?, response: StandardResponse?) -> Unit) {
         dataSource.deleteMyBasket(callback)
+    }
 
     fun checkoutMyBasket(
         checkoutRequest: CheckoutRequest,

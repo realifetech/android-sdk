@@ -6,6 +6,7 @@ import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.exception.ApolloParseException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.*
 import com.realifetech.sdk.core.data.model.basket.Basket
@@ -106,11 +107,11 @@ class BasketDataSourceImpl @Inject constructor(private val apolloClient: ApolloC
                     callback.invoke(null, standardResponse)
                 }
 
-                override fun onFailure(e: ApolloException) {
-                    TODO("Not yet implemented")
-                }
+                    override fun onFailure(e: ApolloException) {
+                        callback.invoke(e, null)
+                    }
 
-            })
+                })
         } catch (exception: ApolloHttpException) {
             callback.invoke(exception, null)
         }
