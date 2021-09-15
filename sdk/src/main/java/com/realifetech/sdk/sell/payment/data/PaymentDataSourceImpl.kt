@@ -92,10 +92,10 @@ class PaymentDataSourceImpl @Inject constructor(private val apolloClient: Apollo
         callback: (error: Exception?, response: PaymentIntent?) -> Unit
     ) {
         try {
-            val response = apolloClient.mutate(CreatePaymentIntentMutation(input))
-            response.enqueue(object : ApolloCall.Callback<CreatePaymentIntentMutation.Data>() {
-                override fun onResponse(response: Response<CreatePaymentIntentMutation.Data>) {
-                    response.data?.createPaymentIntent?.fragments?.paymentIntent?.let {
+            val response = apolloClient.mutate(CreateMyPaymentIntentMutation(input))
+            response.enqueue(object : ApolloCall.Callback<CreateMyPaymentIntentMutation.Data>() {
+                override fun onResponse(response: Response<CreateMyPaymentIntentMutation.Data>) {
+                    response.data?.createMyPaymentIntent?.fragments?.paymentIntent?.let {
                         callback.invoke(null, it)
                     } ?: run {
                         callback.invoke(Exception(), null)

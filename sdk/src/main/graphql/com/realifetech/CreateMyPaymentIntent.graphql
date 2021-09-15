@@ -1,0 +1,6 @@
+mutation CreateMyPaymentIntent($input: PaymentIntentInput!) {
+    createMyPaymentIntent(input: $input) {
+        __typename
+        ...PaymentIntent
+    }
+}

@@ -38,13 +38,13 @@ class PaymentDataSourceTest {
     private lateinit var paymentDataSource: PaymentDataSourceImpl
     private lateinit var getPaymentData: Response<GetMyPaymentIntentQuery.Data>
     private lateinit var updatePaymentData: Response<UpdatePaymentIntentMutation.Data>
-    private lateinit var createPaymentData: Response<CreatePaymentIntentMutation.Data>
+    private lateinit var createPaymentData: Response<CreateMyPaymentIntentMutation.Data>
     private lateinit var getPaymentSourcesData: Response<Data>
     private lateinit var deletePaymentSourceData: Response<DeleteMyPaymentSourceMutation.Data>
     private lateinit var addPaymentSourceData: Response<AddPaymentSourceToMyWalletMutation.Data>
     private lateinit var getPaymentIntentSlot: CapturingSlot<ApolloCall.Callback<GetMyPaymentIntentQuery.Data>>
     private lateinit var updatePaymentIntentSlot: CapturingSlot<ApolloCall.Callback<UpdatePaymentIntentMutation.Data>>
-    private lateinit var createPaymentIntentSlot: CapturingSlot<ApolloCall.Callback<CreatePaymentIntentMutation.Data>>
+    private lateinit var createPaymentIntentSlot: CapturingSlot<ApolloCall.Callback<CreateMyPaymentIntentMutation.Data>>
     private lateinit var getPaymentSourcesSlot: CapturingSlot<ApolloCall.Callback<Data>>
     private lateinit var deletePaymentSourceSlot: CapturingSlot<ApolloCall.Callback<DeleteMyPaymentSourceMutation.Data>>
     private lateinit var addPaymentSourceSlot: CapturingSlot<ApolloCall.Callback<AddPaymentSourceToMyWalletMutation.Data>>
@@ -436,7 +436,7 @@ class PaymentDataSourceTest {
     fun `create Payment Intent successfully`() = runBlocking {
         //Given
         every {
-            createPaymentData.data?.createPaymentIntent?.fragments?.paymentIntent
+            createPaymentData.data?.createMyPaymentIntent?.fragments?.paymentIntent
         } returns paymentIntent
         createPaymentIntentSuccessAnswer()
         // When
@@ -470,7 +470,7 @@ class PaymentDataSourceTest {
         //Given
         every {
             apolloClient.mutate(
-                CreatePaymentIntentMutation(
+                CreateMyPaymentIntentMutation(
                     paymentIntentInput
                 )
             )
@@ -499,7 +499,7 @@ class PaymentDataSourceTest {
         // When
         //Null fragments
         every {
-            createPaymentData.data?.createPaymentIntent?.fragments
+            createPaymentData.data?.createMyPaymentIntent?.fragments
         } returns null
         paymentDataSource.createPaymentIntent(
             paymentIntentInput
@@ -509,7 +509,7 @@ class PaymentDataSourceTest {
         }
         //Null paymentIntent
         every {
-            createPaymentData.data?.createPaymentIntent?.fragments?.paymentIntent
+            createPaymentData.data?.createMyPaymentIntent?.fragments?.paymentIntent
         } returns null
         paymentDataSource.createPaymentIntent(
             paymentIntentInput
@@ -519,7 +519,7 @@ class PaymentDataSourceTest {
         }
         //Null getMyPaymentIntent
         every {
-            createPaymentData.data?.createPaymentIntent
+            createPaymentData.data?.createMyPaymentIntent
         } returns null
         paymentDataSource.createPaymentIntent(
             paymentIntentInput
@@ -544,7 +544,7 @@ class PaymentDataSourceTest {
     private fun createPaymentIntentSuccessAnswer() {
         every {
             apolloClient.mutate(
-                CreatePaymentIntentMutation(
+                CreateMyPaymentIntentMutation(
                     paymentIntentInput
                 )
             )
