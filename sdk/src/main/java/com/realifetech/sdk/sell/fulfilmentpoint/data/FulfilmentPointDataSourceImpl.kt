@@ -46,12 +46,14 @@ class FulfilmentPointDataSourceImpl @Inject constructor(private val apolloClient
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetFulfilmentPointsQuery.Data>() {
                 override fun onResponse(response: Response<GetFulfilmentPointsQuery.Data>) {
-                    val fulfilmentPoints =
-                        response.data?.getFulfilmentPoints?.edges?.map { result -> result?.fragments?.fragmentFulfilmentPoint?.asModel }
-                    val nextPage = response.data?.getFulfilmentPoints?.nextPage
-                    val paginatedObject = PaginatedObject(fulfilmentPoints, nextPage)
-                    paginatedObject.extractResponse(response.errors)
-                    callback.invoke(null, paginatedObject)
+                    response.data?.getFulfilmentPoints?.apply {
+                        val fulfilmentPoints =
+                            edges?.map { result -> result?.fragments?.fragmentFulfilmentPoint?.asModel }
+                        val paginatedObject = PaginatedObject(fulfilmentPoints, nextPage)
+                        paginatedObject.extractResponse(response.errors)
+                        callback.invoke(null, paginatedObject)
+                    } ?: run { callback.invoke(Exception(), null) }
+
                 }
 
                 override fun onFailure(e: ApolloException) {
