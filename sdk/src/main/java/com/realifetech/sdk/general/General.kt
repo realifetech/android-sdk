@@ -10,6 +10,7 @@ import com.realifetech.sdk.core.utils.ColorPallet
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
+import kotlinx.coroutines.selects.select
 import javax.inject.Inject
 
 class General @Inject constructor(
@@ -45,7 +46,7 @@ class General @Inject constructor(
 
     fun setColor(@ColorInt color: Int, forType: ColorType) {
         colorPallet.apply {
-            when (forType) {
+            when (forType ) {
                 PRIMARY -> colorPrimary = color
                 ON_PRIMARY -> colorOnPrimary = color
                 SURFACE -> colorSurface = color

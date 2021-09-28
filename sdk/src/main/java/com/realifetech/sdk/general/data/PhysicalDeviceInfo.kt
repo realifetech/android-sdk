@@ -6,12 +6,13 @@ import android.os.Build
 import android.util.DisplayMetrics
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.realifetech.realifetech_sdk.BuildConfig
-import com.realifetech.sdk.general.utils.isWifiConnected
-import com.realifetech.sdk.general.utils.isWifiOn
+import com.realifetech.sdk.core.utils.isWifiConnected
+import com.realifetech.sdk.core.utils.isWifiOn
 import javax.inject.Inject
 
 /**
  * Returns information about the current device & based on the passed [Context]
+ * Will be excluded from unit test coverage as it contains context, use UI test instead.
  */
 open class PhysicalDeviceInfo @Inject constructor(
     private val context: Context

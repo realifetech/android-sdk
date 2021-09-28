@@ -5,7 +5,7 @@ import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.realifetech.BelongsToAudienceWithExternalIdQuery
-import com.realifetech.sdk.general.utils.hasNetworkConnection
+import com.realifetech.sdk.core.utils.hasNetworkConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
