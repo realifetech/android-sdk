@@ -1,18 +1,9 @@
-package com.realifetech.sdk.general.utils
+package com.realifetech.sdk.core.utils
 
 import android.content.Context
-import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 
-val Context.appVersionName: String
-    get() {
-        return try {
-            packageManager.getPackageInfo(packageName, 0).versionName
-        } catch (exception: PackageManager.NameNotFoundException) {
-            ""
-        }
-    }
 
 val Context.isWifiOn: Boolean
     get() {

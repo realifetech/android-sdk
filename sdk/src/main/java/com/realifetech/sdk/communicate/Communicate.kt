@@ -5,7 +5,7 @@ import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.data.TokenBody
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.Result
-import com.realifetech.sdk.general.utils.hasNetworkConnection
+import com.realifetech.sdk.core.utils.hasNetworkConnection
 
 class Communicate (
     private val tokenStorage: PushNotificationsTokenStorage,

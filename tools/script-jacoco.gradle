@@ -23,6 +23,8 @@ def androidExclusion = [
         '**/WebOrderingFeature*.*',
         '**/NetworkUtil*.*',
         '**/ViewExtensions*.*',
+        '**/PhysicalDeviceInfo*.*',
+        '**/ContextExtensions*.*',
         '**/*Adapter*.*',
         '**/*ViewPager*.*',
         '**/*ViewHolder*.*',
