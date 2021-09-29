@@ -141,7 +141,7 @@ class WidgetsDataSourceImplTest {
     }
 
     private fun getWidgetsByTypeCall(shouldFail: Boolean = false) {
-        coEvery {
+        every {
             apolloClient.query(GetWidgetsByScreenTypeQuery(WidgetMocks.screenType, PAGE_SIZE, PAGE))
                 .toBuilder()
                 .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
@@ -257,7 +257,7 @@ class WidgetsDataSourceImplTest {
     }
 
     private fun getWidgetsByIdCall(shouldFail: Boolean = false) {
-        coEvery {
+        every {
             apolloClient.query(GetWidgetsByScreenIdQuery(WidgetMocks.screenId, PAGE_SIZE, PAGE))
                 .toBuilder()
                 .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()

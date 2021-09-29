@@ -33,7 +33,7 @@ class WidgetsRepositoryTest {
 
 
     @Test
-    fun `get Screen By Id results data`() {
+    fun `get Widgets By Id results data`() {
         //Given
         every {
             widgetsDataSource.getWidgetsByScreenId(
@@ -58,7 +58,7 @@ class WidgetsRepositoryTest {
     }
 
     @Test
-    fun `get Screen By Id results error`() {
+    fun `get Widgets By Id results error`() {
         //Given
         every {
             widgetsDataSource.getWidgetsByScreenId(
@@ -80,7 +80,7 @@ class WidgetsRepositoryTest {
     }
 
     @Test
-    fun `get Screen By Type results data`() {
+    fun `get Widgets By Type results data`() {
         //Given
         every {
             widgetsDataSource.getWidgetsByScreenType(
@@ -102,7 +102,7 @@ class WidgetsRepositoryTest {
     }
 
     @Test
-    fun `get Screen By Type results error`() {
+    fun `get Widgets By Type results error`() {
         //Given
         every {
             widgetsDataSource.getWidgetsByScreenType(
