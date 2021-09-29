@@ -9,11 +9,11 @@ object WidgetMocks {
 
     const val PAGE = 1
     const val PAGE_SIZE = 10
-    const val NEXT_PAGE = 2
+    private const val NEXT_PAGE = 2
     val screenType: ScreenType = ScreenType.DISCOVER
-    val edge = generateEdge("1")
-    val edges = listOf(edge, generateEdge("2"))
-    val widgets = edges.map { it.asModel() }
+    private val edge = generateEdge("1")
+    private val edges = listOf(edge, generateEdge("2"))
+    private val widgets = edges.map { it.asModel() }
     val widgetEdge: WidgetEdge? = WidgetEdge(widgets, NEXT_PAGE)
     const val screenId = "1234"
     val fragmentWidget = FragmentWidget("", edges, NEXT_PAGE)

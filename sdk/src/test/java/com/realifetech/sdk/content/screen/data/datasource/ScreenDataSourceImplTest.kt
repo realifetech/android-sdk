@@ -125,7 +125,7 @@ class ScreenDataSourceImplTest {
     }
 
     private fun getScreenByTypeCall(shouldFail: Boolean = false) {
-        coEvery {
+        every {
             apolloClient.query(GetScreenByScreenTypeQuery(screenType)).toBuilder()
                 .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
                 .enqueue(capture(screenByTypeSlot))
@@ -208,7 +208,7 @@ class ScreenDataSourceImplTest {
     }
 
     private fun getScreenByIdCall(shouldFail: Boolean = false) {
-        coEvery {
+        every {
             apolloClient.query(GetScreenByIdQuery(screenId)).toBuilder()
                 .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
                 .enqueue(capture(screenByIdSlot))
