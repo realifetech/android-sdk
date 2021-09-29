@@ -1,7 +1,7 @@
 package com.realifetech.sdk.content.widgets.domain
 
-import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
 import com.realifetech.sdk.content.widgets.data.datasource.WidgetsDataSource
+import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.type.ScreenType
 import io.reactivex.Flowable
@@ -11,30 +11,21 @@ import javax.inject.Inject
 
 class WidgetsRepository @Inject constructor(private val dataSource: WidgetsDataSource) {
 
-    fun getWidgetsByScreenIdFlowable(
+    fun getWidgetsByScreenId(
         id: String,
         pageSize: Int,
-        page: Int
-    ): Flowable<Result<WidgetEdge>> {
-        return rxSingle { dataSource.getWidgetsByScreenId(id, pageSize, page) }.toFlowable()
+        page: Int,
+        callback: (error: Exception?, response: WidgetEdge?) -> Unit
+    ) {
+        dataSource.getWidgetsByScreenId(id, pageSize, page,callback)
     }
 
-    fun getWidgetsByScreenTypeFlowable(
+    fun getWidgetsByScreenType(
         screenType: ScreenType,
         pageSize: Int,
-        page: Int
-    ): Flowable<Result<WidgetEdge>> =
-        rxSingle { dataSource.getWidgetsByScreenType(screenType, pageSize, page) }.toFlowable()
-
-    suspend fun getWidgetsByScreenType(
-        screenType: ScreenType,
-        pageSize: Int,
-        page: Int
-    ) =
-        dataSource.getWidgetsByScreenType(screenType, pageSize, page)
-
-    suspend fun getWidgetsByScreenId(id: String, pageSize: Int, page: Int) =
-        dataSource.getWidgetsByScreenId(id, pageSize, page)
-
-
+        page: Int,
+        callback: (error: Exception?, response: WidgetEdge?) -> Unit
+    ) {
+        dataSource.getWidgetsByScreenType(screenType, pageSize, page,callback)
+    }
 }

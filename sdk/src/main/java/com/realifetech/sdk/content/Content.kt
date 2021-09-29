@@ -1,8 +1,10 @@
 package com.realifetech.sdk.content
 
 import com.realifetech.fragment.FragmentWebPage
+import com.realifetech.sdk.content.screen.data.model.Translation
 import com.realifetech.sdk.content.screen.domain.ScreenRepository
 import com.realifetech.sdk.content.webPage.domain.WebPageRepository
+import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
 import com.realifetech.sdk.content.widgets.domain.WidgetsRepository
 import com.realifetech.type.ScreenType
 import com.realifetech.type.WebPageType
@@ -22,15 +24,33 @@ class Content @Inject constructor(
         webPageRepository.getWebPageByType(webPage, callback)
     }
 
-    fun getWidgetsByScreenId(id: String, pageSize: Int, page: Int) =
-        widgetsRepository.getWidgetsByScreenIdFlowable(id, pageSize, page)
+    fun getWidgetsByScreenId(
+        id: String,
+        pageSize: Int,
+        page: Int,
+        callback: (error: Exception?, response: WidgetEdge?) -> Unit
+    ) =
+        widgetsRepository.getWidgetsByScreenId(id, pageSize, page, callback)
 
-    fun getWidgetsByScreenType(screenType: ScreenType, pageSize: Int, page: Int) =
-        widgetsRepository.getWidgetsByScreenTypeFlowable(screenType, pageSize, page)
+    fun getWidgetsByScreenType(
+        screenType: ScreenType,
+        pageSize: Int,
+        page: Int,
+        callback: (error: Exception?, response: WidgetEdge?) -> Unit
+    ) =
+        widgetsRepository.getWidgetsByScreenType(screenType, pageSize, page, callback)
 
-    fun getScreenTitleById(id: String) =
-        screenRepository.getScreenByIdSingle(id)
+    fun getScreenTitleById(
+        id: String,
+        callback: (error: Exception?, response: List<Translation>?) -> Unit
+    ) =
+        screenRepository.getScreenById(id, callback)
 
-    fun getScreenTitleByScreenType(screenType: ScreenType) =
-        screenRepository.getScreenByScreenTypeSingle(screenType)
+    fun getScreenTitleByScreenType(
+        screenType: ScreenType,
+        callback: (error: Exception?, response: List<Translation>?) -> Unit
+    ) {
+        screenRepository.getScreenByScreenType(screenType, callback)
+    }
+
 }

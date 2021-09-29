@@ -7,19 +7,18 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.realifetech.sample.R
-import com.realifetech.sample.utils.disposedBy
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.type.ScreenType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_widgets_sample.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WidgetsSampleActivity : AppCompatActivity() {
 
@@ -69,95 +68,48 @@ class WidgetsSampleActivity : AppCompatActivity() {
     }
 
     private fun queryWidgets() {
-        RealifeTech.getContent().getWidgetsByScreenType(selectedType!!, 10, 1)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).map {
-                when (it) {
-                    is Result.Success -> {
-                        it.data
-                    }
-                    is Result.Error -> {
-                        throw  it.exception
+        GlobalScope.launch(Dispatchers.IO) {
+            RealifeTech.getContent()
+                .getWidgetsByScreenType(selectedType!!, 10, 1) { error, response ->
+                    GlobalScope.launch(Dispatchers.IO) {
+                        withContext(Dispatchers.Main) {
+                            error?.let {
+                                displayToast("Error loading:${it.message}")
+                            }
+                            response?.let {
+                                displayToast(
+                                    "Next Page: ${it.nextPage} " + "\n Widget loading: ${it.items} "
+                                )
+                            }
+                        }
                     }
                 }
-            }.doOnNext {
-                Toast.makeText(
-                    this@WidgetsSampleActivity,
-                    "Next Page: ${it.nextPage}",
-                    Toast.LENGTH_LONG
-                ).show()
-            }.flatMapIterable(WidgetEdge::items)
-            .subscribeBy(
-                {
-                    Toast.makeText(
-                        this@WidgetsSampleActivity,
-                        "Error loading: ${it.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }, {
-                    Log.d("Completion", "Completed")
-
-                }, {
-                    Toast.makeText(
-                        this@WidgetsSampleActivity,
-                        "Widget loading: $it",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }).disposedBy(compositeDisposable)
-
-// In case we have coroutines instead of RxJava, you can do the following
-
-//            GlobalScope.launch(Dispatchers.IO) {
-//                CoreConfiguration.deviceId = General.instance.deviceIdentifier
-//                val widgetsRepo = WidgetsModuleProvider.provideWidgetsRepository(storage.graphQl)
-//                val widgetsResult = widgetsRepo.getWidgetsByScreenType(selectedType!!)
-//                when (widgetsResult) {
-//                    is Result.Success -> {
-//                        widgetsResult.data.forEach {
-//                            Log.d("Result", it.toString())
-//                        }
-//
-//                    }
-//                    is Result.Error -> {
-//                        withContext(Dispatchers.Main) {
-//                            Toast.makeText(
-//                                this@WidgetsSampleActivity,
-//                                "Error in loading: ${widgetsResult.exception.message}",
-//                                Toast.LENGTH_LONG
-//                            ).show()
-//                        }
-//                    }
-//                }
-//            }
+        }
     }
 
     private fun queryScreenTitle() {
-        RealifeTech.getContent().getScreenTitleByScreenType(selectedType!!)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).map {
-                when (it) {
-                    is Result.Success -> {
-                        it.data
-                    }
-                    is Result.Error -> {
-                        throw  it.exception
+        GlobalScope.launch(Dispatchers.IO) {
+            RealifeTech.getContent().getScreenTitleByScreenType(selectedType!!) { error, response ->
+                GlobalScope.launch(Dispatchers.IO) {
+                    withContext(Dispatchers.Main) {
+                        error?.let {
+                            displayToast("Error loading:${it.message}")
+                        }
+                        response?.let {
+                            displayToast("Screen Title translations loading: $it")
+                        }
                     }
                 }
-            }.subscribeBy(
-                {
-                    Toast.makeText(
-                        this@WidgetsSampleActivity,
-                        "Error loading: ${it.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }, {
-                    Log.d("Completion", "Completed")
-                    Toast.makeText(
-                        this@WidgetsSampleActivity,
-                        "Screen Title translations loading: $it",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }).disposedBy(compositeDisposable)
+            }
+        }
+    }
+
+    private fun displayToast(message: String?) {
+        Toast.makeText(
+            this@WidgetsSampleActivity,
+            message,
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     override fun onDestroy() {
