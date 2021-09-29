@@ -10,6 +10,7 @@ import com.realifetech.type.WidgetType
  *
  * Example: this widget will have information about a news feed, along with how many articles and IDs to each one of the articles, but not the actual article content. To actually show the content of the widget, we will have to query the server for each one of the [contentIds]
  */
+
 data class Widget(
     val id: String,
     val style: FragmentWidget.Style?,
@@ -46,4 +47,22 @@ data class Widget(
     fun getTitle(targetLanguage: Language): String? {
         return titleTranslations.firstOrNull { it.language == targetLanguage }?.title
     }
+}
+
+fun FragmentWidget.Edge.asModel(): Widget {
+    val contentIds = this.variation?.contentIds.orEmpty().filterNotNull()
+    val params = this.variation?.params.orEmpty().filterNotNull()
+    val engagementParam = this.variation?.engagementParams.orEmpty().filterNotNull()
+    val translationsTitle = this.variation?.translations.orEmpty().filterNotNull()
+    return Widget(
+        id = this.id,
+        style = this.style,
+        viewAllUrl = this.viewAllUrl.orEmpty(),
+        widgetType = this.widgetType,
+        fetchType = this.variation?.fetchType,
+        contentIds = contentIds,
+        params = params,
+        engagementParam = engagementParam,
+        titleTranslations = translationsTitle
+    )
 }

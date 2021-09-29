@@ -1,87 +1,88 @@
 package com.realifetech.sdk.content.widgets.data.datasource
 
+import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Error
-import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo.api.Response
+import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.GetWidgetsByScreenIdQuery
 import com.realifetech.GetWidgetsByScreenTypeQuery
-import com.realifetech.sdk.core.utils.Result
-import com.realifetech.fragment.FragmentWidget
-import com.realifetech.sdk.content.widgets.data.model.Widget
 import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
+import com.realifetech.sdk.content.widgets.data.model.asModel
 import com.realifetech.type.ScreenType
 
-class WidgetsDataSourceImpl (private val apolloClient: ApolloClient) :
+class WidgetsDataSourceImpl(private val apolloClient: ApolloClient) :
     WidgetsDataSource {
 
 
-    override suspend fun getWidgetsByScreenType(
+    override fun getWidgetsByScreenType(
         screenType: ScreenType,
         pageSize: Int,
-        page: Int
-    ): Result<WidgetEdge> {
-        return try {
+        page: Int,
+        callback: (error: Exception?, response: WidgetEdge?) -> Unit
+    ) {
+        try {
             val response =
                 apolloClient.query(GetWidgetsByScreenTypeQuery(screenType, pageSize, page))
                     .toBuilder()
                     .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                     .build()
-                    .await()
-            response.data?.getWidgetsByScreenType?.fragments?.fragmentWidget.extractResponse(
-                response.errors
-            )
+            response.enqueue(object : ApolloCall.Callback<GetWidgetsByScreenTypeQuery.Data>() {
+                override fun onResponse(response: Response<GetWidgetsByScreenTypeQuery.Data>) {
+                    response.data?.getWidgetsByScreenType?.fragments?.fragmentWidget?.let { fragment ->
+                        callback.invoke(
+                            null,
+                            WidgetEdge(
+                                fragment.edges?.filterNotNull()?.map { it.asModel() },
+                                fragment.nextPage
+                            )
+                        )
+
+                    }
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+            })
+
         } catch (exception: ApolloHttpException) {
-            Result.Error(exception)
+            callback.invoke(exception, null)
         }
     }
 
-    override suspend fun getWidgetsByScreenId(
+    override fun getWidgetsByScreenId(
         id: String,
         pageSize: Int,
-        page: Int
-    ): Result<WidgetEdge> {
-        return try {
+        page: Int,
+        callback: (error: Exception?, response: WidgetEdge?) -> Unit
+    ) {
+        try {
             val response = apolloClient.query(GetWidgetsByScreenIdQuery(id, pageSize, page))
                 .toBuilder()
                 .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                 .build()
-                .await()
-            response.data?.getWidgetsByScreenId?.fragments?.fragmentWidget.extractResponse(response.errors)
+            response.enqueue(object : ApolloCall.Callback<GetWidgetsByScreenIdQuery.Data>() {
+                override fun onResponse(response: Response<GetWidgetsByScreenIdQuery.Data>) {
+                    response.data?.getWidgetsByScreenId?.fragments?.fragmentWidget?.let { fragment ->
+                        callback.invoke(
+                            null,
+                            WidgetEdge(
+                                fragment.edges?.filterNotNull()?.map { it.asModel() },
+                                fragment.nextPage
+                            )
+                        )
+                    }
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+            })
+
         } catch (exception: ApolloHttpException) {
-            Result.Error(exception)
-        }
-    }
-
-    private fun FragmentWidget?.extractResponse(errors: List<Error>?): Result<WidgetEdge> {
-        val extractedWidgets = this?.edges?.filterNotNull()
-        val nextPage = this?.nextPage
-        return if (extractedWidgets != null) {
-            Result.Success(WidgetEdge(extractedWidgets.toWidgets(), nextPage))
-        } else {
-            val errorMessage = errors?.firstOrNull()?.message ?: "Unknown error"
-            Result.Error(RuntimeException(errorMessage))
-        }
-    }
-
-    private fun List<FragmentWidget.Edge>.toWidgets(): List<Widget> {
-        return map {
-            val contentIds = it.variation?.contentIds.orEmpty().filterNotNull()
-            val params = it.variation?.params.orEmpty().filterNotNull()
-            val engagementParam = it.variation?.engagementParams.orEmpty().filterNotNull()
-            val translationsTitle = it.variation?.translations.orEmpty().filterNotNull()
-            Widget(
-                id = it.id,
-                style = it.style,
-                viewAllUrl = it.viewAllUrl.orEmpty(),
-                widgetType = it.widgetType,
-                fetchType = it.variation?.fetchType,
-                contentIds = contentIds,
-                params = params,
-                engagementParam = engagementParam,
-                titleTranslations = translationsTitle
-            )
+            callback.invoke(exception, null)
         }
     }
 }
