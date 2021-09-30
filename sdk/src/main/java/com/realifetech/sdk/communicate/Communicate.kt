@@ -1,13 +1,13 @@
 package com.realifetech.sdk.communicate
 
 import android.content.Context
-import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.data.TokenBody
+import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.core.utils.hasNetworkConnection
 
-class Communicate (
+class Communicate(
     private val tokenStorage: PushNotificationsTokenStorage,
     private val realifetechApiV3Service: RealifetechApiV3Service,
     private val context: Context
@@ -34,7 +34,7 @@ class Communicate (
     internal fun resendPendingToken() {
         if (tokenStorage.hasPendingToken) {
             registerForPushNotifications(tokenStorage.pendingToken)
-        }
+        } else return
     }
 
 

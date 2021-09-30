@@ -53,8 +53,11 @@ object FeatureModule {
         tokenStorage: PushNotificationsTokenStorage,
         realifetechApiV3Service: RealifetechApiV3Service,
         context: Context
-    ): Communicate =
-        Communicate(tokenStorage, realifetechApiV3Service, context)
+    ): Communicate {
+        val communicate = Communicate(tokenStorage, realifetechApiV3Service, context)
+        communicate.resendPendingToken()
+        return communicate
+    }
 
     @FeatureScope
     @Provides
@@ -74,6 +77,13 @@ object FeatureModule {
         general: General,
         timeUtil: TimeUtil
     ): Analytics =
-        Analytics(analyticsEngine, analyticsStorage, general, Dispatchers.IO,Dispatchers.Main,timeUtil)
+        Analytics(
+            analyticsEngine,
+            analyticsStorage,
+            general,
+            Dispatchers.IO,
+            Dispatchers.Main,
+            timeUtil
+        )
 
 }
