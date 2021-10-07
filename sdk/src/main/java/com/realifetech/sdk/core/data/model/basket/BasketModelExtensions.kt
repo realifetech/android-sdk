@@ -59,6 +59,7 @@ val BasketRequest.asInputObject: BasketInput
 fun convertBasketItemsToInput(basketItems: List<BasketRequestItem?>?): List<BasketItemInput?>? =
     basketItems?.map {
         BasketItemInput(
+            Input.optional(it?.id),
             Input.optional(it?.product),
             Input.optional(it?.productVariant),
             Input.optional(it?.fulfilmentPoint),
