@@ -29,10 +29,10 @@ val FragmentProduct.Image.asModel: ProductImage
 
 val FragmentProduct.Translation2.asModel: ProductTranslation
     get() = ProductTranslation(
-        id = null,
+        id = id,
         language = language,
         title = title,
-        description = null
+        description = description
     )
 
 val FragmentProduct.Translation1.asModel: StandardTranslation
