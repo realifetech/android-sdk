@@ -25,7 +25,7 @@ object ProductMocks {
 
     val edge = generateProductEdge("1")
     val fragmentProduct = edge.fragments.fragmentProduct
-    val product= fragmentProduct.asModel
+    val product = fragmentProduct.asModel
     val edges = listOf(edge)
     val productsResult = edges.map { it.fragments.fragmentProduct.asModel }
     val products: GetProductsQuery.GetProducts? =
@@ -43,7 +43,9 @@ object ProductMocks {
                     "success",
                     "test",
                     "test",
-                    listOf(FragmentProduct.Image("", "url", 1)),
+                    "",
+                    "",
+                    listOf(FragmentProduct.Image("", "", "url", 1)),
                     listOf(
                         FragmentProduct.ModifierList(
                             "", id,
@@ -106,6 +108,8 @@ object ProductMocks {
                             "sada",
                             "fdas",
                             1,
+                            "",
+                            "",
                             listOf(FragmentProduct.Translation1("", Language.EN, "category"))
                         )
                     ),
@@ -115,7 +119,7 @@ object ProductMocks {
                             FragmentProduct.FulfilmentPoint.Fragments(fragmentFulfilmentPoint)
                         )
                     ),
-                    listOf(FragmentProduct.Translation2("", "en", ""))
+                    listOf(FragmentProduct.Translation2("", "", "en", "", ""))
                 )
             )
         )
