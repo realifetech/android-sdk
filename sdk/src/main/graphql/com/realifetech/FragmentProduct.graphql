@@ -3,7 +3,10 @@ fragment FragmentProduct on Product {
     status
     reference
     externalId
+    createdAt
+    updatedAt
     images {
+        id
         imageUrl
         position
     }
@@ -32,6 +35,8 @@ fragment FragmentProduct on Product {
         reference
         status
         position
+        createdAt
+        updatedAt
         translations {
             language
             title
@@ -41,8 +46,10 @@ fragment FragmentProduct on Product {
         ...FragmentFulfilmentPoint
     }
     translations {
+        id
         language
         title
+        description
     }
 }
 
