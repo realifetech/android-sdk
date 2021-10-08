@@ -1,7 +1,7 @@
 package com.realifetech.sdk.core.data.model.basket
 
 data class BasketRequestItem(
-    val id: Int,
+    val id: String?,
     val product: String?,
     val productVariant: String?,
     val fulfilmentPoint: String?,

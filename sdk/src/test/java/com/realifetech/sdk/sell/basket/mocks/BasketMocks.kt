@@ -8,7 +8,7 @@ object BasketMocks {
     val response = StandardResponse(200, "Success", "deleted successfully")
     val basketItem1 = generateBasketItem("1")
     val checkoutRequest = CheckoutRequest(null, "")
-    private fun generateBasketItemRequest() = BasketRequestItem(0, null, null, null, null, null)
+    private fun generateBasketItemRequest() = BasketRequestItem("0", null, null, null, null, null)
     val basketRequest =
         BasketRequest(null, null, mutableListOf(generateBasketItemRequest()), null, null, null)
 
