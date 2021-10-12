@@ -17,7 +17,7 @@ import com.realifetech.sdk.content.screen.mocks.ScreenMocks.translationsById
 import com.realifetech.sdk.content.screen.mocks.ScreenMocks.translationsByType
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before

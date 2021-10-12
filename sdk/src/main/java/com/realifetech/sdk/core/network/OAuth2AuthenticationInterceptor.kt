@@ -18,15 +18,9 @@ class OAuth2AuthenticationInterceptor(
         val originalRequest = chain.request()
         val newBuilder = originalRequest.newBuilder()
         val accessToken =
-            if (platformPreferences.rltToken != null) {
-                platformPreferences.rltToken?.accessToken
-            } else {
-                authTokenStorage.accessToken
-            }
-        accessToken?.apply {
-            if (isNotEmpty()) {
-                newBuilder.header(AUTHORIZATION, this.toBearerFormat)
-            }
+            platformPreferences.rltToken?.accessToken ?: run { authTokenStorage.accessToken }
+        if (accessToken.isNotEmpty()) {
+            newBuilder.header(AUTHORIZATION, accessToken.toBearerFormat)
         }
 
         return chain.proceed(newBuilder.build())

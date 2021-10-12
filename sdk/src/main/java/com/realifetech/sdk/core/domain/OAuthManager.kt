@@ -4,26 +4,15 @@ import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.data.database.preferences.platform.PlatformPreferences
 import com.realifetech.sdk.core.data.datasource.AuthApiDataSource
-import com.realifetech.sdk.di.Injector
-import javax.inject.Inject
+import com.realifetech.sdk.core.data.model.shared.`object`.toClientId
+import dagger.Lazy
 
-class OAuthManager {
-
-    @Inject
-    lateinit var authTokenStorage: AuthTokenStorage
-
-    @Inject
-    lateinit var authApiSource: AuthApiDataSource
-
-    @Inject
-    lateinit var platformTokenStorage: PlatformPreferences
-
-    @Inject
-    lateinit var configurationStorage: ConfigurationStorage
-
-    init {
-    Injector.getComponent().inject(this)
-    }
+class OAuthManager(
+    private val authTokenStorage: AuthTokenStorage,
+    private val authApiLazyWrapper: Lazy<AuthApiDataSource>,
+    private val platformTokenStorage: PlatformPreferences,
+    private val configurationStorage: ConfigurationStorage
+) {
 
     val accessToken: String
         get() {
@@ -49,9 +38,9 @@ class OAuthManager {
 
     private fun requestAccessTokenServer() {
         val accessTokenInfo =
-            authApiSource.getAccessToken(
+            authApiLazyWrapper.get().getAccessToken(
                 configurationStorage.clientSecret,
-                configurationStorage.appCode + SUFFIX
+                configurationStorage.appCode.toClientId
             ) ?: return
         authTokenStorage.accessToken = accessTokenInfo.token
         authTokenStorage.expireAtMilliseconds = accessTokenInfo.expireAtMilliseconds
@@ -59,15 +48,11 @@ class OAuthManager {
 
     private fun requestRefreshTokenServer(refreshToken: String) {
         val tokenResponse =
-            authApiSource.refreshToken(
+            authApiLazyWrapper.get().refreshToken(
                 configurationStorage.clientSecret,
-                configurationStorage.appCode + SUFFIX,
+                configurationStorage.appCode.toClientId,
                 refreshToken
             ) ?: return
         platformTokenStorage.rltToken = tokenResponse
-    }
-
-    companion object {
-        private const val SUFFIX = "_0"
     }
 }

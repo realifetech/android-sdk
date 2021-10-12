@@ -1,11 +1,12 @@
 package com.realifetech.sdk.communicate.domain
 
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.token
+import com.realifetech.sdk.util.Constants.EMPTY
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -41,17 +42,13 @@ class PushNotificationsTokenStorageTest {
         var result = notificationsTokenStorage.hasPendingToken
         assertEquals(false, result)
         every { pushNotificationStorage.token } returns token
-         result = notificationsTokenStorage.hasPendingToken
+        result = notificationsTokenStorage.hasPendingToken
         assertEquals(true, result)
     }
 
     @Test
     fun removePendingToken() {
-         notificationsTokenStorage.removePendingToken()
+        notificationsTokenStorage.removePendingToken()
         verify { pushNotificationStorage.removeToken() }
-    }
-
-    companion object {
-        private const val EMPTY = ""
     }
 }

@@ -3,11 +3,12 @@ package com.realifetech.sdk.communicate.domain
 import android.content.Context
 import androidx.core.content.edit
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.token
+import com.realifetech.sdk.util.Constants.EMPTY
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -54,7 +55,6 @@ class PushNotificationsTokenPreferenceStorageTest {
     }
 
     companion object {
-        private const val EMPTY = ""
         private const val TOKEN_KEY = "PushNotificationsToken"
     }
 }

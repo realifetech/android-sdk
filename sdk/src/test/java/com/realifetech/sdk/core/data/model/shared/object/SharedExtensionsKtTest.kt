@@ -2,6 +2,7 @@ package com.realifetech.sdk.core.data.model.shared.`object`
 
 import com.realifetech.sdk.core.data.model.shared.mocks.SharedMocks
 import com.realifetech.sdk.core.data.model.shared.mocks.SharedMocks.bearerFormat
+import com.realifetech.sdk.core.data.model.shared.mocks.SharedMocks.clientId
 import com.realifetech.sdk.core.data.model.shared.mocks.SharedMocks.fragmentTimeslot
 import com.realifetech.sdk.core.data.model.shared.mocks.SharedMocks.fragmentTimeslotWithNullTranslations
 import com.realifetech.sdk.core.data.model.shared.mocks.SharedMocks.languageText
@@ -10,7 +11,7 @@ import com.realifetech.sdk.core.data.model.shared.mocks.SharedMocks.randomText
 import com.realifetech.sdk.core.data.model.shared.mocks.SharedMocks.timeslot
 import com.realifetech.sdk.core.data.model.shared.mocks.SharedMocks.timeslotWithNullTranslations
 import com.realifetech.type.Language
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class SharedExtensionsKtTest {
@@ -36,6 +37,12 @@ class SharedExtensionsKtTest {
     fun getToBearerFormat() {
         val result = SharedMocks.token.toBearerFormat
         assertEquals(bearerFormat, result)
+    }
+
+    @Test
+    fun getToClientId() {
+        val result = SharedMocks.appCode.toClientId
+        assertEquals(clientId, result)
     }
 
     @Test
