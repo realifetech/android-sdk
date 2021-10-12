@@ -18,6 +18,9 @@ val String.toLanguage: Language?
 
 val String.toBearerFormat
     get() = "Bearer $this"
+val String.toClientId
+    get() = "${this}_0"
+
 val FragmentTimeslot.asModel: TimeSlot
     get() = TimeSlot(
         id = id,

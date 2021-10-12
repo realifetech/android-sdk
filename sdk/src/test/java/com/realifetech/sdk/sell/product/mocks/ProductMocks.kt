@@ -15,19 +15,18 @@ import com.realifetech.type.ProductFilter
 import com.realifetech.type.ProductModifierItemStatus
 
 object ProductMocks {
-    val productId = "id"
+    const val productId = "id"
     val filters: ProductFilter =
         ProductFilter(listOf("1", "2").toInput(), listOf("2", "3").toInput())
     val params = listOf(FilterParamWrapper("key", "value"))
-    val PAGE_SIZE = 10
-    val PAGE = 1
-    val NEXT_PAGE = 2
-
-    val edge = generateProductEdge("1")
+    const val PAGE_SIZE = 10
+    const val PAGE = 1
+    private const val NEXT_PAGE = 2
+    private val edge = generateProductEdge("1")
     val fragmentProduct = edge.fragments.fragmentProduct
     val product = fragmentProduct.asModel
-    val edges = listOf(edge)
-    val productsResult = edges.map { it.fragments.fragmentProduct.asModel }
+   private val edges = listOf(edge)
+   private val productsResult = edges.map { it.fragments.fragmentProduct.asModel }
     val products: GetProductsQuery.GetProducts? =
         GetProductsQuery.GetProducts("", edges, NEXT_PAGE)
     val paginatedObject: PaginatedObject<Product?>? =

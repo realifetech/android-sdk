@@ -14,7 +14,7 @@ import com.realifetech.sdk.content.widgets.mocks.WidgetMocks.PAGE
 import com.realifetech.sdk.content.widgets.mocks.WidgetMocks.PAGE_SIZE
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test

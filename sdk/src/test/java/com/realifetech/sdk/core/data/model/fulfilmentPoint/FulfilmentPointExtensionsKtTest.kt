@@ -1,7 +1,8 @@
 package com.realifetech.sdk.core.data.model.fulfilmentPoint
 
 import com.realifetech.sdk.sell.fulfilmentpoint.mocks.FFPMocks
-import junit.framework.Assert.assertEquals
+import com.realifetech.sdk.util.Constants.EMPTY
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class FulfilmentPointExtensionsKtTest {
@@ -54,10 +55,5 @@ class FulfilmentPointExtensionsKtTest {
     fun `get SeatForm from FulfilmentPoint returns SeatForm`() {
         val form = FFPMocks.fulfilmentPoint?.form
         assertEquals(FFPMocks.form, form)
-    }
-
-
-    companion object {
-        private const val EMPTY = ""
     }
 }

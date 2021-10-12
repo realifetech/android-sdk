@@ -5,7 +5,7 @@ import androidx.core.content.edit
 import com.realifetech.sdk.core.data.database.preferences.AbstractPreferences
 import java.util.*
 
-class AuthTokenStorage(val context: Context) : AbstractPreferences(context) {
+class AuthTokenStorage(context: Context) : AbstractPreferences(context) {
 
     var accessToken: String
         get() = preferences.getString(ACCESS_TOKEN_KEY, "").orEmpty()

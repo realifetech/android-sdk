@@ -5,10 +5,12 @@ import com.realifetech.sdk.core.data.database.preferences.configuration.Configur
 import com.realifetech.sdk.core.data.database.preferences.platform.PlatformPreferences
 import com.realifetech.sdk.core.data.datasource.AuthApiDataSource
 import com.realifetech.sdk.core.data.datasource.AuthApiDataSourceImpl
+import com.realifetech.sdk.core.domain.OAuthManager
 import com.realifetech.sdk.core.network.DeviceIdInterceptor
 import com.realifetech.sdk.core.network.OAuth2AuthenticationInterceptor
 import com.realifetech.sdk.core.network.OAuth2Authenticator
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
+import com.realifetech.sdk.core.utils.TimeUtil
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -27,12 +29,13 @@ object RestClientV3Module {
         deviceIdInterceptor: DeviceIdInterceptor,
         platformPreferences: PlatformPreferences,
         authTokenStorage: AuthTokenStorage,
+        oAuthManager: OAuthManager
     ): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
             .addInterceptor(OAuth2AuthenticationInterceptor(authTokenStorage, platformPreferences))
-            .authenticator(OAuth2Authenticator())
+            .authenticator(OAuth2Authenticator { oAuthManager })
             .addInterceptor(deviceIdInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
@@ -60,7 +63,10 @@ object RestClientV3Module {
 
     @CoreScope
     @Provides
-    internal fun authenticationBackendApiDataSource(realifetechApiV3Service: RealifetechApiV3Service): AuthApiDataSource =
-        AuthApiDataSourceImpl(realifetechApiV3Service)
+    internal fun authenticationBackendApiDataSource(
+        realifetechApiV3Service: RealifetechApiV3Service,
+        timeUtil: TimeUtil
+    ): AuthApiDataSource =
+        AuthApiDataSourceImpl(realifetechApiV3Service, timeUtil)
 
 }

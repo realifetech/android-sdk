@@ -23,7 +23,7 @@ import com.realifetech.sdk.sell.product.mocks.ProductMocks.productId
 import com.realifetech.type.ProductFilter
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test

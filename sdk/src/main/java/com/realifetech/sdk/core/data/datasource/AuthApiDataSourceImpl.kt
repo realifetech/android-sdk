@@ -5,11 +5,15 @@ import com.realifetech.sdk.core.data.model.token.AccessTokenBody
 import com.realifetech.sdk.core.data.model.token.AccessTokenInfo
 import com.realifetech.sdk.core.data.model.token.RefreshTokenBody
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
+import com.realifetech.sdk.core.utils.TimeUtil
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class AuthApiDataSourceImpl @Inject constructor(private val authorizationApiNetwork: RealifetechApiV3Service) :
+class AuthApiDataSourceImpl @Inject constructor(
+    private val authorizationApiNetwork: RealifetechApiV3Service,
+    private val timeUtil: TimeUtil
+) :
     AuthApiDataSource {
     override fun getAccessToken(
         clientSecret: String,
@@ -20,7 +24,7 @@ class AuthApiDataSourceImpl @Inject constructor(private val authorizationApiNetw
                 .getAuthToken(AccessTokenBody(clientSecret = clientSecret, clientId = clientId))
                 .execute().body()
         return if (responseBody != null) {
-            val timeNowMilliseconds = Calendar.getInstance().timeInMillis
+            val timeNowMilliseconds = timeUtil.currentTime
             val expireTimeInMilliseconds =
                 timeNowMilliseconds + TimeUnit.SECONDS.toMillis(responseBody.expiresIn.toLong())
             AccessTokenInfo(responseBody.accessToken, expireTimeInMilliseconds)
@@ -44,10 +48,9 @@ class AuthApiDataSourceImpl @Inject constructor(private val authorizationApiNetw
                 )
             ).execute().body()
         tokenResponse?.let {
-            val timeNowMilliseconds = Calendar.getInstance().timeInMillis
+            val timeNowMilliseconds = timeUtil.currentTime
             val expireTimeInMilliseconds =
                 timeNowMilliseconds + TimeUnit.SECONDS.toMillis(it.expiresIn.toLong())
-
             return OAuthTokenResponse(
                 it.accessToken,
                 it.expiresIn,
