@@ -26,7 +26,7 @@ object NetworkMocks {
     val deviceRegister = DeviceRegisterResponse(200, "Success", "Noice")
     val deviceResponse = convertToJson(deviceRegister)
     val tokenResponse = convertToJson(rltToken)
-    val deviceId = "0ea67cc4-b6e9-42fb-a9d7-2578b8d2ade7:com.realifetech.sample"
+    const val deviceId = "0ea67cc4-b6e9-42fb-a9d7-2578b8d2ade7:com.realifetech.sample"
     val notification = convertToJson(RegisterPushNotificationsResponse(true, "sup,bra?"))
 
     private fun <T> convertToJson(model: T): String {
