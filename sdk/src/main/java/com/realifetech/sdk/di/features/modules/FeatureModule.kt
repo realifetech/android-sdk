@@ -4,6 +4,8 @@ import android.content.Context
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
+import com.realifetech.sdk.audiences.Audiences
+import com.realifetech.sdk.audiences.repository.AudiencesRepository
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
@@ -58,6 +60,13 @@ object FeatureModule {
         communicate.resendPendingToken()
         return communicate
     }
+
+    @FeatureScope
+    @Provides
+    internal fun audiences(
+        audiencesRepository: AudiencesRepository,
+        context: Context
+    ) = Audiences(audiencesRepository, Dispatchers.IO, Dispatchers.Main, context)
 
     @FeatureScope
     @Provides
