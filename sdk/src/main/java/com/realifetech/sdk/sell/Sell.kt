@@ -6,7 +6,6 @@ import com.realifetech.sdk.sell.order.OrderFeature
 import com.realifetech.sdk.sell.payment.PaymentFeature
 import com.realifetech.sdk.sell.product.ProductFeature
 import com.realifetech.sdk.sell.weboredering.WebOrderingFeature
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 class Sell @Inject constructor(
@@ -37,7 +36,6 @@ class Sell @Inject constructor(
         return fulfilmentPointFeature
     }
 
-    @ExperimentalCoroutinesApi
     fun createOrderingJourneyFragment() {
         return webOrderingFeature.startActivity()
     }
