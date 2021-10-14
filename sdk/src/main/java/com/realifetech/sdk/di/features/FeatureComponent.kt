@@ -7,7 +7,7 @@ import dagger.Subcomponent
 
 @FeatureScope
 @Subcomponent(
-    modules = [FeatureModule::class, ContentModule::class, AnalyticsModule::class,
+    modules = [FeatureModule::class, ContentModule::class, AnalyticsModule::class, AudiencesModule::class,
         GeneralModule::class, SellModule::class, CommunicateModule::class]
 )
 interface FeatureComponent {
