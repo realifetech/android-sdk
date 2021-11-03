@@ -78,7 +78,7 @@ val PaymentSourceBillingDetailsWrapper.asInput
 val PaymentSourceWrapper.asInput
     get() = PaymentSourceInput(
         Input.optional(id),
-        "vgs".toInput(),
+        TOKEN_PROVIDER.toInput(),
         PaymentSourceType.CARD.toInput(),
         Input.optional(billingDetailsInput?.asInput),
         Input.optional(card?.asInput)
@@ -88,9 +88,12 @@ fun convertPaymentSourceWrapperToInput(items: List<PaymentSourceWrapper>): List<
     items.map {
         PaymentSourceInput(
             Input.optional(it.id),
-            "vgs".toInput(),
+            TOKEN_PROVIDER.toInput(),
             PaymentSourceType.CARD.toInput(),
             Input.optional(it.billingDetailsInput?.asInput),
             Input.optional(it.card?.asInput)
         )
     }
+
+
+const val TOKEN_PROVIDER = "vgs"
