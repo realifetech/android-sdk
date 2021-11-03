@@ -44,9 +44,9 @@ val FragmentPaymentSource.Address.asModel: PaymentSourceAddressWrapper
 val FragmentPaymentSource.Card.asModel: CardWrapper
     get() = CardWrapper(
         brand = brand,
-        numberToken = numberToken,
-        expMonthToken = expMonth,
-        expYearToken = expYear,
+        numberToken = numberToken.orEmpty(),
+        expMonthToken = expMonth.orEmpty(),
+        expYearToken = expYear.orEmpty(),
         securityCode = fingerprint.orEmpty(),
         last4 = last4
     )
