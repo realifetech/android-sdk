@@ -72,6 +72,7 @@ val PaymentSourceBillingDetailsWrapper.asInput
         PaymentSourceBillingDetailsInput(
             address?.asInput.toInput(),
             email.toInput(),
+            name.toInput(),
             phone.toInput()
         )
 
