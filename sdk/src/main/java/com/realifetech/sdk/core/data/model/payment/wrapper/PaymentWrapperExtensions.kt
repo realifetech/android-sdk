@@ -26,9 +26,9 @@ val PaymentSourceEdge.Address.asWrapper: PaymentSourceAddressWrapper
 val PaymentSourceEdge.Card.asWrapper: CardWrapper
     get() = CardWrapper(
         brand = brand,
-        numberToken = numberToken,
-        expMonthToken = expMonth,
-        expYearToken = expYear,
+        numberToken = numberToken.orEmpty(),
+        expMonthToken = expMonth.orEmpty(),
+        expYearToken = expYear.orEmpty(),
         securityCode = fingerprint.orEmpty(),
         last4 = last4
     )
@@ -78,6 +78,8 @@ val PaymentSourceBillingDetailsWrapper.asInput
 val PaymentSourceWrapper.asInput
     get() = PaymentSourceInput(
         Input.optional(id),
+        "vgs".toInput(),
+        PaymentSourceType.CARD.toInput(),
         Input.optional(billingDetailsInput?.asInput),
         Input.optional(card?.asInput)
     )
@@ -86,6 +88,8 @@ fun convertPaymentSourceWrapperToInput(items: List<PaymentSourceWrapper>): List<
     items.map {
         PaymentSourceInput(
             Input.optional(it.id),
+            "vgs".toInput(),
+            PaymentSourceType.CARD.toInput(),
             Input.optional(it.billingDetailsInput?.asInput),
             Input.optional(it.card?.asInput)
         )
