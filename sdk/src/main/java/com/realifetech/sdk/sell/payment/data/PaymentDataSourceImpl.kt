@@ -12,6 +12,7 @@ import com.realifetech.fragment.PaymentIntent
 import com.realifetech.sdk.core.data.model.payment.model.PaymentSource
 import com.realifetech.sdk.core.data.model.payment.model.asModel
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
+import com.realifetech.sdk.core.utils.invokeCallback
 import com.realifetech.type.PaymentIntentInput
 import com.realifetech.type.PaymentIntentUpdateInput
 import com.realifetech.type.PaymentSourceInput
@@ -30,14 +31,9 @@ class PaymentDataSourceImpl @Inject constructor(private val apolloClient: Apollo
             response.enqueue(object :
                 ApolloCall.Callback<AddPaymentSourceToMyWalletMutation.Data>() {
                 override fun onResponse(response: Response<AddPaymentSourceToMyWalletMutation.Data>) {
-                    response.data?.addPaymentSourceToMyWallet?.fragments?.fragmentPaymentSource?.let {
-                        callback.invoke(
-                            null,
-                            it.asModel
-                        )
-                    } ?: run {
-                        callback.invoke(Exception(), null)
-                    }
+                    val paymentSource =
+                        response.data?.addPaymentSourceToMyWallet?.fragments?.fragmentPaymentSource?.asModel
+                    paymentSource.invokeCallback(response, callback)
                 }
 
                 override fun onFailure(e: ApolloException) {
@@ -63,18 +59,14 @@ class PaymentDataSourceImpl @Inject constructor(private val apolloClient: Apollo
                     .build()
             response.enqueue(object : ApolloCall.Callback<GetMyPaymentSourcesQuery.Data>() {
                 override fun onResponse(response: Response<GetMyPaymentSourcesQuery.Data>) {
-                    response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.let { sourceEdge ->
-                        callback.invoke(
-                            null,
+                    val paginatedObject: PaginatedObject<PaymentSource?>? =
+                        response.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.let { sourceEdge ->
                             PaginatedObject(
                                 sourceEdge.edges?.map { it?.asModel },
                                 sourceEdge.nextPage
                             )
-                        )
-                    } ?: run {
-                        callback.invoke(Exception(), null)
-                    }
-
+                        }
+                    paginatedObject.invokeCallback(response, callback)
                 }
 
                 override fun onFailure(e: ApolloException) {
@@ -95,11 +87,9 @@ class PaymentDataSourceImpl @Inject constructor(private val apolloClient: Apollo
             val response = apolloClient.mutate(CreateMyPaymentIntentMutation(input))
             response.enqueue(object : ApolloCall.Callback<CreateMyPaymentIntentMutation.Data>() {
                 override fun onResponse(response: Response<CreateMyPaymentIntentMutation.Data>) {
-                    response.data?.createMyPaymentIntent?.fragments?.paymentIntent?.let {
-                        callback.invoke(null, it)
-                    } ?: run {
-                        callback.invoke(Exception(), null)
-                    }
+                    val paymentIntent =
+                        response.data?.createMyPaymentIntent?.fragments?.paymentIntent
+                    paymentIntent.invokeCallback(response, callback)
                 }
 
                 override fun onFailure(e: ApolloException) {
@@ -121,11 +111,9 @@ class PaymentDataSourceImpl @Inject constructor(private val apolloClient: Apollo
             val response = apolloClient.mutate(UpdatePaymentIntentMutation(id, input))
             response.enqueue(object : ApolloCall.Callback<UpdatePaymentIntentMutation.Data>() {
                 override fun onResponse(response: Response<UpdatePaymentIntentMutation.Data>) {
-                    response.data?.updateMyPaymentIntent?.fragments?.paymentIntent?.let {
-                        callback.invoke(null, it)
-                    } ?: run {
-                        callback.invoke(Exception(), null)
-                    }
+                    val paymentIntent =
+                        response.data?.updateMyPaymentIntent?.fragments?.paymentIntent
+                    paymentIntent.invokeCallback(response, callback)
                 }
 
                 override fun onFailure(e: ApolloException) {
@@ -150,11 +138,8 @@ class PaymentDataSourceImpl @Inject constructor(private val apolloClient: Apollo
             response.enqueue(object :
                 ApolloCall.Callback<GetMyPaymentIntentQuery.Data>() {
                 override fun onResponse(response: Response<GetMyPaymentIntentQuery.Data>) {
-                    response.data?.getMyPaymentIntent?.fragments?.paymentIntent?.let {
-                        callback.invoke(null, it)
-                    } ?: run {
-                        callback.invoke(Exception(), null)
-                    }
+                    val paymentIntent = response.data?.getMyPaymentIntent?.fragments?.paymentIntent
+                    paymentIntent.invokeCallback(response, callback)
                 }
 
                 override fun onFailure(e: ApolloException) {
@@ -175,11 +160,9 @@ class PaymentDataSourceImpl @Inject constructor(private val apolloClient: Apollo
             response.enqueue(object :
                 ApolloCall.Callback<DeleteMyPaymentSourceMutation.Data>() {
                 override fun onResponse(response: Response<DeleteMyPaymentSourceMutation.Data>) {
-                    response.data?.deleteMyPaymentSource?.fragments?.fragmentPaymentSource?.let {
-                        callback.invoke(null, it.asModel)
-                    } ?: run {
-                        callback.invoke(Exception(), null)
-                    }
+                    val paymentSource =
+                        response.data?.deleteMyPaymentSource?.fragments?.fragmentPaymentSource?.asModel
+                    paymentSource.invokeCallback(response, callback)
                 }
 
                 override fun onFailure(e: ApolloException) {

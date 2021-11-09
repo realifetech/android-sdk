@@ -2,6 +2,7 @@ package com.realifetech.sdk.sell.payment.data
 
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
@@ -9,24 +10,26 @@ import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.*
 import com.realifetech.GetMyPaymentSourcesQuery.Data
+import com.realifetech.fragment.PaymentIntent
 import com.realifetech.sdk.core.data.model.payment.model.PaymentSource
 import com.realifetech.sdk.core.data.model.payment.model.asModel
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntent
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntentInput
 import com.realifetech.sdk.sell.payment.mocks.PaymentIntentMocks.paymentIntentUpdateInput
-import com.realifetech.sdk.sell.payment.mocks.PaymentSourcesMocks.paymentSource
-import com.realifetech.sdk.sell.payment.mocks.PaymentSourcesMocks.paymentSources
-import com.realifetech.fragment.PaymentIntent
 import com.realifetech.sdk.sell.payment.mocks.PaymentSourcesMocks.emptyPaymentSources
+import com.realifetech.sdk.sell.payment.mocks.PaymentSourcesMocks.paymentSource
 import com.realifetech.sdk.sell.payment.mocks.PaymentSourcesMocks.paymentSourceInput
+import com.realifetech.sdk.sell.payment.mocks.PaymentSourcesMocks.paymentSources
+import com.realifetech.sdk.util.Constants
+import com.realifetech.sdk.util.Constants.ERROR_MESSAGE
 import io.mockk.CapturingSlot
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.any
@@ -89,7 +92,25 @@ class PaymentDataSourceTest {
         // When
         paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
             // Then
-            Assert.assertEquals(response, paymentIntent)
+            assertEquals(null, error)
+            assertEquals(paymentIntent, response)
+        }
+    }
+
+    @Test
+    fun `get My Payment Intent  returns error`() = runBlocking {
+        //Given
+        every {
+            getPaymentData.data?.getMyPaymentIntent?.fragments?.paymentIntent
+        } returns paymentIntent
+
+        getPaymentIntentSuccessAnswer(errors = Constants.errors)
+        // When
+        paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
+            // Then
+            assertTrue(error is RuntimeException)
+            assertEquals(ERROR_MESSAGE, error?.message)
+            assertEquals(null, response)
         }
     }
 
@@ -106,7 +127,7 @@ class PaymentDataSourceTest {
         paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
             //Then
             assert(error is ApolloHttpException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -124,7 +145,7 @@ class PaymentDataSourceTest {
         paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
             // Then
             assert(error is ApolloException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -134,8 +155,8 @@ class PaymentDataSourceTest {
         getPaymentIntentSuccessAnswer()
         val callback = { error: Exception?, response: PaymentIntent? ->
             // Then
-            assert(error is Exception)
-            Assert.assertSame(null, response)
+            assertEquals(null, error)
+            assertEquals(null, response)
         }
         // When
         //Null fragments
@@ -168,7 +189,8 @@ class PaymentDataSourceTest {
         }
     }
 
-    private fun getPaymentIntentSuccessAnswer() {
+    private fun getPaymentIntentSuccessAnswer(errors: List<Error>? = null) {
+        every { getPaymentData.errors } returns errors
         every {
             apolloClient.query(GetMyPaymentIntentQuery(PAYMENT_INTENT_ID)).toBuilder()
                 .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY).build()
@@ -190,8 +212,26 @@ class PaymentDataSourceTest {
             PAYMENT_INTENT_ID
         ) { error, response ->
             // Then
-            Assert.assertEquals(null, error)
-            Assert.assertEquals(response, paymentSource.asModel)
+            assertEquals(null, error)
+            assertEquals(response, paymentSource.asModel)
+        }
+    }
+
+    @Test
+    fun `delete Payment Source returns error`() = runBlocking {
+        //Given
+        every {
+            deletePaymentSourceData.data?.deleteMyPaymentSource?.fragments?.fragmentPaymentSource
+        } returns paymentSource
+        deletePaymentSourceSuccessAnswer(errors = Constants.errors)
+        // When
+        paymentDataSource.deleteMyPaymentSource(
+            PAYMENT_INTENT_ID
+        ) { error, response ->
+            // Then
+            assertTrue(error is RuntimeException)
+            assertEquals(ERROR_MESSAGE, error?.message)
+            assertEquals(null, response)
         }
     }
 
@@ -208,7 +248,7 @@ class PaymentDataSourceTest {
         ) { error, response ->
             //Then
             assert(error is ApolloHttpException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -231,7 +271,7 @@ class PaymentDataSourceTest {
         ) { error, response ->
             // Then
             assert(error is ApolloException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -240,8 +280,8 @@ class PaymentDataSourceTest {
         // Given
         deletePaymentSourceSuccessAnswer()
         val callback = { error: Exception?, response: PaymentSource? ->
-            assert(error is Exception)
-            Assert.assertSame(null, response)
+            assertEquals(null, error)
+            assertEquals(null, response)
         }
         // When
         //Null fragments
@@ -288,7 +328,8 @@ class PaymentDataSourceTest {
 
     }
 
-    private fun deletePaymentSourceSuccessAnswer() {
+    private fun deletePaymentSourceSuccessAnswer(errors: List<Error>? = null) {
+        every { deletePaymentSourceData.errors } returns errors
         every {
             apolloClient.mutate(
                 DeleteMyPaymentSourceMutation(
@@ -314,7 +355,27 @@ class PaymentDataSourceTest {
             paymentIntentUpdateInput
         ) { error, response ->
             // Then
-            Assert.assertEquals(response, paymentIntent)
+            assertEquals(null, error)
+            assertEquals(paymentIntent, response)
+        }
+    }
+
+    @Test
+    fun `update Payment Intent returns error`() = runBlocking {
+        //Given
+        every {
+            updatePaymentData.data?.updateMyPaymentIntent?.fragments?.paymentIntent
+        } returns paymentIntent
+        updatePaymentIntentSuccessAnswer(Constants.errors)
+        // When
+        paymentDataSource.updatePaymentIntent(
+            PAYMENT_INTENT_ID,
+            paymentIntentUpdateInput
+        ) { error, response ->
+            // Then
+            assertTrue(error is RuntimeException)
+            assertEquals(ERROR_MESSAGE, error?.message)
+            assertEquals(null, response)
         }
     }
 
@@ -332,7 +393,7 @@ class PaymentDataSourceTest {
         ) { error, response ->
             //Then
             assert(error is ApolloHttpException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -357,7 +418,7 @@ class PaymentDataSourceTest {
         ) { error, response ->
             // Then
             assert(error is ApolloException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -366,8 +427,9 @@ class PaymentDataSourceTest {
         // Given
         updatePaymentIntentSuccessAnswer()
         val callback = { error: Exception?, response: PaymentIntent? ->
-            assert(error is Exception)
-            Assert.assertSame(null, response)
+
+            assertSame(null, error)
+            assertSame(null, response)
         }
         // When
         //Null fragments
@@ -418,7 +480,8 @@ class PaymentDataSourceTest {
 //        verifyNull(callback, updatePaymentData.data)
     }
 
-    private fun updatePaymentIntentSuccessAnswer() {
+    private fun updatePaymentIntentSuccessAnswer(errors: List<Error>? = null) {
+        every { updatePaymentData.errors } returns errors
         every {
             apolloClient.mutate(
                 UpdatePaymentIntentMutation(
@@ -444,7 +507,25 @@ class PaymentDataSourceTest {
             paymentIntentInput
         ) { error, response ->
             // Then
-            Assert.assertEquals(response, paymentIntent)
+            assertEquals(response, paymentIntent)
+        }
+    }
+
+    @Test
+    fun `create Payment Intent error`() = runBlocking {
+        //Given
+        every {
+            createPaymentData.data?.createMyPaymentIntent?.fragments?.paymentIntent
+        } returns paymentIntent
+        createPaymentIntentSuccessAnswer(errors = listOf(Error(ERROR_MESSAGE)))
+        // When
+        paymentDataSource.createPaymentIntent(
+            paymentIntentInput
+        ) { error, response ->
+            // Then
+            assertTrue(error is RuntimeException)
+            assertEquals(ERROR_MESSAGE, error?.message)
+            assertEquals(null, response)
         }
     }
 
@@ -461,7 +542,7 @@ class PaymentDataSourceTest {
         ) { error, response ->
             //Then
             assert(error is ApolloHttpException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -484,7 +565,7 @@ class PaymentDataSourceTest {
         ) { error, response ->
             // Then
             assert(error is ApolloException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -493,8 +574,8 @@ class PaymentDataSourceTest {
         // Given
         createPaymentIntentSuccessAnswer()
         val callback = { error: Exception?, response: PaymentIntent? ->
-            assert(error is Exception)
-            Assert.assertSame(null, response)
+            assertEquals(null, error)
+            assertSame(null, response)
         }
         // When
         //Null fragments
@@ -541,7 +622,8 @@ class PaymentDataSourceTest {
 //        verifyNull(callback, updatePaymentData.data)
     }
 
-    private fun createPaymentIntentSuccessAnswer() {
+    private fun createPaymentIntentSuccessAnswer(errors: List<Error>? = null) {
+        every { createPaymentData.errors } returns errors
         every {
             apolloClient.mutate(
                 CreateMyPaymentIntentMutation(
@@ -566,7 +648,7 @@ class PaymentDataSourceTest {
             paymentSourceInput
         ) { error, response ->
             // Then
-            Assert.assertEquals(response, paymentSource.asModel)
+            assertEquals(response, paymentSource.asModel)
         }
     }
 
@@ -583,7 +665,7 @@ class PaymentDataSourceTest {
         ) { error, response ->
             //Then
             assert(error is ApolloHttpException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -606,7 +688,7 @@ class PaymentDataSourceTest {
         ) { error, response ->
             // Then
             assert(error is ApolloException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -615,8 +697,8 @@ class PaymentDataSourceTest {
         // Given
         addPaymentSourceSuccessAnswer()
         val callback = { error: Exception?, response: PaymentSource? ->
-            assert(error is Exception)
-            Assert.assertSame(null, response)
+            assertEquals(null, error)
+            assertEquals(null, response)
         }
         // When
         //Null fragments
@@ -663,7 +745,8 @@ class PaymentDataSourceTest {
 
     }
 
-    private fun addPaymentSourceSuccessAnswer() {
+    private fun addPaymentSourceSuccessAnswer(errors: List<Error>? = null) {
+        every { addPaymentSourceData.errors } returns errors
         every {
             apolloClient.mutate(AddPaymentSourceToMyWalletMutation(paymentSourceInput))
                 .enqueue(capture(addPaymentSourceSlot))
@@ -687,12 +770,33 @@ class PaymentDataSourceTest {
             PAGE_SIZE, PAGE
         ) { error, response ->
             // Then
-            Assert.assertEquals(
+            assertEquals(
                 response, PaginatedObject(
                     paymentSources.map { it.asModel },
                     NEXT_PAGE
                 )
             )
+        }
+    }
+
+    @Test
+    fun `get Payment Sources returns error`() = runBlocking {
+        //Given
+        every {
+            getPaymentSourcesData.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.edges
+        } returns paymentSources
+        every {
+            getPaymentSourcesData.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.nextPage
+        } returns NEXT_PAGE
+        getPaymentSourceSuccessAnswer(Constants.errors)
+        // When
+        paymentDataSource.getMyPaymentSources(
+            PAGE_SIZE, PAGE
+        ) { error, response ->
+            // Then
+            assertTrue(error is RuntimeException)
+            assertEquals(ERROR_MESSAGE, error?.message)
+            assertEquals(null, response)
         }
     }
 
@@ -710,7 +814,7 @@ class PaymentDataSourceTest {
         ) { error, response ->
             //Then
             assert(error is ApolloHttpException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -737,7 +841,7 @@ class PaymentDataSourceTest {
         ) { error, response ->
             // Then
             assert(error is ApolloException)
-            Assert.assertEquals(null, response)
+            assertEquals(null, response)
         }
     }
 
@@ -746,8 +850,8 @@ class PaymentDataSourceTest {
         // Given
         getPaymentSourceSuccessAnswer()
         val callback = { error: Exception?, response: PaginatedObject<PaymentSource?>? ->
-            assert(error is Exception)
-            Assert.assertSame(null, response)
+            assertEquals(null, error)
+            assertEquals(null, response)
         }
         // When
         //Null Edges
@@ -785,13 +889,13 @@ class PaymentDataSourceTest {
             PAGE
         ) { error, response ->
             // Then
-            Assert.assertEquals(
+            assertEquals(
                 PaginatedObject(
                     emptyPaymentSources.map { it?.asModel },
                     null
                 ), response
             )
-            Assert.assertEquals(null, error)
+            assertEquals(null, error)
         }
         every {
             getPaymentSourcesData.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.edges
@@ -801,13 +905,13 @@ class PaymentDataSourceTest {
             PAGE
         ) { error, response ->
             // Then
-            Assert.assertEquals(
+            assertEquals(
                 PaginatedObject<PaymentSource?>(
                     null,
                     null
                 ), response
             )
-            Assert.assertEquals(null, error)
+            assertEquals(null, error)
         }
         //Null getMyPaymentSources
         every {
@@ -834,7 +938,8 @@ class PaymentDataSourceTest {
 
     }
 
-    private fun getPaymentSourceSuccessAnswer() {
+    private fun getPaymentSourceSuccessAnswer(errors: List<Error>? = null) {
+        every { getPaymentSourcesData.errors } returns errors
         every {
             apolloClient.query(GetMyPaymentSourcesQuery(PAGE_SIZE, Input.fromNullable(PAGE)))
                 .toBuilder()
