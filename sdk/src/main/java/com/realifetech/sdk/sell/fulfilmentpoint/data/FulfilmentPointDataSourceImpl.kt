@@ -18,7 +18,9 @@ import com.realifetech.sdk.core.data.model.fulfilmentPoint.asModel
 import com.realifetech.sdk.core.data.model.shared.`object`.FilterParamWrapper
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.core.data.model.shared.`object`.asInput
+import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.core.utils.extractResponse
+import com.realifetech.sdk.core.utils.invokeCallback
 import com.realifetech.type.FulfilmentPointFilter
 import javax.inject.Inject
 
@@ -84,10 +86,9 @@ class FulfilmentPointDataSourceImpl @Inject constructor(private val apolloClient
                     .build()
             response.enqueue(object : ApolloCall.Callback<GetFulfilmentPointByIdQuery.Data>() {
                 override fun onResponse(response: Response<GetFulfilmentPointByIdQuery.Data>) {
-                    callback.invoke(
-                        null,
+                    val fulfilmentPoint =
                         response.data?.getFulfilmentPoint?.fragments?.fragmentFulfilmentPoint?.asModel
-                    )
+                    fulfilmentPoint.invokeCallback(response, callback)
                 }
 
                 override fun onFailure(e: ApolloException) {
