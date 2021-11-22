@@ -13,13 +13,13 @@ import javax.inject.Inject
 abstract class BaseRealifetech {
 
     @Inject
-    internal  lateinit var generalInstance: General
+    internal lateinit var generalInstance: General
 
     @Inject
     internal lateinit var contentInstance: Content
 
     @Inject
-    internal  lateinit var communicateInstance: Communicate
+    internal lateinit var communicateInstance: Communicate
 
     @Inject
     internal lateinit var audiencesInstance: Audiences
@@ -28,7 +28,7 @@ abstract class BaseRealifetech {
     internal lateinit var analyticsInstance: Analytics
 
     @Inject
-   internal lateinit var sellInstance: Sell
+    internal lateinit var sellInstance: Sell
 
     @Inject
     internal lateinit var apolloClient: ApolloClient

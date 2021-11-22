@@ -40,7 +40,7 @@ class Analytics(
      * In case if there was an error, the event will be saved in the [storage], and the [retryPolicy] will be called, for
      * new attempts of sending pending events.
      */
-     fun logEvent(
+    fun logEvent(
         type: String,
         action: String,
         new: Map<String, Any>?,
