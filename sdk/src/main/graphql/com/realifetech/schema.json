@@ -76,6 +76,33 @@
               "deprecationReason": null
             },
             {
+              "name": "getDeviceBelongsToAudience",
+              "description": null,
+              "args": [
+                {
+                  "name": "externalAudienceId",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "getNewsArticles",
               "description": null,
               "args": [
@@ -1625,8 +1652,8 @@
                 "name": "Boolean",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Field is deprecated!. Use getDeviceBelongsToAudience"
             }
           ],
           "inputFields": null,
@@ -7679,6 +7706,12 @@
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "nb",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null
@@ -11055,6 +11088,12 @@
             },
             {
               "name": "REFUND_REQUESTED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "PAYMENT_ERROR",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -14538,9 +14577,9 @@
   "extensions": {
     "tracing": {
       "version": 1,
-      "startTime": "2021-11-01T14:53:27.519Z",
-      "endTime": "2021-11-01T14:53:27.553Z",
-      "duration": 34349668,
+      "startTime": "2021-11-22T12:26:27.424Z",
+      "endTime": "2021-11-22T12:26:27.449Z",
+      "duration": 24778323,
       "execution": {
         "resolvers": []
       }
