@@ -23,6 +23,7 @@ object PaymentIntentMocks {
         null,
         false,
         null,
+        null,
         null
     )
     val paymentIntentWrapper = PaymentIntentWrapper(
