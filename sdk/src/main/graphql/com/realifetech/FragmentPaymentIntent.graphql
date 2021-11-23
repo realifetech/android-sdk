@@ -40,4 +40,5 @@ fragment PaymentIntent on PaymentIntent {
         type
         url
     }
+    lastPaymentError
 }

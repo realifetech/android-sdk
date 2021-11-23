@@ -53,13 +53,8 @@ class GraphQlModule {
         val apolloClient = ApolloClient.builder()
             .serverUrl(configurationStorage.graphApiUrl)
             .okHttpClient(okHttpClient)
-        apolloClient.normalizedCache(
-            SqlNormalizedCacheFactory(
-                context,
-                APOLLO_DB
-            )
-        ).defaultResponseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
-
+        apolloClient.normalizedCache(SqlNormalizedCacheFactory(context, APOLLO_DB))
+            .defaultResponseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
         return apolloClient.build()
     }
 
