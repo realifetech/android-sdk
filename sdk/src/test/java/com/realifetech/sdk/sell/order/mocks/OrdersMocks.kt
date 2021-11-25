@@ -7,12 +7,14 @@ import com.realifetech.sdk.core.data.model.order.wrapper.OrderUpdateWrapper
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.type.CollectionPreferenceType
 import com.realifetech.type.OrderStatus
+import com.realifetech.type.PaymentOrderStatus
 
 object OrdersMocks {
 
     val order1 = generateOrder("1")
     private val order2 = generateOrder("2")
-    val orderUpdateWrapper = OrderUpdateWrapper(null, CollectionPreferenceType.ASAP, null)
+    val orderUpdateWrapper =
+        OrderUpdateWrapper(null, CollectionPreferenceType.ASAP, null, PaymentOrderStatus.SUCCEED)
     val ordersResponse = GetMyOrdersQuery.GetMyOrders(
         "", listOf(
             generateOrderEdge(order1), generateOrderEdge(order2)

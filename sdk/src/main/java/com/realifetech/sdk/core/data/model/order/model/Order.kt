@@ -5,6 +5,8 @@ import com.realifetech.sdk.core.data.model.fulfilmentPoint.FulfilmentPoint
 import com.realifetech.sdk.core.data.model.shared.`object`.TimeSlot
 import com.realifetech.type.CollectionPreferenceType
 import com.realifetech.type.OrderStatus
+import com.realifetech.type.PaymentOrderStatus
+import com.realifetech.type.PaymentStatus
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -15,7 +17,7 @@ data class Order(
     val collectionDate: String?,
     val status: OrderStatus?,
     val state: OrderState?,
-    val paymentStatus: String?,
+    val paymentStatus: PaymentOrderStatus?,
     val grossAmount: Int?,
     val discountAmount: Int?,
     val netAmount: Int?,

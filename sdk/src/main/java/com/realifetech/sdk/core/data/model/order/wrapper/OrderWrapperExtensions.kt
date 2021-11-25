@@ -9,5 +9,6 @@ val OrderUpdateWrapper.asInput
         OrderUpdateInput(
             Input.optional(status),
             Input.optional(collectionPreferenceType),
-            Input.optional(checkInTime)
+            Input.optional(checkInTime),
+            Input.optional(paymentStatus)
         ).toInput()

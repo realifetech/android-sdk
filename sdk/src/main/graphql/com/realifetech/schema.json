@@ -9689,8 +9689,8 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "PaymentOrderStatus",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -10740,6 +10740,16 @@
                 "ofType": null
               },
               "defaultValue": null
+            },
+            {
+              "name": "paymentStatus",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "PaymentOrderStatus",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -11094,6 +11104,35 @@
             },
             {
               "name": "PAYMENT_ERROR",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "PaymentOrderStatus",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "STANDING",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SUCCEED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "DECLINED",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -14577,9 +14616,9 @@
   "extensions": {
     "tracing": {
       "version": 1,
-      "startTime": "2021-11-22T12:26:27.424Z",
-      "endTime": "2021-11-22T12:26:27.449Z",
-      "duration": 24778323,
+      "startTime": "2021-11-25T16:18:11.705Z",
+      "endTime": "2021-11-25T16:18:11.731Z",
+      "duration": 26132496,
       "execution": {
         "resolvers": []
       }
