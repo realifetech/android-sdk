@@ -144,7 +144,7 @@ class WidgetsDataSourceImplTest {
         every {
             apolloClient.query(GetWidgetsByScreenTypeQuery(WidgetMocks.screenType, PAGE_SIZE, PAGE))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(widgetByTypeSlot))
         } answers {
             if (shouldFail) {
@@ -260,7 +260,7 @@ class WidgetsDataSourceImplTest {
         every {
             apolloClient.query(GetWidgetsByScreenIdQuery(WidgetMocks.screenId, PAGE_SIZE, PAGE))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(widgetByIdSlot))
         } answers {
             if (shouldFail) {

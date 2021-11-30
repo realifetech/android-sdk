@@ -21,7 +21,7 @@ class ScreenDataSourceImpl(private val apolloClient: ApolloClient) :
         try {
             val response = apolloClient.query(GetScreenByScreenTypeQuery(screenType))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetScreenByScreenTypeQuery.Data>() {
                 override fun onResponse(response: Response<GetScreenByScreenTypeQuery.Data>) {
@@ -49,7 +49,7 @@ class ScreenDataSourceImpl(private val apolloClient: ApolloClient) :
         try {
             val response = apolloClient.query(GetScreenByIdQuery(id))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetScreenByIdQuery.Data>() {
                 override fun onResponse(response: Response<GetScreenByIdQuery.Data>) {
