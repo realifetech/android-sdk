@@ -54,7 +54,7 @@ class GraphQlModule {
             .serverUrl(configurationStorage.graphApiUrl)
             .okHttpClient(okHttpClient)
         apolloClient.normalizedCache(SqlNormalizedCacheFactory(context, APOLLO_DB))
-            .defaultResponseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+            .defaultResponseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
         return apolloClient.build()
     }
 
