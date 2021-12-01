@@ -8,9 +8,7 @@ import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.data.database.preferences.platform.PlatformPreferences
 import com.realifetech.sdk.core.domain.OAuthManager
-import com.realifetech.sdk.core.network.DeviceIdInterceptor
-import com.realifetech.sdk.core.network.OAuth2AuthenticationInterceptor
-import com.realifetech.sdk.core.network.OAuth2Authenticator
+import com.realifetech.sdk.core.network.*
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
@@ -34,8 +32,9 @@ class GraphQlModule {
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
             .addInterceptor(OAuth2AuthenticationInterceptor(authTokenStorage, platformPreferences))
-            .authenticator(OAuth2Authenticator(oAuthManager))
             .addInterceptor(deviceIdInterceptor)
+            .authenticator(OAuth2Authenticator(oAuthManager))
+            .addNetworkInterceptor(UnauthenticatedCaseParserInterceptor())
             .addInterceptor(loggingInterceptor)
             .build()
 
@@ -52,6 +51,7 @@ class GraphQlModule {
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         val apolloClient = ApolloClient.builder()
             .serverUrl(configurationStorage.graphApiUrl)
+            .addApplicationInterceptor(OAuth2ApolloInterceptor())
             .okHttpClient(okHttpClient)
         apolloClient.normalizedCache(SqlNormalizedCacheFactory(context, APOLLO_DB))
             .defaultResponseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
