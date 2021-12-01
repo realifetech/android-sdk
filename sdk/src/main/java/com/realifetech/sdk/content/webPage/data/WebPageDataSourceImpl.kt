@@ -20,7 +20,7 @@ class WebPageDataSourceImpl (private val apolloClient: ApolloClient) :
         try {
             val response = apolloClient.query(GetWebPageByTypeQuery(type))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetWebPageByTypeQuery.Data>() {
                 override fun onResponse(response: Response<GetWebPageByTypeQuery.Data>) {

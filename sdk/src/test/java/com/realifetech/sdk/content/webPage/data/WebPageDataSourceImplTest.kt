@@ -84,7 +84,7 @@ class WebPageDataSourceImplTest {
     private fun getWebPageByTypeCall(shouldFail: Boolean = false) {
         every {
             apolloClient.query(GetWebPageByTypeQuery(WebPageMocks.webPageType)).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(webPageSlot))
         } answers {
             if (shouldFail) {

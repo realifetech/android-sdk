@@ -164,7 +164,7 @@ class FulfilmentPointDataSourceImplTest {
                     Input.optional(null)
                 )
             ).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(ffPointsSlot))
         } answers { ffPointsSlot.captured.onFailure(ApolloException("Error")) }
 
@@ -275,7 +275,7 @@ class FulfilmentPointDataSourceImplTest {
                     params = Input.optional(params?.map { it.asInput })
                 )
             ).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(ffPointsSlot))
         } answers { ffPointsSlot.captured.onResponse(ffPointsData) }
     }
@@ -351,7 +351,7 @@ class FulfilmentPointDataSourceImplTest {
                     Input.optional(null)
                 )
             ).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build().enqueue(capture(ffPointSlot))
         } answers { ffPointSlot.captured.onFailure(ApolloException("")) }
 
@@ -429,7 +429,7 @@ class FulfilmentPointDataSourceImplTest {
                     Input.optional(params?.map { it.asInput })
                 )
             ).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build().enqueue(capture(ffPointSlot))
         } answers { ffPointSlot.captured.onResponse(ffPointData) }
     }
@@ -515,7 +515,7 @@ class FulfilmentPointDataSourceImplTest {
             apolloClient.query(
                 GetFulfilmentPointCategoriesQuery(PAGE_SIZE, PAGE.toInput())
             ).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build().enqueue(capture(ffpCategoriesSlot))
         } answers {
             if (isFailure) {
@@ -607,7 +607,7 @@ class FulfilmentPointDataSourceImplTest {
             apolloClient.query(
                 GetFulfilmentPointCategoryByIdQuery(fulfilmentPointID)
             ).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build().enqueue(capture(ffpCategorySlot))
         } answers {
             if (isFailure) {

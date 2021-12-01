@@ -44,7 +44,7 @@ class FulfilmentPointDataSourceImpl @Inject constructor(private val apolloClient
                 )
             )
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetFulfilmentPointsQuery.Data>() {
                 override fun onResponse(response: Response<GetFulfilmentPointsQuery.Data>) {
@@ -82,7 +82,7 @@ class FulfilmentPointDataSourceImpl @Inject constructor(private val apolloClient
                     )
                 )
                     .toBuilder()
-                    .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                    .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                     .build()
             response.enqueue(object : ApolloCall.Callback<GetFulfilmentPointByIdQuery.Data>() {
                 override fun onResponse(response: Response<GetFulfilmentPointByIdQuery.Data>) {
@@ -114,7 +114,7 @@ class FulfilmentPointDataSourceImpl @Inject constructor(private val apolloClient
                 )
             )
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
             response.enqueue(object :
                 ApolloCall.Callback<GetFulfilmentPointCategoriesQuery.Data>() {
@@ -146,7 +146,7 @@ class FulfilmentPointDataSourceImpl @Inject constructor(private val apolloClient
                 GetFulfilmentPointCategoryByIdQuery(id)
             )
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
             response.enqueue(object :
                 ApolloCall.Callback<GetFulfilmentPointCategoryByIdQuery.Data>() {

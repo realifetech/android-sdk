@@ -39,7 +39,7 @@ class ProductDataSourceImpl @Inject constructor(private val apolloClient: Apollo
                     )
                 )
                     .toBuilder()
-                    .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                    .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                     .build()
             response.enqueue(object : ApolloCall.Callback<GetProductsQuery.Data>() {
                 override fun onResponse(response: Response<GetProductsQuery.Data>) {
@@ -74,7 +74,7 @@ class ProductDataSourceImpl @Inject constructor(private val apolloClient: Apollo
                     )
                 )
                     .toBuilder()
-                    .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                    .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                     .build()
             response.enqueue(object : ApolloCall.Callback<GetProductByIdQuery.Data>() {
                 override fun onResponse(response: Response<GetProductByIdQuery.Data>) {

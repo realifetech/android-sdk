@@ -28,7 +28,7 @@ class OrderBackendDataSource @Inject constructor(private val apolloClient: Apoll
         try {
             val response = apolloClient.query(GetMyOrdersQuery(pageSize, page.toInput()))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetMyOrdersQuery.Data>() {
                 override fun onResponse(response: Response<GetMyOrdersQuery.Data>) {
@@ -57,7 +57,7 @@ class OrderBackendDataSource @Inject constructor(private val apolloClient: Apoll
         try {
             val response = apolloClient.query(GetMyOrderByIdQuery(id))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetMyOrderByIdQuery.Data>() {
                 override fun onResponse(response: Response<GetMyOrderByIdQuery.Data>) {

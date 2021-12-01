@@ -98,7 +98,7 @@ class OrderBackendDataSourceTest {
         //Given
         every {
             apolloClient.query(GetMyOrdersQuery(PAGE_SIZE, PAGE.toInput())).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(getOrdersCapture))
         } answers { getOrdersCapture.captured.onFailure(ApolloException("Error")) }
         // When
@@ -202,7 +202,7 @@ class OrderBackendDataSourceTest {
         //Given
         every {
             apolloClient.query(GetMyOrderByIdQuery(ORDER_ID)).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(getOrderCapture))
         } answers { getOrderCapture.captured.onFailure(ApolloException("Error")) }
         // When
@@ -393,7 +393,7 @@ class OrderBackendDataSourceTest {
     private fun getOrdersSuccessAnswer() {
         every {
             apolloClient.query(GetMyOrdersQuery(PAGE_SIZE, PAGE.toInput())).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(getOrdersCapture))
         } answers {
             getOrdersCapture.captured.onResponse(getOrdersData)
@@ -404,7 +404,7 @@ class OrderBackendDataSourceTest {
         every {
             apolloClient.query(GetMyOrderByIdQuery(ORDER_ID))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
                 .enqueue(capture(getOrderCapture))
         } answers {

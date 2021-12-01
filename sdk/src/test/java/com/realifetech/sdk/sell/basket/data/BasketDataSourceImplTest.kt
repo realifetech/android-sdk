@@ -119,7 +119,7 @@ class BasketDataSourceImplTest {
     private fun getBasketSuccessAnswer() {
         every {
             apolloClient.query(GetMyBasketQuery()).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(getBasketSlot))
         } answers {
             getBasketSlot.captured.onResponse(getMyBasketData)

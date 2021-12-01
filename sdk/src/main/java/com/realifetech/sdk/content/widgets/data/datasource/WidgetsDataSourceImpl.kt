@@ -61,7 +61,7 @@ class WidgetsDataSourceImpl(private val apolloClient: ApolloClient) :
         try {
             val response = apolloClient.query(GetWidgetsByScreenIdQuery(id, pageSize, page))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetWidgetsByScreenIdQuery.Data>() {
                 override fun onResponse(response: Response<GetWidgetsByScreenIdQuery.Data>) {
