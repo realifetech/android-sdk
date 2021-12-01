@@ -5,6 +5,8 @@ import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.realifetech.sdk.sell.utils.MainCoroutineRule
 import com.realifetech.sdk.sell.weboredering.WebOrderingViewModel.ScreenState
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -14,9 +16,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mock
-import org.mockito.Mockito.mock
-import org.mockito.MockitoAnnotations
 
 @ExperimentalCoroutinesApi
 class WebOrderingViewModelTest {
@@ -28,18 +27,16 @@ class WebOrderingViewModelTest {
 
     private lateinit var viewModel: WebOrderingViewModel
 
-    @Mock
+    @MockK
     private lateinit var view: View
 
-    @Mock
+    @MockK
     private lateinit var menuItem: MenuItem
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
+        MockKAnnotations.init(this, relaxed = true)
         viewModel = WebOrderingViewModel()
-        view = mock(View::class.java)
-
     }
 
 

@@ -28,6 +28,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.any
 
 class ProductDataSourceImplTest {
 
@@ -89,7 +90,7 @@ class ProductDataSourceImplTest {
     fun `get products throws exception`() {
         // Given
         every { productsData.data?.getProducts } throws ApolloHttpException(
-            ArgumentMatchers.any()
+            any()
         )
         //When
         getProductsCall(filters = filters, params = params)
@@ -107,7 +108,7 @@ class ProductDataSourceImplTest {
     fun `get products returns failure`() {
         // Given
         every { productsData.data?.getProducts } throws ApolloHttpException(
-            ArgumentMatchers.any()
+            any()
         )
         //When
         getProductsCall(true, filters = filters, params = params)
@@ -161,7 +162,7 @@ class ProductDataSourceImplTest {
                 )
             )
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(productsSlot))
         } answers {
             if (shouldFail) {
@@ -211,7 +212,7 @@ class ProductDataSourceImplTest {
     fun `get Product By Id throws exception`() {
         // Given
         every { productByIdData.data?.getProduct?.fragments?.fragmentProduct } throws ApolloHttpException(
-            ArgumentMatchers.any()
+            any()
         )
         //When
         getProductByIdCall(params)
@@ -230,7 +231,7 @@ class ProductDataSourceImplTest {
     fun `get Product By Id returns failure`() {
         // Given
         every { productByIdData.data?.getProduct?.fragments?.fragmentProduct } throws ApolloHttpException(
-            ArgumentMatchers.any()
+            any()
         )
         //When
         getProductByIdCall(params, true)
@@ -299,7 +300,7 @@ class ProductDataSourceImplTest {
                 )
             )
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(productByIdSlot))
         } answers {
             if (shouldFail) {
