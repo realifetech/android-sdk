@@ -67,7 +67,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
+    api "com.squareup.okhttp3:logging-interceptor:4.9.0"
     implementation "com.google.android.gms:play-services-ads:16.0.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.preference:preference-ktx:1.1.1"
@@ -100,8 +100,8 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.ext.coroutines_version"
-    testImplementation"com.squareup.okhttp3:mockwebserver:4.9.2"
-
+    testImplementation"com.squareup.okhttp3:mockwebserver:4.9.0"
+    testImplementation 'org.json:json:20201115'
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test:rules:1.4.0'
 }

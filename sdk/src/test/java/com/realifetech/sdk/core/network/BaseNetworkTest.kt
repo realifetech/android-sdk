@@ -43,8 +43,14 @@ abstract class BaseNetworkTest {
         val authenticator = OAuth2Authenticator(oAuthManager)
         val interceptor = OAuth2AuthenticationInterceptor(authTokenStorage, platformPreferences)
         val deviceInterceptor = DeviceIdInterceptor(configurationStorage)
+        val unauthenticatedCaseParserInterceptor = UnauthenticatedCaseParserInterceptor()
         realifetechApiV3Service = provideService(
-            server, interceptor, authenticator, deviceInterceptor, listOfResponses
+            server,
+            interceptor,
+            authenticator,
+            deviceInterceptor,
+            unauthenticatedCaseParserInterceptor,
+            listOfResponses
         )
     }
 
@@ -53,6 +59,7 @@ abstract class BaseNetworkTest {
         interceptor: OAuth2AuthenticationInterceptor,
         authenticator: OAuth2Authenticator,
         deviceInterceptor: DeviceIdInterceptor,
+        unauthenticatedCaseParserInterceptor: UnauthenticatedCaseParserInterceptor,
         mockResponses: List<MockResponse>
     ): RealifetechApiV3Service {
         for (mockResponse in mockResponses) {
@@ -66,6 +73,7 @@ abstract class BaseNetworkTest {
             .addInterceptor(interceptor)
             .authenticator(authenticator)
             .addInterceptor(deviceInterceptor)
+            .addNetworkInterceptor(unauthenticatedCaseParserInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
         return Retrofit.Builder()

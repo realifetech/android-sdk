@@ -26,6 +26,7 @@ object NetworkMocks {
     val deviceRegister = DeviceRegisterResponse(200, "Success", "Noice")
     val deviceResponse = convertToJson(deviceRegister)
     val tokenResponse = convertToJson(rltToken)
+    val unauthenticatedBody="{\"errors\":[{\"message\":\"Context creation failed: Access denied: Invalid auth token\",\"extensions\":{\"code\":\"UNAUTHENTICATED\",\"exception\":{\"stacktrace\":[\"AuthenticationError: Context creation failed: Access denied: Invalid auth token\",\"    at getContext (/usr/src/app/index.js:78:15)\",\"    at runMicrotasks (<anonymous>)\",\"    at processTicksAndRejections (internal/process/task_queues.js:95:5)\",\"    at async ApolloServer.context (/usr/src/app/index.js:70:16)\"]}}}]}\n"
     const val deviceId = "0ea67cc4-b6e9-42fb-a9d7-2578b8d2ade7:com.realifetech.sample"
     val notification = convertToJson(RegisterPushNotificationsResponse(true, "sup,bra?"))
 
