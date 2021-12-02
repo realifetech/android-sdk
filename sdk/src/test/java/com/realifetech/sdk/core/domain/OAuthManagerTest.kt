@@ -76,7 +76,7 @@ class OAuthManagerTest {
 
     @Test
     fun `ensure refresh token is not expired results success`() {
-        every { platformTokenStorage.rltToken?.isTokenExpired } returns false
+        every { platformTokenStorage.rltToken?.hasRefreshToken } returns false
         oAuthManager.ensureActive()
         verify(exactly = 0) {
             authApiLazyWrapper.get().refreshToken(

@@ -11,6 +11,7 @@ data class OAuthTokenResponse(
     @SerializedName("refresh_token") val refreshToken: String,
     @SerializedName("refresh_expiry") val refreshExpiry: Date?
 ) {
+    val hasRefreshToken = refreshToken.isNotBlank()
     val isTokenExpired: Boolean
         get() {
             refreshExpiry?.let {

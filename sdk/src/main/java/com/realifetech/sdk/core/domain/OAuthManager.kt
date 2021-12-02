@@ -28,7 +28,7 @@ class OAuthManager(
      */
     fun ensureActive() {
         platformTokenStorage.rltToken?.let {
-            if (!it.isTokenExpired) return
+            if (!it.hasRefreshToken) return
             requestRefreshTokenServer(it.refreshToken)
         } ?: run {
             if (!authTokenStorage.isTokenExpired) return
