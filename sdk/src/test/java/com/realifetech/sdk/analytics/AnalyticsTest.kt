@@ -5,7 +5,7 @@ import com.realifetech.sdk.analytics.data.model.AnalyticEventWrapper
 import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
 import com.realifetech.sdk.analytics.mocks.AnalyticsMocks
-import com.realifetech.sdk.core.utils.TimeUtil
+import com.realifetech.sdk.core.utils.DeviceCalendar
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.sell.utils.MainCoroutineRule
 import io.mockk.*
@@ -37,7 +37,7 @@ class AnalyticsTest {
     lateinit var analyticsEngine: AnalyticsEngine
 
     @RelaxedMockK
-    lateinit var timeUtil: TimeUtil
+    lateinit var deviceCalendar: DeviceCalendar
 
     @RelaxedMockK
     lateinit var general: General
@@ -55,12 +55,12 @@ class AnalyticsTest {
                 analyticsStorage,
                 general,
                 testDispatcher, testDispatcher,
-                timeUtil
+                deviceCalendar
             )
         eventResponse = mockk()
         captureSlot = CapturingSlot()
         pendingCaptureSlot = CapturingSlot()
-        every { timeUtil.currentTime } returns CURRENT_TIME
+        every { deviceCalendar.currentTime } returns CURRENT_TIME
 
     }
 

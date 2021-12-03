@@ -1,14 +1,15 @@
 package com.realifetech.sdk.core.data.datasource
 
 import com.realifetech.sdk.core.data.model.auth.OAuthTokenResponse
-import com.realifetech.sdk.core.mocks.AuthMocks.tokenBody
 import com.realifetech.sdk.core.mocks.AuthMocks.accessTokenInfo
 import com.realifetech.sdk.core.mocks.AuthMocks.refreshToken
+import com.realifetech.sdk.core.mocks.AuthMocks.resultExpiryTime
 import com.realifetech.sdk.core.mocks.AuthMocks.rltTokenResult
+import com.realifetech.sdk.core.mocks.AuthMocks.tokenBody
 import com.realifetech.sdk.core.mocks.NetworkMocks.expireAtMilliSeconds
 import com.realifetech.sdk.core.mocks.NetworkMocks.rltToken
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
-import com.realifetech.sdk.core.utils.TimeUtil
+import com.realifetech.sdk.core.utils.DeviceCalendar
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
@@ -17,6 +18,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
+import java.util.*
 
 class AuthApiDataSourceImplTest {
 
@@ -25,14 +27,14 @@ class AuthApiDataSourceImplTest {
     lateinit var authorizationApiNetwork: RealifetechApiV3Service
 
     @RelaxedMockK
-    lateinit var timeUtil: TimeUtil
+    lateinit var deviceCalendar: DeviceCalendar
     private lateinit var authApiDataSourceImpl: AuthApiDataSourceImpl
     private lateinit var response: Response<OAuthTokenResponse>
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        authApiDataSourceImpl = AuthApiDataSourceImpl(authorizationApiNetwork, timeUtil)
+        authApiDataSourceImpl = AuthApiDataSourceImpl(authorizationApiNetwork, deviceCalendar)
         response = mockk()
     }
 
@@ -43,7 +45,7 @@ class AuthApiDataSourceImplTest {
         } returns response
         every { response.isSuccessful } returns true
         every { response.body() } returns rltToken
-        every { timeUtil.currentTime } returns expireAtMilliSeconds
+        every { deviceCalendar.currentTime } returns expireAtMilliSeconds
         val result = authApiDataSourceImpl.getAccessToken(
             tokenBody.clientSecret,
             tokenBody.clientId
@@ -60,7 +62,7 @@ class AuthApiDataSourceImplTest {
         } returns response
         every { response.isSuccessful } returns true
         every { response.body() } returns null
-        every { timeUtil.currentTime } returns expireAtMilliSeconds
+        every { deviceCalendar.currentTime } returns expireAtMilliSeconds
         val result = authApiDataSourceImpl.getAccessToken(
             tokenBody.clientSecret,
             tokenBody.clientId
@@ -75,7 +77,7 @@ class AuthApiDataSourceImplTest {
         } returns response
         every { response.isSuccessful } returns true
         every { response.body() } returns rltToken
-        every { timeUtil.currentTime } returns expireAtMilliSeconds
+        every { deviceCalendar.time } returns Date(resultExpiryTime)
         val result = authApiDataSourceImpl.refreshToken(
             tokenBody.clientSecret,
             tokenBody.clientId,
@@ -83,8 +85,8 @@ class AuthApiDataSourceImplTest {
         )
         assertNotNull(result)
         assertEquals(rltTokenResult, result)
-        assertEquals(rltTokenResult.refreshExpiry,result?.refreshExpiry)
-        assertEquals(false,result?.isTokenExpired)
+        assertEquals(rltTokenResult.refreshExpiry, result?.refreshExpiry)
+        assertEquals(false, result?.isTokenExpired)
 
     }
 
@@ -95,7 +97,7 @@ class AuthApiDataSourceImplTest {
         } returns response
         every { response.isSuccessful } returns true
         every { response.body() } returns null
-        every { timeUtil.currentTime } returns expireAtMilliSeconds
+        every { deviceCalendar.currentTime } returns expireAtMilliSeconds
         val result = authApiDataSourceImpl.refreshToken(
             tokenBody.clientSecret,
             tokenBody.clientId,

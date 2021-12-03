@@ -17,13 +17,13 @@ object AuthMocks {
         Date(1633863600000L)
     )
     const val refreshToken = "refresh token"
-    private const val resultExpiryTime = 4112636410000L
+    const val resultExpiryTime = 4112636410000L
     val rltTokenResult =
         OAuthTokenResponse(
             accessToken,
             10,
             "Bearer",
-            "scope",
+            "",
             "refresh token",
             Date(resultExpiryTime)
         )

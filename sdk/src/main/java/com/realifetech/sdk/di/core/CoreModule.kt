@@ -8,7 +8,8 @@ import com.realifetech.sdk.core.data.datasource.AuthApiDataSource
 import com.realifetech.sdk.core.data.model.config.CoreConfiguration
 import com.realifetech.sdk.core.domain.OAuthManager
 import com.realifetech.sdk.core.utils.ColorPallet
-import com.realifetech.sdk.core.utils.TimeUtil
+import com.realifetech.sdk.core.utils.DeviceCalendar
+import com.realifetech.sdk.core.utils.DeviceCalendarWrapper
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
@@ -26,7 +27,7 @@ class CoreModule(private val context: Context, private val configuration: CoreCo
 
     @CoreScope
     @Provides
-    internal fun timeUtil(): TimeUtil = TimeUtil()
+    internal fun deviceCalendar(): DeviceCalendar = DeviceCalendarWrapper()
 
 
     @CoreScope

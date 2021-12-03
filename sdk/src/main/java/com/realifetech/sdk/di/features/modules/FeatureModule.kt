@@ -11,7 +11,7 @@ import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.ColorPallet
-import com.realifetech.sdk.core.utils.TimeUtil
+import com.realifetech.sdk.core.utils.DeviceCalendar
 import com.realifetech.sdk.di.features.FeatureScope
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.domain.DeviceRepository
@@ -84,7 +84,7 @@ object FeatureModule {
         analyticsEngine: AnalyticsEngine,
         analyticsStorage: AnalyticsStorage,
         general: General,
-        timeUtil: TimeUtil
+        deviceCalendar: DeviceCalendar
     ): Analytics =
         Analytics(
             analyticsEngine,
@@ -92,7 +92,7 @@ object FeatureModule {
             general,
             Dispatchers.IO,
             Dispatchers.Main,
-            timeUtil
+            deviceCalendar
         )
 
 }

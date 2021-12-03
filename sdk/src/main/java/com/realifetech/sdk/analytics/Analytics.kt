@@ -5,7 +5,7 @@ import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
 import com.realifetech.sdk.core.domain.LinearRetryPolicy
 import com.realifetech.sdk.core.domain.RetryPolicy
-import com.realifetech.sdk.core.utils.TimeUtil
+import com.realifetech.sdk.core.utils.DeviceCalendar
 import com.realifetech.sdk.general.General
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
@@ -19,7 +19,7 @@ class Analytics(
     private val general: General,
     private val dispatcherIO: CoroutineDispatcher,
     private val dispatcherMain: CoroutineDispatcher,
-    private val timeUtils: TimeUtil
+    private val timeUtils: DeviceCalendar
 ) {
 
     internal val retryPolicy: RetryPolicy = LinearRetryPolicy(RETRY_TIME_MILLISECONDS) {

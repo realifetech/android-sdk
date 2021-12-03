@@ -10,7 +10,7 @@ import com.realifetech.sdk.core.network.DeviceIdInterceptor
 import com.realifetech.sdk.core.network.OAuth2AuthenticationInterceptor
 import com.realifetech.sdk.core.network.OAuth2Authenticator
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
-import com.realifetech.sdk.core.utils.TimeUtil
+import com.realifetech.sdk.core.utils.DeviceCalendar
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -65,8 +65,8 @@ object RestClientV3Module {
     @Provides
     internal fun authenticationBackendApiDataSource(
         realifetechApiV3Service: RealifetechApiV3Service,
-        timeUtil: TimeUtil
+        deviceCalendar: DeviceCalendar
     ): AuthApiDataSource =
-        AuthApiDataSourceImpl(realifetechApiV3Service, timeUtil)
+        AuthApiDataSourceImpl(realifetechApiV3Service, deviceCalendar)
 
 }

@@ -5,14 +5,14 @@ import com.realifetech.sdk.core.data.model.token.AccessTokenBody
 import com.realifetech.sdk.core.data.model.token.AccessTokenInfo
 import com.realifetech.sdk.core.data.model.token.RefreshTokenBody
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
-import com.realifetech.sdk.core.utils.TimeUtil
+import com.realifetech.sdk.core.utils.DeviceCalendar
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AuthApiDataSourceImpl @Inject constructor(
     private val authorizationApiNetwork: RealifetechApiV3Service,
-    private val timeUtil: TimeUtil
+    private val deviceCalendar: DeviceCalendar
 ) :
     AuthApiDataSource {
     override fun getAccessToken(
@@ -24,7 +24,7 @@ class AuthApiDataSourceImpl @Inject constructor(
                 .getAuthToken(AccessTokenBody(clientSecret = clientSecret, clientId = clientId))
                 .execute().body()
         return if (responseBody != null) {
-            val timeNowMilliseconds = timeUtil.currentTime
+            val timeNowMilliseconds = deviceCalendar.currentTime
             val expireTimeInMilliseconds =
                 timeNowMilliseconds + TimeUnit.SECONDS.toMillis(responseBody.expiresIn.toLong())
             AccessTokenInfo(responseBody.accessToken, expireTimeInMilliseconds)
@@ -48,16 +48,17 @@ class AuthApiDataSourceImpl @Inject constructor(
                 )
             ).execute().body()
         tokenResponse?.let {
-            val timeNowMilliseconds = timeUtil.currentTime
-            val expireTimeInMilliseconds =
-                timeNowMilliseconds + TimeUnit.SECONDS.toMillis(it.expiresIn.toLong())
+            val calendar = deviceCalendar
+            calendar.add(Calendar.DAY_OF_YEAR, CAL_DAYS)
+            calendar.add(Calendar.HOUR_OF_DAY, CAL_HOURS)
+
             return OAuthTokenResponse(
                 it.accessToken,
                 it.expiresIn,
                 it.tokenType,
-                it.scope,
+                EMPTY,
                 it.refreshToken,
-                Date(expireTimeInMilliseconds)
+                calendar.time
             )
         }
         return null
@@ -65,5 +66,8 @@ class AuthApiDataSourceImpl @Inject constructor(
 
     companion object {
         private const val GRANT_TYPE_REFRESH_TOKEN = "refresh_token"
+        private const val CAL_HOURS = -2
+        private const val CAL_DAYS = 14
+        private const val EMPTY = ""
     }
 }
