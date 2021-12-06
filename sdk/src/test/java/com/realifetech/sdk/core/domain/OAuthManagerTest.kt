@@ -10,6 +10,7 @@ import com.realifetech.sdk.core.data.model.shared.translation.EMPTY
 import com.realifetech.sdk.core.mocks.AuthMocks.accessTokenInfo
 import com.realifetech.sdk.core.mocks.AuthMocks.expiredRltToken
 import com.realifetech.sdk.core.mocks.AuthMocks.refreshToken
+import com.realifetech.sdk.core.mocks.NetworkMocks.accessToken
 import com.realifetech.sdk.core.mocks.NetworkMocks.rltToken
 import dagger.Lazy
 import io.mockk.MockKAnnotations
@@ -61,6 +62,16 @@ class OAuthManagerTest {
     @Test
     fun `get Access Token returns AuthTokenStorage's accessToken while Platform accessToken is empty`() {
         every { platformTokenStorage.rltToken?.accessToken } returns EMPTY
+        every { platformTokenStorage.rltToken?.refreshToken } returns EMPTY
+        every { authTokenStorage.accessToken } returns token
+        val accessToken = oAuthManager.accessToken
+        assertEquals(token, accessToken)
+    }
+
+    @Test
+    fun `get Access Token returns AuthTokenStorage's accessToken while Platform refresh token is empty`() {
+        every { platformTokenStorage.rltToken?.refreshToken } returns EMPTY
+        every { platformTokenStorage.rltToken?.accessToken } returns accessToken
         every { authTokenStorage.accessToken } returns token
         val accessToken = oAuthManager.accessToken
         assertEquals(token, accessToken)
@@ -77,13 +88,21 @@ class OAuthManagerTest {
     @Test
     fun `ensure refresh token is not expired results success`() {
         every { platformTokenStorage.rltToken?.refreshToken } returns EMPTY
-        oAuthManager.ensureActive()
-        verify(exactly = 0) {
-            authApiLazyWrapper.get().refreshToken(
+        every { platformTokenStorage.rltToken?.accessToken } returns EMPTY
+        every {
+            authApiLazyWrapper.get().getAccessToken(
                 configurationStorage.clientSecret,
-                configurationStorage.appCode.toClientId,
-                refreshToken
+                configurationStorage.appCode.toClientId
             )
+        } returns accessTokenInfo
+        oAuthManager.ensureActive()
+        verify(exactly = 1) {
+            authApiLazyWrapper.get().getAccessToken(
+                configurationStorage.clientSecret,
+                configurationStorage.appCode.toClientId
+            )
+            authTokenStorage.accessToken = accessTokenInfo.token
+            authTokenStorage.expireAtMilliseconds = accessTokenInfo.expireAtMilliseconds
         }
     }
 
@@ -163,10 +182,11 @@ class OAuthManagerTest {
                 configurationStorage.clientSecret,
                 configurationStorage.appCode.toClientId
             )
-            authTokenStorage.accessToken= accessTokenInfo.token
-            authTokenStorage.expireAtMilliseconds= accessTokenInfo.expireAtMilliseconds
+            authTokenStorage.accessToken = accessTokenInfo.token
+            authTokenStorage.expireAtMilliseconds = accessTokenInfo.expireAtMilliseconds
         }
     }
+
     @Test
     fun `ensure Access Token refresh results failure`() {
         every { platformTokenStorage.rltToken } returns null

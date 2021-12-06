@@ -16,8 +16,9 @@ class OAuthManager(
 
     val accessToken: String
         get() {
-            var token = platformTokenStorage.rltToken?.accessToken
-            if (token.isNullOrBlank())
+            val rltToken=platformTokenStorage.rltToken
+            var token = rltToken?.accessToken
+            if (token.isNullOrBlank() || rltToken?.refreshToken.isNullOrEmpty())
                 token = authTokenStorage.accessToken
             return token
         }
@@ -28,8 +29,11 @@ class OAuthManager(
      */
     fun ensureActive() {
         platformTokenStorage.rltToken?.let {
-            if (it.refreshToken.isEmpty()) return
-            requestRefreshTokenServer(it.refreshToken)
+            if (it.refreshToken.isEmpty()) {
+                requestAccessTokenServer()
+            } else {
+                requestRefreshTokenServer(it.refreshToken)
+            }
         } ?: run {
             if (!authTokenStorage.isTokenExpired) return
             requestAccessTokenServer()
