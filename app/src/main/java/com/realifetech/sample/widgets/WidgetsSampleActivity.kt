@@ -69,21 +69,35 @@ class WidgetsSampleActivity : AppCompatActivity() {
 
     private fun queryWidgets() {
         GlobalScope.launch(Dispatchers.IO) {
-            RealifeTech.getContent()
-                .getWidgetsByScreenType(selectedType!!, 10, 1) { error, response ->
-                    GlobalScope.launch(Dispatchers.IO) {
-                        withContext(Dispatchers.Main) {
-                            error?.let {
-                                displayToast("Error loading:${it.message}")
-                            }
-                            response?.let {
-                                displayToast(
-                                    "Next Page: ${it.nextPage} " + "\n Widget loading: ${it.items} "
-                                )
-                            }
+//            RealifeTech.getContent()
+//                .getWidgetsByScreenType(selectedType!!, 10, 1) { error, response ->
+//                    GlobalScope.launch(Dispatchers.IO) {
+//                        withContext(Dispatchers.Main) {
+//                            error?.let {
+//                                displayToast("Error loading:${it.message}")
+//                            }
+//                            response?.let {
+//                                displayToast(
+//                                    "Next Page: ${it.nextPage} " + "\n Widget loading: ${it.items} "
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+            RealifeTech.getSell().getPayment().getMyPaymentIntent("827"){error, response ->
+                GlobalScope.launch(Dispatchers.IO) {
+                    withContext(Dispatchers.Main) {
+                        error?.let {
+                            displayToast("Error loading:${it.message}")
+                        }
+                        response?.let {
+                            displayToast(
+                                "Next Page: ${it.status} " + "\n Widget loading: ${it.lastPaymentError} "
+                            )
                         }
                     }
                 }
+            }
         }
     }
 

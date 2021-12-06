@@ -52,9 +52,9 @@ class Analytics(
         GlobalScope.launch(dispatcherIO) {
             val event =
                 AnalyticEventWrapper(type, action, new, old, timeUtils.currentTime)
-            var errorResponse: Exception? = null
             if (general.isSdkReady) {
                 engine.logEvent(event) { error, response ->
+                    var errorResponse: Exception? = null
                     error?.let {
                         retryPolicy.execute()
                         errorResponse = it
@@ -62,14 +62,19 @@ class Analytics(
                         errorResponse = null
                         retryPolicy.cancel()
                     }
+                    GlobalScope.launch(dispatcherIO) {
+                        withContext(dispatcherMain) {
+                            completion?.invoke(errorResponse)
+                        }
+                    }
                 }
             } else {
                 storage.save(event)
-                errorResponse = RuntimeException(RUNTIME_EXCEPTION_MESSAGE)
+                withContext(dispatcherMain) {
+                    completion?.invoke(RuntimeException(RUNTIME_EXCEPTION_MESSAGE))
+                }
             }
-            withContext(dispatcherMain) {
-                completion?.invoke(errorResponse)
-            }
+
         }
     }
 

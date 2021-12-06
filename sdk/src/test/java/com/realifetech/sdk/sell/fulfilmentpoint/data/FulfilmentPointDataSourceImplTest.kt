@@ -20,7 +20,6 @@ import com.realifetech.sdk.core.data.model.shared.`object`.FilterParamWrapper
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.core.data.model.shared.`object`.asInput
 import com.realifetech.sdk.sell.fulfilmentpoint.mocks.FFPMocks
-import com.realifetech.sdk.util.Constants.ERROR_MESSAGE
 import com.realifetech.sdk.sell.fulfilmentpoint.mocks.FFPMocks.NEXT_PAGE
 import com.realifetech.sdk.sell.fulfilmentpoint.mocks.FFPMocks.PAGE
 import com.realifetech.sdk.sell.fulfilmentpoint.mocks.FFPMocks.PAGE_SIZE
@@ -37,7 +36,7 @@ import com.realifetech.sdk.sell.fulfilmentpoint.mocks.FFPMocks.nullableFFPCatego
 import com.realifetech.sdk.sell.fulfilmentpoint.mocks.FFPMocks.nullableFFPCategoryEdges
 import com.realifetech.sdk.sell.fulfilmentpoint.mocks.FFPMocks.nullableFFPEdges
 import com.realifetech.sdk.sell.fulfilmentpoint.mocks.FFPMocks.params
-import com.realifetech.sdk.util.Constants
+import com.realifetech.sdk.util.Constants.ERROR_MESSAGE
 import com.realifetech.type.FulfilmentPointFilter
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
@@ -297,22 +296,6 @@ class FulfilmentPointDataSourceImplTest {
     }
 
     @Test
-    fun `get Fulfilment Point By Id returns errors`() {
-        every {
-            ffPointData.data?.getFulfilmentPoint?.fragments?.fragmentFulfilmentPoint
-        } returns null
-        getFFPSuccessAnswer(errors = Constants.errors)
-        fulfilmentPointDataSource.getFulfilmentPointById(
-            fulfilmentPointID,
-            null
-        ) { error, fulfilmentPoint ->
-            assertTrue(error is RuntimeException)
-            assertEquals(ERROR_MESSAGE, error?.message)
-            assertEquals(null, fulfilmentPoint)
-        }
-    }
-
-    @Test
     fun `get Fulfilment Point By Id with params returns success`() {
         every {
             ffPointData.data?.getFulfilmentPoint?.fragments?.fragmentFulfilmentPoint
@@ -419,9 +402,7 @@ class FulfilmentPointDataSourceImplTest {
 
     private fun getFFPSuccessAnswer(
         params: List<FilterParamWrapper>? = null,
-        errors: List<Error>? = null
     ) {
-        every { ffPointData.errors } returns errors
         every {
             apolloClient.query(
                 GetFulfilmentPointByIdQuery(
