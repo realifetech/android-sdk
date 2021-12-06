@@ -16,10 +16,11 @@ class OAuthManager(
 
     val accessToken: String
         get() {
-            val rltToken=platformTokenStorage.rltToken
-            var token = rltToken?.accessToken
-            if (token.isNullOrBlank() || rltToken?.refreshToken.isNullOrEmpty())
-                token = authTokenStorage.accessToken
+            var token = authTokenStorage.accessToken
+            platformTokenStorage.rltToken?.apply {
+                if (accessToken.isNotBlank() && refreshToken.isNotBlank())
+                    token = accessToken
+            }
             return token
         }
 
