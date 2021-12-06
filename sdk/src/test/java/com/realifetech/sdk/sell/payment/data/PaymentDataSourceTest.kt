@@ -98,23 +98,6 @@ class PaymentDataSourceTest {
     }
 
     @Test
-    fun `get My Payment Intent  returns error`() = runBlocking {
-        //Given
-        every {
-            getPaymentData.data?.getMyPaymentIntent?.fragments?.paymentIntent
-        } returns paymentIntent
-
-        getPaymentIntentSuccessAnswer(errors = Constants.errors)
-        // When
-        paymentDataSource.getMyPaymentIntent(PAYMENT_INTENT_ID) { error, response ->
-            // Then
-            assertTrue(error is RuntimeException)
-            assertEquals(ERROR_MESSAGE, error?.message)
-            assertEquals(null, response)
-        }
-    }
-
-    @Test
     fun `get My Payment Intent results with throwable`() = runBlocking {
         //Given
         every {
@@ -189,8 +172,7 @@ class PaymentDataSourceTest {
         }
     }
 
-    private fun getPaymentIntentSuccessAnswer(errors: List<Error>? = null) {
-        every { getPaymentData.errors } returns errors
+    private fun getPaymentIntentSuccessAnswer() {
         every {
             apolloClient.query(GetMyPaymentIntentQuery(PAYMENT_INTENT_ID)).toBuilder()
                 .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY).build()
@@ -214,24 +196,6 @@ class PaymentDataSourceTest {
             // Then
             assertEquals(null, error)
             assertEquals(response, paymentSource.asModel)
-        }
-    }
-
-    @Test
-    fun `delete Payment Source returns error`() = runBlocking {
-        //Given
-        every {
-            deletePaymentSourceData.data?.deleteMyPaymentSource?.fragments?.fragmentPaymentSource
-        } returns paymentSource
-        deletePaymentSourceSuccessAnswer(errors = Constants.errors)
-        // When
-        paymentDataSource.deleteMyPaymentSource(
-            PAYMENT_INTENT_ID
-        ) { error, response ->
-            // Then
-            assertTrue(error is RuntimeException)
-            assertEquals(ERROR_MESSAGE, error?.message)
-            assertEquals(null, response)
         }
     }
 
@@ -328,8 +292,7 @@ class PaymentDataSourceTest {
 
     }
 
-    private fun deletePaymentSourceSuccessAnswer(errors: List<Error>? = null) {
-        every { deletePaymentSourceData.errors } returns errors
+    private fun deletePaymentSourceSuccessAnswer() {
         every {
             apolloClient.mutate(
                 DeleteMyPaymentSourceMutation(
@@ -360,24 +323,6 @@ class PaymentDataSourceTest {
         }
     }
 
-    @Test
-    fun `update Payment Intent returns error`() = runBlocking {
-        //Given
-        every {
-            updatePaymentData.data?.updateMyPaymentIntent?.fragments?.paymentIntent
-        } returns paymentIntent
-        updatePaymentIntentSuccessAnswer(Constants.errors)
-        // When
-        paymentDataSource.updatePaymentIntent(
-            PAYMENT_INTENT_ID,
-            paymentIntentUpdateInput
-        ) { error, response ->
-            // Then
-            assertTrue(error is RuntimeException)
-            assertEquals(ERROR_MESSAGE, error?.message)
-            assertEquals(null, response)
-        }
-    }
 
     @Test
     fun `update Payment Intent results with throwable`() = runBlocking {
@@ -480,8 +425,7 @@ class PaymentDataSourceTest {
 //        verifyNull(callback, updatePaymentData.data)
     }
 
-    private fun updatePaymentIntentSuccessAnswer(errors: List<Error>? = null) {
-        every { updatePaymentData.errors } returns errors
+    private fun updatePaymentIntentSuccessAnswer() {
         every {
             apolloClient.mutate(
                 UpdatePaymentIntentMutation(
@@ -508,24 +452,6 @@ class PaymentDataSourceTest {
         ) { error, response ->
             // Then
             assertEquals(response, paymentIntent)
-        }
-    }
-
-    @Test
-    fun `create Payment Intent error`() = runBlocking {
-        //Given
-        every {
-            createPaymentData.data?.createMyPaymentIntent?.fragments?.paymentIntent
-        } returns paymentIntent
-        createPaymentIntentSuccessAnswer(errors = listOf(Error(ERROR_MESSAGE)))
-        // When
-        paymentDataSource.createPaymentIntent(
-            paymentIntentInput
-        ) { error, response ->
-            // Then
-            assertTrue(error is RuntimeException)
-            assertEquals(ERROR_MESSAGE, error?.message)
-            assertEquals(null, response)
         }
     }
 
@@ -622,8 +548,7 @@ class PaymentDataSourceTest {
 //        verifyNull(callback, updatePaymentData.data)
     }
 
-    private fun createPaymentIntentSuccessAnswer(errors: List<Error>? = null) {
-        every { createPaymentData.errors } returns errors
+    private fun createPaymentIntentSuccessAnswer() {
         every {
             apolloClient.mutate(
                 CreateMyPaymentIntentMutation(
@@ -780,27 +705,6 @@ class PaymentDataSourceTest {
     }
 
     @Test
-    fun `get Payment Sources returns error`() = runBlocking {
-        //Given
-        every {
-            getPaymentSourcesData.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.edges
-        } returns paymentSources
-        every {
-            getPaymentSourcesData.data?.getMyPaymentSources?.fragments?.paymentSourceEdge?.nextPage
-        } returns NEXT_PAGE
-        getPaymentSourceSuccessAnswer(Constants.errors)
-        // When
-        paymentDataSource.getMyPaymentSources(
-            PAGE_SIZE, PAGE
-        ) { error, response ->
-            // Then
-            assertTrue(error is RuntimeException)
-            assertEquals(ERROR_MESSAGE, error?.message)
-            assertEquals(null, response)
-        }
-    }
-
-    @Test
     fun `get Payment Sources results with throwable`() = runBlocking {
         //Given
         every {
@@ -938,8 +842,7 @@ class PaymentDataSourceTest {
 
     }
 
-    private fun getPaymentSourceSuccessAnswer(errors: List<Error>? = null) {
-        every { getPaymentSourcesData.errors } returns errors
+    private fun getPaymentSourceSuccessAnswer() {
         every {
             apolloClient.query(GetMyPaymentSourcesQuery(PAGE_SIZE, Input.fromNullable(PAGE)))
                 .toBuilder()

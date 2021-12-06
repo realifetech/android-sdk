@@ -18,9 +18,6 @@ import com.realifetech.sdk.core.data.model.fulfilmentPoint.asModel
 import com.realifetech.sdk.core.data.model.shared.`object`.FilterParamWrapper
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.core.data.model.shared.`object`.asInput
-import com.realifetech.sdk.core.utils.Result
-import com.realifetech.sdk.core.utils.extractResponse
-import com.realifetech.sdk.core.utils.invokeCallback
 import com.realifetech.type.FulfilmentPointFilter
 import javax.inject.Inject
 
@@ -52,7 +49,6 @@ class FulfilmentPointDataSourceImpl @Inject constructor(private val apolloClient
                         val fulfilmentPoints =
                             edges?.map { result -> result?.fragments?.fragmentFulfilmentPoint?.asModel }
                         val paginatedObject = PaginatedObject(fulfilmentPoints, nextPage)
-                        paginatedObject.extractResponse(response.errors)
                         callback.invoke(null, paginatedObject)
                     } ?: run { callback.invoke(Exception(), null) }
 
@@ -88,7 +84,7 @@ class FulfilmentPointDataSourceImpl @Inject constructor(private val apolloClient
                 override fun onResponse(response: Response<GetFulfilmentPointByIdQuery.Data>) {
                     val fulfilmentPoint =
                         response.data?.getFulfilmentPoint?.fragments?.fragmentFulfilmentPoint?.asModel
-                    fulfilmentPoint.invokeCallback(response, callback)
+                    callback.invoke(null, fulfilmentPoint)
                 }
 
                 override fun onFailure(e: ApolloException) {
@@ -123,7 +119,6 @@ class FulfilmentPointDataSourceImpl @Inject constructor(private val apolloClient
                         response.data?.getFulfilmentPointCategories?.edges?.map { result -> result?.fragments?.fragmentFulfilmentPointCategory?.asModel }
                     val nextPage = response.data?.getFulfilmentPointCategories?.nextPage
                     val paginatedObject = PaginatedObject(fulfilmentPointCategories, nextPage)
-                    paginatedObject.extractResponse(response.errors)
                     callback.invoke(null, paginatedObject)
                 }
 
