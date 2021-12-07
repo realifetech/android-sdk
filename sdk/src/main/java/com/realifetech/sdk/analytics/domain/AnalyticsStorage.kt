@@ -1,8 +1,8 @@
 package com.realifetech.sdk.analytics.domain
 
+import com.realifetech.sdk.analytics.data.database.Entity.PendingAnalyticsEvent
 import com.realifetech.sdk.analytics.data.datasource.AnalyticsStorageDataSource
 import com.realifetech.sdk.analytics.data.model.AnalyticEventWrapper
-import com.realifetech.sdk.analytics.data.database.Entity.PendingAnalyticsEvent
 
 /**
  * Manages the storage of the [AnalyticEventWrapper] in database and extraction of it in the form of [PendingAnalyticsEvent]
