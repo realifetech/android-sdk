@@ -3,17 +3,12 @@ package com.realifetech.sample.widgets
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.realifetech.sample.R
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
-import com.realifetech.sdk.core.utils.Result
 import com.realifetech.type.ScreenType
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_widgets_sample.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -69,35 +64,21 @@ class WidgetsSampleActivity : AppCompatActivity() {
 
     private fun queryWidgets() {
         GlobalScope.launch(Dispatchers.IO) {
-//            RealifeTech.getContent()
-//                .getWidgetsByScreenType(selectedType!!, 10, 1) { error, response ->
-//                    GlobalScope.launch(Dispatchers.IO) {
-//                        withContext(Dispatchers.Main) {
-//                            error?.let {
-//                                displayToast("Error loading:${it.message}")
-//                            }
-//                            response?.let {
-//                                displayToast(
-//                                    "Next Page: ${it.nextPage} " + "\n Widget loading: ${it.items} "
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-            RealifeTech.getSell().getPayment().getMyPaymentIntent("827"){error, response ->
-                GlobalScope.launch(Dispatchers.IO) {
-                    withContext(Dispatchers.Main) {
-                        error?.let {
-                            displayToast("Error loading:${it.message}")
-                        }
-                        response?.let {
-                            displayToast(
-                                "Next Page: ${it.status} " + "\n Widget loading: ${it.lastPaymentError} "
-                            )
+            RealifeTech.getContent()
+                .getWidgetsByScreenType(selectedType!!, 10, 1) { error, response ->
+                    GlobalScope.launch(Dispatchers.IO) {
+                        withContext(Dispatchers.Main) {
+                            error?.let {
+                                displayToast("Error loading:${it.message}")
+                            }
+                            response?.let {
+                                displayToast(
+                                    "Next Page: ${it.nextPage} " + "\n Widget loading: ${it.items} "
+                                )
+                            }
                         }
                     }
                 }
-            }
         }
     }
 
