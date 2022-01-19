@@ -61,7 +61,7 @@ class CampaignAutomationActivity : AppCompatActivity() {
 
     companion object {
         fun start(context: Context) {
-            context.startActivity(Intent(context, WebPageSampleActivity::class.java))
+            context.startActivity(Intent(context, CampaignAutomationActivity::class.java))
         }
     }
 }
