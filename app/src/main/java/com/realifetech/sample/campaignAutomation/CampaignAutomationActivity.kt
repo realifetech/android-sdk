@@ -10,6 +10,7 @@ import com.realifetech.sample.R
 import com.realifetech.sample.webPage.WebPageSampleActivity
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.campaignautomation.data.model.ContentResponse
+import com.realifetechCa.GetContentByExternalIdQuery
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -51,7 +52,7 @@ class CampaignAutomationActivity : AppCompatActivity() {
         disposable?.let { compositeDisposable.add(disposable) }
     }
 
-    private fun getData(error: Exception?, result: ContentResponse?): Observable<ContentResponse>? {
+    private fun getData(error: Exception?, result: GetContentByExternalIdQuery.GetContentByExternalId?): Observable<GetContentByExternalIdQuery.GetContentByExternalId>? {
         return error?.let { exception ->
             Observable.error(exception)
         } ?: result?.run {

@@ -47,6 +47,15 @@ android {
 apollo {
     // instruct the compiler to generate Kotlin models
     generateKotlinModels.set(true)
+
+    service("core"){
+        sourceFolder = "com/realifetech"
+        packageName ="com.realifetech"
+    }
+    service("realifetechCa"){
+        sourceFolder = "com/realifetechCa"
+        packageName ="com.realifetechCa"
+    }
 }
 
 task sourceJar(type: Jar) {
