@@ -3,6 +3,7 @@ package com.realifetech.sample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import com.realifetech.sample.campaignAutomation.CampaignAutomationActivity
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.webPage.WebPageSampleActivity
 import com.realifetech.sample.widgets.WidgetsSampleActivity
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         audienceButton.setOnClickListener { AudienceSampleActivity.start(this) }
         widgetsButton.setOnClickListener { WidgetsSampleActivity.start(this) }
         webPage.setOnClickListener { WebPageSampleActivity.start(this) }
+        campaignAutomationButton.setOnClickListener { CampaignAutomationActivity.start(this) }
         ordering_journey.setOnClickListener {
             RealifeTech.getSell().createOrderingJourneyFragment()
         }

@@ -1,0 +1,15 @@
+package com.realifetech.sdk.campaignautomation.data.model
+
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+
+@Parcelize
+data class Banner (
+    val id: Int,
+    val title: String?,
+    val subtitle: String?,
+    val imageUrl: String?,
+    val language: String?,
+    val url: String?
+) : Parcelable
