@@ -1,6 +1,5 @@
 package com.realifetech.sdk.campaignautomation
 
-import com.realifetech.sdk.campaignautomation.data.model.ContentResponse
 import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
 import com.realifetechCa.GetContentByExternalIdQuery
 import javax.inject.Inject
