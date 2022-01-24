@@ -9,7 +9,7 @@ data class Banner (
     val id: Int,
     val title: String?,
     val subtitle: String?,
+    val url: String?,
     val imageUrl: String?,
-    val language: String?,
-    val url: String?
+    val language: String?
 ) : Parcelable
