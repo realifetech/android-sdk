@@ -16,7 +16,6 @@ class CampaignAutomationDataSourceImplementation(private val apolloClient: Apoll
     ) {
         try {
             val response =
-
                 apolloClient.query(GetContentByExternalIdQuery(externalId))
                     .toBuilder()
                     .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)

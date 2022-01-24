@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class GetContentByExternalId(
-    val campaignId: Int,
+    val __typename: String,
+    val campaignId: String,
     val items: List<Content>
 ) : Parcelable
