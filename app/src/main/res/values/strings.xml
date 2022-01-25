@@ -20,7 +20,8 @@
     <string name="about">about</string>
     <string name="about_company">aboutCompany</string>
     <string name="purchaseHelp">purchasesHelp</string>
-    <string name="query_web_page">Query Campaign Automation</string>
+    <string name="query_web_page">Query Web Page</string>
+    <string name="query_campaign_automation">Query Campaign Automation</string>
     <string name="result">Result:</string>
     <string name="error_in_loading">Error in loading: </string>
     <string name="please_select_type">"Please select a type"</string>
