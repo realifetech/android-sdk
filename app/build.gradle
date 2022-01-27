@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.realifetech.sample"
-        minSdkVersion 24
-        targetSdkVersion 30
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

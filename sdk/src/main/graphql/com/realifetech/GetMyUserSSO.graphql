@@ -1,0 +1,6 @@
+query GetMyUserSSO {
+    getMyUserSSO{
+        id
+        sub
+    }
+}

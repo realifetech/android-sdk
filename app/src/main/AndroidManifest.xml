@@ -12,38 +12,35 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".GeneralSampleActivity"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".CommunicationSampleActivity"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".AnalyticsSampleActivity"
             android:parentActivityName=".MainActivity" />
-
+        <activity
+            android:name=".IdentitySampleActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AudienceSampleActivity"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".widgets.WidgetsSampleActivity"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".webPage.WebPageSampleActivity"
             android:parentActivityName=".MainActivity" />
-
     </application>
 
 </manifest>

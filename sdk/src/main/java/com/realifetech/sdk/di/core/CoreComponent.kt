@@ -17,7 +17,8 @@ interface CoreComponent {
         communicateModule: CommunicateModule,
         sellModule: SellModule,
         analyticsModule: AnalyticsModule,
-        contentModule: ContentModule
+        contentModule: ContentModule,
+        identityModule: IdentityModule
     ): FeatureComponent
 
 

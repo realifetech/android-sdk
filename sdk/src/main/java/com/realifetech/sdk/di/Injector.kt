@@ -10,9 +10,9 @@ import com.realifetech.sdk.di.features.modules.*
 class Injector {
     companion object {
         private lateinit var component: FeatureComponent
-        fun initialize(context: Context,configuration:CoreConfiguration): FeatureComponent {
+        fun initialize(context: Context, configuration: CoreConfiguration): FeatureComponent {
             val coreComponent = DaggerCoreComponent.builder()
-                .coreModule(CoreModule(context,configuration))
+                .coreModule(CoreModule(context, configuration))
                 .build()
             component = coreComponent.newFeaturesComponent(
                 FeatureModule,
@@ -20,7 +20,8 @@ class Injector {
                 CommunicateModule,
                 SellModule,
                 AnalyticsModule(),
-                ContentModule
+                ContentModule,
+                IdentityModule
             )
             return component
         }
