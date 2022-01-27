@@ -7,6 +7,7 @@ import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.content.Content
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.general.General
+import com.realifetech.sdk.identity.Identity
 import com.realifetech.sdk.sell.Sell
 import javax.inject.Inject
 
@@ -29,6 +30,9 @@ abstract class BaseRealifetech {
 
     @Inject
     internal lateinit var sellInstance: Sell
+
+    @Inject
+    internal lateinit var identityInstance: Identity
 
     @Inject
     internal lateinit var apolloClient: ApolloClient

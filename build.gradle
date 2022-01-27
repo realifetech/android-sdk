@@ -48,6 +48,11 @@ subprojects {
     apply from: "$project.rootDir/tools/script-jacoco.gradle"
 }
 ext {
+    // compilation versions
+    compileSdkVersion = 31
+    minSdkVersion = 24
+    targetSdkVersion = 31
+
     room_version = "2.3.0"
     mockito_version = '2.23.0'
     mockito_inline_version="3.11.2"
