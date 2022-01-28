@@ -41,6 +41,11 @@
         <activity
             android:name=".webPage.WebPageSampleActivity"
             android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".campaignAutomation.CampaignAutomationActivity"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>

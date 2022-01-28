@@ -13,6 +13,7 @@
     <string name="widgets">Widgets</string>
     <string name="web_page">Web Page</string>
     <string name="ordering_journey">Ordering Journey</string>
+    <string name="campaign_automation">Campaign Automation</string>
     <string name="audio_guides_help">audioGuidesHelp</string>
     <string name="tandc">tAndC</string>
     <string name="privacy">privacy</string>
@@ -20,6 +21,7 @@
     <string name="about_company">aboutCompany</string>
     <string name="purchaseHelp">purchasesHelp</string>
     <string name="query_web_page">Query Web Page</string>
+    <string name="query_campaign_automation">Query Campaign Automation</string>
     <string name="result">Result:</string>
     <string name="error_in_loading">Error in loading: </string>
     <string name="please_select_type">"Please select a type"</string>

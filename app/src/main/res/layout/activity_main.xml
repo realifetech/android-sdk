@@ -126,6 +126,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ordering_journey" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/campaignAutomationButton"
+        style="@style/Material.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/campaign_automation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ordering_journey" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView2"
         android:layout_width="match_parent"
