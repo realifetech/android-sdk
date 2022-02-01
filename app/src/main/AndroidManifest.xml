@@ -30,7 +30,7 @@
             android:name=".AnalyticsSampleActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".IdentitySampleActivity"
+            android:name=".identity.IdentitySSOActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AudienceSampleActivity"
@@ -45,6 +45,21 @@
         <activity
             android:name=".campaignAutomation.CampaignAutomationActivity"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".identity.IdentityActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/host_login_scheme"
+                    android:scheme="@string/host_scheme" />
+            </intent-filter>
+
+        </activity>
 
     </application>
 

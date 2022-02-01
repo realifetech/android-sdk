@@ -44,9 +44,23 @@ class DeviceConfigurationStorage(context: Context) {
             preferences.edit { putString(PUSH_TOKEN, value) }
         }
 
+    var salt: String
+        get() = preferences.getString(SALT, "a0238b93efda10f5df56").orEmpty()
+        set(value) {
+            preferences.edit { putString(SALT, value) }
+        }
+
+    var isLoggedIn: Boolean
+        get() = preferences.getBoolean(LOGGED_IN, false)
+        set(value) {
+            preferences.edit { putBoolean(LOGGED_IN, value) }
+        }
+
     companion object {
         private const val EMPTY = ""
         private const val PUSH_TOKEN = "PushToken"
+        private const val SALT = "SALT"
+        private const val LOGGED_IN = "LoggedIn"
         private const val APP_CODE = "app_code"
         private const val CLIENT_SECRET = "client_secret"
         private const val ORDERING_JOURNEY_URL = "ordering_journey_url"

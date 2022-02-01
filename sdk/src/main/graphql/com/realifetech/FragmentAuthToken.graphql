@@ -1,0 +1,7 @@
+fragment AuthToken on AuthToken{
+    accessToken
+    tokenType
+    expiresIn
+    refreshToken
+    scope
+}

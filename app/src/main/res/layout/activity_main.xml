@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -24,202 +24,232 @@
             android:gravity="center" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/generalButton"
-        style="@style/Material.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/general"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/communicateButton"
-        style="@style/Material.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/communicate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/generalButton" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/analyticsButton"
-        style="@style/Material.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/analytics"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/communicateButton" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/audienceButton"
-        style="@style/Material.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/audience"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/analyticsButton" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/app_version"
-        app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/appVersionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/dash"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
-        app:layout_constraintStart_toEndOf="@+id/textView6" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/widgetsButton"
-        style="@style/Material.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/widgets"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/audienceButton" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/webPage"
-        style="@style/Material.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/web_page"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/widgetsButton" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/ordering_journey"
-        style="@style/Material.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/ordering_journey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/webPage" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/identityButton"
-        style="@style/Material.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/identity"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ordering_journey" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/campaignAutomationButton"
-        style="@style/Material.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/campaign_automation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ordering_journey" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView2"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layout_constraintEnd_toEndOf="@+id/app_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:layout_height="wrap_content">
 
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/generalButton"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/device_configuration"
+                android:text="@string/general"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout"
-                android:layout_width="match_parent"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/communicateButton"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:hint="@string/api_url"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/apiUrlEditTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:singleLine="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/graphQLInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="@string/graph_ql"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/graphQlUrlEditTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:singleLine="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="@string/ordering_journey_url"
+                android:text="@string/communicate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/graphQLInputLayout">
+                app:layout_constraintTop_toBottomOf="@+id/generalButton" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/orderingUrlEditTextView"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/analyticsButton"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/analytics"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/communicateButton" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/audienceButton"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/audience"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/analyticsButton" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/widgetsButton"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/widgets"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/audienceButton" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/identitySSButton"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/identity_sso"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/widgetsButton" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/webPage"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/web_page"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/identitySSButton" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ordering_journey"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/ordering_journey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/webPage" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/identityButton"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/identity_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ordering_journey" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/campaignAutomationButton"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/campaign_automation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/identityButton" />
+
+            <LinearLayout
+                android:id="@+id/app_version_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/campaignAutomationButton">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/app_version"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/campaignAutomationButton" />
+
+                <TextView
+                    android:id="@+id/appVersionTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/dash"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/app_version_layout">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:singleLine="true" />
+                    android:padding="16dp">
 
-            </com.google.android.material.textfield.TextInputLayout>
 
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/device_configuration"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:hint="@string/api_url"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/apiUrlEditTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:singleLine="true" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/graphQLInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="@string/graph_ql"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/graphQlUrlEditTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:singleLine="true" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="@string/ordering_journey_url"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/graphQLInputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/orderingUrlEditTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:singleLine="true" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

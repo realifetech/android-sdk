@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".IdentitySampleActivity">
+    tools:context=".identity.IdentitySSOActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/userBearerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="@string/user_bearrer_token"
+        android:hint="@string/user_access_token"
         android:paddingHorizontal="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

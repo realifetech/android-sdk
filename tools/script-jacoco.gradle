@@ -30,6 +30,7 @@ def androidExclusion = [
         '**/*ViewHolder*.*',
         '**/*Module*.*',
         '**/fragment/*.*',
+        '**/WebViewWrapper*.*',
         '**/type/*.*',
         '**/model/*.*',
         '**/wrapper/*.*'
