@@ -8,14 +8,19 @@ import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.audiences.repository.AudiencesRepository
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
+import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.ColorPallet
 import com.realifetech.sdk.core.utils.DeviceCalendar
+import com.realifetech.sdk.core.utils.NetworkUtil
 import com.realifetech.sdk.di.features.FeatureScope
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
+import com.realifetech.sdk.identity.Identity
+import com.realifetech.sdk.identity.domain.IdentityRepository
+import com.realifetech.sdk.identity.sso.SSOFeature
 import com.realifetech.sdk.sell.Sell
 import com.realifetech.sdk.sell.basket.BasketFeature
 import com.realifetech.sdk.sell.fulfilmentpoint.FulfilmentPointFeature
@@ -23,12 +28,22 @@ import com.realifetech.sdk.sell.order.OrderFeature
 import com.realifetech.sdk.sell.payment.PaymentFeature
 import com.realifetech.sdk.sell.product.ProductFeature
 import com.realifetech.sdk.sell.weboredering.WebOrderingFeature
+import com.realifetech.sdk.sell.weboredering.WebViewWrapper
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 
 @Module
 object FeatureModule {
+
+    @FeatureScope
+    @Provides
+    fun webViewProvider(
+        configuration: ConfigurationStorage,
+        networkUtil: NetworkUtil,
+        storage: AuthTokenStorage
+    ) =
+        WebViewWrapper(networkUtil, configuration, storage)
 
     @FeatureScope
     @Provides
@@ -76,7 +91,12 @@ object FeatureModule {
         configuration: ConfigurationStorage,
         colorPallet: ColorPallet
     ): General =
-        General(deviceRepository, sdkInitializationPrecondition, configuration, colorPallet)
+        General(
+            deviceRepository,
+            sdkInitializationPrecondition,
+            configuration,
+            colorPallet
+        )
 
     @FeatureScope
     @Provides
@@ -93,6 +113,24 @@ object FeatureModule {
             Dispatchers.IO,
             Dispatchers.Main,
             deviceCalendar
+        )
+
+
+    @FeatureScope
+    @Provides
+    fun identity(
+        identityRepository: IdentityRepository,
+        webViewWrapper: WebViewWrapper,
+        storage: AuthTokenStorage,
+        ssoFeature: SSOFeature
+    ): Identity =
+        Identity(
+            webViewWrapper,
+            identityRepository,
+            Dispatchers.IO,
+            Dispatchers.Main,
+            ssoFeature,
+            storage
         )
 
 }

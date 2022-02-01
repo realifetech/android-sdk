@@ -3,24 +3,14 @@ package com.realifetech.sdk.sell.weboredering
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
-import android.webkit.*
-import android.webkit.WebSettings.LOAD_CACHE_ELSE_NETWORK
-import android.webkit.WebSettings.LOAD_DEFAULT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.realifetech.realifetech_sdk.R
 import com.realifetech.realifetech_sdk.databinding.FragmentWebOrderingBinding
-import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
-import com.realifetech.sdk.core.utils.ColorPallet
+import com.realifetech.sdk.core.utils.*
 import com.realifetech.sdk.di.Injector
-import com.realifetech.sdk.core.utils.NetworkUtil
-import com.realifetech.sdk.core.utils.clicks
-import com.realifetech.sdk.core.utils.setTaggableOnSurfaceTint
-import com.realifetech.sdk.core.utils.tint
-import kotlinx.android.synthetic.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
@@ -28,17 +18,17 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class WebOrderingFragment : Fragment() {
 
-    private var _binding: FragmentWebOrderingBinding? = null
-    private val binding get() = _binding!!
-
     @Inject
     lateinit var colorPallet: ColorPallet
 
     @Inject
-    lateinit var configuation: ConfigurationStorage
+    lateinit var networkUtil: NetworkUtil
 
     @Inject
-    internal lateinit var networkUtil: NetworkUtil
+    lateinit var webViewWrapper: WebViewWrapper
+
+    private var _binding: FragmentWebOrderingBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var viewModel: WebOrderingViewModel
 
@@ -67,9 +57,9 @@ class WebOrderingFragment : Fragment() {
         binding.apply {
             viewModel.screenState.observe(viewLifecycleOwner, { screen ->
                 when (screen) {
-                    WebOrderingViewModel.ScreenState.WebViewGoBack -> webView.goBack()
-                    WebOrderingViewModel.ScreenState.WebViewGoForward -> webView.goForward()
-                    WebOrderingViewModel.ScreenState.WebViewRefresh -> webView.reload()
+                    WebOrderingViewModel.ScreenState.WebViewGoBack -> webViewWrapper.webView?.goBack()
+                    WebOrderingViewModel.ScreenState.WebViewGoForward -> webViewWrapper.webView?.goForward()
+                    WebOrderingViewModel.ScreenState.WebViewRefresh -> webViewWrapper.webView?.reload()
                 }
             })
         }
@@ -77,7 +67,10 @@ class WebOrderingFragment : Fragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        savedInstanceState?.let { binding.webView.restoreState(it) } ?: run { setupWebView() }
+        webViewWrapper.webView?.let { webView ->
+            savedInstanceState?.let { webView.restoreState(it) } ?: run { setupWebView() }
+        } ?: kotlin.run { setupWebView() }
+
     }
 
     private fun setupNavBar() {
@@ -111,19 +104,15 @@ class WebOrderingFragment : Fragment() {
 
     private fun setupWebView() {
         binding.apply {
-            webView.apply {
-                context?.let {
-                    setBackgroundColor(ContextCompat.getColor(it, R.color.RLT_SDK_Color_Surface))
-                }
-                setOnLongClickListener { true }
-                isHapticFeedbackEnabled = false
-                isLongClickable = false
-                settings.apply {
-                    setupSettings()
-                }
+            webViewWrapper.webView = webView
+            context?.let {
+                webViewWrapper.configureWebView(
+                    ContextCompat.getColor(
+                        it,
+                        R.color.RLT_SDK_Color_Surface
+                    ), isAdded, navBack, navForward, it
+                )
             }
-            webView.webViewClient = getWebViewClient()
-            webView.loadUrl(configuation.webOrderingJourneyUrl)
         }
     }
 
@@ -144,61 +133,13 @@ class WebOrderingFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
     }
 
-    private fun WebSettings.setupSettings() {
-        javaScriptEnabled = true
-        domStorageEnabled = true
-        builtInZoomControls = false
-        useWideViewPort = true
-        loadWithOverviewMode = true
-        allowFileAccess = true
-        CookieManager.getInstance().removeAllCookies(null)
-        CookieManager.getInstance().flush()
-        if (!networkUtil.isNetworkAvailable()) {
-            cacheMode = LOAD_CACHE_ELSE_NETWORK
-        }
-    }
-
-    private fun FragmentWebOrderingBinding.getWebViewClient() =
-        object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                if (isAdded) {
-                    if (URLUtil.isNetworkUrl(url)) {
-                        return false
-                    }
-                }
-                return true
-            }
-
-            override fun onLoadResource(view: WebView, url: String) {
-                webView.settings.cacheMode =
-                    if (networkUtil.isNetworkAvailable()) LOAD_DEFAULT else LOAD_CACHE_ELSE_NETWORK
-                webView.visibility = View.VISIBLE
-                navForward.isEnabled = webView.canGoForward()
-                navBack.isEnabled = webView.canGoBack()
-            }
-
-            override fun onReceivedError(
-                view: WebView?,
-                request: WebResourceRequest?,
-                error: WebResourceError?
-            ) {
-                super.onReceivedError(view, request, error)
-                webView.isVisible = false
-                if (webView.settings.cacheMode != LOAD_CACHE_ELSE_NETWORK) {
-                    webView.settings.cacheMode = LOAD_CACHE_ELSE_NETWORK
-                }
-            }
-
-        }
-
     override fun onSaveInstanceState(outState: Bundle) {
-        binding.webView.saveState(outState)
+        webViewWrapper.webView?.saveState(outState)
         super.onSaveInstanceState(outState)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.webView.clearFindViewByIdCache()
         _binding = null
 
     }

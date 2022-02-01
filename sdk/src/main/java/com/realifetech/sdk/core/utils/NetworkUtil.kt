@@ -6,7 +6,7 @@ import android.net.NetworkCapabilities
 import javax.inject.Inject
 
 // require context, should be tested using UI test
-internal class NetworkUtil @Inject constructor(private val context: Context) {
+class NetworkUtil @Inject constructor(private val context: Context) {
 
     fun isNetworkAvailable(): Boolean {
         val result: Boolean

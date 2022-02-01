@@ -18,6 +18,8 @@
     <string name="tandc">tAndC</string>
     <string name="privacy">privacy</string>
     <string name="about">about</string>
+    <string name="host_login_scheme">rlthostapplogin</string>
+    <string name="host_scheme">rltsampleapp</string>
     <string name="about_company">aboutCompany</string>
     <string name="purchaseHelp">purchasesHelp</string>
     <string name="query_web_page">Query Web Page</string>
@@ -25,8 +27,16 @@
     <string name="result">Result:</string>
     <string name="error_in_loading">Error in loading: </string>
     <string name="please_select_type">"Please select a type"</string>
+    <string name="identity_login_title">Login to unlock new features</string>
+    <string name="identity_logout_title">Logout before you leave</string>
+    <string name="identity_email">enter your email</string>
+    <string name="identity_password">enter password</string>
+    <string name="identity_login">login</string>
+    <string name="identity_button">Identity</string>
+    <string name="identity_logout">Logout</string>
     <string name="identity">Identity</string>
     <string name="query_sso_id">Query SSO ID</string>
-    <string name="user_bearrer_token">User Bearrer token</string>
+    <string name="user_access_token">User access token</string>
     <string name="user_access_token_message">Enter User accessToken</string>
+    <string name="identity_sso">IDENTITY-SSO</string>
 </resources>

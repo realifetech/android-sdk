@@ -1,0 +1,7 @@
+query getDeviceId {
+        me {
+            device {
+                id
+            }
+        }
+    }

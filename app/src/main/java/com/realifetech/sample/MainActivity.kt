@@ -5,14 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.realifetech.sample.campaignAutomation.CampaignAutomationActivity
 import com.realifetech.sample.data.DeviceConfigurationStorage
+import com.realifetech.sample.identity.IdentityActivity
+import com.realifetech.sample.identity.IdentitySSOActivity
 import com.realifetech.sample.webPage.WebPageSampleActivity
 import com.realifetech.sample.widgets.WidgetsSampleActivity
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.core.data.model.config.CoreConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +27,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun onClickButtons() {
         generalButton.setOnClickListener { GeneralSampleActivity.start(this) }
-        identityButton.setOnClickListener { IdentitySampleActivity.start(this) }
+        identityButton.setOnClickListener { IdentityActivity.start(this) }
+        identitySSButton.setOnClickListener{ IdentitySSOActivity.start(this) }
         communicateButton.setOnClickListener { CommunicationSampleActivity.start(this) }
         analyticsButton.setOnClickListener { AnalyticsSampleActivity.start(this) }
         audienceButton.setOnClickListener { AudienceSampleActivity.start(this) }
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         ordering_journey.setOnClickListener {
             RealifeTech.getSell().createOrderingJourneyFragment()
         }
+        identityButton.setOnClickListener { IdentityActivity.start(this) }
     }
 
     private fun onTextViewsChanged(storage: DeviceConfigurationStorage) {
