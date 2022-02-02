@@ -14,7 +14,6 @@ import com.realifetech.sdk.sell.Sell
 
 object RealifeTech : BaseRealifetech() {
 
-
     fun configureSdk(context: Context, configuration: CoreConfiguration) {
         Injector.initialize(context, configuration).inject(this)
     }
