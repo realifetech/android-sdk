@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.realifetech.sample.R
 import com.realifetech.sdk.RealifeTech
+import com.realifetech.sdk.campaignautomation.data.model.BannerFabric
 import com.realifetechCa.GetContentByExternalIdQuery
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -33,7 +34,8 @@ class CampaignAutomationActivity : AppCompatActivity() {
                     .getContentByExternalId("homepage-top-view") { error, result ->
                         addSubscription(getData(error, result)?.subscribe(
                             {
-                                resultPrint.text = result.toString()
+                                val banana = BannerFabric().create(result?.items?.get(0)?.data)
+                                resultPrint.text = banana.toString()
                             }, {
                                 Toast.makeText(
                                     this,
