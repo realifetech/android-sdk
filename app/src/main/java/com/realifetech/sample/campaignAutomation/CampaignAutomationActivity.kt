@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.realifetech.sample.R
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.campaignautomation.data.model.BannerFabric
+import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
 import com.realifetechCa.GetContentByExternalIdQuery
+import com.realifetechCa.type.ContentType
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -34,8 +36,8 @@ class CampaignAutomationActivity : AppCompatActivity() {
                     .getContentByExternalId("homepage-top-view") { error, result ->
                         addSubscription(getData(error, result)?.subscribe(
                             {
-                                val banana = BannerFabric().create(result?.items?.get(0)?.data)
-                                resultPrint.text = banana.toString()
+                                val banana = listOf(ContentType.UNKNOWN__, ContentType.BANNER)
+                                 RLTFetcher(result)
                             }, {
                                 Toast.makeText(
                                     this,
