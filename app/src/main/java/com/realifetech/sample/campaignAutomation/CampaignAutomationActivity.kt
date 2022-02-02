@@ -36,7 +36,6 @@ class CampaignAutomationActivity : AppCompatActivity() {
                     .getContentByExternalId("homepage-top-view") { error, result ->
                         addSubscription(getData(error, result)?.subscribe(
                             {
-                                val banana = listOf(ContentType.UNKNOWN__, ContentType.BANNER)
                                  RLTFetcher(result)
                             }, {
                                 Toast.makeText(
