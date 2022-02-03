@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
-data class Banner (
+data class BannerDataModel (
     val id: Int,
     val title: String?,
     val subtitle: String?,
