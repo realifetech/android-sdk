@@ -4,89 +4,75 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import com.realifetech.sample.R
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.campaignautomation.data.model.BannerDataModel
-import com.realifetech.sdk.campaignautomation.data.model.Content
-import com.realifetech.sdk.campaignautomation.data.model.RLTDataModel
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_campaign_automation_sample.*
+import com.realifetech.sdk.campaignautomation.data.model.RLTCreatable
+import kotlinx.android.synthetic.main.banner_view.view.*
+
 
 class CampaignAutomationActivity : AppCompatActivity() {
 
-    @SuppressLint("CheckResult")
+    @SuppressLint("CheckResult", "ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_campaign_automation_sample)
-        val great = findViewById<ComposeView>(R.id.great)
 
-        queryCampaignAutomation.setOnClickListener {
-//            RealifeTech.getCampaignAutomation().factories(List<RLTFactory>)
-            RealifeTech.getCampaignAutomation().fetch("homepage-top-view") { error, response ->
-                response?.let {
-                    great.setContent {
-                        OnlyText(response)
-                    }
-                }
-                error?.let {
+        val layout = findViewById<ConstraintLayout>(R.id.campaignAutomationLayout)
+        val set = ConstraintSet()
+        set.clone(layout)
+        RealifeTech.getCampaignAutomation().fetch("homepage-top-view") { error, response ->
+            response?.let {
 
-                }
+
+                val bannerView =
+                    IntegratorBanner(
+                        this,
+                        bannerDataModel = response[0] as BannerDataModel
+                    )
+
+                layout.addView(bannerView)
+                set.applyTo(layout)
+
+
             }
+            error?.let {
 
-
-        }
-    }
-
-
-    @Composable
-    fun OnlyText(list: List<RLTDataModel>) {
-        LazyColumn() {
-            items(items = list) {
-                BannerViewTextOnly(it)
             }
         }
+
     }
 
-    @Composable
-    fun OnlyImage(values: List<RLTDataModel>) {
-        LazyColumn() {
-            items(items = values) {
-                BannerViewImageOnly(it)
-            }
+
+    class IntegratorBanner(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0,
+        bannerDataModel: BannerDataModel
+    ) : ConstraintLayout(context, attrs, defStyleAttr), RLTCreatable {
+
+        init {
+            val view = LayoutInflater.from(context)
+                .inflate(R.layout.banner_view, this, false)
+            val set = ConstraintSet()
+            addView(view)
+            set.clone(this)
+            set.match(view, this)
+            view.title.text = bannerDataModel.title
+            view.subtitle.text = bannerDataModel.subtitle
         }
-    }
 
-    @Composable
-    fun BannerViewImageOnly(bannerDataModel: Any) {
-        bannerDataModel as BannerDataModel
-        Column() {
-            Image(
-                painter = rememberImagePainter(bannerDataModel.imageUrl),
-                contentDescription = null,
-                modifier = Modifier.size(128.dp)
-            )
-        }
-
-    }
-
-    @Composable
-    fun BannerViewTextOnly(bannerDataModel: Any) {
-        bannerDataModel as BannerDataModel
-        Column() {
-            bannerDataModel.title?.let { Text(text = it) }
-            bannerDataModel.subtitle?.let { Text(text = it) }
+        private fun ConstraintSet.match(view: View, parentView: View) {
+            this.connect(view.id, ConstraintSet.TOP, parentView.id, ConstraintSet.TOP)
+            this.connect(view.id, ConstraintSet.START, parentView.id, ConstraintSet.START)
+            this.connect(view.id, ConstraintSet.END, parentView.id, ConstraintSet.END)
+            this.connect(view.id, ConstraintSet.BOTTOM, parentView.id, ConstraintSet.BOTTOM)
         }
 
     }
