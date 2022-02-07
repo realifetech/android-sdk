@@ -1,5 +1,5 @@
 package com.realifetech.sdk.campaignautomation.data.model
 
-interface RLTBannerFactory : RLTCreatableFactory{
-   override fun create(bannerDataModel: BannerDataModel): RLTCreatable?
+interface RLTBannerFactory : RLTCreatableFactory<BannerDataModel>{
+   override fun create(dataModel: BannerDataModel): RLTCreatable?
 }
