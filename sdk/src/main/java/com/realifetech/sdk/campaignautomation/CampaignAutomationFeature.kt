@@ -2,7 +2,7 @@ package com.realifetech.sdk.campaignautomation
 
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatable
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
-import com.realifetech.sdk.campaignautomation.data.model.RLTFetcherV2
+import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
 import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
 import com.realifetechCa.GetContentByExternalIdQuery
 import com.realifetechCa.type.ContentType
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class CampaignAutomationFeature @Inject constructor(
     private val campaignAutomationRepo: CampaignAutomationRepository,
-    private val rltFetcherV2: RLTFetcherV2
+    private val rltFetcher: RLTFetcher
 ) {
 
     internal fun getContentByExternalId(
@@ -25,7 +25,7 @@ class CampaignAutomationFeature @Inject constructor(
         factories: Map<ContentType, RLTCreatableFactory<*>>,
         callback: (error: Exception?, response: List<RLTCreatable?>) -> Unit
     ) {
-        rltFetcherV2.fetch(
+        rltFetcher.fetch(
             location,
             factories,
             callback

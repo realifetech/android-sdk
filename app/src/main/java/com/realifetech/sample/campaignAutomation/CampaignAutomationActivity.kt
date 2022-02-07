@@ -50,9 +50,8 @@ class CampaignAutomationActivity : AppCompatActivity() {
     }
 
     // This is the Fabric given by the Integrator
-
     inner class IntegratorBannerFactory : RLTBannerFactory {
-        override fun create(dataModel: BannerDataModel): RLTCreatable? {
+        override fun create(dataModel: BannerDataModel): RLTCreatable {
             return IntegratorBanner(
                 context = this@CampaignAutomationActivity,
                 bannerDataModel = dataModel
