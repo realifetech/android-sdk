@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import com.realifetech.sample.R
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.campaignautomation.data.model.BannerDataModel
+import com.realifetech.sdk.campaignautomation.data.model.RLTBannerFactory
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatable
 import kotlinx.android.synthetic.main.banner_view.view.*
 
@@ -29,14 +30,7 @@ class CampaignAutomationActivity : AppCompatActivity() {
         set.clone(layout)
         RealifeTech.getCampaignAutomation().fetch("homepage-top-view") { error, response ->
             response?.let {
-
-
-                val bannerView =
-                    IntegratorBanner(
-                        this,
-                        bannerDataModel = response[0] as BannerDataModel
-                    )
-
+                val bannerView = response[0] as View
                 layout.addView(bannerView)
                 set.applyTo(layout)
 
@@ -49,7 +43,10 @@ class CampaignAutomationActivity : AppCompatActivity() {
 
     }
 
+    // This is the Fabric given by the Integrator
 
+
+// This is the UI given by the Integrator
     class IntegratorBanner(
         context: Context,
         attrs: AttributeSet? = null,

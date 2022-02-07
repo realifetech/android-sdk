@@ -15,26 +15,28 @@ class RLTFetcherV2 @Inject constructor() {
     private val bannerFactory: RLTBannerFactory? = null
 
 
-//    val factories = mutableMapOf<>()
+    private val factories = mutableMapOf<ContentType, RLTCreatableFactory>()
+
 
     fun fetch(
         location: String,
-        callback: (error: Exception?, response: List<RLTDataModel>?) -> Unit
+        callback: (error: Exception?, response: List<RLTCreatable?>) -> Unit
     ) {
-        val list = mutableListOf<RLTDataModel>()
+        val list = mutableListOf<RLTCreatable?>()
         RealifeTech.getCampaignAutomation()
             .getContentByExternalId(location) { error, response ->
                 GlobalScope.launch(Dispatchers.IO) {
                     withContext(Dispatchers.Main) {
                         error?.let {
-                            callback(error, null)
+                            callback(error, emptyList())
                         }
                         response?.let {
                             response.items?.forEach {
                                 when (it?.contentType) {
                                     ContentType.BANNER -> {
                                         Log.d("RLTFetcher", "WOW IT'S A MATCH ${it.data}")
-                                        list.add(RLTBannerFactory().create(it))
+                                        val bannerDataModel = convert<BannerDataModel>(it)
+                                        list.add(factories[ContentType.BANNER]?.create(bannerDataModel))
                                     }
                                     else -> {
 
@@ -56,7 +58,7 @@ class RLTFetcherV2 @Inject constructor() {
     }
 
     companion object {
-
+//        fun setFactories(factoryList: List<RLT>){}
     }
 
 

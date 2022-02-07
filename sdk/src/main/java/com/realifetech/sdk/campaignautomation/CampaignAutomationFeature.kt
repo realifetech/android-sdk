@@ -1,5 +1,6 @@
 package com.realifetech.sdk.campaignautomation
 
+import com.realifetech.sdk.campaignautomation.data.model.RLTCreatable
 import com.realifetech.sdk.campaignautomation.data.model.RLTDataModel
 import com.realifetech.sdk.campaignautomation.data.model.RLTFetcherV2
 import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
@@ -20,7 +21,7 @@ class CampaignAutomationFeature @Inject constructor(
 
     fun fetch(
         location: String,
-        callback: (error: Exception?, response: List<RLTDataModel>?) -> Unit
+        callback: (error: Exception?, response: List<RLTCreatable?>) -> Unit
     ){
         rltFetcherV2.fetch(location, callback)
     }
