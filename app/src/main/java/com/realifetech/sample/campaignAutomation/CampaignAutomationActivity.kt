@@ -27,12 +27,12 @@ class CampaignAutomationActivity : AppCompatActivity() {
         val layout = findViewById<ConstraintLayout>(R.id.campaignAutomationLayout)
         val set = ConstraintSet()
         set.clone(layout)
-
+        val factories =
+            mutableMapOf<ContentType, RLTCreatableFactory<*>>(ContentType.BANNER to IntegratorBannerFactory())
         RealifeTech.getCampaignAutomation().apply {
-
             fetch(
                 "homepage-top-view",
-                factories = mutableMapOf(ContentType.BANNER to IntegratorBannerFactory() as RLTCreatableFactory<RLTDataModel>)
+                factories = factories
             ) { error, response ->
                 response.forEachIndexed { index, banner ->
                     banner?.let {
