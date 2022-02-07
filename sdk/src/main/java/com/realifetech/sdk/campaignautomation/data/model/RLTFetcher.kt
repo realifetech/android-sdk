@@ -8,7 +8,8 @@ class RLTFetcher(
     result: GetContentByExternalIdQuery.GetContentByExternalId?,
     filter: List<ContentType> = emptyList()
 ) {
-    val list = mutableListOf<BannerDataModel>()
+    val list = mutableListOf<RLTDataModel>()
+
     init {
 
         result?.items?.forEach {
@@ -16,15 +17,11 @@ class RLTFetcher(
                 ContentType.BANNER -> {
                     if (showBanner(filter)) {
                         Log.d("RLTFetcher", "WOW IT'S A MATCH ${it.data}")
-                        list.add(BannerFabric.create(it))
-                    } else {
-                        Log.d("RLTFetcher", "Sorry but ${it.data} will be skipped ")
+//                        list.add(RLTBannerFactory().create(it))
                     }
-
-
                 }
                 else -> {
-
+                    Log.d("RLTFetcher", "Sorry but ${it?.data} will be skipped ")
                 }
             }
 
@@ -32,7 +29,7 @@ class RLTFetcher(
 
     }
 
-    fun returnList(): List<BannerDataModel> {
+    fun returnList(): List<RLTDataModel> {
         Log.d("RLTFetcher", list.size.toString())
         return list
     }

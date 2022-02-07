@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -20,63 +19,59 @@ import coil.compose.rememberImagePainter
 import com.realifetech.sample.R
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.campaignautomation.data.model.BannerDataModel
-import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
-import com.realifetechCa.GetContentByExternalIdQuery
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.realifetech.sdk.campaignautomation.data.model.Content
+import com.realifetech.sdk.campaignautomation.data.model.RLTDataModel
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_campaign_automation_sample.*
 
 class CampaignAutomationActivity : AppCompatActivity() {
-    private val compositeDisposable = CompositeDisposable()
 
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_campaign_automation_sample)
         val great = findViewById<ComposeView>(R.id.great)
-        queryCampaignAutomation.setOnClickListener {
 
-            Single.just(
-                RealifeTech.getCampaignAutomation()
-                    .getContentByExternalId("homepage-top-view") { error, result ->
-                        addSubscription(getData(error, result)?.subscribe(
-                            {
-                                val fetcher = RLTFetcher(result)
-                                val list = fetcher.returnList()
-                                great.setContent {
-                                    BannerListView(list)
-                                }
-                            }, {
-                                Toast.makeText(
-                                    this,
-                                    "${this.getString(R.string.error_in_loading)}${error?.message}",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            })
-                        )
-                    })
+        queryCampaignAutomation.setOnClickListener {
+//            RealifeTech.getCampaignAutomation().factories(List<RLTFactory>)
+            RealifeTech.getCampaignAutomation().fetch("homepage-top-view") { error, response ->
+                response?.let {
+                    great.setContent {
+                        OnlyText(response)
+                    }
+                }
+                error?.let {
+
+                }
+            }
+
+
         }
     }
 
+
     @Composable
-    fun BannerListView(values: List<BannerDataModel>) {
+    fun OnlyText(list: List<RLTDataModel>) {
         LazyColumn() {
-            items(items = values) {
-                BannerView(it)
+            items(items = list) {
+                BannerViewTextOnly(it)
             }
         }
     }
 
     @Composable
-    fun BannerView(bannerDataModel: BannerDataModel) {
+    fun OnlyImage(values: List<RLTDataModel>) {
+        LazyColumn() {
+            items(items = values) {
+                BannerViewImageOnly(it)
+            }
+        }
+    }
+
+    @Composable
+    fun BannerViewImageOnly(bannerDataModel: Any) {
+        bannerDataModel as BannerDataModel
         Column() {
-            bannerDataModel.title?.let { Text(text = it) }
-            bannerDataModel.subtitle?.let { Text(text = it) }
-            bannerDataModel.language?.let { Text(text = it) }
             Image(
                 painter = rememberImagePainter(bannerDataModel.imageUrl),
                 contentDescription = null,
@@ -86,19 +81,14 @@ class CampaignAutomationActivity : AppCompatActivity() {
 
     }
 
-    private fun addSubscription(disposable: Disposable?) {
-        disposable?.let { compositeDisposable.add(disposable) }
-    }
+    @Composable
+    fun BannerViewTextOnly(bannerDataModel: Any) {
+        bannerDataModel as BannerDataModel
+        Column() {
+            bannerDataModel.title?.let { Text(text = it) }
+            bannerDataModel.subtitle?.let { Text(text = it) }
+        }
 
-    private fun getData(
-        error: Exception?,
-        result: GetContentByExternalIdQuery.GetContentByExternalId?
-    ): Observable<GetContentByExternalIdQuery.GetContentByExternalId>? {
-        return error?.let { exception ->
-            Observable.error(exception)
-        } ?: result?.run {
-            Observable.just(this)
-        }?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
     }
 
     companion object {
