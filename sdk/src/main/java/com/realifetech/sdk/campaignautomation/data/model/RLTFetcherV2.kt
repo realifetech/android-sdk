@@ -15,11 +15,9 @@ class RLTFetcherV2 @Inject constructor() {
     private val bannerFactory: RLTBannerFactory? = null
 
 
-    private val factories = mutableMapOf<ContentType, RLTCreatableFactory>()
-
-
     fun fetch(
         location: String,
+        factories:MutableMap<ContentType, RLTCreatableFactory<RLTDataModel>>,
         callback: (error: Exception?, response: List<RLTCreatable?>) -> Unit
     ) {
         val list = mutableListOf<RLTCreatable?>()
@@ -36,14 +34,18 @@ class RLTFetcherV2 @Inject constructor() {
                                     ContentType.BANNER -> {
                                         Log.d("RLTFetcher", "WOW IT'S A MATCH ${it.data}")
                                         val bannerDataModel = convert<BannerDataModel>(it)
-                                        list.add(factories[ContentType.BANNER]?.create(bannerDataModel))
+                                        list.add(
+                                            (factories[ContentType.BANNER] as? RLTBannerFactory)?.create(
+                                                bannerDataModel
+                                            )
+                                        )
                                     }
                                     else -> {
 
                                     }
                                 }
-                                callback(null, list)
                             }
+                            callback(null, list)
                             Log.d("RLTFetcherV2", list.size.toString())
 
                         }
