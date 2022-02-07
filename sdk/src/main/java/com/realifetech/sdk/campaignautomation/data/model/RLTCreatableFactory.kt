@@ -1,8 +1,7 @@
 package com.realifetech.sdk.campaignautomation.data.model
 
-import com.realifetechCa.GetContentByExternalIdQuery
 
-
-interface RLTCreatableFactory<T> {
-    fun create(item: GetContentByExternalIdQuery.Item): T
+interface RLTCreatableFactory {
+    abstract fun <T : RLTDataModel> create(dataModel: T ): RLTCreatable?
+    fun create(bannerDataModel: BannerDataModel): RLTCreatable?
 }
