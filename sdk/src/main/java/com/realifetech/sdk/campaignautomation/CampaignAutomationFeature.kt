@@ -2,7 +2,6 @@ package com.realifetech.sdk.campaignautomation
 
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatable
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
-import com.realifetech.sdk.campaignautomation.data.model.RLTDataModel
 import com.realifetech.sdk.campaignautomation.data.model.RLTFetcherV2
 import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
 import com.realifetechCa.GetContentByExternalIdQuery
@@ -23,10 +22,14 @@ class CampaignAutomationFeature @Inject constructor(
 
     fun fetch(
         location: String,
-        factories: MutableMap<ContentType, RLTCreatableFactory<RLTDataModel>>,
+        factories: Map<ContentType, RLTCreatableFactory<*>>,
         callback: (error: Exception?, response: List<RLTCreatable?>) -> Unit
     ) {
-        rltFetcherV2.fetch(location,factories, callback)
+        rltFetcherV2.fetch(
+            location,
+            factories,
+            callback
+        )
     }
 
 

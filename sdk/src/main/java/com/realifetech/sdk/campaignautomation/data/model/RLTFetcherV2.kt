@@ -11,13 +11,9 @@ import javax.inject.Inject
 
 class RLTFetcherV2 @Inject constructor() {
 
-
-    private val bannerFactory: RLTBannerFactory? = null
-
-
     fun fetch(
         location: String,
-        factories:MutableMap<ContentType, RLTCreatableFactory<RLTDataModel>>,
+        factories: Map<ContentType, RLTCreatableFactory<*>>,
         callback: (error: Exception?, response: List<RLTCreatable?>) -> Unit
     ) {
         val list = mutableListOf<RLTCreatable?>()
