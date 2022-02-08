@@ -14,9 +14,9 @@ class RLTFetcher @Inject constructor() {
     fun fetch(
         location: String,
         factories: Map<ContentType, RLTCreatableFactory<*>>,
-        callback: (error: Exception?, response: List<RLTCreatable?>) -> Unit
+        callback: (error: Exception?, response: List<RLTViewCreatable?>) -> Unit
     ) {
-        val list = mutableListOf<RLTCreatable?>()
+        val list = mutableListOf<RLTViewCreatable?>()
         RealifeTech.getCampaignAutomation()
             .getContentByExternalId(location) { error, response ->
                 GlobalScope.launch(Dispatchers.IO) {

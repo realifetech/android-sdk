@@ -1,3 +1,3 @@
 package com.realifetech.sdk.campaignautomation.data.model
 
-interface RLTCreatable
+interface RLTViewCreatable

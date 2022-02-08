@@ -51,7 +51,7 @@ class CampaignAutomationActivity : AppCompatActivity() {
 
     // This is the Fabric given by the Integrator
     inner class IntegratorBannerFactory : RLTBannerFactory {
-        override fun create(dataModel: BannerDataModel): RLTCreatable {
+        override fun create(dataModel: BannerDataModel): RLTViewCreatable {
             return IntegratorBanner(
                 context = this@CampaignAutomationActivity,
                 bannerDataModel = dataModel
@@ -66,7 +66,7 @@ class CampaignAutomationActivity : AppCompatActivity() {
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
         bannerDataModel: BannerDataModel
-    ) : ConstraintLayout(context, attrs, defStyleAttr), RLTCreatable {
+    ) : ConstraintLayout(context, attrs, defStyleAttr), RLTViewCreatable {
 
         init {
             val view = LayoutInflater.from(context)
