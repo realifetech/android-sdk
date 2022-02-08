@@ -1,6 +1,6 @@
 package com.realifetech.sdk.campaignautomation.data.model
 
-import android.util.Log
+import android.view.View
 import com.realifetech.sdk.RealifeTech
 import com.realifetechCa.type.ContentType
 import kotlinx.coroutines.Dispatchers
@@ -14,9 +14,9 @@ class RLTFetcher @Inject constructor() {
     fun fetch(
         location: String,
         factories: Map<ContentType, RLTCreatableFactory<*>>,
-        callback: (error: Exception?, response: List<RLTViewCreatable?>) -> Unit
+        callback: (error: Exception?, response: List<View?>) -> Unit
     ) {
-        val list = mutableListOf<RLTViewCreatable?>()
+        val list = mutableListOf<View?>()
         RealifeTech.getCampaignAutomation()
             .getContentByExternalId(location) { error, response ->
                 GlobalScope.launch(Dispatchers.IO) {
@@ -33,6 +33,7 @@ class RLTFetcher @Inject constructor() {
                                             (factories[ContentType.BANNER] as? RLTBannerFactory)?.create(
                                                 bannerDataModel
                                             )
+                                                    as View
                                         )
                                     }
                                     else -> {
@@ -41,21 +42,12 @@ class RLTFetcher @Inject constructor() {
                                 }
                             }
                             callback(null, list)
-                            Log.d("RLTFetcherV2", list.size.toString())
 
                         }
                     }
                 }
             }
 
-    }
-
-    private fun displayToast(message: String?) {
-        Log.d("RLTFetcherV2", message!!)
-    }
-
-    companion object {
-//        fun setFactories(factoryList: List<RLT>){}
     }
 
 

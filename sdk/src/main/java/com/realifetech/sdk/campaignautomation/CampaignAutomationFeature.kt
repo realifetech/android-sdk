@@ -1,5 +1,6 @@
 package com.realifetech.sdk.campaignautomation
 
+import android.view.View
 import com.realifetech.sdk.campaignautomation.data.model.RLTViewCreatable
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
 import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
@@ -23,7 +24,7 @@ class CampaignAutomationFeature @Inject constructor(
     fun fetch(
         location: String,
         factories: Map<ContentType, RLTCreatableFactory<*>>,
-        callback: (error: Exception?, response: List<RLTViewCreatable?>) -> Unit
+        callback: (error: Exception?, response: List<View?>) -> Unit
     ) {
         rltFetcher.fetch(
             location,
