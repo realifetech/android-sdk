@@ -17,11 +17,14 @@ class OAuth2ApolloInterceptor : ApolloInterceptor {
         callBack: ApolloInterceptor.CallBack
     ) {
         chain.proceedAsync(request, dispatcher, object : ApolloInterceptor.CallBack {
+            @Suppress("UNCHECKED_CAST")
             override fun onResponse(response: ApolloInterceptor.InterceptorResponse) {
                 response.parsedResponse.get().errors?.let {
                     val error = it.firstOrNull() as? Error
                     val message = error?.message ?: DEFAULT_MESSAGE
-                    callBack.onFailure(ApolloException(message))
+                    val errorCode = (error?.customAttributes?.getValue(EXTENSIONS)
+                            as? MutableMap<String, String>)?.getValue(CODE)
+                    callBack.onFailure(ApolloException(message, Throwable(errorCode)))
                 } ?: run {
                     callBack.onResponse(response)
                 }
@@ -47,5 +50,7 @@ class OAuth2ApolloInterceptor : ApolloInterceptor {
 
     companion object {
         const val DEFAULT_MESSAGE = "Unknown error"
+        const val EXTENSIONS = "extensions"
+        const val CODE = "code"
     }
 }
