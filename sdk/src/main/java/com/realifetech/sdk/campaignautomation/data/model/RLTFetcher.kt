@@ -28,7 +28,6 @@ class RLTFetcher @Inject constructor() {
                             response.items?.forEach {
                                 when (it?.contentType) {
                                     ContentType.BANNER -> {
-                                        Log.d("RLTFetcher", "WOW IT'S A MATCH ${it.data}")
                                         val bannerDataModel = convert<BannerDataModel>(it)
                                         list.add(
                                             (factories[ContentType.BANNER] as? RLTBannerFactory)?.create(
