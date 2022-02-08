@@ -34,12 +34,12 @@ class CampaignAutomationActivity : AppCompatActivity() {
                 "homepage-top-view",
                 factories = factories
             ) { error, response ->
-                response.forEachIndexed { index, banner ->
-                    banner?.let {
-                        val bannerView = banner as View
-                        layout.addView(bannerView, index)
-                        set.applyTo(layout)
-                    }
+                response.let {
+
+                    val bannerView = response[0] as View
+                    layout.addView(bannerView)
+                    set.applyTo(layout)
+
                 }
                 error?.let {
 
