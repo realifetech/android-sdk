@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.banner_view.view.*
 
 class CampaignAutomationActivity : AppCompatActivity() {
 
-    @SuppressLint("CheckResult", "ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_campaign_automation_sample)
@@ -60,6 +59,7 @@ class CampaignAutomationActivity : AppCompatActivity() {
     }
 
     // This is the UI given by the Integrator
+    @SuppressLint("ViewConstructor")
     class IntegratorBanner(
         context: Context,
         bannerDataModel: BannerDataModel
