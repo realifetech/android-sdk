@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.realifetech.sample.R
@@ -30,20 +32,25 @@ class CampaignAutomationActivity : AppCompatActivity() {
         val factories =
             mutableMapOf<ContentType, RLTCreatableFactory<*>>(ContentType.BANNER to IntegratorBannerFactory())
 
-        RealifeTech.getCampaignAutomation().apply {
-            fetch(
-                "homepage-top-view",
-                factories = factories
-            ) { error, response ->
-                response.forEachIndexed { _, banner ->
-                    banner?.let {
-                        layout.addView(banner)
+        val location = findViewById<EditText>(R.id.location)
+        val button = findViewById<Button>(R.id.button)
+        button.setOnClickListener {
+            RealifeTech.getCampaignAutomation().apply {
+                fetch(
+                    location.text.toString(),
+                    factories = factories
+                ) { error, response ->
+                    response.forEachIndexed { _, item ->
+                        item?.let {
+                            layout.addView(item)
+                        }
+                    }
+                    error?.let {
+
                     }
                 }
-                error?.let {
-
-                }
             }
+
         }
 
     }
@@ -74,6 +81,9 @@ class CampaignAutomationActivity : AppCompatActivity() {
             set.match(view, this)
             view.title.text = bannerDataModel.title
             view.subtitle.text = bannerDataModel.subtitle
+            view.url.text = bannerDataModel.url
+            view.imageUrl.text = bannerDataModel.imageUrl
+            view.language.text = bannerDataModel.language
         }
 
         private fun ConstraintSet.match(view: View, parentView: View) {
