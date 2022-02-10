@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.realifetech.sample.R
@@ -39,9 +40,9 @@ class CampaignAutomationActivity : AppCompatActivity() {
                     location.text.toString(),
                     factories = factories
                 ) { error, response ->
-                    response.forEachIndexed { _, banner ->
-                        banner?.let {
-                            layout.addView(banner)
+                    response.forEachIndexed { _, item ->
+                        item?.let {
+                            layout.addView(item)
                         }
                     }
                     error?.let {
