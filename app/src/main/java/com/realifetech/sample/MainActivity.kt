@@ -35,9 +35,6 @@ class MainActivity : AppCompatActivity() {
         initTextViews(storage)
         onTextViewsChanged(storage)
         onClickButtons()
-        val factories =
-            mutableMapOf<ContentType, RLTCreatableFactory<*>>(ContentType.BANNER to IntegratorBannerFactory())
-        RealifeTech.getCampaignAutomation().factories(factories)
     }
 
     private fun onClickButtons() {
@@ -54,45 +51,6 @@ class MainActivity : AppCompatActivity() {
             RealifeTech.getSell().createOrderingJourneyFragment()
         }
         identityButton.setOnClickListener { IdentityActivity.start(this) }
-    }
-
-    // This is the Fabric given by the Integrator
-    inner class IntegratorBannerFactory : RLTBannerFactory {
-        override fun create(dataModel: BannerDataModel): RLTViewCreatable {
-            return CampaignAutomationActivity.IntegratorBanner(
-                context = this@MainActivity,
-                bannerDataModel = dataModel
-            )
-        }
-    }
-
-    @SuppressLint("ViewConstructor")
-    class IntegratorBanner(
-        context: Context,
-        bannerDataModel: BannerDataModel
-    ) : ConstraintLayout(context), RLTViewCreatable {
-
-        init {
-            val view = LayoutInflater.from(context)
-                .inflate(R.layout.banner_view, this, false)
-            val set = ConstraintSet()
-            addView(view)
-            set.clone(this)
-            set.match(view, this)
-            view.title.text = bannerDataModel.title
-            view.subtitle.text = bannerDataModel.subtitle
-            view.url.text = bannerDataModel.url
-            view.imageUrl.text = bannerDataModel.imageUrl
-            view.language.text = bannerDataModel.language
-        }
-
-        private fun ConstraintSet.match(view: View, parentView: View) {
-            this.connect(view.id, ConstraintSet.TOP, parentView.id, ConstraintSet.TOP)
-            this.connect(view.id, ConstraintSet.START, parentView.id, ConstraintSet.START)
-            this.connect(view.id, ConstraintSet.END, parentView.id, ConstraintSet.END)
-            this.connect(view.id, ConstraintSet.BOTTOM, parentView.id, ConstraintSet.BOTTOM)
-        }
-
     }
 
 
