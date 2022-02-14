@@ -31,14 +31,14 @@ class CampaignAutomationActivity : AppCompatActivity() {
 
         val factories =
             mutableMapOf<ContentType, RLTCreatableFactory<*>>(ContentType.BANNER to IntegratorBannerFactory())
+        RealifeTech.getCampaignAutomation().factories(factories)
 
         val location = findViewById<EditText>(R.id.location)
         val button = findViewById<Button>(R.id.button)
         button.setOnClickListener {
             RealifeTech.getCampaignAutomation().apply {
                 fetch(
-                    location.text.toString(),
-                    factories = factories
+                    location.text.toString()
                 ) { error, response ->
                     response.forEachIndexed { _, item ->
                         item?.let {

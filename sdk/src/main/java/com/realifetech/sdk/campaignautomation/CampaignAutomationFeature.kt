@@ -21,6 +21,20 @@ class CampaignAutomationFeature @Inject constructor(
         campaignAutomationRepo.getContentByExternalId(externalId, callback)
     }
 
+    fun factories(factories: Map<ContentType, RLTCreatableFactory<*>>){
+        rltFetcher.setFactories(factories)
+    }
+
+    fun fetch(
+        location: String,
+        callback: (error: Exception?, response: List<View?>) -> Unit
+    ) {
+        rltFetcher.fetch(
+            location,
+            callback
+        )
+    }
+
     fun fetch(
         location: String,
         factories: Map<ContentType, RLTCreatableFactory<*>>,
