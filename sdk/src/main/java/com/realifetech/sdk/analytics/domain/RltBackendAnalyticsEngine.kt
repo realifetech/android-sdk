@@ -18,7 +18,7 @@ internal class RltBackendAnalyticsEngine @Inject constructor(
     private val storage: AnalyticsStorage
 ) :
     AnalyticsEngine {
-    override suspend fun logEvent(
+    override suspend fun track(
         event: AnalyticEventWrapper,
         callback: (error: Exception?, response: Boolean) -> Unit
     ) {
@@ -60,7 +60,7 @@ internal class RltBackendAnalyticsEngine @Inject constructor(
             return
         }
         allPendingEvents.forEach { pendingEvent ->
-            logEvent(pendingEvent.event) { error, response ->
+            track(pendingEvent.event) { error, response ->
                 if (error == null) {
                     storage.remove(pendingEvent)
                 }
