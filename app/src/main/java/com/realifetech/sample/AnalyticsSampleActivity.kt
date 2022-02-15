@@ -49,7 +49,6 @@ class AnalyticsSampleActivity : AppCompatActivity() {
             .track(
                 typeEditText.text.toString(),
                 actionEditText.text.toString(),
-                userEditText.text.toString(),
                 newDictionary,
                 oldDictionary) {
                 progressBar.isVisible = false

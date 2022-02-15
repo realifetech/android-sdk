@@ -74,7 +74,6 @@ class AnalyticsTest {
             TYPE,
             ACTION,
             null,
-            null,
             null
         ) { error ->
             assert(error is Exception)
@@ -92,7 +91,6 @@ class AnalyticsTest {
             TYPE,
             ACTION,
             null,
-            null,
             null
         ) { error ->
             assert(error is Exception)
@@ -108,7 +106,6 @@ class AnalyticsTest {
         analytics.track(
             TYPE,
             ACTION,
-            null,
             null,
             null
         ) { error ->
@@ -126,7 +123,6 @@ class AnalyticsTest {
             ACTION,
             null,
             null,
-            null,
             null
         )
     }
@@ -139,7 +135,6 @@ class AnalyticsTest {
         analytics.track(
             TYPE,
             ACTION,
-            null,
             null,
             null
         ) { error ->

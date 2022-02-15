@@ -1,5 +1,6 @@
 package com.realifetech.sdk.analytics
 
+import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.analytics.data.model.AnalyticEventWrapper
 import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
@@ -43,7 +44,6 @@ class Analytics(
     fun track(
         type: String,
         action: String,
-        userId: String?,
         new: Map<String, Any>?,
         old: Map<String, Any>?,
         completion: ((
@@ -52,7 +52,7 @@ class Analytics(
     ) {
         GlobalScope.launch(dispatcherIO) {
             val event =
-                AnalyticEventWrapper(type, action, new, old, timeUtils.currentTime)
+                AnalyticEventWrapper(type, action, RealifeTech.configuration.userId, new, old, timeUtils.currentTime)
             if (general.isSdkReady) {
                 engine.track(event) { error, response ->
                     var errorResponse: Exception? = null
