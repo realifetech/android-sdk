@@ -43,6 +43,7 @@ class Analytics(
     fun track(
         type: String,
         action: String,
+        userId: String?,
         new: Map<String, Any>?,
         old: Map<String, Any>?,
         completion: ((

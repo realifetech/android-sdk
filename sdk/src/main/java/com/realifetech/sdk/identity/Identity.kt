@@ -1,8 +1,9 @@
 package com.realifetech.sdk.identity
 
+import android.content.Context
+import android.content.Intent
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
-import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.identity.domain.IdentityRepository
 import com.realifetech.sdk.identity.sso.SSOFeature
 import com.realifetech.sdk.sell.weboredering.WebViewWrapper
@@ -20,29 +21,52 @@ class Identity @Inject constructor(
     private val ssoFeature: SSOFeature,
     private val storage: AuthTokenStorage,
 ) {
+
+
     fun getSSO(): SSOFeature {
         return ssoFeature
     }
+
     fun logout() {
         webViewWrapper.clearCacheAndStorage()
     }
 
     fun identify(
         userId: String,
-        traits: Map<String, Any>?
-    ){
+        traits: Map<String, Any>?,
+        completion: (error: Exception?) -> Unit
+    ) {
         RealifeTech.configuration.userId = userId
-//        RealifeTech.getAnalytics().logEvent()
+        RealifeTech.getAnalytics()
+            .track(
+                type = USER,
+                action = IDENTIFY,
+                userId = userId,
+                new = traits,
+                old = null
+            ) {
+
+            }
     }
 
     fun alias(
         aliasType: String,
-        aliasId: String
-    ){
-//        RealifeTech.getAnalytics().logEvent()
+        aliasId: String,
+        completion: (error: Exception?) -> Unit
+    ) {
+        RealifeTech.getAnalytics()
+            .track(
+                type = USER,
+                action = ALIAS,
+                userId = RealifeTech.configuration.userId,
+                new = mapOf(aliasType to aliasId),
+                old = null
+            ) {
+
+            }
     }
 
-    fun clear(){
+    fun clear() {
         RealifeTech.configuration.userId = null
     }
 
@@ -80,5 +104,11 @@ class Identity @Inject constructor(
 
         }
 
+    }
+
+    companion object {
+     private const val USER = "user"
+     private const val ALIAS = "alias"
+     private const val IDENTIFY = "identify"
     }
 }

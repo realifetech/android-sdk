@@ -45,6 +45,26 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutAction3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Action"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutAction">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/userEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
     <Button
         android:id="@+id/sendEventButton"
         android:layout_width="wrap_content"
@@ -134,8 +154,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Should Send New Data"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayoutAction"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutAction" />
+        app:layout_constraintStart_toStartOf="@+id/textInputLayoutAction3"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutAction3" />
 
     <CheckBox
         android:id="@+id/oldDictionaryCheckBox"
@@ -145,6 +165,6 @@
         android:layout_marginTop="16dp"
         android:text="Should Send Old Data"
         app:layout_constraintStart_toEndOf="@+id/newDictionaryCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutAction" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutAction3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
