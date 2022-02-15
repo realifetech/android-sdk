@@ -40,7 +40,7 @@ class Analytics(
      * In case if there was an error, the event will be saved in the [storage], and the [retryPolicy] will be called, for
      * new attempts of sending pending events.
      */
-    fun logEvent(
+    fun track(
         type: String,
         action: String,
         new: Map<String, Any>?,
@@ -53,7 +53,7 @@ class Analytics(
             val event =
                 AnalyticEventWrapper(type, action, new, old, timeUtils.currentTime)
             if (general.isSdkReady) {
-                engine.logEvent(event) { error, response ->
+                engine.track(event) { error, response ->
                     var errorResponse: Exception? = null
                     error?.let {
                         retryPolicy.execute()

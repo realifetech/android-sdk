@@ -68,9 +68,9 @@ class AnalyticsTest {
     @Test
     fun `log Event while sdk is ready returns error and send pending events`() = runBlockingTest {
         val event = AnalyticsMocks.analyticEventWrapper
-        initLogEventMocks(event, Exception(ERROR_MESSAGE), false)
+        initTrackEventMocks(event, Exception(ERROR_MESSAGE), false)
         initLogPendingEvent(true)
-        analytics.logEvent(
+        analytics.track(
             TYPE,
             ACTION,
             null,
@@ -85,9 +85,9 @@ class AnalyticsTest {
     @Test
     fun `log Event while sdk is ready returns error and empty pending events`() = runBlockingTest {
         val event = AnalyticsMocks.analyticEventWrapper
-        initLogEventMocks(event, Exception(ERROR_MESSAGE), false)
+        initTrackEventMocks(event, Exception(ERROR_MESSAGE), false)
         initLogPendingEvent(false)
-        analytics.logEvent(
+        analytics.track(
             TYPE,
             ACTION,
             null,
@@ -102,8 +102,8 @@ class AnalyticsTest {
     @Test
     fun `log Event while sdk is ready result with success`() = runBlockingTest {
         val event = AnalyticsMocks.analyticEventWrapper
-        initLogEventMocks(event, null, true)
-        analytics.logEvent(
+        initTrackEventMocks(event, null, true)
+        analytics.track(
             TYPE,
             ACTION,
             null,
@@ -117,8 +117,8 @@ class AnalyticsTest {
     @Test
     fun `log Event while sdk is ready results with null completion`() = runBlockingTest {
         val event = AnalyticsMocks.analyticEventWrapper
-        initLogEventMocks(event, null, true)
-        analytics.logEvent(
+        initTrackEventMocks(event, null, true)
+        analytics.track(
             TYPE,
             ACTION,
             null,
@@ -131,8 +131,8 @@ class AnalyticsTest {
     @Test
     fun `log Event while sdk is not ready result with RunTimeException`() = runBlockingTest {
         val event = AnalyticsMocks.analyticEventWrapper
-        initLogEventMocks(event, null, response = false, sdkReady = false)
-        analytics.logEvent(
+        initTrackEventMocks(event, null, response = false, sdkReady = false)
+        analytics.track(
             TYPE,
             ACTION,
             null,
@@ -147,14 +147,14 @@ class AnalyticsTest {
         }
     }
 
-    private fun initLogEventMocks(
+    private fun initTrackEventMocks(
         event: AnalyticEventWrapper,
         error: Exception?,
         response: Boolean,
         sdkReady: Boolean = true
     ) {
         every { general.isSdkReady } returns sdkReady
-        coEvery { analyticsEngine.logEvent(event, capture(captureSlot)) }
+        coEvery { analyticsEngine.track(event, capture(captureSlot)) }
             .coAnswers { captureSlot.captured.invoke(error, response) }
     }
 

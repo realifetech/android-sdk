@@ -11,6 +11,20 @@ import javax.inject.Inject
 
 class RLTFetcher @Inject constructor() {
 
+    private var factories: Map<ContentType, RLTCreatableFactory<*>> = emptyMap()
+
+    fun setFactories(factories: Map<ContentType, RLTCreatableFactory<*>>) {
+        this.factories = factories
+    }
+
+    fun fetch(
+        location: String,
+        callback: (error: Exception?, response: List<View?>) -> Unit
+    ) {
+        fetch(location, factories, callback)
+    }
+
+
     fun fetch(
         location: String,
         factories: Map<ContentType, RLTCreatableFactory<*>>,
@@ -49,7 +63,6 @@ class RLTFetcher @Inject constructor() {
             }
 
     }
-
 
 }
 

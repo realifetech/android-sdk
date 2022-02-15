@@ -42,7 +42,7 @@ class RltBackendAnalyticsEngineTest {
             response.data
         } returns AnalyticsMocks.successData
         putEventSuccessfully()
-        rltBackendAnalyticsEngine.logEvent(AnalyticsMocks.analyticEventWrapper) { error, response ->
+        rltBackendAnalyticsEngine.track(AnalyticsMocks.analyticEventWrapper) { error, response ->
             Assert.assertEquals(null, error)
             Assert.assertEquals(true, response)
         }
@@ -102,7 +102,7 @@ class RltBackendAnalyticsEngineTest {
             response.data
         } throws ApolloHttpException(any())
         putEventSuccessfully()
-        rltBackendAnalyticsEngine.logEvent(AnalyticsMocks.analyticEventWrapper) { error, response ->
+        rltBackendAnalyticsEngine.track(AnalyticsMocks.analyticEventWrapper) { error, response ->
             assert(error is ApolloHttpException)
             Assert.assertEquals(false, response)
         }
@@ -120,7 +120,7 @@ class RltBackendAnalyticsEngineTest {
         } answers {
             captureSlot.captured.onFailure(ApolloException("Error"))
         }
-        rltBackendAnalyticsEngine.logEvent(AnalyticsMocks.analyticEventWrapper) { error, response ->
+        rltBackendAnalyticsEngine.track(AnalyticsMocks.analyticEventWrapper) { error, response ->
             assert(error is ApolloException)
             Assert.assertEquals(false, response)
         }
@@ -137,14 +137,14 @@ class RltBackendAnalyticsEngineTest {
             response.data
         } returns null
         putEventSuccessfully()
-        rltBackendAnalyticsEngine.logEvent(AnalyticsMocks.analyticEventWrapper) { error, response ->
+        rltBackendAnalyticsEngine.track(AnalyticsMocks.analyticEventWrapper) { error, response ->
             callback(error, response)
         }
         every {
             response.data?.putAnalyticEvent
         } returns null
 
-        rltBackendAnalyticsEngine.logEvent(AnalyticsMocks.analyticEventWrapper) { error, response ->
+        rltBackendAnalyticsEngine.track(AnalyticsMocks.analyticEventWrapper) { error, response ->
             callback(error, response)
         }
         verify { storage.save(AnalyticsMocks.analyticEventWrapper) }

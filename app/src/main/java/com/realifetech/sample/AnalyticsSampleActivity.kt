@@ -46,7 +46,7 @@ class AnalyticsSampleActivity : AppCompatActivity() {
         operationTextView.text = "Sending analytics event"
 
         RealifeTech.getAnalytics()
-            .logEvent(typeEditText.text.toString(), actionEditText.text.toString(), newDictionary, oldDictionary) {
+            .track(typeEditText.text.toString(), actionEditText.text.toString(), newDictionary, oldDictionary) {
                 progressBar.isVisible = false
                 resultTextView.text = when (it != null) {
                     false -> "Success!"

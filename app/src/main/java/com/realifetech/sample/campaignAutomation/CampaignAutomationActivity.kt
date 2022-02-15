@@ -28,17 +28,18 @@ class CampaignAutomationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_campaign_automation_sample)
 
         val layout = findViewById<LinearLayout>(R.id.campaignAutomationLayout)
+        val location = findViewById<EditText>(R.id.location)
+        val button = findViewById<Button>(R.id.button)
 
         val factories =
             mutableMapOf<ContentType, RLTCreatableFactory<*>>(ContentType.BANNER to IntegratorBannerFactory())
 
-        val location = findViewById<EditText>(R.id.location)
-        val button = findViewById<Button>(R.id.button)
+        RealifeTech.getCampaignAutomation().factories(factories)
+
         button.setOnClickListener {
             RealifeTech.getCampaignAutomation().apply {
                 fetch(
-                    location.text.toString(),
-                    factories = factories
+                    location.text.toString()
                 ) { error, response ->
                     response.forEachIndexed { _, item ->
                         item?.let {
