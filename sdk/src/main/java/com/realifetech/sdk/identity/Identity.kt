@@ -1,7 +1,5 @@
 package com.realifetech.sdk.identity
 
-import android.content.Context
-import android.content.Intent
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.identity.domain.IdentityRepository
@@ -107,8 +105,8 @@ class Identity @Inject constructor(
     }
 
     companion object {
-     private const val USER = "user"
-     private const val ALIAS = "alias"
-     private const val IDENTIFY = "identify"
+        private const val USER = "user"
+        private const val ALIAS = "alias"
+        private const val IDENTIFY = "identify"
     }
 }
