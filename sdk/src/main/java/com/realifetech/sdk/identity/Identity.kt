@@ -39,7 +39,6 @@ class Identity @Inject constructor(
             .track(
                 type = USER,
                 action = IDENTIFY,
-                userId = userId,
                 new = traits,
                 old = null
             ) {
@@ -56,7 +55,6 @@ class Identity @Inject constructor(
             .track(
                 type = USER,
                 action = ALIAS,
-                userId = RealifeTech.configuration.userId,
                 new = mapOf(aliasType to aliasId),
                 old = null
             ) {
