@@ -18,16 +18,18 @@ object AnalyticsMocks {
     val analyticEventWrapper = event1.event
     val analyticEvent = analyticEventWrapper.asAnalyticEvent()
     val successData = PutAnalyticEventMutation.Data(
-            PutAnalyticEventMutation.PutAnalyticEvent(
-                "",
-                true,
-                "event saved successfully"
-            )
+        PutAnalyticEventMutation.PutAnalyticEvent(
+            "",
+            true,
+            "event saved successfully"
         )
+    )
+
     private fun generateEvents(type: String, action: String) = PendingAnalyticsEvent(
         AnalyticEventWrapper(
             type,
             action,
+            null,
             null,
             null,
             1234
