@@ -66,6 +66,7 @@ class AnalyticsTest {
         captureSlot = CapturingSlot()
         pendingCaptureSlot = CapturingSlot()
         every { deviceCalendar.currentTime } returns CURRENT_TIME
+        every { configurationStorage.userId } returns null
 
     }
 
