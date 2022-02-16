@@ -104,7 +104,8 @@ object FeatureModule {
         analyticsEngine: AnalyticsEngine,
         analyticsStorage: AnalyticsStorage,
         general: General,
-        deviceCalendar: DeviceCalendar
+        deviceCalendar: DeviceCalendar,
+        configuration: ConfigurationStorage
     ): Analytics =
         Analytics(
             analyticsEngine,
@@ -112,7 +113,8 @@ object FeatureModule {
             general,
             Dispatchers.IO,
             Dispatchers.Main,
-            deviceCalendar
+            deviceCalendar,
+            configuration
         )
 
 

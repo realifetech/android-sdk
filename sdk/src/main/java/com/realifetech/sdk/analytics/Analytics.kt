@@ -1,9 +1,9 @@
 package com.realifetech.sdk.analytics
 
-import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.analytics.data.model.AnalyticEventWrapper
 import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.domain.LinearRetryPolicy
 import com.realifetech.sdk.core.domain.RetryPolicy
 import com.realifetech.sdk.core.utils.DeviceCalendar
@@ -20,7 +20,8 @@ class Analytics(
     private val general: General,
     private val dispatcherIO: CoroutineDispatcher,
     private val dispatcherMain: CoroutineDispatcher,
-    private val timeUtils: DeviceCalendar
+    private val timeUtils: DeviceCalendar,
+    private val configurationStorage: ConfigurationStorage
 ) {
 
     internal val retryPolicy: RetryPolicy = LinearRetryPolicy(RETRY_TIME_MILLISECONDS) {
@@ -52,7 +53,14 @@ class Analytics(
     ) {
         GlobalScope.launch(dispatcherIO) {
             val event =
-                AnalyticEventWrapper(type, action, RealifeTech.configuration.userId, new, old, timeUtils.currentTime)
+                AnalyticEventWrapper(
+                    type,
+                    action,
+                    configurationStorage.userId,
+                    new,
+                    old,
+                    timeUtils.currentTime
+                )
             if (general.isSdkReady) {
                 engine.track(event) { error, response ->
                     var errorResponse: Exception? = null
