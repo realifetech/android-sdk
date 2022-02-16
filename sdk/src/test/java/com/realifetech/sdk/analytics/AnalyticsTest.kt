@@ -5,6 +5,7 @@ import com.realifetech.sdk.analytics.data.model.AnalyticEventWrapper
 import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
 import com.realifetech.sdk.analytics.mocks.AnalyticsMocks
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.utils.DeviceCalendar
 import com.realifetech.sdk.general.General
 import com.realifetech.sdk.sell.utils.MainCoroutineRule
@@ -40,6 +41,9 @@ class AnalyticsTest {
     lateinit var deviceCalendar: DeviceCalendar
 
     @RelaxedMockK
+    lateinit var configurationStorage: ConfigurationStorage
+
+    @RelaxedMockK
     lateinit var general: General
     lateinit var analytics: Analytics
     private lateinit var eventResponse: (error: Exception?, response: Boolean) -> Unit
@@ -55,7 +59,8 @@ class AnalyticsTest {
                 analyticsStorage,
                 general,
                 testDispatcher, testDispatcher,
-                deviceCalendar
+                deviceCalendar,
+                configurationStorage
             )
         eventResponse = mockk()
         captureSlot = CapturingSlot()
@@ -75,7 +80,7 @@ class AnalyticsTest {
             ACTION,
             null,
             null
-        ) { error ->
+        ) { error, _ ->
             assert(error is Exception)
             Assert.assertEquals(ERROR_MESSAGE, error?.message)
         }
@@ -92,7 +97,7 @@ class AnalyticsTest {
             ACTION,
             null,
             null
-        ) { error ->
+        ) { error, _  ->
             assert(error is Exception)
             Assert.assertEquals(ERROR_MESSAGE, error?.message)
         }
@@ -108,7 +113,7 @@ class AnalyticsTest {
             ACTION,
             null,
             null
-        ) { error ->
+        ) { error, _  ->
             Assert.assertEquals(null, error)
         }
     }
@@ -137,7 +142,7 @@ class AnalyticsTest {
             ACTION,
             null,
             null
-        ) { error ->
+        ) { error, _  ->
             assert(error is RuntimeException)
             Assert.assertEquals(RUNTIME_EXCEPTION_MESSAGE, error?.message)
         }

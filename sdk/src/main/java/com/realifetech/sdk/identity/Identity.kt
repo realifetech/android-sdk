@@ -2,6 +2,8 @@ package com.realifetech.sdk.identity
 
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
+import com.realifetech.sdk.identity.data.model.RLTAliasType
+import com.realifetech.sdk.identity.data.model.RLTTraitType
 import com.realifetech.sdk.identity.domain.IdentityRepository
 import com.realifetech.sdk.identity.sso.SSOFeature
 import com.realifetech.sdk.sell.weboredering.WebViewWrapper
@@ -31,35 +33,59 @@ class Identity @Inject constructor(
 
     fun identify(
         userId: String,
-        traits: Map<String, Any>?,
-        completion: (error: Exception?) -> Unit
+        traits: Map<RLTTraitType, Any>?,
+        completion: (error: Exception?, result: Boolean) -> Unit
     ) {
+
         RealifeTech.configuration.userId = userId
+
+        val map = mutableMapOf<String, Any>()
+        traits?.forEach { trait ->
+            when (val key = trait.key) {
+                RLTTraitType.DateOfBirth -> map["dateOfBirth"] = trait.value
+                RLTTraitType.Email -> map["email"] = trait.value
+                RLTTraitType.EmailConsent -> map["emailConsent"] = trait.value
+                RLTTraitType.FirstName -> map["firstName"] = trait.value
+                RLTTraitType.LastName -> map["lastName"] = trait.value
+                RLTTraitType.PushConsent -> map["pushConsent"] = trait.value
+                is RLTTraitType.Dynamic -> map[key.rawvalue] = trait.value
+            }
+        }
+
         RealifeTech.getAnalytics()
             .track(
                 type = USER,
                 action = IDENTIFY,
-                new = traits,
-                old = null
-            ) {
-
-            }
+                new = map,
+                old = null,
+                completion
+            )
     }
 
     fun alias(
-        aliasType: String,
+        aliasType: RLTAliasType,
         aliasId: String,
-        completion: (error: Exception?) -> Unit
+        completion: (error: Exception?, result: Boolean) -> Unit
     ) {
+
+
+        val alias = when(aliasType){
+            RLTAliasType.ExternalUserId -> "EXTERNAL_USER_ID"
+            RLTAliasType.AltExternalUserId -> "ALT_EXTERNAL_USER_ID"
+            RLTAliasType.TicketmasterAccountId -> "TM_ACCOUNT_ID"
+            RLTAliasType.TdcAccountId -> "TDC_ACCOUNT_ID"
+            RLTAliasType.BleepAccountId -> "BLEEP_ACCOUNT_ID"
+            is RLTAliasType.Dynamic -> aliasType.rawvalue
+        }
+
         RealifeTech.getAnalytics()
             .track(
                 type = USER,
                 action = ALIAS,
-                new = mapOf(aliasType to aliasId),
-                old = null
-            ) {
-
-            }
+                new = mapOf(alias to aliasId),
+                old = null,
+                completion
+            )
     }
 
     fun clear() {

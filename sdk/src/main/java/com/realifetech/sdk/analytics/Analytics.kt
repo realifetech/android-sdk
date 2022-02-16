@@ -48,7 +48,8 @@ class Analytics(
         new: Map<String, Any>?,
         old: Map<String, Any>?,
         completion: ((
-            error: Exception?
+            error: Exception?,
+            result: Boolean
         ) -> Unit)?
     ) {
         GlobalScope.launch(dispatcherIO) {
@@ -73,14 +74,14 @@ class Analytics(
                     }
                     GlobalScope.launch(dispatcherIO) {
                         withContext(dispatcherMain) {
-                            completion?.invoke(errorResponse)
+                            completion?.invoke(errorResponse, response)
                         }
                     }
                 }
             } else {
                 storage.save(event)
                 withContext(dispatcherMain) {
-                    completion?.invoke(RuntimeException(RUNTIME_EXCEPTION_MESSAGE))
+                    completion?.invoke(RuntimeException(RUNTIME_EXCEPTION_MESSAGE), false)
                 }
             }
 

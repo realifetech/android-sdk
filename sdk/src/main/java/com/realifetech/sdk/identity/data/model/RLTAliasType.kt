@@ -1,11 +1,12 @@
 package com.realifetech.sdk.identity.data.model
 
-enum class RLTAliasType(val aliasType : String) {
+sealed class RLTAliasType {
 
-    EXTERNAL_USER_ID("EXTERNAL_USER_ID"),
-    ALT_EXTERNAL_USER_ID("ALT_EXTERNAL_USER_ID"),
-    TICKETMASTER_ACCOUNT_ID("TM_ACCOUNT_ID"),
-    TDC_ACCOUNT_ID("TDC_ACCOUNT_ID"),
-    BLEEP_ACCOUNT_ID("BLEEP_ACCOUNT_ID")
+    object ExternalUserId : RLTAliasType()
+    object AltExternalUserId : RLTAliasType()
+    object TicketmasterAccountId : RLTAliasType()
+    object TdcAccountId : RLTAliasType()
+    object BleepAccountId : RLTAliasType()
+    class Dynamic(val rawvalue: String) : RLTAliasType()
 
 }

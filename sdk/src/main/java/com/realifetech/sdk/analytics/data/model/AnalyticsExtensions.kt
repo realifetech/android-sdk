@@ -15,7 +15,8 @@ fun AnalyticEventWrapper.asAnalyticEvent() = AnalyticEvent(
     SimpleDateFormat(
         DATE_FORMAT,
         Locale.getDefault()
-    ).format(Date(this.creationTimeMillisecondsSince1970))
+    ).format(Date(this.creationTimeMillisecondsSince1970)),
+    Input.optional(this.userId)
 )
 
 private const val EVENT_VERSION = "1.0"
