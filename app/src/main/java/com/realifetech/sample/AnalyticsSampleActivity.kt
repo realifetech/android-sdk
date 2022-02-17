@@ -66,7 +66,8 @@ class AnalyticsSampleActivity : AppCompatActivity() {
         operationTextView.text = "Sending analytics event"
 
         RealifeTech.getIdentity().alias(
-            aliasType = RLTAliasType.Dynamic("wired alias"),
+//            aliasType = RLTAliasType.Dynamic("wired alias"),
+            aliasType = RLTAliasType.TdcAccountId,
             aliasId = aliasIdEditText.text.toString()
         ) { error, result ->
             progressBar.isVisible = false
