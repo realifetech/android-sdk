@@ -9,7 +9,7 @@ sealed class RLTAliasType {
     object BleepAccountId : RLTAliasType()
     class Dynamic(val rawvalue: String) : RLTAliasType()
 
-    fun convertAliasToString(): String {
+    internal fun convertAliasToString(): String {
         return when (this) {
             ExternalUserId -> EXTERNAL_USER_ID
             AltExternalUserId -> ALT_EXTERNAL_USER_ID

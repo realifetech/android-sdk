@@ -10,7 +10,7 @@ sealed class RLTTraitType {
     object EmailConsent : RLTTraitType()
     class Dynamic(val rawvalue: String) : RLTTraitType()
 
-    fun convertTraitToString(): String {
+    internal fun convertTraitToString(): String {
         return when (this) {
             DateOfBirth -> DOB
             Email -> EMAIL
