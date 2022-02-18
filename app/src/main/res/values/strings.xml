@@ -7,6 +7,7 @@
     <string name="ordering_journey_url">Ordering Journey URL</string>
     <string name="communicate">Communicate</string>
     <string name="analytics">Analytics</string>
+    <string name="caIdentity">CA Identity</string>
     <string name="audience">Audience</string>
     <string name="app_version">"App Version: "</string>
     <string name="dash">-</string>

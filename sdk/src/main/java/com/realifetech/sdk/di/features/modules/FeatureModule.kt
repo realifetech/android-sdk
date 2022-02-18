@@ -104,7 +104,8 @@ object FeatureModule {
         analyticsEngine: AnalyticsEngine,
         analyticsStorage: AnalyticsStorage,
         general: General,
-        deviceCalendar: DeviceCalendar
+        deviceCalendar: DeviceCalendar,
+        configuration: ConfigurationStorage
     ): Analytics =
         Analytics(
             analyticsEngine,
@@ -112,7 +113,8 @@ object FeatureModule {
             general,
             Dispatchers.IO,
             Dispatchers.Main,
-            deviceCalendar
+            deviceCalendar,
+            configuration
         )
 
 
@@ -122,7 +124,9 @@ object FeatureModule {
         identityRepository: IdentityRepository,
         webViewWrapper: WebViewWrapper,
         storage: AuthTokenStorage,
-        ssoFeature: SSOFeature
+        ssoFeature: SSOFeature,
+        configuration: ConfigurationStorage,
+        analytics: Analytics
     ): Identity =
         Identity(
             webViewWrapper,
@@ -130,7 +134,9 @@ object FeatureModule {
             Dispatchers.IO,
             Dispatchers.Main,
             ssoFeature,
-            storage
+            storage,
+            configuration,
+            analytics
         )
 
 }

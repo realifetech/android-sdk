@@ -50,6 +50,12 @@ class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
             preferences.edit { putString(APP_CODE, value) }
         }
 
+    var userId: String?
+        get() = preferences.getString(USER_ID, null)
+        set(value) {
+            preferences.edit { putString(USER_ID, value) }
+        }
+
     fun set(value: CoreConfiguration) {
         value.let {
             appCode = it.appCode
@@ -69,6 +75,7 @@ class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
     companion object {
         private const val APP_CODE = "app_code"
         private const val CLIENT_SECRET = "client_secret"
+        private const val USER_ID = "user_id"
         private const val ORDERING_JOURNEY_URL = "ordering_journey_url"
         private const val API_URL = "api_url"
         private const val GRAPHQL_URL = "graphql_url"

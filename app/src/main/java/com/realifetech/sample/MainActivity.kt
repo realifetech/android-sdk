@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.widget.doOnTextChanged
 import com.realifetech.sample.campaignAutomation.CampaignAutomationActivity
 import com.realifetech.sample.data.DeviceConfigurationStorage
+import com.realifetech.sample.identity.CAIdentitySampleActivity
 import com.realifetech.sample.identity.IdentityActivity
 import com.realifetech.sample.identity.IdentitySSOActivity
 import com.realifetech.sample.webPage.WebPageSampleActivity
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         communicateButton.setOnClickListener { CommunicationSampleActivity.start(this) }
         analyticsButton.setOnClickListener { AnalyticsSampleActivity.start(this) }
         audienceButton.setOnClickListener { AudienceSampleActivity.start(this) }
+        campaignAutomationIdentityButton.setOnClickListener { CAIdentitySampleActivity.start(this) }
         widgetsButton.setOnClickListener { WidgetsSampleActivity.start(this) }
         webPage.setOnClickListener { WebPageSampleActivity.start(this) }
         campaignAutomationButton.setOnClickListener { CampaignAutomationActivity.start(this) }

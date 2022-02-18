@@ -2,10 +2,12 @@ package com.realifetech.sample
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.realifetech.sdk.RealifeTech
+import com.realifetech.sdk.identity.data.model.RLTAliasType
+import com.realifetech.sdk.identity.data.model.RLTTraitType
 import kotlinx.android.synthetic.main.activity_analytics_sample.*
 import kotlinx.android.synthetic.main.activity_communication_sample.operationTextView
 import kotlinx.android.synthetic.main.activity_communication_sample.progressBar
@@ -38,7 +40,10 @@ class AnalyticsSampleActivity : AppCompatActivity() {
         sendEventButton.setOnClickListener {
             sendEvent()
         }
+
+
     }
+
 
     private fun sendEvent() {
         progressBar.isVisible = true
@@ -46,13 +51,22 @@ class AnalyticsSampleActivity : AppCompatActivity() {
         operationTextView.text = "Sending analytics event"
 
         RealifeTech.getAnalytics()
-            .track(typeEditText.text.toString(), actionEditText.text.toString(), newDictionary, oldDictionary) {
+            .track(
+                typeEditText.text.toString(),
+                actionEditText.text.toString(),
+                newDictionary,
+                oldDictionary
+            ) { error, result ->
                 progressBar.isVisible = false
-                resultTextView.text = when (it != null) {
-                    false -> "Success!"
-                    else -> it?.message ?: "Unknown error"
+                result.takeIf { it }?.let {
+                    resultTextView.text = "Success"
+                }
+                error?.let {
+                    resultTextView.text = "Failure"
                 }
             }
+
+
     }
 
     companion object {

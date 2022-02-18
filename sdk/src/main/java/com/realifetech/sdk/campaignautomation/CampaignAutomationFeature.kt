@@ -1,7 +1,6 @@
 package com.realifetech.sdk.campaignautomation
 
 import android.view.View
-import com.realifetech.sdk.campaignautomation.data.model.RLTViewCreatable
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
 import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
 import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository

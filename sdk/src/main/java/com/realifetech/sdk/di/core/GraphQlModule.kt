@@ -26,13 +26,15 @@ class GraphQlModule {
         deviceIdInterceptor: DeviceIdInterceptor,
         platformPreferences: PlatformPreferences,
         authTokenStorage: AuthTokenStorage,
-        oAuthManager: Lazy<OAuthManager>
+        oAuthManager: Lazy<OAuthManager>,
+        languageInterceptor: LanguageInterceptor
     ): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
             .addInterceptor(OAuth2AuthenticationInterceptor(authTokenStorage, platformPreferences))
             .addInterceptor(deviceIdInterceptor)
+            .addInterceptor(languageInterceptor)
             .authenticator(OAuth2Authenticator(oAuthManager))
             .addNetworkInterceptor(UnauthenticatedCaseParserInterceptor())
             .addInterceptor(loggingInterceptor)

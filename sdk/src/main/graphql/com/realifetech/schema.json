@@ -8590,6 +8590,16 @@
                 }
               },
               "defaultValue": null
+            },
+            {
+              "name": "userId",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -15409,9 +15419,9 @@
   "extensions": {
     "tracing": {
       "version": 1,
-      "startTime": "2022-01-27T12:45:27.142Z",
-      "endTime": "2022-01-27T12:45:27.165Z",
-      "duration": 23120889,
+      "startTime": "2022-02-15T10:16:23.096Z",
+      "endTime": "2022-02-15T10:16:23.115Z",
+      "duration": 19851197,
       "execution": {
         "resolvers": []
       }
