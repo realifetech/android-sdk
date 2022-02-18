@@ -124,7 +124,9 @@ object FeatureModule {
         identityRepository: IdentityRepository,
         webViewWrapper: WebViewWrapper,
         storage: AuthTokenStorage,
-        ssoFeature: SSOFeature
+        ssoFeature: SSOFeature,
+        configuration: ConfigurationStorage,
+        analytics: Analytics
     ): Identity =
         Identity(
             webViewWrapper,
@@ -132,7 +134,9 @@ object FeatureModule {
             Dispatchers.IO,
             Dispatchers.Main,
             ssoFeature,
-            storage
+            storage,
+            configuration,
+            analytics
         )
 
 }

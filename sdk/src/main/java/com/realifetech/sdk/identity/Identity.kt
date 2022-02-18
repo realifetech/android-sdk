@@ -1,7 +1,9 @@
 package com.realifetech.sdk.identity
 
 import com.realifetech.sdk.RealifeTech
+import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.identity.data.model.RLTAliasType
 import com.realifetech.sdk.identity.data.model.RLTTraitType
 import com.realifetech.sdk.identity.domain.IdentityRepository
@@ -20,6 +22,8 @@ class Identity @Inject constructor(
     private val dispatcherMain: CoroutineDispatcher,
     private val ssoFeature: SSOFeature,
     private val storage: AuthTokenStorage,
+    private val configurationStorage: ConfigurationStorage,
+    private val analytics: Analytics
 ) {
 
 
@@ -37,15 +41,14 @@ class Identity @Inject constructor(
         completion: (error: Exception?, result: Boolean) -> Unit
     ) {
 
-        RealifeTech.configuration.userId = userId
+        configurationStorage.userId = userId
 
         val map = mutableMapOf<String, Any>()
         traits?.forEach { trait ->
             map[trait.key.convertTraitToString()] = trait.value
         }
 
-        RealifeTech.getAnalytics()
-            .track(
+        analytics.track(
                 type = USER,
                 action = IDENTIFY,
                 new = map,
@@ -62,8 +65,7 @@ class Identity @Inject constructor(
 
         val alias = aliasType.convertAliasToString()
 
-        RealifeTech.getAnalytics()
-            .track(
+        analytics.track(
                 type = USER,
                 action = ALIAS,
                 new = mapOf(alias to aliasId),
@@ -73,7 +75,7 @@ class Identity @Inject constructor(
     }
 
     fun clear() {
-        RealifeTech.configuration.userId = null
+        configurationStorage.userId = null
     }
 
 
