@@ -3,7 +3,9 @@ package com.realifetech.sdk.identity
 import android.webkit.WebView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.realifetech.fragment.AuthToken
+import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.identity.domain.IdentityRepository
 import com.realifetech.sdk.identity.mocks.IdentityMocks.SALT
 import com.realifetech.sdk.identity.mocks.IdentityMocks.authToken
@@ -42,6 +44,12 @@ class IdentityTest {
     lateinit var ssoFeature: SSOFeature
 
     @RelaxedMockK
+    lateinit var analytics: Analytics
+
+    @RelaxedMockK
+    lateinit var configurationStorage: ConfigurationStorage
+
+    @RelaxedMockK
     lateinit var webViewWrapper: WebViewWrapper
     lateinit var identity: Identity
     lateinit var webView: WebView
@@ -58,7 +66,9 @@ class IdentityTest {
                 testDispatcher,
                 testDispatcher,
                 ssoFeature,
-                storage
+                storage,
+                configurationStorage,
+                analytics
             )
         authenticateSlot = slot()
         webView = mockk()
