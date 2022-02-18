@@ -41,69 +41,9 @@ class AnalyticsSampleActivity : AppCompatActivity() {
             sendEvent()
         }
 
-        sendIdentifyButton.setOnClickListener {
-            sendIdentify()
-        }
-
-        sendAliasButton.setOnClickListener {
-            sendAlias()
-        }
-
-        clearIdButton.setOnClickListener {
-            clearId()
-        }
-
 
     }
 
-    private fun clearId() {
-        RealifeTech.getIdentity().clear()
-    }
-
-    private fun sendAlias() {
-        progressBar.isVisible = true
-        resultTextView.text = ""
-        operationTextView.text = "Sending analytics event"
-
-        RealifeTech.getIdentity().alias(
-//            aliasType = RLTAliasType.Dynamic("wired alias"),
-            aliasType = RLTAliasType.TdcAccountId,
-            aliasId = aliasIdEditText.text.toString()
-        ) { error, result ->
-            progressBar.isVisible = false
-            result.takeIf { it }?.let {
-                resultTextView.text = "Success"
-            }
-            error?.let {
-                resultTextView.text = "Failure"
-            }
-
-        }
-    }
-
-    private fun sendIdentify() {
-
-        progressBar.isVisible = true
-        resultTextView.text = ""
-        operationTextView.text = "Sending analytics event"
-
-        val map = mutableMapOf<RLTTraitType, Any>()
-        map[RLTTraitType.LastName] = "lastName"
-        map[RLTTraitType.Dynamic("dynamic value")] = 123
-
-        RealifeTech.getIdentity().identify(
-            userId = userIdEditText.text.toString(),
-            map
-        ) { error, result ->
-            progressBar.isVisible = false
-            result.takeIf { it }?.let {
-                resultTextView.text = "Success"
-            }
-            error?.let {
-                resultTextView.text = "Failure"
-            }
-        }
-    }
 
     private fun sendEvent() {
         progressBar.isVisible = true
