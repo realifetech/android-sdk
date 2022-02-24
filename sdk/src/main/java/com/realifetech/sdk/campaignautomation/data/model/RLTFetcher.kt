@@ -47,6 +47,7 @@ class RLTFetcher @Inject constructor() {
                                 when (it?.contentType) {
                                     ContentType.BANNER -> {
                                         val bannerDataModel = convert<BannerDataModel>(it)
+                                        bannerDataModel.setDataForAnalytics(analytics, response.campaignId, location)
                                         list.add(
                                             (factories[ContentType.BANNER] as? RLTBannerFactory)?.create(
                                                 bannerDataModel
