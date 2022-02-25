@@ -110,7 +110,7 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
 
             }
             error?.let {
-                Log.e(this.javaClass.name, "Error while sending Loading CA analytics")
+                Log.e(this.javaClass.name, "Error while sending UserInteraction CA analytics")
             }
         }
     }
