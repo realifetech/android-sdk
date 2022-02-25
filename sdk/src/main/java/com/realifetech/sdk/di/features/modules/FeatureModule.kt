@@ -146,12 +146,10 @@ object FeatureModule {
     @Provides
     fun campaignAutomation(
         campaignAutomationRepository: CampaignAutomationRepository,
-        analytics: Analytics,
         rltFetcher: RLTFetcher
     ): CampaignAutomation =
         CampaignAutomation(
             campaignAutomationRepository,
-            analytics,
             rltFetcher
         )
 

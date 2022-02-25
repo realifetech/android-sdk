@@ -11,7 +11,6 @@ import javax.inject.Inject
 
 class CampaignAutomation @Inject constructor(
     private val campaignAutomationRepo: CampaignAutomationRepository,
-    private val analytics: Analytics,
     private val rltFetcher: RLTFetcher
 ) {
 
@@ -31,7 +30,6 @@ class CampaignAutomation @Inject constructor(
         callback: (error: Exception?, response: List<View?>) -> Unit
     ) {
         rltFetcher.fetch(
-            analytics,
             location,
             callback
         )
@@ -43,7 +41,6 @@ class CampaignAutomation @Inject constructor(
         callback: (error: Exception?, response: List<View?>) -> Unit
     ) {
         rltFetcher.fetch(
-            analytics,
             location,
             factories,
             callback
