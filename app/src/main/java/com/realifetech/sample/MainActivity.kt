@@ -1,13 +1,7 @@
 package com.realifetech.sample
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.widget.doOnTextChanged
 import com.realifetech.sample.campaignAutomation.CampaignAutomationActivity
 import com.realifetech.sample.data.DeviceConfigurationStorage
@@ -17,14 +11,8 @@ import com.realifetech.sample.identity.IdentitySSOActivity
 import com.realifetech.sample.webPage.WebPageSampleActivity
 import com.realifetech.sample.widgets.WidgetsSampleActivity
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.campaignautomation.data.model.BannerDataModel
-import com.realifetech.sdk.campaignautomation.data.model.RLTBannerFactory
-import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
-import com.realifetech.sdk.campaignautomation.data.model.RLTViewCreatable
 import com.realifetech.sdk.core.data.model.config.CoreConfiguration
-import com.realifetechCa.type.ContentType
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.banner_view.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private fun onClickButtons() {
         generalButton.setOnClickListener { GeneralSampleActivity.start(this) }
         identityButton.setOnClickListener { IdentityActivity.start(this) }
-        identitySSButton.setOnClickListener{ IdentitySSOActivity.start(this) }
+        identitySSButton.setOnClickListener { IdentitySSOActivity.start(this) }
         communicateButton.setOnClickListener { CommunicationSampleActivity.start(this) }
         analyticsButton.setOnClickListener { AnalyticsSampleActivity.start(this) }
         audienceButton.setOnClickListener { AudienceSampleActivity.start(this) }

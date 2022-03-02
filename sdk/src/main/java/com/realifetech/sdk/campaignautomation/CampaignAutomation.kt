@@ -1,6 +1,7 @@
 package com.realifetech.sdk.campaignautomation
 
 import android.view.View
+import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
 import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
 import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
@@ -8,7 +9,7 @@ import com.realifetechCa.GetContentByExternalIdQuery
 import com.realifetechCa.type.ContentType
 import javax.inject.Inject
 
-class CampaignAutomationFeature @Inject constructor(
+class CampaignAutomation @Inject constructor(
     private val campaignAutomationRepo: CampaignAutomationRepository,
     private val rltFetcher: RLTFetcher
 ) {

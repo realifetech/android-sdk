@@ -11,7 +11,6 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.Composable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.realifetech.sample.R
@@ -82,9 +81,12 @@ class CampaignAutomationActivity : AppCompatActivity() {
             set.match(view, this)
             view.title.text = bannerDataModel.title
             view.subtitle.text = bannerDataModel.subtitle
-            view.url.text = bannerDataModel.url
             view.imageUrl.text = bannerDataModel.imageUrl
             view.language.text = bannerDataModel.language
+            view.setOnClickListener {
+                Toast.makeText(context, bannerDataModel.generateLinkHandler(), Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
 
         private fun ConstraintSet.match(view: View, parentView: View) {
