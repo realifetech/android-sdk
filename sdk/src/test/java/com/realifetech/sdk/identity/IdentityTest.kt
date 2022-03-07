@@ -6,6 +6,8 @@ import com.realifetech.fragment.AuthToken
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
+import com.realifetech.sdk.identity.data.model.RLTAliasType
+import com.realifetech.sdk.identity.data.model.RLTTraitType
 import com.realifetech.sdk.identity.domain.IdentityRepository
 import com.realifetech.sdk.identity.mocks.IdentityMocks.SALT
 import com.realifetech.sdk.identity.mocks.IdentityMocks.authToken
@@ -54,7 +56,15 @@ class IdentityTest {
     lateinit var identity: Identity
     lateinit var webView: WebView
     lateinit var authenticateSlot: CapturingSlot<(token: AuthToken?, error: Exception?) -> Unit>
+    private lateinit var completion: (error: Exception?, result: Boolean) -> Unit
+
     private val testDispatcher = TestCoroutineDispatcher()
+    private val aliasType = RLTAliasType.TdcAccountId
+    private val providedAliasId = "aliasId"
+    private val userId = "some user id"
+    private val USER = "user"
+    private val ALIAS = "alias"
+    private val IDENTIFY = "identify"
 
     @Before
     fun setUp() {
@@ -72,6 +82,71 @@ class IdentityTest {
             )
         authenticateSlot = slot()
         webView = mockk()
+        configurationStorage = mockk()
+        completion = mockk()
+    }
+
+    @Test
+    fun `clear does set userId to null in configurationStorage`() {
+        // GIVEN
+        every {
+            configurationStorage.userId
+        } answers { null }
+        // WHEN
+        identity.clear()
+        // THEN
+        assertEquals(configurationStorage.userId, null)
+    }
+
+    @Test
+    fun `identify does set the userId and sent analytics`() {
+        // GIVEN
+        every {
+            configurationStorage.userId
+        } answers { userId }
+
+        val traits = mutableMapOf<RLTTraitType, Any>()
+        traits[RLTTraitType.LastName] = "lastName"
+        traits[RLTTraitType.Dynamic("dynamic value")] = 123
+
+        val map = mutableMapOf<String, Any>()
+        traits.forEach { trait ->
+            map[trait.key.convertTraitToString()] = trait.value
+        }
+
+        // WHEN
+        identity.identify(userId, traits, completion)
+        // THEN
+        assertEquals(configurationStorage.userId, userId)
+        verify {
+            analytics.track(
+                USER,
+                IDENTIFY,
+                map,
+                null,
+                completion
+            )
+        }
+    }
+
+    @Test
+    fun `alias sent analytics correctly`() {
+        // GIVEN
+        val convertedAlias = aliasType.convertAliasToString()
+        val map = mapOf(convertedAlias to providedAliasId)
+
+        // WHEN
+        identity.alias(aliasType, providedAliasId, completion)
+        // THEN
+        verify {
+            analytics.track(
+                USER,
+                ALIAS,
+                map,
+                null,
+                completion
+            )
+        }
     }
 
     @Test

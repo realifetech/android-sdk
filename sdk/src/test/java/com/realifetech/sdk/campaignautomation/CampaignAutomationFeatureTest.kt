@@ -17,7 +17,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.mockito.Mockito.mock
 
 class CampaignAutomationFeatureTest {
 
@@ -60,24 +59,31 @@ class CampaignAutomationFeatureTest {
 
     @Test
     fun `CA feature fetch without factories`() {
+        // WHEN
         caFeature.fetch(location, callback)
+        // THEN
         verify { rltFetcher.fetch(location, callback) }
     }
 
     @Test
     fun `CA feature fetch with factories`() {
+        // WHEN
         caFeature.fetch(location, factory, callback)
+        // THEN
         verify { rltFetcher.fetch(location, factory, callback) }
     }
 
     @Test
     fun `set up factories`() {
+        // WHEN
         caFeature.factories(factory)
+        // THEN
         verify { rltFetcher.setFactories(factory) }
     }
 
     @Test
     fun `get content by external Id return content`() {
+        // GIVEN
         every {
             campaignAutomationRepo.getContentByExternalId(
                 location,
@@ -86,7 +92,9 @@ class CampaignAutomationFeatureTest {
         } answers {
             contentSlot.captured.invoke(null, CAMocks.mock)
         }
+        // WHEN
         caFeature.getContentByExternalId(location) { error, response ->
+            // THEN
             assertEquals(null, error)
             assertEquals(CAMocks.mock, response)
         }
@@ -94,6 +102,7 @@ class CampaignAutomationFeatureTest {
 
     @Test
     fun `get content by external Id return Exception`() {
+        // GIVEN
         every {
             campaignAutomationRepo.getContentByExternalId(
                 location,
@@ -102,7 +111,9 @@ class CampaignAutomationFeatureTest {
         } answers {
             contentSlot.captured.invoke(Exception(), null)
         }
+        // WHEN
         caFeature.getContentByExternalId(location) { error, response ->
+            // THEN
             assert(error is Exception)
             assertEquals(null, response)
         }
