@@ -1,6 +1,5 @@
 package com.realifetech.sdk.identity
 
-import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
@@ -49,12 +48,12 @@ class Identity @Inject constructor(
         }
 
         analytics.track(
-                type = USER,
-                action = IDENTIFY,
-                new = map,
-                old = null,
-                completion
-            )
+            type = USER,
+            action = IDENTIFY,
+            new = map,
+            old = null,
+            completion
+        )
     }
 
     fun alias(
@@ -66,12 +65,12 @@ class Identity @Inject constructor(
         val alias = aliasType.convertAliasToString()
 
         analytics.track(
-                type = USER,
-                action = ALIAS,
-                new = mapOf(alias to aliasId),
-                old = null,
-                completion
-            )
+            type = USER,
+            action = ALIAS,
+            new = mapOf(alias to aliasId),
+            old = null,
+            completion
+        )
     }
 
     fun clear() {

@@ -17,6 +17,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import org.mockito.Mockito.mock
 
 class CampaignAutomationFeatureTest {
 
@@ -36,7 +37,9 @@ class CampaignAutomationFeatureTest {
 
     private lateinit var captureSlot: CapturingSlot<(error: Error?, result: Boolean) -> Unit>
     private lateinit var contentSlot: CapturingSlot<(error: Exception?, response: GetContentByExternalIdQuery.GetContentByExternalId?) -> Unit>
-    private lateinit var callback: CapturingSlot<(error: Exception?, response: List<View?>) -> Unit>
+    private lateinit var callback: (error: Exception?, response: List<View?>) -> Unit
+    private val factory: Map<ContentType, RLTCreatableFactory<*>> = mutableMapOf()
+
 
     private lateinit var caFeature: CampaignAutomationFeature
 
@@ -52,12 +55,23 @@ class CampaignAutomationFeatureTest {
         )
         captureSlot = slot()
         contentSlot = slot()
-        callback = slot()
+        callback = mockk()
+    }
+
+    @Test
+    fun `CA feature fetch without factories`() {
+        caFeature.fetch(location, callback)
+        verify { rltFetcher.fetch(location, callback) }
+    }
+
+    @Test
+    fun `CA feature fetch with factories`() {
+        caFeature.fetch(location, factory, callback)
+        verify { rltFetcher.fetch(location, factory, callback) }
     }
 
     @Test
     fun `set up factories`() {
-        val factory: Map<ContentType, RLTCreatableFactory<*>> = mutableMapOf()
         caFeature.factories(factory)
         verify { rltFetcher.setFactories(factory) }
     }
