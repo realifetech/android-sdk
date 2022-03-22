@@ -6,26 +6,26 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
-import com.realifetech.GetMyUserSSOQuery
-import com.realifetech.GetMyUserSSOQuery.GetMyUserSSO
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import com.realifetech.GetUserAliasesQuery
+import com.realifetech.fragment.FragmentUserAlias
 import javax.inject.Inject
 
 class SSODatasourceImpl @Inject constructor(private val apolloClient: ApolloClient) :
     SSODataSource {
 
-    override fun getMyUserSSO(callback: (error: Exception?, user: GetMyUserSSO?) -> Unit) {
+    override fun getUserAlias(callback: (error: Exception?, user: FragmentUserAlias?) -> Unit) {
         try {
-            val response = apolloClient.query(GetMyUserSSOQuery())
+            val response = apolloClient.query(GetUserAliasesQuery())
                 .toBuilder()
                 .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY)
                 .build()
             response.enqueue(object :
-                ApolloCall.Callback<GetMyUserSSOQuery.Data>() {
-                override fun onResponse(response: Response<GetMyUserSSOQuery.Data>) {
-                    callback.invoke(null, response.data?.getMyUserSSO)
+                ApolloCall.Callback<GetUserAliasesQuery.Data>() {
+                override fun onResponse(response: Response<GetUserAliasesQuery.Data>) {
+                    callback.invoke(
+                        null,
+                        response.data?.me?.user?.userAliases?.firstOrNull()?.fragments?.fragmentUserAlias
+                    )
                 }
 
                 override fun onFailure(e: ApolloException) {

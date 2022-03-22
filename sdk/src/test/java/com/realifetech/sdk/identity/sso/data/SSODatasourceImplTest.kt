@@ -6,9 +6,10 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
-import com.realifetech.GetMyUserSSOQuery
-import com.realifetech.GetMyUserSSOQuery.GetMyUserSSO
-import com.realifetech.sdk.identity.sso.mocks.SSOMocks.expectedUser
+import com.realifetech.GetUserAliasesQuery
+import com.realifetech.fragment.FragmentUserAlias
+import com.realifetech.sdk.identity.sso.mocks.SSOMocks.expectedUserAlias
+import com.realifetech.sdk.identity.sso.mocks.SSOMocks.result
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.runBlocking
@@ -23,8 +24,8 @@ class SSODatasourceImplTest {
     @RelaxedMockK
     lateinit var apolloClient: ApolloClient
     private lateinit var ssoDatasource: SSODatasourceImpl
-    private lateinit var userSSOData: Response<GetMyUserSSOQuery.Data>
-    private lateinit var userSSOCapture: CapturingSlot<ApolloCall.Callback<GetMyUserSSOQuery.Data>>
+    private lateinit var userSSOData: Response<GetUserAliasesQuery.Data>
+    private lateinit var userSSOCapture: CapturingSlot<ApolloCall.Callback<GetUserAliasesQuery.Data>>
 
 
     @Before
@@ -37,29 +38,29 @@ class SSODatasourceImplTest {
 
 
     @Test
-    fun `get My User SSO returns data`() = runBlocking {
+    fun `get User Alias returns data`() = runBlocking {
         // Given
         every {
-            userSSOData.data?.getMyUserSSO
-        } returns expectedUser
-        getUserSSOSuccessAnswer()
+            userSSOData.data
+        } returns result
+        getUserAliasSuccessAnswer()
         //When
-        ssoDatasource.getMyUserSSO { error, response ->
+        ssoDatasource.getUserAlias { error, response ->
             //Then
             assertEquals(null, error)
-            assertEquals(expectedUser, response)
+            assertEquals(expectedUserAlias, response)
         }
     }
 
     @Test
-    fun `get orders results with throwable`() = runBlocking {
+    fun `get user alias results with throwable`() = runBlocking {
         //Given
         every {
-            userSSOData.data?.getMyUserSSO
+            userSSOData.data?.me?.user?.userAliases?.firstOrNull()?.fragments?.fragmentUserAlias
         } throws ApolloHttpException(ArgumentMatchers.any())
-        getUserSSOSuccessAnswer()
+        getUserAliasSuccessAnswer()
         // When
-        ssoDatasource.getMyUserSSO { error, response ->
+        ssoDatasource.getUserAlias { error, response ->
             //Then
             assert(error is ApolloHttpException)
             Assert.assertEquals(null, response)
@@ -67,15 +68,15 @@ class SSODatasourceImplTest {
     }
 
     @Test
-    fun `get orders results with failure`() = runBlocking {
+    fun `get user alias results with failure`() = runBlocking {
         //Given
         every {
-            apolloClient.query(GetMyUserSSOQuery()).toBuilder()
+            apolloClient.query(GetUserAliasesQuery()).toBuilder()
                 .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY).build()
                 .enqueue(capture(userSSOCapture))
         } answers { userSSOCapture.captured.onFailure(ApolloException("Error")) }
         // When
-        ssoDatasource.getMyUserSSO { error, response ->
+        ssoDatasource.getUserAlias { error, response ->
             // Then
             assert(error is ApolloException)
             Assert.assertEquals(null, response)
@@ -84,19 +85,64 @@ class SSODatasourceImplTest {
 
 
     @Test
-    fun `get orders results with null response`() = runBlocking {
+    fun `get user alias results with null response`() = runBlocking {
         // Given
-        val errorCallback = { error: Exception?, response: GetMyUserSSO? ->
+        val errorCallback = { error: Exception?, response: FragmentUserAlias? ->
             // Then
             Assert.assertSame(null, error)
             Assert.assertSame(null, response)
         }
-        getUserSSOSuccessAnswer()
+        getUserAliasSuccessAnswer()
         every {
-            userSSOData.data?.getMyUserSSO
+            userSSOData.data?.me?.user?.userAliases?.firstOrNull()?.fragments?.fragmentUserAlias
         } returns null
         // When
-        ssoDatasource.getMyUserSSO { error, response ->
+        ssoDatasource.getUserAlias { error, response ->
+            // Then
+            errorCallback(error, response)
+        }
+        // Given
+        every {
+            userSSOData.data?.me?.user?.userAliases?.firstOrNull()?.fragments
+        } returns null
+        // When
+        ssoDatasource.getUserAlias { error, response ->
+            // Then
+            errorCallback(error, response)
+        }
+        // Given
+        every {
+            userSSOData.data?.me?.user?.userAliases?.firstOrNull()
+        } returns null
+        // When
+        ssoDatasource.getUserAlias { error, response ->
+            // Then
+            errorCallback(error, response)
+        }
+        // Given
+        every {
+            userSSOData.data?.me?.user?.userAliases
+        } returns null
+        // When
+        ssoDatasource.getUserAlias { error, response ->
+            // Then
+            errorCallback(error, response)
+        }
+        // Given
+        every {
+            userSSOData.data?.me?.user
+        } returns null
+        // When
+        ssoDatasource.getUserAlias { error, response ->
+            // Then
+            errorCallback(error, response)
+        }
+        // Given
+        every {
+            userSSOData.data?.me
+        } returns null
+        // When
+        ssoDatasource.getUserAlias { error, response ->
             // Then
             errorCallback(error, response)
         }
@@ -105,15 +151,15 @@ class SSODatasourceImplTest {
             userSSOData.data
         } returns null
         // When
-        ssoDatasource.getMyUserSSO { error, response ->
+        ssoDatasource.getUserAlias { error, response ->
             // Then
             errorCallback(error, response)
         }
     }
 
-    private fun getUserSSOSuccessAnswer() {
+    private fun getUserAliasSuccessAnswer() {
         every {
-            apolloClient.query(GetMyUserSSOQuery()).toBuilder()
+            apolloClient.query(GetUserAliasesQuery()).toBuilder()
                 .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
                 .enqueue(capture(userSSOCapture))
         } answers {

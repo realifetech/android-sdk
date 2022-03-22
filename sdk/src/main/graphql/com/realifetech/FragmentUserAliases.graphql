@@ -1,0 +1,6 @@
+fragment FragmentUserAlias on UserAlias{
+    userAliasType{
+        userAliasType
+    }
+    value
+}
