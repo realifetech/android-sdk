@@ -11,7 +11,7 @@ fun AnalyticEventWrapper.asAnalyticEvent() = AnalyticEvent(
     this.action,
     Input.optional(this.new?.let { Gson().toJson(it) }),
     Input.optional(this.old?.let { Gson().toJson(it) }),
-    EVENT_VERSION,
+    Input.optional(EVENT_VERSION),
     SimpleDateFormat(
         DATE_FORMAT,
         Locale.getDefault()
