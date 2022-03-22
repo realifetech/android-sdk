@@ -40,7 +40,7 @@ class CampaignAutomationFeatureTest {
     private val factory: Map<ContentType, RLTCreatableFactory<*>> = mutableMapOf()
 
 
-    private lateinit var caFeature: CampaignAutomationFeature
+    private lateinit var caFeature: CampaignAutomation
 
     private val location: String = "random location"
 
@@ -48,7 +48,7 @@ class CampaignAutomationFeatureTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        caFeature = CampaignAutomationFeature(
+        caFeature = CampaignAutomation(
             campaignAutomationRepo,
             rltFetcher
         )
