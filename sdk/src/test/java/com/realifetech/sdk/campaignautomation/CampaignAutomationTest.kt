@@ -18,7 +18,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
-class CampaignAutomationFeatureTest {
+class CampaignAutomationTest {
 
     private val testDispatcher = TestCoroutineDispatcher()
 

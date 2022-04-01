@@ -1,0 +1,9 @@
+query getUserAliases {
+    me {
+        user {
+            userAliases{
+                ...FragmentUserAlias
+            }
+        }
+    }
+}

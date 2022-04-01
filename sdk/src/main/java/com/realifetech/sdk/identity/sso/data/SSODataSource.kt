@@ -1,7 +1,7 @@
 package com.realifetech.sdk.identity.sso.data
 
-import com.realifetech.GetMyUserSSOQuery.GetMyUserSSO
+import com.realifetech.fragment.FragmentUserAlias
 
 interface SSODataSource {
-    fun getMyUserSSO(callback: (error: Exception?, user: GetMyUserSSO?) -> Unit)
+    fun getUserAlias(callback: (error: Exception?, user: FragmentUserAlias?) -> Unit)
 }

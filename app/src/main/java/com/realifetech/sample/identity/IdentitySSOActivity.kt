@@ -9,7 +9,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.realifetech.sample.R
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
-import com.realifetech.sdk.core.data.model.shared.`object`.toBearerFormat
 import kotlinx.android.synthetic.main.activity_identity_sso.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,7 +25,11 @@ class IdentitySSOActivity : AppCompatActivity() {
                 preferences.accessToken = userBearerTextField.text.toString()
                 getUserSSO()
             } else {
-                Snackbar.make(identityLayout, getString(R.string.user_access_token_message), Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    identityLayout,
+                    getString(R.string.user_access_token_message),
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -34,18 +37,20 @@ class IdentitySSOActivity : AppCompatActivity() {
     private fun getUserSSO() {
         progressBar.isVisible = true
         GlobalScope.launch(Dispatchers.IO) {
-                RealifeTech.getIdentity().getSSO().getMyUserSSO { error, user ->
-                 GlobalScope.launch(Dispatchers.IO) {
-                     withContext(Dispatchers.Main) {
-                         progressBar.isVisible = false
-                         user?.let {
-                             ssoId.text = user.id
-                         }
-                         error?.let {
-                             ssoId.text = it.message
-                         }
-                 }
-                 }
+            RealifeTech.getIdentity().getSSO().getUserAlias { error, user ->
+                GlobalScope.launch(Dispatchers.IO) {
+                    withContext(Dispatchers.Main) {
+                        progressBar.isVisible = false
+                        user?.let {
+                            val message =
+                                "${user.value} for type: ${user.userAliasType?.userAliasType}"
+                            ssoId.text = message
+                        }
+                        error?.let {
+                            ssoId.text = it.message
+                        }
+                    }
+                }
             }
         }
     }

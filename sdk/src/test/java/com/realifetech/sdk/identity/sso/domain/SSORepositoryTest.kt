@@ -1,8 +1,8 @@
 package com.realifetech.sdk.identity.sso.domain
 
-import com.realifetech.GetMyUserSSOQuery.GetMyUserSSO
+import com.realifetech.fragment.FragmentUserAlias
 import com.realifetech.sdk.identity.sso.data.SSODataSource
-import com.realifetech.sdk.identity.sso.mocks.SSOMocks.expectedUser
+import com.realifetech.sdk.identity.sso.mocks.SSOMocks.expectedUserAlias
 import io.mockk.CapturingSlot
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -18,7 +18,7 @@ class SSORepositoryTest {
     @RelaxedMockK
     lateinit var ssoDatasource: SSODataSource
     private lateinit var ssoRepository: SSORepository
-    private lateinit var userSSOSlot: CapturingSlot<(error: Exception?, response: GetMyUserSSO?) -> Unit>
+    private lateinit var userSSOSlot: CapturingSlot<(error: Exception?, response: FragmentUserAlias?) -> Unit>
 
     @Before
     fun setUp() {
@@ -28,19 +28,15 @@ class SSORepositoryTest {
     }
 
     @Test
-    fun getMyUserSSO() {
-    }
-
-    @Test
-    fun `get my User SSO results data`() {
+    fun `get my User Alias results data`() {
         //Given
-        every { ssoDatasource.getMyUserSSO(capture(userSSOSlot)) }
-            .answers { userSSOSlot.captured.invoke(null, expectedUser) }
+        every { ssoDatasource.getUserAlias(capture(userSSOSlot)) }
+            .answers { userSSOSlot.captured.invoke(null, expectedUserAlias) }
         //When
-        ssoRepository.getMyUserSSO { error, response ->
+        ssoRepository.getUserAlias { error, response ->
             //Then
             Assert.assertEquals(null, error)
-            Assert.assertEquals(expectedUser, response)
+            Assert.assertEquals(expectedUserAlias, response)
 
         }
     }

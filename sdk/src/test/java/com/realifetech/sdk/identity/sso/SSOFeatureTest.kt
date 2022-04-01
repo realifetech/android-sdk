@@ -1,6 +1,6 @@
 package com.realifetech.sdk.identity.sso
 
-import com.realifetech.GetMyUserSSOQuery.GetMyUserSSO
+import com.realifetech.fragment.FragmentUserAlias
 import com.realifetech.sdk.identity.sso.domain.SSORepository
 import com.realifetech.sdk.identity.sso.mocks.SSOMocks
 import io.mockk.CapturingSlot
@@ -17,7 +17,7 @@ class SSOFeatureTest {
     @RelaxedMockK
     lateinit var ssoRepository: SSORepository
     private lateinit var ssoFeature: SSOFeature
-    private lateinit var userSSOSlot: CapturingSlot<(error: Exception?, response: GetMyUserSSO?) -> Unit>
+    private lateinit var userSSOSlot: CapturingSlot<(error: Exception?, response: FragmentUserAlias?) -> Unit>
 
     @Before
     fun setUp() {
@@ -27,15 +27,15 @@ class SSOFeatureTest {
     }
 
     @Test
-    fun `get my User SSO results data`() {
+    fun `get my User Alias results data`() {
         //Given
-        every { ssoRepository.getMyUserSSO(capture(userSSOSlot)) }
-            .answers { userSSOSlot.captured.invoke(null, SSOMocks.expectedUser) }
+        every { ssoRepository.getUserAlias(capture(userSSOSlot)) }
+            .answers { userSSOSlot.captured.invoke(null, SSOMocks.expectedUserAlias) }
         //When
-        ssoFeature.getMyUserSSO { error, response ->
+        ssoFeature.getUserAlias { error, response ->
             //Then
             Assert.assertEquals(null, error)
-            Assert.assertEquals(SSOMocks.expectedUser, response)
+            Assert.assertEquals(SSOMocks.expectedUserAlias, response)
 
         }
     }
