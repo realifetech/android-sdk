@@ -72,8 +72,7 @@ class CAIdentitySampleActivity : AppCompatActivity() {
         operationTextView.text = "Sending analytics event"
 
         val map = mutableMapOf<RLTTraitType, Any>()
-        map[RLTTraitType.LastName] = "lastName"
-        map[RLTTraitType.Dynamic("dynamic value")] = 123
+        map[RLTTraitType.LastName] = "RLT Last Name"
 
         RealifeTech.getIdentity().identify(
             userId = userIdEditText.text.toString(),
