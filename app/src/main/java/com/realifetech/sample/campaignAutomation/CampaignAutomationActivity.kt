@@ -13,10 +13,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.isVisible
 import com.realifetech.sample.R
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.campaignautomation.data.model.*
 import com.realifetechCa.type.ContentType
+import kotlinx.android.synthetic.main.activity_campaign_automation_sample.*
 import kotlinx.android.synthetic.main.banner_view.view.*
 
 
@@ -36,17 +38,24 @@ class CampaignAutomationActivity : AppCompatActivity() {
         RealifeTech.getCampaignAutomation().factories(factories)
 
         button.setOnClickListener {
+            layout.removeAllViews()
+            progressBar.isVisible = true
             RealifeTech.getCampaignAutomation().apply {
                 fetch(
                     location.text.toString()
                 ) { error, response ->
+                    progressBar.isVisible = false
                     response.forEachIndexed { _, item ->
                         item?.let {
                             layout.addView(item)
                         }
                     }
                     error?.let {
-
+                        Toast.makeText(
+                            this@CampaignAutomationActivity,
+                            it.message,
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
