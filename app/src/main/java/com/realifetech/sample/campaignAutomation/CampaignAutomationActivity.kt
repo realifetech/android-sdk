@@ -3,6 +3,7 @@ package com.realifetech.sample.campaignAutomation
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import com.realifetech.sample.R
+import com.realifetech.sample.utils.loadImage
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.campaignautomation.data.model.*
 import com.realifetechCa.type.ContentType
@@ -90,11 +92,15 @@ class CampaignAutomationActivity : AppCompatActivity() {
             set.match(view, this)
             view.title.text = bannerDataModel.title
             view.subtitle.text = bannerDataModel.subtitle
-            view.imageUrl.text = bannerDataModel.imageUrl
-            view.language.text = bannerDataModel.language
-            view.setOnClickListener {
-                Toast.makeText(context, bannerDataModel.generateLinkHandler(), Toast.LENGTH_SHORT)
-                    .show()
+            view.subtitle.isVisible = !bannerDataModel.subtitle.isNullOrEmpty()
+            view.title.isVisible = !bannerDataModel.title.isNullOrEmpty()
+            view.bannerImage.loadImage(context, bannerDataModel.imageUrl)
+            bannerDataModel.generateLinkHandler()?.let { url ->
+                view.setOnClickListener {
+                    val uriUrl = Uri.parse(url)
+                    val launchBrowser = Intent(Intent.ACTION_VIEW, uriUrl)
+                    context.startActivity(launchBrowser)
+                }
             }
         }
 

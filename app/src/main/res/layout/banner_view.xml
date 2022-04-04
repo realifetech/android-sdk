@@ -1,136 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tool="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bannerView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorAccent"
-    android:padding="@dimen/margin_l">
+    android:paddingBottom="@dimen/margin_xl">
 
-    <LinearLayout
-        android:id="@+id/title_layout"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bannerCard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_m"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/margin_m"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title: "
-            android:textColor="@color/colorOnPrimary" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorOnPrimary"
-            tool:text="title" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/subtitle_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_m"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_layout">
-
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Subtitle: "
-            android:textColor="@color/colorOnPrimary" />
-
-        <TextView
-            android:id="@+id/subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorOnPrimary"
-            tool:text="Subtitle" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/url_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_m"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/subtitle_layout">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Url: "
-            android:textColor="@color/colorOnPrimary" />
-
-        <TextView
-            android:id="@+id/url"
+        <ImageView
+            android:id="@+id/bannerImage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorOnPrimary"
-            tool:text="url" />
-    </LinearLayout>
+            android:layout_height="200dp"
+            android:contentDescription="@string/banner_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </com.google.android.material.card.MaterialCardView>
 
-    <LinearLayout
-        android:id="@+id/imageUrl_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_m"
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_m"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/url_layout">
+        app:layout_constraintTop_toBottomOf="@id/bannerCard"
+        tools:text="@string/title" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ImageUrl: "
-            android:textColor="@color/colorOnPrimary" />
-
-        <TextView
-            android:id="@+id/imageUrl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorOnPrimary"
-            tool:text="ImageUrl" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/language_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/margin_m"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageUrl_layout">
-
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Language: "
-            android:textColor="@color/colorOnPrimary" />
-
-        <TextView
-            android:id="@+id/language"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorOnPrimary"
-            tool:text="language" />
-    </LinearLayout>
-
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:textColor="@color/colorNeutral"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="@string/subtitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
