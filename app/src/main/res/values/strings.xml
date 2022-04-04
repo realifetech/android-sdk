@@ -40,4 +40,7 @@
     <string name="user_access_token">User access token</string>
     <string name="user_access_token_message">Enter User accessToken</string>
     <string name="identity_sso">IDENTITY-SSO</string>
+    <string name="banner_image">banner image</string>
+    <string name="title">Title:</string>
+    <string name="subtitle">Subtitle:</string>
 </resources>
