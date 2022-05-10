@@ -7,7 +7,6 @@ import com.realifetech.sample.campaignAutomation.CampaignAutomationActivity
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.identity.CAIdentitySampleActivity
 import com.realifetech.sample.identity.IdentityActivity
-import com.realifetech.sample.identity.IdentitySSOActivity
 import com.realifetech.sample.webPage.WebPageSampleActivity
 import com.realifetech.sample.widgets.WidgetsSampleActivity
 import com.realifetech.sdk.RealifeTech
@@ -29,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     private fun onClickButtons() {
         generalButton.setOnClickListener { GeneralSampleActivity.start(this) }
         identityButton.setOnClickListener { IdentityActivity.start(this) }
-        identitySSButton.setOnClickListener { IdentitySSOActivity.start(this) }
         communicateButton.setOnClickListener { CommunicationSampleActivity.start(this) }
         analyticsButton.setOnClickListener { AnalyticsSampleActivity.start(this) }
         audienceButton.setOnClickListener { AudienceSampleActivity.start(this) }

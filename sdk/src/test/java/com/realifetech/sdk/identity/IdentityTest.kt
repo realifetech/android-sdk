@@ -12,7 +12,6 @@ import com.realifetech.sdk.identity.domain.IdentityRepository
 import com.realifetech.sdk.identity.mocks.IdentityMocks.SALT
 import com.realifetech.sdk.identity.mocks.IdentityMocks.authToken
 import com.realifetech.sdk.identity.mocks.IdentityMocks.userInfo
-import com.realifetech.sdk.identity.sso.SSOFeature
 import com.realifetech.sdk.sell.utils.MainCoroutineRule
 import com.realifetech.sdk.sell.weboredering.WebViewWrapper
 import io.mockk.*
@@ -21,7 +20,6 @@ import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,9 +39,6 @@ class IdentityTest {
 
     @RelaxedMockK
     lateinit var storage: AuthTokenStorage
-
-    @RelaxedMockK
-    lateinit var ssoFeature: SSOFeature
 
     @RelaxedMockK
     lateinit var analytics: Analytics
@@ -75,7 +70,6 @@ class IdentityTest {
                 identityRepository,
                 testDispatcher,
                 testDispatcher,
-                ssoFeature,
                 storage,
                 configurationStorage,
                 analytics
@@ -211,12 +205,6 @@ class IdentityTest {
         ) {
             assert(it is Exception)
         }
-    }
-
-    @Test
-    fun getSSO() {
-        val sso = identity.getSSO()
-        Assert.assertEquals(ssoFeature, sso)
     }
 
     private fun `Repository Attempt Login Successfully`() {

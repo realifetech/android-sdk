@@ -29,10 +29,7 @@
         <activity
             android:name=".AnalyticsSampleActivity"
             android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".identity.IdentitySSOActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity
+           <activity
             android:name=".identity.CAIdentitySampleActivity"
             android:parentActivityName=".MainActivity" />
         <activity
