@@ -11,8 +11,6 @@ import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.databinding.ActivityIdentityBinding
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
-import kotlinx.android.synthetic.main.activity_identity.*
-import kotlinx.android.synthetic.main.activity_identity_sso.*
 
 class IdentityActivity : AppCompatActivity() {
 

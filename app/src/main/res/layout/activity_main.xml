@@ -95,15 +95,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/audienceButton" />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/identitySSButton"
-                style="@style/Material.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/identity_sso"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/widgetsButton" />
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/webPage"
@@ -113,7 +105,7 @@
                 android:text="@string/web_page"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/identitySSButton" />
+                app:layout_constraintTop_toBottomOf="@+id/widgetsButton" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/ordering_journey"

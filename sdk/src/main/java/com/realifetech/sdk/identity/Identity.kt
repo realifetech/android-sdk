@@ -6,7 +6,6 @@ import com.realifetech.sdk.core.data.database.preferences.configuration.Configur
 import com.realifetech.sdk.identity.data.model.RLTAliasType
 import com.realifetech.sdk.identity.data.model.RLTTraitType
 import com.realifetech.sdk.identity.domain.IdentityRepository
-import com.realifetech.sdk.identity.sso.SSOFeature
 import com.realifetech.sdk.sell.weboredering.WebViewWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
@@ -19,16 +18,10 @@ class Identity @Inject constructor(
     private val identityRepository: IdentityRepository,
     private val dispatcherIO: CoroutineDispatcher,
     private val dispatcherMain: CoroutineDispatcher,
-    private val ssoFeature: SSOFeature,
     private val storage: AuthTokenStorage,
     private val configurationStorage: ConfigurationStorage,
     private val analytics: Analytics
 ) {
-
-
-    fun getSSO(): SSOFeature {
-        return ssoFeature
-    }
 
     fun logout() {
         webViewWrapper.clearCacheAndStorage()

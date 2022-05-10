@@ -23,7 +23,6 @@ import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
 import com.realifetech.sdk.identity.Identity
 import com.realifetech.sdk.identity.domain.IdentityRepository
-import com.realifetech.sdk.identity.sso.SSOFeature
 import com.realifetech.sdk.sell.Sell
 import com.realifetech.sdk.sell.basket.BasketFeature
 import com.realifetech.sdk.sell.fulfilmentpoint.FulfilmentPointFeature
@@ -127,7 +126,6 @@ object FeatureModule {
         identityRepository: IdentityRepository,
         webViewWrapper: WebViewWrapper,
         storage: AuthTokenStorage,
-        ssoFeature: SSOFeature,
         configuration: ConfigurationStorage,
         analytics: Analytics
     ): Identity =
@@ -136,7 +134,6 @@ object FeatureModule {
             identityRepository,
             Dispatchers.IO,
             Dispatchers.Main,
-            ssoFeature,
             storage,
             configuration,
             analytics
