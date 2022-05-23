@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.analytics.Analytics
+import com.realifetechCa.GetContentByExternalIdQuery
 import com.realifetechCa.type.ContentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -24,6 +25,57 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
         callback: (error: Exception?, response: List<View?>) -> Unit
     ) {
         fetch(location, factories, callback)
+    }
+
+
+    fun fetchRLTDataModels(
+        location: String,
+        callback: (error: Exception?, response: List<GetContentByExternalIdQuery.Item?>) -> Unit
+    ) {
+        val list = mutableListOf<GetContentByExternalIdQuery.Item>()
+        RealifeTech.getCampaignAutomation()
+            .getContentByExternalId(location) { error, response ->
+                GlobalScope.launch(Dispatchers.IO) {
+                    withContext(Dispatchers.Main) {
+                        error?.let {
+                            callback(error, emptyList())
+                        }
+                        response?.let {
+                            response.items?.forEach {
+                                when (it?.contentType) {
+                                    ContentType.BANNER -> {
+                                        val bannerDataModel = convert<BannerDataModel>(it)
+                                        val dictionary = eventDictionary(
+                                            response.campaignId,
+                                            location,
+                                            bannerDataModel.id.toString(),
+                                            it.contentType.toString(),
+                                            bannerDataModel.language.toString()
+                                        )
+                                        bannerDataModel.listener = {
+                                            trackUserInteractionCreatable(
+                                                dictionary
+                                            )
+                                        }
+                                        list.add(
+                                            GetContentByExternalIdQuery.Item("Content", ContentType.BANNER, bannerDataModel)
+                                        )
+                                        trackLoadCreatable(
+                                            dictionary
+                                        )
+
+                                    }
+                                    else -> {
+
+                                    }
+                                }
+                            }
+                            callback(null, list)
+
+                        }
+                    }
+                }
+            }
     }
 
 

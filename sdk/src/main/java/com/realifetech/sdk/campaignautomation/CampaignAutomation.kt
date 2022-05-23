@@ -35,6 +35,16 @@ class CampaignAutomation @Inject constructor(
         )
     }
 
+    fun fetchV2(
+        location: String,
+        callback: (error: Exception?, response: List<GetContentByExternalIdQuery.Item?>) -> Unit
+    ) {
+        rltFetcher.fetchRLTDataModels(
+            location,
+            callback
+        )
+    }
+
     fun fetch(
         location: String,
         factories: Map<ContentType, RLTCreatableFactory<*>>,
