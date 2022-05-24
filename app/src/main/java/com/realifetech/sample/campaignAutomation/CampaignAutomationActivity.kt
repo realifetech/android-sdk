@@ -43,25 +43,25 @@ class CampaignAutomationActivity : AppCompatActivity() {
         button.setOnClickListener {
             layout.removeAllViews()
             progressBar.isVisible = true
-//            RealifeTech.getCampaignAutomation().apply {
-//                fetch(
-//                    location.text.toString()
-//                ) { error, response ->
-//                    progressBar.isVisible = false
-//                    response.forEachIndexed { _, item ->
-//                        item?.let {
-//                            layout.addView(item)
-//                        }
-//                    }
-//                    error?.let {
-//                        Toast.makeText(
-//                            this@CampaignAutomationActivity,
-//                            it.message,
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-//                }
-//            }
+            RealifeTech.getCampaignAutomation().apply {
+                fetch(
+                    location.text.toString()
+                ) { error, response ->
+                    progressBar.isVisible = false
+                    response.forEachIndexed { _, item ->
+                        item?.let {
+                            layout.addView(item)
+                        }
+                    }
+                    error?.let {
+                        Toast.makeText(
+                            this@CampaignAutomationActivity,
+                            it.message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
             RealifeTech.getCampaignAutomation().apply {
                 fetchV2(
                     location.text.toString()

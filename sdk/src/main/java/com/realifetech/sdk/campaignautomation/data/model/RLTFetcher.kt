@@ -30,9 +30,9 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
 
     fun fetchRLTDataModels(
         location: String,
-        callback: (error: Exception?, response: List<GetContentByExternalIdQuery.Item?>) -> Unit
+        callback: (error: Exception?, response: List<RLTItem>) -> Unit
     ) {
-        val list = mutableListOf<GetContentByExternalIdQuery.Item>()
+        val list = mutableListOf<RLTItem>()
         RealifeTech.getCampaignAutomation()
             .getContentByExternalId(location) { error, response ->
                 GlobalScope.launch(Dispatchers.IO) {
@@ -58,7 +58,8 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
                                             )
                                         }
                                         list.add(
-                                            GetContentByExternalIdQuery.Item("Content", ContentType.BANNER, bannerDataModel)
+//                                            GetContentByExternalIdQuery.Item("Content", ContentType.BANNER, bannerDataModel)
+                                            RLTItem(ContentType.BANNER, bannerDataModel)
                                         )
                                         trackLoadCreatable(
                                             dictionary
