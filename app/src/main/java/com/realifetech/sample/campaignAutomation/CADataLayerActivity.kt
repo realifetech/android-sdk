@@ -29,29 +29,24 @@ class CADataLayerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_campaign_automation_sample)
+        setContentView(R.layout.activity_campaign_automation_datal_layer_sample)
 
         val layout = findViewById<LinearLayout>(R.id.campaignAutomationLayout)
         val location = findViewById<EditText>(R.id.location)
         val button = findViewById<Button>(R.id.button)
 
-        val factories =
-            mutableMapOf<ContentType, RLTCreatableFactory<*>>(ContentType.BANNER to IntegratorBannerFactory())
-
-        RealifeTech.getCampaignAutomation().factories(factories)
-
         button.setOnClickListener {
             layout.removeAllViews()
             progressBar.isVisible = true
             RealifeTech.getCampaignAutomation().apply {
-                fetchV2(
+                fetchRLTDataModels(
                     location.text.toString()
                 ) { error, response ->
                     progressBar.isVisible = false
                     response.forEachIndexed { _, item ->
                         item?.let {
-                            val ciccio = IntegratorBanner(this@CADataLayerActivity, it.data as BannerDataModel)
-                            layout.addView(ciccio)
+                            val banner = IntegratorBanner(this@CADataLayerActivity, it.data as BannerDataModel)
+                            layout.addView(banner)
                         }
                     }
                     error?.let {

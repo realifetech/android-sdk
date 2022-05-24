@@ -36,7 +36,7 @@ class CampaignAutomation @Inject constructor(
         )
     }
 
-    fun fetchV2(
+    fun fetchRLTDataModels(
         location: String,
         callback: (error: Exception?, response: List<RLTItem?>) -> Unit
     ) {
