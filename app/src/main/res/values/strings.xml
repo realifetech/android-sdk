@@ -15,6 +15,7 @@
     <string name="web_page">Web Page</string>
     <string name="ordering_journey">Ordering Journey</string>
     <string name="campaign_automation">Campaign Automation</string>
+    <string name="ca_datalayer">CA with DataLayer</string>
     <string name="audio_guides_help">audioGuidesHelp</string>
     <string name="tandc">tAndC</string>
     <string name="privacy">privacy</string>

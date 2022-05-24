@@ -45,6 +45,10 @@
         <activity
             android:name=".campaignAutomation.CampaignAutomationActivity"
             android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".campaignAutomation.CADataLayerActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".identity.IdentityActivity"
             android:exported="true">

@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.activity_campaign_automation_sample.*
 import kotlinx.android.synthetic.main.banner_view.view.*
 
 
-class CampaignAutomationActivity : AppCompatActivity() {
+class CADataLayerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,18 +44,19 @@ class CampaignAutomationActivity : AppCompatActivity() {
             layout.removeAllViews()
             progressBar.isVisible = true
             RealifeTech.getCampaignAutomation().apply {
-                fetch(
+                fetchV2(
                     location.text.toString()
                 ) { error, response ->
                     progressBar.isVisible = false
                     response.forEachIndexed { _, item ->
                         item?.let {
-                            layout.addView(item)
+                            val ciccio = IntegratorBanner(this@CADataLayerActivity, it.data as BannerDataModel)
+                            layout.addView(ciccio)
                         }
                     }
                     error?.let {
                         Toast.makeText(
-                            this@CampaignAutomationActivity,
+                            this@CADataLayerActivity,
                             it.message,
                             Toast.LENGTH_LONG
                         ).show()
@@ -71,7 +72,7 @@ class CampaignAutomationActivity : AppCompatActivity() {
     inner class IntegratorBannerFactory : RLTBannerFactory {
         override fun create(dataModel: BannerDataModel): RLTViewCreatable {
             return IntegratorBanner(
-                context = this@CampaignAutomationActivity,
+                context = this@CADataLayerActivity,
                 bannerDataModel = dataModel
             )
         }
