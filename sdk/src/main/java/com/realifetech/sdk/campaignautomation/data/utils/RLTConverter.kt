@@ -6,9 +6,7 @@ import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
 import com.realifetech.sdk.campaignautomation.data.model.RLTItem
 import com.realifetechCa.type.ContentType
 
-class RLTConverter(
-
-) {
+class RLTConverter {
     fun convert(
         items: List<RLTItem?>,
         factories: Map<ContentType, RLTCreatableFactory<*>>
