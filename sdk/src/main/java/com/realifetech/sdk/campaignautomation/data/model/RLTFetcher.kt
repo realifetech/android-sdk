@@ -4,7 +4,6 @@ import android.util.Log
 import android.view.View
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.analytics.Analytics
-import com.realifetechCa.GetContentByExternalIdQuery
 import com.realifetechCa.type.ContentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -58,7 +57,6 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
                                             )
                                         }
                                         list.add(
-//                                            GetContentByExternalIdQuery.Item("Content", ContentType.BANNER, bannerDataModel)
                                             RLTItem(ContentType.BANNER, bannerDataModel)
                                         )
                                         trackLoadCreatable(
@@ -182,6 +180,7 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
             }
             error?.let {
                 Log.e(this.javaClass.name, "Error while sending Loading CA analytics")
+                Log.e(this.javaClass.name, it.toString())
             }
         }
     }

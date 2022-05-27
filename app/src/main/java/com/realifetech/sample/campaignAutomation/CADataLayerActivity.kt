@@ -29,9 +29,9 @@ import coil.compose.rememberImagePainter
 import com.realifetech.sample.R
 import com.realifetech.sample.utils.loadImage
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.campaignautomation.data.model.BannerDataModel
-import com.realifetech.sdk.campaignautomation.data.model.RLTItem
-import com.realifetech.sdk.campaignautomation.data.model.RLTViewCreatable
+import com.realifetech.sdk.campaignautomation.data.model.*
+import com.realifetech.sdk.campaignautomation.data.utils.RLTConverter
+import com.realifetechCa.type.ContentType
 
 import kotlinx.android.synthetic.main.activity_campaign_automation_datal_layer_sample.*
 import kotlinx.android.synthetic.main.banner_view.view.*
@@ -69,6 +69,38 @@ class CADataLayerActivity : AppCompatActivity() {
                 }
             }
 
+        }
+    }
+
+    inner class IntegratorBannerFactory : RLTBannerFactory {
+        override fun create(dataModel: RLTDataModel?): RLTViewCreatable {
+            return CampaignAutomationActivity.IntegratorBanner(
+                context = this@CADataLayerActivity,
+                bannerDataModel = dataModel as BannerDataModel
+            )
+        }
+    }
+
+    private fun addingView(layout: LinearLayout) {
+        RealifeTech.getCampaignAutomation().apply {
+            fetchRLTDataModels(
+                location.text.toString()
+            ) { error, response ->
+                progressBar.isVisible = false
+                val factories =
+                    mutableMapOf<ContentType, RLTCreatableFactory<*>>(ContentType.BANNER to IntegratorBannerFactory())
+                val items = RLTConverter().convert(response, factories)
+                items.forEach {
+                    layout.addView(it)
+                }
+                error?.let {
+                    Toast.makeText(
+                        this@CADataLayerActivity,
+                        it.message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
         }
     }
 
@@ -143,33 +175,33 @@ class CADataLayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun addingView(layout: LinearLayout) {
-
-
-        RealifeTech.getCampaignAutomation().apply {
-            fetchRLTDataModels(
-                location.text.toString()
-            ) { error, response ->
-                progressBar.isVisible = false
-                response.forEachIndexed { _, item ->
-                    item?.let {
-                        val banner = IntegratorBanner(
-                            this@CADataLayerActivity,
-                            it.data as BannerDataModel
-                        )
-                        layout.addView(banner)
-                    }
-                }
-                error?.let {
-                    Toast.makeText(
-                        this@CADataLayerActivity,
-                        it.message,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-        }
-    }
+//    private fun addingView(layout: LinearLayout) {
+//
+//
+//        RealifeTech.getCampaignAutomation().apply {
+//            fetchRLTDataModels(
+//                location.text.toString()
+//            ) { error, response ->
+//                progressBar.isVisible = false
+//                response.forEachIndexed { _, item ->
+//                    item?.let {
+//                        val banner = IntegratorBanner(
+//                            this@CADataLayerActivity,
+//                            it.data as BannerDataModel
+//                        )
+//                        layout.addView(banner)
+//                    }
+//                }
+//                error?.let {
+//                    Toast.makeText(
+//                        this@CADataLayerActivity,
+//                        it.message,
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
+//            }
+//        }
+//    }
 
     // This is the UI given by the Integrator
     @SuppressLint("ViewConstructor")
