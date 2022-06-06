@@ -15,9 +15,7 @@ class RLTConverter {
         items.forEach {
             val viewItem = (factories[it?.contentType])?.create(it?.data)
             list.add(viewItem as View)
-
         }
         return list
-
     }
 }

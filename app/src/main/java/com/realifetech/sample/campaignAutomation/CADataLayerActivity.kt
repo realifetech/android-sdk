@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -32,7 +31,6 @@ import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.campaignautomation.data.model.*
 import com.realifetech.sdk.campaignautomation.data.utils.RLTConverter
 import com.realifetechCa.type.ContentType
-
 import kotlinx.android.synthetic.main.activity_campaign_automation_datal_layer_sample.*
 import kotlinx.android.synthetic.main.banner_view.view.*
 
@@ -72,15 +70,10 @@ class CADataLayerActivity : AppCompatActivity() {
         }
     }
 
-    inner class IntegratorBannerFactory : RLTBannerFactory {
-        override fun create(dataModel: RLTDataModel?): RLTViewCreatable {
-            return CampaignAutomationActivity.IntegratorBanner(
-                context = this@CADataLayerActivity,
-                bannerDataModel = dataModel as BannerDataModel
-            )
-        }
-    }
 
+    // Example of integration with RLTCreatableFactories and RLTConverter
+    // given the response item list it is the passed to factories and the converter
+    // to return a list of view that can be easily added
     private fun addingView(layout: LinearLayout) {
         RealifeTech.getCampaignAutomation().apply {
             fetchRLTDataModels(
@@ -104,6 +97,7 @@ class CADataLayerActivity : AppCompatActivity() {
         }
     }
 
+    // Example of integration with recycler view to inflate the data
     private fun usingRecyclerView() {
 
         recyclerview.visibility = View.VISIBLE
@@ -125,10 +119,58 @@ class CADataLayerActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+
+    // Example of factory created by the integrator that return a list of views
+    inner class IntegratorBannerFactory : RLTBannerFactory {
+        override fun create(dataModel: RLTDataModel?): RLTViewCreatable {
+            return IntegratorBanner(
+                context = this@CADataLayerActivity,
+                bannerDataModel = dataModel as BannerDataModel
+            )
+        }
+    }
+
+
+    // Example of UI provided by the Integrator
+    @SuppressLint("ViewConstructor")
+    class IntegratorBanner(
+        context: Context,
+        bannerDataModel: BannerDataModel
+    ) : ConstraintLayout(context), RLTViewCreatable {
+
+        init {
+            val view = LayoutInflater.from(context)
+                .inflate(R.layout.banner_view, this, false)
+            val set = ConstraintSet()
+            addView(view)
+            set.clone(this)
+            set.match(view, this)
+            view.title.text = bannerDataModel.title
+            view.subtitle.text = bannerDataModel.subtitle
+            view.subtitle.isVisible = !bannerDataModel.subtitle.isNullOrEmpty()
+            view.title.isVisible = !bannerDataModel.title.isNullOrEmpty()
+            view.bannerImage.loadImage(context, bannerDataModel.imageUrl)
+
+            view.setOnClickListener {
+                val uriUrl = Uri.parse(bannerDataModel.imageUrl)
+                val launchBrowser = Intent(Intent.ACTION_VIEW, uriUrl)
+                context.startActivity(launchBrowser)
+            }
+
+        }
+
+        private fun ConstraintSet.match(view: View, parentView: View) {
+            this.connect(view.id, ConstraintSet.TOP, parentView.id, ConstraintSet.TOP)
+            this.connect(view.id, ConstraintSet.START, parentView.id, ConstraintSet.START)
+            this.connect(view.id, ConstraintSet.END, parentView.id, ConstraintSet.END)
+            this.connect(view.id, ConstraintSet.BOTTOM, parentView.id, ConstraintSet.BOTTOM)
+        }
 
     }
 
+    // Example of inflating the view via Jetpack Compose
     private fun usingJetpackCompose() {
 
         composeView.visibility = View.VISIBLE
@@ -175,70 +217,6 @@ class CADataLayerActivity : AppCompatActivity() {
         }
     }
 
-//    private fun addingView(layout: LinearLayout) {
-//
-//
-//        RealifeTech.getCampaignAutomation().apply {
-//            fetchRLTDataModels(
-//                location.text.toString()
-//            ) { error, response ->
-//                progressBar.isVisible = false
-//                response.forEachIndexed { _, item ->
-//                    item?.let {
-//                        val banner = IntegratorBanner(
-//                            this@CADataLayerActivity,
-//                            it.data as BannerDataModel
-//                        )
-//                        layout.addView(banner)
-//                    }
-//                }
-//                error?.let {
-//                    Toast.makeText(
-//                        this@CADataLayerActivity,
-//                        it.message,
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            }
-//        }
-//    }
-
-    // This is the UI given by the Integrator
-    @SuppressLint("ViewConstructor")
-    class IntegratorBanner(
-        context: Context,
-        bannerDataModel: BannerDataModel
-    ) : ConstraintLayout(context), RLTViewCreatable {
-
-        init {
-            val view = LayoutInflater.from(context)
-                .inflate(R.layout.banner_view, this, false)
-            val set = ConstraintSet()
-            addView(view)
-            set.clone(this)
-            set.match(view, this)
-            view.title.text = bannerDataModel.title
-            view.subtitle.text = bannerDataModel.subtitle
-            view.subtitle.isVisible = !bannerDataModel.subtitle.isNullOrEmpty()
-            view.title.isVisible = !bannerDataModel.title.isNullOrEmpty()
-            view.bannerImage.loadImage(context, bannerDataModel.imageUrl)
-
-            view.setOnClickListener {
-                val uriUrl = Uri.parse(bannerDataModel.imageUrl)
-                val launchBrowser = Intent(Intent.ACTION_VIEW, uriUrl)
-                context.startActivity(launchBrowser)
-            }
-
-        }
-
-        private fun ConstraintSet.match(view: View, parentView: View) {
-            this.connect(view.id, ConstraintSet.TOP, parentView.id, ConstraintSet.TOP)
-            this.connect(view.id, ConstraintSet.START, parentView.id, ConstraintSet.START)
-            this.connect(view.id, ConstraintSet.END, parentView.id, ConstraintSet.END)
-            this.connect(view.id, ConstraintSet.BOTTOM, parentView.id, ConstraintSet.BOTTOM)
-        }
-
-    }
 
     companion object {
         fun start(context: Context) {
