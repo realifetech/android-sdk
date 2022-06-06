@@ -4,6 +4,7 @@ import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
 import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
+import com.realifetech.sdk.campaignautomation.data.model.RLTItem
 import com.realifetech.sdk.campaignautomation.domain.CAMocks
 import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
 import com.realifetech.sdk.sell.utils.MainCoroutineRule
@@ -37,6 +38,7 @@ class CampaignAutomationTest {
     private lateinit var captureSlot: CapturingSlot<(error: Error?, result: Boolean) -> Unit>
     private lateinit var contentSlot: CapturingSlot<(error: Exception?, response: GetContentByExternalIdQuery.GetContentByExternalId?) -> Unit>
     private lateinit var callback: (error: Exception?, response: List<View?>) -> Unit
+    private lateinit var callbackRLTDataModel: (error: Exception?, response: List<RLTItem?>) -> Unit
     private val factory: Map<ContentType, RLTCreatableFactory<*>> = mutableMapOf()
 
 
@@ -55,6 +57,7 @@ class CampaignAutomationTest {
         captureSlot = slot()
         contentSlot = slot()
         callback = mockk()
+        callbackRLTDataModel = mockk()
     }
 
     @Test
@@ -71,6 +74,14 @@ class CampaignAutomationTest {
         caFeature.fetch(location, factory, callback)
         // THEN
         verify { rltFetcher.fetch(location, factory, callback) }
+    }
+
+    @Test
+    fun `CA feature fetch RLT dataModel`() {
+        // WHEN
+        caFeature.fetchRLTDataModels(location, callbackRLTDataModel)
+        // THEN
+        verify { rltFetcher.fetchRLTDataModels(location, callbackRLTDataModel) }
     }
 
     @Test
