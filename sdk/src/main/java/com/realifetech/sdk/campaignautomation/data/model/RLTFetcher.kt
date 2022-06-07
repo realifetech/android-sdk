@@ -27,6 +27,56 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
     }
 
 
+    fun fetchRLTDataModels(
+        location: String,
+        callback: (error: Exception?, response: List<RLTItem>) -> Unit
+    ) {
+        val list = mutableListOf<RLTItem>()
+        RealifeTech.getCampaignAutomation()
+            .getContentByExternalId(location) { error, response ->
+                GlobalScope.launch(Dispatchers.IO) {
+                    withContext(Dispatchers.Main) {
+                        error?.let {
+                            callback(error, emptyList())
+                        }
+                        response?.let {
+                            response.items?.forEach {
+                                when (it?.contentType) {
+                                    ContentType.BANNER -> {
+                                        val bannerDataModel = convert<BannerDataModel>(it)
+                                        val dictionary = eventDictionary(
+                                            response.campaignId,
+                                            location,
+                                            bannerDataModel.id.toString(),
+                                            it.contentType.toString(),
+                                            bannerDataModel.language.toString()
+                                        )
+                                        bannerDataModel.listener = {
+                                            trackUserInteractionCreatable(
+                                                dictionary
+                                            )
+                                        }
+                                        list.add(
+                                            RLTItem(ContentType.BANNER, bannerDataModel)
+                                        )
+                                        trackLoadCreatable(
+                                            dictionary
+                                        )
+
+                                    }
+                                    ContentType.UNKNOWN__ -> TODO()
+                                    null -> TODO()
+                                }
+                            }
+                            callback(null, list)
+
+                        }
+                    }
+                }
+            }
+    }
+
+
     fun fetch(
         location: String,
         factories: Map<ContentType, RLTCreatableFactory<*>>,
@@ -67,9 +117,8 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
                                         )
 
                                     }
-                                    else -> {
-
-                                    }
+                                    ContentType.UNKNOWN__ -> TODO()
+                                    null -> TODO()
                                 }
                             }
                             callback(null, list)
@@ -129,6 +178,7 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
             }
             error?.let {
                 Log.e(this.javaClass.name, "Error while sending Loading CA analytics")
+                Log.e(this.javaClass.name, it.toString())
             }
         }
     }

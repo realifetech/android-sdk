@@ -137,6 +137,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/identityButton" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/caDataLayerButton"
+                style="@style/Material.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/ca_datalayer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/campaignAutomationButton" />
+
             <LinearLayout
                 android:id="@+id/app_version_layout"
                 android:layout_width="0dp"
@@ -144,7 +154,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/campaignAutomationButton">
+                app:layout_constraintTop_toBottomOf="@+id/caDataLayerButton">
 
                 <TextView
                     android:id="@+id/textView6"
