@@ -64,9 +64,8 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
                                         )
 
                                     }
-                                    else -> {
-
-                                    }
+                                    ContentType.UNKNOWN__ -> TODO()
+                                    null -> TODO()
                                 }
                             }
                             callback(null, list)
@@ -118,9 +117,8 @@ class RLTFetcher @Inject constructor(private val analytics: Analytics) {
                                         )
 
                                     }
-                                    else -> {
-
-                                    }
+                                    ContentType.UNKNOWN__ -> TODO()
+                                    null -> TODO()
                                 }
                             }
                             callback(null, list)

@@ -21,8 +21,6 @@ class CampaignAdapter(private val list: List<RLTItem?>) :
     RecyclerView.Adapter<CampaignAdapter.ViewHolder>() {
 
 
-    private var context: Context? = null
-
     //    /**
 //     * Provide a reference to the type of views that you are using
 //     * (custom ViewHolder).
@@ -40,7 +38,6 @@ class CampaignAdapter(private val list: List<RLTItem?>) :
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.banner_view, viewGroup, false)
-        context = viewGroup.context
         return ViewHolder(view)
     }
 
@@ -54,12 +51,12 @@ class CampaignAdapter(private val list: List<RLTItem?>) :
         viewHolder.subtitle.text = bannerDataModel.subtitle
         viewHolder.subtitle.isVisible = !bannerDataModel.subtitle.isNullOrEmpty()
         viewHolder.title.isVisible = !bannerDataModel.title.isNullOrEmpty()
-        viewHolder.bannerImage.loadImage(context, bannerDataModel.imageUrl)
+        viewHolder.bannerImage.loadImage(viewHolder.itemView.context, bannerDataModel.imageUrl)
 
         viewHolder.bannerImage.setOnClickListener {
             val uriUrl = Uri.parse(bannerDataModel.imageUrl)
             val launchBrowser = Intent(Intent.ACTION_VIEW, uriUrl)
-            context?.startActivity(launchBrowser)
+            viewHolder.itemView.context.startActivity(launchBrowser)
         }
     }
 
