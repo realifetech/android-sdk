@@ -8,25 +8,25 @@
         android:id="@+id/radioGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:checkedButton="@id/uno"
+        android:checkedButton="@id/integrator_banner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <RadioButton
-            android:id="@+id/uno"
+            android:id="@+id/integrator_banner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ca_integrator_banner" />
 
         <RadioButton
-            android:id="@+id/due"
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ca_recycler_view" />
 
         <RadioButton
-            android:id="@+id/tre"
+            android:id="@+id/jetpack_compose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ca_jetpack_compose" />
