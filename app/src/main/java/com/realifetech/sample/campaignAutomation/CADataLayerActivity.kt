@@ -29,7 +29,7 @@ import com.realifetech.sample.R
 import com.realifetech.sample.utils.loadImage
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.campaignautomation.data.model.*
-import com.realifetech.sdk.campaignautomation.data.utils.RLTConverter
+import com.realifetech.sdk.campaignautomation.data.utils.RLTContentConverter
 import com.realifetechCa.type.ContentType
 import kotlinx.android.synthetic.main.activity_campaign_automation_datal_layer_sample.*
 import kotlinx.android.synthetic.main.banner_view.view.*
@@ -71,7 +71,7 @@ class CADataLayerActivity : AppCompatActivity() {
     }
 
 
-    // Example of integration with RLTCreatableFactories and RLTConverter
+    // Example of integration with RLTCreatableFactories and RLTContentConverter
     // given the response item list it is the passed to factories and the converter
     // to return a list of view that can be easily added
     private fun addingView(layout: LinearLayout) {
@@ -82,7 +82,7 @@ class CADataLayerActivity : AppCompatActivity() {
                 progressBar.isVisible = false
                 val factories =
                     mutableMapOf<ContentType, RLTCreatableFactory<*>>(ContentType.BANNER to IntegratorBannerFactory())
-                val items = RLTConverter().convert(response, factories)
+                val items = RLTContentConverter().convert(response, factories)
                 items.forEach {
                     layout.addView(it)
                 }
@@ -195,7 +195,7 @@ class CADataLayerActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun BannerListView(response: List<RLTItem?>) {
+    fun BannerListView(response: List<RLTContentItem?>) {
         LazyColumn() {
             items(items = response) {
                 BannerView(it?.data as BannerDataModel?)

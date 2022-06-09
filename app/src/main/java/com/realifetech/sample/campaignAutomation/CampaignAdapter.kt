@@ -1,6 +1,5 @@
 package com.realifetech.sample.campaignAutomation
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -13,11 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.realifetech.sample.R
 import com.realifetech.sample.utils.loadImage
 import com.realifetech.sdk.campaignautomation.data.model.BannerDataModel
-import com.realifetech.sdk.campaignautomation.data.model.RLTItem
-import kotlinx.android.synthetic.main.banner_view.view.*
+import com.realifetech.sdk.campaignautomation.data.model.RLTContentItem
 
 
-class CampaignAdapter(private val list: List<RLTItem?>) :
+class CampaignAdapter(private val list: List<RLTContentItem?>) :
     RecyclerView.Adapter<CampaignAdapter.ViewHolder>() {
 
 
