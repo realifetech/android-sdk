@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
 @Parcelize
-data class RLTItem(
+data class RLTContentItem(
     val contentType: ContentType?,
     val data: @RawValue RLTDataModel?
 ) : Parcelable

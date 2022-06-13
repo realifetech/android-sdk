@@ -1,10 +1,9 @@
 package com.realifetech.sdk.campaignautomation
 
 import android.view.View
-import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
 import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
-import com.realifetech.sdk.campaignautomation.data.model.RLTItem
+import com.realifetech.sdk.campaignautomation.data.model.RLTContentItem
 import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
 import com.realifetechCa.GetContentByExternalIdQuery
 import com.realifetechCa.type.ContentType
@@ -38,7 +37,7 @@ class CampaignAutomation @Inject constructor(
 
     fun fetchRLTDataModels(
         location: String,
-        callback: (error: Exception?, response: List<RLTItem?>) -> Unit
+        callback: (error: Exception?, response: List<RLTContentItem?>) -> Unit
     ) {
         rltFetcher.fetchRLTDataModels(
             location,
