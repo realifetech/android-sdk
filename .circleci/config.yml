@@ -95,6 +95,10 @@ jobs:
 #      - attach_workspace:
 #          at: .
 ##      - init_parameters
+      - checkout
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies --stacktrace
       - run:
           name: Build apk and push
           command: |
