@@ -92,7 +92,7 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - init_parameters
+#      - init_parameters
       - run:
           name: Build apk and push
           command: ./.scripts/createBundleAndApk.sh << pipeline.git.branch >>
@@ -115,33 +115,33 @@ jobs:
 workflows:
   realifetech_SDK:
     jobs:
-      - unit-test
-      - lint-test
-      - build:
-          filters:
-            branches:
-              only:
-                - develop
-                - /^release\/.+$/
-                - /^hotfix\/.+$/
-                - master
-      - deploy:
-          requires:
-            - build
-            - unit-test
-            - lint-test
-          filters:
-            branches:
-              only:
-                - develop
-                - /^release\/.+$/
-                - /^hotfix\/.+$/
-                - master
-      - apk:
-          requires:
-            - build
-            - unit-test
-            - lint-test
+#      - unit-test
+#      - lint-test
+#      - build:
+#          filters:
+#            branches:
+#              only:
+#                - develop
+#                - /^release\/.+$/
+#                - /^hotfix\/.+$/
+#                - master
+#      - deploy:
+#          requires:
+#            - build
+#            - unit-test
+#            - lint-test
+#          filters:
+#            branches:
+#              only:
+#                - develop
+#                - /^release\/.+$/
+#                - /^hotfix\/.+$/
+#                - master
+      - apk
+#          requires:
+#            - build
+#            - unit-test
+#            - lint-test
 #          filters:
 #            branches:
 #              only:
