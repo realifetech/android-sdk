@@ -95,7 +95,11 @@ jobs:
 #      - init_parameters
       - run:
           name: Build apk and push
-          command: ./.scripts/createBundleAndApk.sh << pipeline.git.branch >>
+          command: |
+            ./gradlew assembleDebug;
+            ./gradlew bundleDebug --stacktrace;
+            ./gradlew packageDebug --stacktrace;
+            ./gradlew appDistributionUploadDebug --stacktrace;
 
       - store_artifacts:
           name: Store Bundle
