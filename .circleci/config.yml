@@ -88,24 +88,15 @@ jobs:
   apk:
     working_directory: ~/code
     executor: docker-executor
-#    executor:
-#      name: android/android-machine
-#      resource-class: medium
     steps:
-#      - attach_workspace:
-#          at: .
-##      - init_parameters
       - checkout
-
       - run:
           name: Exporting Firebase token
           command: |
             export FIREBASE_TOKEN=1//03-4fyJQImzphCgYIARAAGAMSNwF-L9IrpPAbUUivDuuWfkUCWZn0oSeJBaDLbBRu5eTyVcguzkpMCOgbV78VGrlgP_tln0rathk
-
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies --stacktrace
-
       - run:
           name: Build apk and push
           command: |
@@ -140,37 +131,37 @@ executors:
 workflows:
   realifetech_SDK:
     jobs:
-#      - unit-test
-#      - lint-test
-#      - build:
-#          filters:
-#            branches:
-#              only:
-#                - develop
-#                - /^release\/.+$/
-#                - /^hotfix\/.+$/
-#                - master
-#      - deploy:
-#          requires:
-#            - build
-#            - unit-test
-#            - lint-test
-#          filters:
-#            branches:
-#              only:
-#                - develop
-#                - /^release\/.+$/
-#                - /^hotfix\/.+$/
-#                - master
-      - apk
-#          requires:
-#            - build
-#            - unit-test
-#            - lint-test
-#          filters:
-#            branches:
-#              only:
-#                - develop
-#                - /^release\/.+$/
-#                - /^hotfix\/.+$/
-#                - master
+      - unit-test
+      - lint-test
+      - build:
+          filters:
+            branches:
+              only:
+                - develop
+                - /^release\/.+$/
+                - /^hotfix\/.+$/
+                - master
+      - deploy:
+          requires:
+            - build
+            - unit-test
+            - lint-test
+          filters:
+            branches:
+              only:
+                - develop
+                - /^release\/.+$/
+                - /^hotfix\/.+$/
+                - master
+      - apk:
+          requires:
+            - build
+            - unit-test
+            - lint-test
+          filters:
+            branches:
+              only:
+                - develop
+                - /^release\/.+$/
+                - /^hotfix\/.+$/
+                - master
