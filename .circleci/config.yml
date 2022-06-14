@@ -86,13 +86,15 @@ jobs:
           name: Assemble Release build
           command: ./.scripts/executeDeploy.sh << pipeline.git.branch >>
   apk:
-    executor:
-      name: android/android-machine
-      resource-class: medium
+    working_directory: ~/code
+    executor: docker-executor
+#    executor:
+#      name: android/android-machine
+#      resource-class: medium
     steps:
-      - attach_workspace:
-          at: .
-#      - init_parameters
+#      - attach_workspace:
+#          at: .
+##      - init_parameters
       - run:
           name: Build apk and push
           command: |
@@ -115,6 +117,14 @@ jobs:
           name: Store Universal Apk
           path: app/build/outputs/universal_apk
           destination: universal_apks
+
+executors:
+  docker-executor:
+    docker:
+      #      - image: bitriseio/docker-android:latest
+      #      - image: circleci/android@sha256:b6646fdf7457f61825526e7bfce364d8e533da6ceb1cdb98e371e94348ecc834
+      - image: cimg/android:2022.03
+
 
 workflows:
   realifetech_SDK:
