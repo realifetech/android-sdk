@@ -103,7 +103,7 @@ jobs:
             ./gradlew assembleDebug;
             ./gradlew bundleDebug --stacktrace;
             ./gradlew packageDebug --stacktrace;
-            ./gradlew appDistributionUploadDebugq --stacktrace;
+            ./gradlew appDistributionUploadDebug --stacktrace;
 
       - store_artifacts:
           name: Store Bundle
