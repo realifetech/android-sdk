@@ -26,6 +26,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             firebaseAppDistribution {
                 groups = "livestyled-qa"
+                serviceCredentialsFile = ".app/src/sample-app-sdk.json"
             }
         }
         debug {
