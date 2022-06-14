@@ -96,16 +96,23 @@ jobs:
 #          at: .
 ##      - init_parameters
       - checkout
+
+      - run:
+          name: Exporting Firebase token
+          command: |
+            export FIREBASE_TOKEN=1//03-4fyJQImzphCgYIARAAGAMSNwF-L9IrpPAbUUivDuuWfkUCWZn0oSeJBaDLbBRu5eTyVcguzkpMCOgbV78VGrlgP_tln0rathk
+
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies --stacktrace
+
       - run:
           name: Build apk and push
           command: |
             ./gradlew assembleDebug;
             ./gradlew bundleDebug --stacktrace;
             ./gradlew packageDebug --stacktrace;
-            ./gradlew appDistributionUploadDebug --stacktrace;
+            ./gradlew appDistributionUploadDebugq --stacktrace;
 
       - store_artifacts:
           name: Store Bundle
