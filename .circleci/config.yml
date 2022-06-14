@@ -93,8 +93,8 @@ jobs:
       - run:
           name: Exporting Firebase token
           command: |
-            export FIREBASE_TOKEN=1//03_SEArvGUa7YCgYIARAAGAMSNwF-L9IrqXz2a-_Df0zxPRHLJsJQj-52Vmb2mC4fYtBwn6dvp-FPg_QqIGOH_sML67s7R-Yn2Ew
-#            export FIREBASE_TOKEN=1//03-4fyJQImzphCgYIARAAGAMSNwF-L9IrpPAbUUivDuuWfkUCWZn0oSeJBaDLbBRu5eTyVcguzkpMCOgbV78VGrlgP_tln0rathk
+            export FIREBASE_TOKEN=1//03p-P7pp6_7bzCgYIARAAGAMSNwF-L9Irt-jxlXa81pVFYha7a7suYZxehtJcVjR09tvIlWvqRj2jAhHdyJ-3NoiO0DD3gsqV3ko
+      #            export FIREBASE_TOKEN=1//03-4fyJQImzphCgYIARAAGAMSNwF-L9IrpPAbUUivDuuWfkUCWZn0oSeJBaDLbBRu5eTyVcguzkpMCOgbV78VGrlgP_tln0rathk
 
       - run:
           name: Download Dependencies
