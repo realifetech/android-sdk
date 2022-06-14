@@ -90,10 +90,10 @@ jobs:
     executor: docker-executor
     steps:
       - checkout
-#      - run:
-#          name: Exporting Firebase token
-#          command: |
-#            export FIREBASE_TOKEN=1//03cmCP5GkH2TNCgYIARAAGAMSNwF-L9Irtz3g7EIBbp0B_pVlHwHhAXLHofmrx9V9R-QGskItG1JYKhjOjBC7dBViENJ_8M86bUs
+      - run:
+          name: Exporting Firebase token
+          command: |
+            export FIREBASE_TOKEN=1//03Ee4uHoRM2xxCgYIARAAGAMSNwF-L9Ir7P5A2IN3y2CXdxV_NJBvMcD6C6gYFfQtDF4rs1OVYUiUAfOHrwhViOMdBPFvGuetBgw
       #            export FIREBASE_TOKEN=1//03-4fyJQImzphCgYIARAAGAMSNwF-L9IrpPAbUUivDuuWfkUCWZn0oSeJBaDLbBRu5eTyVcguzkpMCOgbV78VGrlgP_tln0rathk
 
       - run:
