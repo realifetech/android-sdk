@@ -85,6 +85,33 @@ jobs:
       - run:
           name: Assemble Release build
           command: ./.scripts/executeDeploy.sh << pipeline.git.branch >>
+  apk:
+    executor:
+      name: android/android-machine
+      resource-class: medium
+    steps:
+      - attach_workspace:
+          at: .
+      - init_parameters
+      - run:
+          name: Build apk and push
+          command: ./.scripts/createBundleAndApk.sh << pipeline.git.branch >>
+
+      - store_artifacts:
+          name: Store Bundle
+          path: app/build/outputs/bundle
+          destination: bundles
+
+      - store_artifacts:
+          name: Store Apk
+          path: app/build/outputs/apk
+          destination: apks
+
+      - store_artifacts:
+          name: Store Universal Apk
+          path: app/build/outputs/universal_apk
+          destination: universal_apks
+
 workflows:
   realifetech_SDK:
     jobs:
@@ -110,3 +137,15 @@ workflows:
                 - /^release\/.+$/
                 - /^hotfix\/.+$/
                 - master
+      - apk:
+          requires:
+            - build
+            - unit-test
+            - lint-test
+#          filters:
+#            branches:
+#              only:
+#                - develop
+#                - /^release\/.+$/
+#                - /^hotfix\/.+$/
+#                - master
