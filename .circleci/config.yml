@@ -93,7 +93,7 @@ jobs:
       - run:
           name: Exporting Firebase token
           command: |
-            export FIREBASE_TOKEN=1//03p-P7pp6_7bzCgYIARAAGAMSNwF-L9Irt-jxlXa81pVFYha7a7suYZxehtJcVjR09tvIlWvqRj2jAhHdyJ-3NoiO0DD3gsqV3ko
+            export FIREBASE_TOKEN=1//03cmCP5GkH2TNCgYIARAAGAMSNwF-L9Irtz3g7EIBbp0B_pVlHwHhAXLHofmrx9V9R-QGskItG1JYKhjOjBC7dBViENJ_8M86bUs
       #            export FIREBASE_TOKEN=1//03-4fyJQImzphCgYIARAAGAMSNwF-L9IrpPAbUUivDuuWfkUCWZn0oSeJBaDLbBRu5eTyVcguzkpMCOgbV78VGrlgP_tln0rathk
 
       - run:
