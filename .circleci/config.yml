@@ -127,37 +127,37 @@ executors:
 workflows:
   realifetech_SDK:
     jobs:
-#      - unit-test
-#      - lint-test
-#      - build:
-#          filters:
-#            branches:
-#              only:
-#                - develop
-#                - /^release\/.+$/
-#                - /^hotfix\/.+$/
-#                - master
-#      - deploy:
-#          requires:
-#            - build
-#            - unit-test
-#            - lint-test
-#          filters:
-#            branches:
-#              only:
-#                - develop
-#                - /^release\/.+$/
-#                - /^hotfix\/.+$/
-#                - master
-      - apk
-#          requires:
-#            - build
-#            - unit-test
-#            - lint-test
-#          filters:
-#            branches:
-#              only:
-#                - develop
-#                - /^release\/.+$/
-#                - /^hotfix\/.+$/
-#                - master
+      - unit-test
+      - lint-test
+      - build:
+          filters:
+            branches:
+              only:
+                - develop
+                - /^release\/.+$/
+                - /^hotfix\/.+$/
+                - master
+      - deploy:
+          requires:
+            - build
+            - unit-test
+            - lint-test
+          filters:
+            branches:
+              only:
+                - develop
+                - /^release\/.+$/
+                - /^hotfix\/.+$/
+                - master
+      - apk:
+          requires:
+            - build
+            - unit-test
+            - lint-test
+          filters:
+            branches:
+              only:
+                - develop
+                - /^release\/.+$/
+                - /^hotfix\/.+$/
+                - master
