@@ -12,9 +12,15 @@ private String getCommitMessages() {
     return note.toString()
 }
 
-private String getBuildNumber() {
-    return "git rev-list --all --count".execute().text.trim()
+private Integer getBuildNumber() {
+    return "git rev-list HEAD --count".execute().text.trim().toInteger()
 }
+
+private static String generateVersionName() {
+    def testVersionName = "git describe --abbrev=0 --tags".execute().text.trim()
+    return testVersionName.toString()
+}
+
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -24,8 +30,8 @@ android {
         applicationId "com.realifetech.sample"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-
+        versionCode getBuildNumber()
+        versionName generateVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
@@ -42,6 +48,10 @@ android {
         }
         debug {
             initWith release
+            firebaseAppDistribution {
+                groups = "livestyled-qa"
+                releaseNotes = getCommitMessages()
+            }
         }
     }
 
