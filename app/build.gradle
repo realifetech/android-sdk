@@ -5,11 +5,15 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.appdistribution'
 
 private String getCommitMessages() {
-    def note = "Build number:${getPipelineNumber()} \n"
+    def note = "Build number:${getBuildNumber()} \n"
     def result = "git rev-parse --abbrev-ref HEAD".execute().text.trim()
     def lastCommit = "git log -1 --pretty=%B".execute().text.trim()
     note += "Branch:\n" + result.toString() + "\n" + "Last commit:\n" + lastCommit.toString()
     return note.toString()
+}
+
+private String getBuildNumber() {
+    return "git rev-list --all --count".execute().text.trim()
 }
 
 android {
