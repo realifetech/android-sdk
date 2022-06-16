@@ -1,7 +1,6 @@
 package com.realifetech.sdk.communicate
 
 import android.content.Context
-import android.util.Log
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.TokenBody
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
@@ -25,18 +24,10 @@ class Communicate(
             USER,
             event,
             trackInfo,
-            null
-        ) { error, result ->
-            result.let {
-                Log.e(this.javaClass.name, "Analytics for event: $event send correctly")
-            }
-            error?.let {
-                Log.e(this.javaClass.name, "Error while sending Track analytics")
-                Log.e(this.javaClass.name, it.toString())
-            }
-        }
+            null,
+            callback
+        )
     }
-
 
 
     fun registerForPushNotifications(token: String): Result<Boolean> {
