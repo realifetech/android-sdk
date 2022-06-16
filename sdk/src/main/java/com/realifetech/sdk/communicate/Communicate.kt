@@ -28,7 +28,7 @@ class Communicate(
             null
         ) { error, result ->
             result.let {
-
+                Log.e(this.javaClass.name, "Analytics for event: $event send correctly")
             }
             error?.let {
                 Log.e(this.javaClass.name, "Error while sending Track analytics")
