@@ -2,6 +2,25 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.appdistribution'
+
+private String getCommitMessages() {
+    def note = "Build number:${getBuildNumber()} \n"
+    def result = "git rev-parse --abbrev-ref HEAD".execute().text.trim()
+    def lastCommit = "git log -1 --pretty=%B".execute().text.trim()
+    note += "Branch:\n" + result.toString() + "\n" + "Last commit:\n" + lastCommit.toString()
+    return note.toString()
+}
+
+private Integer getBuildNumber() {
+    return "git rev-list HEAD --count".execute().text.trim().toInteger()
+}
+
+private static String generateVersionName() {
+    def testVersionName = "git describe --abbrev=0 --tags".execute().text.trim()
+    return testVersionName.toString()
+}
+
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -11,8 +30,8 @@ android {
         applicationId "com.realifetech.sample"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-
+        versionCode getBuildNumber()
+        versionName generateVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
@@ -22,6 +41,17 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            firebaseAppDistribution {
+                groups = "livestyled-qa"
+                releaseNotes = getCommitMessages()
+            }
+        }
+        debug {
+            initWith release
+            firebaseAppDistribution {
+                groups = "livestyled-qa"
+                releaseNotes = getCommitMessages()
+            }
         }
     }
 

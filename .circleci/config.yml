@@ -85,6 +85,45 @@ jobs:
       - run:
           name: Assemble Release build
           command: ./.scripts/executeDeploy.sh << pipeline.git.branch >>
+  apk:
+    working_directory: ~/code
+    executor: docker-executor
+    steps:
+      - checkout
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies --stacktrace
+      - run:
+          name: Build apk and push
+          command: |
+            ./gradlew assembleDebug;
+            ./gradlew bundleDebug --stacktrace;
+            ./gradlew packageDebug --stacktrace;
+            ./gradlew appDistributionUploadDebug --stacktrace;
+
+      - store_artifacts:
+          name: Store Bundle
+          path: app/build/outputs/bundle
+          destination: bundles
+
+      - store_artifacts:
+          name: Store Apk
+          path: app/build/outputs/apk
+          destination: apks
+
+      - store_artifacts:
+          name: Store Universal Apk
+          path: app/build/outputs/universal_apk
+          destination: universal_apks
+
+executors:
+  docker-executor:
+    docker:
+      #      - image: bitriseio/docker-android:latest
+      #      - image: circleci/android@sha256:b6646fdf7457f61825526e7bfce364d8e533da6ceb1cdb98e371e94348ecc834
+      - image: cimg/android:2022.03
+
+
 workflows:
   realifetech_SDK:
     jobs:
@@ -99,6 +138,18 @@ workflows:
                 - /^hotfix\/.+$/
                 - master
       - deploy:
+          requires:
+            - build
+            - unit-test
+            - lint-test
+          filters:
+            branches:
+              only:
+                - develop
+                - /^release\/.+$/
+                - /^hotfix\/.+$/
+                - master
+      - apk:
           requires:
             - build
             - unit-test
