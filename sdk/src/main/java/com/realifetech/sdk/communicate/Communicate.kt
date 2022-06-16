@@ -18,14 +18,14 @@ class Communicate(
     fun trackPush(
         event: String,
         trackInfo: Map<String, String>,
-        callback: (error: Exception?, response: Boolean) -> Unit
+        completion: (error: Exception?, response: Boolean) -> Unit
     ) {
         analytics.track(
             USER,
             event,
             trackInfo,
             null,
-            callback
+            completion
         )
     }
 
