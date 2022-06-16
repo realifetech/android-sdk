@@ -1,6 +1,8 @@
 package com.realifetech.sdk.communicate
 
 import android.content.Context
+import android.util.Log
+import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.TokenBody
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
@@ -10,8 +12,32 @@ import com.realifetech.sdk.core.utils.hasNetworkConnection
 class Communicate(
     private val tokenStorage: PushNotificationsTokenStorage,
     private val realifetechApiV3Service: RealifetechApiV3Service,
+    private val analytics: Analytics,
     private val context: Context
 ) {
+
+    fun trackPush(
+        event: String,
+        trackInfo: Map<String, String>,
+        callback: (error: Exception?, response: Boolean) -> Unit
+    ) {
+        analytics.track(
+            USER,
+            event,
+            trackInfo,
+            null
+        ) { error, result ->
+            result.let {
+
+            }
+            error?.let {
+                Log.e(this.javaClass.name, "Error while sending Track analytics")
+                Log.e(this.javaClass.name, it.toString())
+            }
+        }
+    }
+
+
 
     fun registerForPushNotifications(token: String): Result<Boolean> {
         tokenStorage.pendingToken = token
@@ -41,5 +67,6 @@ class Communicate(
     companion object {
         private const val ID = "me"
         private const val GOOGLE = "GOOGLE"
+        private const val USER = "user"
     }
 }

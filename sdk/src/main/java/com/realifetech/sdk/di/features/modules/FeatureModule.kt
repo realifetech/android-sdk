@@ -71,9 +71,10 @@ object FeatureModule {
     internal fun communicate(
         tokenStorage: PushNotificationsTokenStorage,
         realifetechApiV3Service: RealifetechApiV3Service,
+        analytics: Analytics,
         context: Context
     ): Communicate {
-        val communicate = Communicate(tokenStorage, realifetechApiV3Service, context)
+        val communicate = Communicate(tokenStorage, realifetechApiV3Service, analytics, context)
         communicate.resendPendingToken()
         return communicate
     }
