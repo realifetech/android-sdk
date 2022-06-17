@@ -6874,6 +6874,12 @@
               "deprecationReason": null
             },
             {
+              "name": "CampaignAutomation",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "Event",
               "description": null,
               "isDeprecated": false,
@@ -6958,6 +6964,12 @@
             },
             {
               "name": "feed",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "dynamic",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
