@@ -17,7 +17,7 @@ class Communicate(
 
     fun trackPush(
         event: String,
-        trackInfo: Map<String, String>,
+        trackInfo: Map<String, Any>?,
         completion: (error: Exception?, response: Boolean) -> Unit
     ) {
         analytics.track(
@@ -28,7 +28,6 @@ class Communicate(
             completion
         )
     }
-
 
     fun registerForPushNotifications(token: String): Result<Boolean> {
         tokenStorage.pendingToken = token

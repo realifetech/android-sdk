@@ -5,6 +5,8 @@ import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.RegisterPushNotificationsResponse
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks
+import com.realifetech.sdk.communicate.mocks.CommunicateMocks.ACTION
+import com.realifetech.sdk.communicate.mocks.CommunicateMocks.USER
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.errorBody
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.registerResponse
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.token
@@ -35,12 +37,24 @@ class CommunicateTest {
 
     private lateinit var communicate: Communicate
     private lateinit var mockedResult: Response<RegisterPushNotificationsResponse>
+    private lateinit var callback: (error: Exception?, response: Boolean) -> Unit
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         communicate = Communicate(tokenStorage, realifetechApiV3Service, analytics, context)
         mockedResult = mockk()
+        callback = mockk()
+    }
+
+    @Test
+    fun `sending analytics track for PN when trackPush is called`() {
+        // WHEN
+        communicate.trackPush(
+            ACTION, mapOf(), callback
+        )
+        // THEN
+        verify { analytics.track(USER, ACTION, mapOf(), null, callback) }
     }
 
     @Test
