@@ -14,5 +14,7 @@ object CommunicateMocks {
     const val ID = "me"
     const val GOOGLE = "GOOGLE"
     val token = "this is a token, don't but you can't see it"
-    val tokenBody= TokenBody(GOOGLE, token)
+    val tokenBody = TokenBody(GOOGLE, token)
+    const val USER = "user"
+    const val ACTION = "event"
 }

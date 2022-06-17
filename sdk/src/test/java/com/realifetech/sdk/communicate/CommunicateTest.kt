@@ -1,10 +1,12 @@
 package com.realifetech.sdk.communicate
 
 import android.content.Context
+import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.RegisterPushNotificationsResponse
-import com.realifetech.sdk.communicate.data.TokenBody
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks
+import com.realifetech.sdk.communicate.mocks.CommunicateMocks.ACTION
+import com.realifetech.sdk.communicate.mocks.CommunicateMocks.USER
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.errorBody
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.registerResponse
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.token
@@ -28,16 +30,31 @@ class CommunicateTest {
     lateinit var realifetechApiV3Service: RealifetechApiV3Service
 
     @RelaxedMockK
+    lateinit var analytics: Analytics
+
+    @RelaxedMockK
     lateinit var context: Context
 
     private lateinit var communicate: Communicate
     private lateinit var mockedResult: Response<RegisterPushNotificationsResponse>
+    private lateinit var callback: (error: Exception?, response: Boolean) -> Unit
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        communicate = Communicate(tokenStorage, realifetechApiV3Service, context)
+        communicate = Communicate(tokenStorage, realifetechApiV3Service, analytics, context)
         mockedResult = mockk()
+        callback = mockk()
+    }
+
+    @Test
+    fun `sending analytics track for PN when trackPush is called`() {
+        // WHEN
+        communicate.trackPush(
+            ACTION, mapOf(), callback
+        )
+        // THEN
+        verify { analytics.track(USER, ACTION, mapOf(), null, callback) }
     }
 
     @Test
@@ -71,6 +88,7 @@ class CommunicateTest {
         assert((result as Result.Error).exception is RuntimeException)
         assertEquals(null, result.exception.message)
     }
+
     @Test
     fun `resend Pending Token `() {
         every { tokenStorage.hasPendingToken } returns true

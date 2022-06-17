@@ -52,10 +52,11 @@ class CampaignAdapter(private val list: List<RLTContentItem?>) :
         viewHolder.bannerImage.loadImage(viewHolder.itemView.context, bannerDataModel.imageUrl)
 
         viewHolder.bannerImage.setOnClickListener {
-            val uriUrl = Uri.parse(bannerDataModel.imageUrl)
+            val uriUrl = Uri.parse(bannerDataModel.generateLinkHandler())
             val launchBrowser = Intent(Intent.ACTION_VIEW, uriUrl)
             viewHolder.itemView.context.startActivity(launchBrowser)
         }
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
