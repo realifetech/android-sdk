@@ -44,7 +44,18 @@
 
         <activity
             android:name=".campaignAutomation.CampaignAutomationActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data
+                android:host="@string/host_campaign_automation"
+                android:scheme="@string/host_scheme" />
+        </intent-filter>
+        </activity>
 
         <activity
             android:name=".campaignAutomation.CADataLayerActivity"
@@ -64,13 +75,13 @@
             </intent-filter>
 
         </activity>
-<!--        <service-->
-<!--            android:name=".service.FirebaseMessageListenerService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <service
+            android:name=".service.FirebaseMessageListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
     </application>
 

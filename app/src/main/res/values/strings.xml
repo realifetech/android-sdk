@@ -23,8 +23,9 @@
     <string name="tandc">tAndC</string>
     <string name="privacy">privacy</string>
     <string name="about">about</string>
+    <string name="host_campaign_automation">cawidgets</string>
     <string name="host_login_scheme">rlthostapplogin</string>
-    <string name="host_scheme">rltsampleapp</string>
+    <string name="host_scheme">rtlsmpapp</string>
     <string name="about_company">aboutCompany</string>
     <string name="purchaseHelp">purchasesHelp</string>
     <string name="query_web_page">Query Web Page</string>

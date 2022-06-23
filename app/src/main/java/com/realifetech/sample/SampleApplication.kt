@@ -4,6 +4,10 @@ import android.app.Application
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.core.data.model.config.CoreConfiguration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SampleApplication : Application() {
     override fun onCreate() {
@@ -12,9 +16,11 @@ class SampleApplication : Application() {
         val storage = DeviceConfigurationStorage(this)
         // Prefill the storage with default values from the configuration
         if (storage.graphQl.isBlank() && storage.apiUrl.isBlank() && storage.orderingJourney.isBlank()) {
-            val configuration = CoreConfiguration(EMPTY, EMPTY)
+            val configuration = CoreConfiguration()
             storage.graphQl = configuration.graphApiUrl
             storage.apiUrl = configuration.apiUrl
+            storage.appCode = configuration.appCode
+            storage.clientSecret = configuration.clientSecret
             storage.orderingJourney = configuration.webOrderingJourneyUrl
         }
         val configuration = CoreConfiguration(
@@ -25,6 +31,7 @@ class SampleApplication : Application() {
             webOrderingJourneyUrl = storage.orderingJourney
         )
         RealifeTech.configureSdk(this, configuration)
+        registerDeviceForSDK()
 
 //  Set Colors via code
         // EXAMPLE 1
@@ -34,6 +41,13 @@ class SampleApplication : Application() {
 //            .setColor(ContextCompat.getColor(this, R.color.colorAccent), ColorType.ON_PRIMARY)
     }
 
+    private fun registerDeviceForSDK() {
+        GlobalScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
+                RealifeTech.getGeneral().registerDevice()
+            }
+        }
+    }
     companion object {
         private const val EMPTY = ""
     }
