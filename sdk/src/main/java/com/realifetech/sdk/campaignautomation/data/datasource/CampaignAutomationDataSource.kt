@@ -1,6 +1,6 @@
 package com.realifetech.sdk.campaignautomation.data.datasource
 
-import com.realifetechCa.GetContentByExternalIdQuery
+import com.realifetech.GetContentByExternalIdQuery
 
 interface CampaignAutomationDataSource {
 

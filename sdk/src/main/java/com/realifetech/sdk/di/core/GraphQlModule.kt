@@ -60,26 +60,6 @@ class GraphQlModule {
         return apolloClient.build()
     }
 
-    @CoreScope
-    @Provides
-    @Named("client-graphQL-CA")
-    fun apolloClientCA(
-        context: Context,
-        @Named("client-graphQL") okHttpClient: OkHttpClient,
-        configurationStorage: ConfigurationStorage,
-    ): ApolloClient {
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        val apolloClient = ApolloClient.builder()
-            .serverUrl(configurationStorage.graphCAApiUrl)
-            .addApplicationInterceptor(OAuth2ApolloInterceptor())
-            .okHttpClient(okHttpClient)
-        apolloClient.normalizedCache(SqlNormalizedCacheFactory(context, APOLLO_DB))
-            .defaultResponseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
-        return apolloClient.build()
-    }
-
-
 
     companion object {
         private const val APOLLO_DB: String = "apollo.db"

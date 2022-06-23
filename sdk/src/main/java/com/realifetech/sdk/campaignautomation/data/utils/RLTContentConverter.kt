@@ -4,7 +4,8 @@ package com.realifetech.sdk.campaignautomation.data.utils
 import android.view.View
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
 import com.realifetech.sdk.campaignautomation.data.model.RLTContentItem
-import com.realifetechCa.type.ContentType
+import com.realifetech.type.ContentType
+
 
 class RLTContentConverter {
     fun convert(

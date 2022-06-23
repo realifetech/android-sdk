@@ -26,11 +26,6 @@ class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
             preferences.edit { putString(GRAPHQL_URL, value) }
         }
 
-    var graphCAApiUrl: String
-        get() = preferences.getString(GRAPHQL_URL_CA, ConfigConstants.graphApiCAUrl).orEmpty()
-        set(value) {
-            preferences.edit { putString(GRAPHQL_URL_CA, value) }
-        }
 
     var webOrderingJourneyUrl: String
         get() = preferences.getString(ORDERING_JOURNEY_URL, ConfigConstants.webOrderingJourneyUrl)
@@ -79,7 +74,6 @@ class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
         private const val ORDERING_JOURNEY_URL = "ordering_journey_url"
         private const val API_URL = "api_url"
         private const val GRAPHQL_URL = "graphql_url"
-        private const val GRAPHQL_URL_CA = "graphql_url_ca"
         private const val DEVICE_ID = "device_id"
         private const val BACK_SLASH = "/"
     }
