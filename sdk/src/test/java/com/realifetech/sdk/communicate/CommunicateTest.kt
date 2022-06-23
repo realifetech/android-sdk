@@ -2,6 +2,7 @@ package com.realifetech.sdk.communicate
 
 import android.content.Context
 import com.realifetech.sdk.analytics.Analytics
+import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.RegisterPushNotificationsResponse
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks
@@ -51,10 +52,10 @@ class CommunicateTest {
     fun `sending analytics track for PN when trackPush is called`() {
         // WHEN
         communicate.trackPush(
-            ACTION, mapOf(), callback
+            Event.RECEIVED, mapOf(), callback
         )
         // THEN
-        verify { analytics.track(USER, ACTION, mapOf(), null, callback) }
+        verify { analytics.track(USER, Event.RECEIVED.message, mapOf(), null, callback) }
     }
 
     @Test

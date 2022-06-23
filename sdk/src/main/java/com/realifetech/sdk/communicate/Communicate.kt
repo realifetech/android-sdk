@@ -2,6 +2,7 @@ package com.realifetech.sdk.communicate
 
 import android.content.Context
 import com.realifetech.sdk.analytics.Analytics
+import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.TokenBody
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
@@ -16,13 +17,13 @@ class Communicate(
 ) {
 
     fun trackPush(
-        event: String,
+        event: Event,
         trackInfo: Map<String, Any>?,
         completion: (error: Exception?, response: Boolean) -> Unit
     ) {
         analytics.track(
             USER,
-            event,
+            event.message,
             trackInfo,
             null,
             completion

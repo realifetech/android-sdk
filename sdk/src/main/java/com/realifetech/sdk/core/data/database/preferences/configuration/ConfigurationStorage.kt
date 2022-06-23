@@ -35,12 +35,12 @@ class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
         }
 
     var clientSecret: String
-        get() = preferences.getString(CLIENT_SECRET, EMPTY).orEmpty()
+        get() = preferences.getString(CLIENT_SECRET, ConfigConstants.clientSecret).orEmpty()
         set(value) {
             preferences.edit { putString(CLIENT_SECRET, value) }
         }
     var appCode: String
-        get() = preferences.getString(APP_CODE, EMPTY).orEmpty()
+        get() = preferences.getString(APP_CODE, ConfigConstants.appCode).orEmpty()
         set(value) {
             preferences.edit { putString(APP_CODE, value) }
         }

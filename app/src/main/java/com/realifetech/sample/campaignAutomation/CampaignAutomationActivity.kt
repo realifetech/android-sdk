@@ -5,18 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import com.realifetech.sample.R
+import com.realifetech.sample.utils.SampleAppCompatActivity
 import com.realifetech.sample.utils.loadImage
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.campaignautomation.data.model.*
@@ -26,12 +25,11 @@ import kotlinx.android.synthetic.main.activity_campaign_automation_sample.*
 import kotlinx.android.synthetic.main.banner_view.view.*
 
 
-class CampaignAutomationActivity : AppCompatActivity() {
+class CampaignAutomationActivity : SampleAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_campaign_automation_sample)
-
         val layout = findViewById<LinearLayout>(R.id.campaignAutomationLayout)
         val location = findViewById<EditText>(R.id.location)
         val button = findViewById<Button>(R.id.button)

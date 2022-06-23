@@ -158,7 +158,7 @@ class ConfigurationStorageTest {
         every {
             configurationStorage.preferences.getString(
                 CLIENT_SECRET,
-                EMPTY
+                ConfigConstants.clientSecret
             )
         } returns ConfigurationMocks.CLIENT_SECRET
         val result = configurationStorage.clientSecret
@@ -170,11 +170,11 @@ class ConfigurationStorageTest {
         every {
             configurationStorage.preferences.getString(
                 CLIENT_SECRET,
-                EMPTY
+                ConfigConstants.clientSecret
             )
-        } returns null
+        } returns ConfigConstants.clientSecret
         val result = configurationStorage.clientSecret
-        Assert.assertEquals(EMPTY, result)
+        Assert.assertEquals(ConfigConstants.clientSecret, result)
     }
 
 
@@ -196,7 +196,7 @@ class ConfigurationStorageTest {
         every {
             configurationStorage.preferences.getString(
                 APP_CODE,
-                EMPTY
+                ConfigConstants.appCode
             )
         } returns ConfigurationMocks.APP_CODE
         val result = configurationStorage.appCode
