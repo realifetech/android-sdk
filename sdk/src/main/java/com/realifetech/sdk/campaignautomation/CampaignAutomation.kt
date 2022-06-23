@@ -2,13 +2,11 @@ package com.realifetech.sdk.campaignautomation
 
 import android.view.View
 import com.realifetech.GetContentByExternalIdQuery
-
+import com.realifetech.sdk.campaignautomation.data.model.RLTContentItem
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
 import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
-import com.realifetech.sdk.campaignautomation.data.model.RLTContentItem
 import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
 import com.realifetech.type.ContentType
-
 import javax.inject.Inject
 
 class CampaignAutomation @Inject constructor(
@@ -23,7 +21,7 @@ class CampaignAutomation @Inject constructor(
         campaignAutomationRepo.getContentByExternalId(externalId, callback)
     }
 
-    fun factories(factories: Map<ContentType, RLTCreatableFactory<*>>){
+    fun factories(factories: Map<ContentType, RLTCreatableFactory<*>>) {
         rltFetcher.setFactories(factories)
     }
 
