@@ -1,7 +1,7 @@
 package com.realifetech.sdk.campaignautomation.domain
 
+import com.realifetech.GetContentByExternalIdQuery
 import com.realifetech.sdk.campaignautomation.data.datasource.CampaignAutomationDataSource
-import com.realifetechCa.GetContentByExternalIdQuery
 import io.mockk.CapturingSlot
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -14,7 +14,7 @@ class CampaignAutomationRepositoryTest {
 
     @RelaxedMockK
     private lateinit var caDataSource: CampaignAutomationDataSource
-    private lateinit var caSlot: CapturingSlot<(error: Exception?, resposnse: GetContentByExternalIdQuery.GetContentByExternalId?) -> Unit>
+    private lateinit var caSlot: CapturingSlot<(error: Exception?, response: GetContentByExternalIdQuery.GetContentByExternalId?) -> Unit>
     private lateinit var caRepository: CampaignAutomationRepository
 
     @Before

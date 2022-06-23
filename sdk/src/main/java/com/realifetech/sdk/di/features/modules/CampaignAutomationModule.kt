@@ -5,12 +5,11 @@ import com.realifetech.sdk.campaignautomation.data.datasource.CampaignAutomation
 import com.realifetech.sdk.campaignautomation.data.datasource.CampaignAutomationDataSourceImplementation
 import dagger.Module
 import dagger.Provides
-import javax.inject.Named
 
 @Module
 object CampaignAutomationModule {
     @Provides
-    internal fun campaignAutomationDataSource(@Named("client-graphQL-CA") apolloClient: ApolloClient): CampaignAutomationDataSource {
+    internal fun campaignAutomationDataSource(apolloClient: ApolloClient): CampaignAutomationDataSource {
         return CampaignAutomationDataSourceImplementation(apolloClient)
     }
 }

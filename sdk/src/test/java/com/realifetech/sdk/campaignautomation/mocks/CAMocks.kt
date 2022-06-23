@@ -1,6 +1,7 @@
 package com.realifetech.sdk.campaignautomation.domain
 
-import com.realifetechCa.GetContentByExternalIdQuery
+import com.realifetech.GetContentByExternalIdQuery
+
 
 object CAMocks {
 

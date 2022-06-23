@@ -1,12 +1,14 @@
 package com.realifetech.sdk.campaignautomation
 
 import android.view.View
+import com.realifetech.GetContentByExternalIdQuery
+
 import com.realifetech.sdk.campaignautomation.data.model.RLTCreatableFactory
 import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
 import com.realifetech.sdk.campaignautomation.data.model.RLTContentItem
 import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
-import com.realifetechCa.GetContentByExternalIdQuery
-import com.realifetechCa.type.ContentType
+import com.realifetech.type.ContentType
+
 import javax.inject.Inject
 
 class CampaignAutomation @Inject constructor(

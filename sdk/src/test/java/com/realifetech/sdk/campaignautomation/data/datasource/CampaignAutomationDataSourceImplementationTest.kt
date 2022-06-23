@@ -6,8 +6,8 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
+import com.realifetech.GetContentByExternalIdQuery
 import com.realifetech.sdk.campaignautomation.domain.CAMocks
-import com.realifetechCa.GetContentByExternalIdQuery
 import io.mockk.CapturingSlot
 import io.mockk.MockKAnnotations
 import io.mockk.every

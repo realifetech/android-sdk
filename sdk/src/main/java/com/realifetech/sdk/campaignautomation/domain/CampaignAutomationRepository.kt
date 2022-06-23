@@ -1,7 +1,8 @@
 package com.realifetech.sdk.campaignautomation.domain
 
+import com.realifetech.GetContentByExternalIdQuery
 import com.realifetech.sdk.campaignautomation.data.datasource.CampaignAutomationDataSource
-import com.realifetechCa.GetContentByExternalIdQuery
+
 import javax.inject.Inject
 
 class CampaignAutomationRepository @Inject constructor(private val datasource: CampaignAutomationDataSource) {

@@ -4,7 +4,8 @@ import android.util.Log
 import android.view.View
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.analytics.Analytics
-import com.realifetechCa.type.ContentType
+import com.realifetech.type.ContentType
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

@@ -30,7 +30,8 @@ import com.realifetech.sample.utils.loadImage
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.campaignautomation.data.model.*
 import com.realifetech.sdk.campaignautomation.data.utils.RLTContentConverter
-import com.realifetechCa.type.ContentType
+import com.realifetech.type.ContentType
+
 import kotlinx.android.synthetic.main.activity_campaign_automation_datal_layer_sample.*
 import kotlinx.android.synthetic.main.banner_view.view.*
 
