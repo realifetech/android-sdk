@@ -62,7 +62,7 @@ When you have the username and the token, you can provide them using different a
    example, in your **app** `build.gradle` file, under dependencies section, add the following:
    ```groovy
    dependencies {
-        implementation 'com.realifetech:sdk:1.0'
+        implementation 'com.realifetech:sdk:<version>'
    }
     ```
 3. Now sync your project, and proceed with coding.
@@ -73,21 +73,24 @@ The SDK is composed of 2 phases: Configuration & Functionality.
 
 ### Configuration
 
-Use the following function(s) to configure the SDK for use. You will be provided the values necessary as part of your
-onboarding.
+#Important: Using the SDK without calling configuring can lead to runtime errors. Do not forget to configure the SDK.
+
+Use the following function to configure the SDK for use. You will be provided the values necessary as part of your onboarding. Note that the SDK provides default values for its API endpoints, unless you are provided with unique endpoints as part of onboarding leave these fields blank.
 
 ```kotlin
- RealifeTech.getGeneral().configuration.apply {
-    context = app_context
-    apiUrl = "https://my-server-url.com"
-    graphApiUrl = "https://my-server-url.com/graphql"
-    clientSecret = "my_client_secret"
-    appCode = "my_client_id"
-}
+ val configuration = CoreConfiguration(
+             appCode: "APPLICATION_CODE",
+             clientSecret: "API_SECRET",
+             apiUrl: "http://API_URL", // OPTIONAL
+             graphApiUrl: "http://GRAPH_API_URL" // OPTIONAL
+             webOrderingJourneyUrl = "http://WEB_ORDERING_Journey_URL" // OPTIONAL
+        )
+ RealifeTech.configureSdk(context, configuration)
+        
 ```
 
-In the code snippet above, there are 5 properties which needs to be configured. `context`, `clientSecret` and `appCode`
-are required, as they don't provide a default value. Whereas `graphApiUrl` & `apiUrl` do have default values.
+There are 5 properties which needs to be configured. `context`, `clientSecret` and `appCode`
+are required, as they don't provide a default value. Whereas `graphApiUrl`, `apiUrl` & `webOrderingJourneyUrl` do have default values.
 
 Note: _The above setup is recommended to be done at the start of the app, in the `Application` class._
 
