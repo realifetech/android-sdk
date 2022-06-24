@@ -1,0 +1,6 @@
+query GetMyPaymentIntent($id: ID!) {
+    getMyPaymentIntent(id: $id) {
+        __typename
+        ...PaymentIntent
+    }
+}

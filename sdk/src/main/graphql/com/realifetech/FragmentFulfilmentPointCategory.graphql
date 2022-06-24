@@ -1,0 +1,13 @@
+fragment FragmentFulfilmentPointCategory on FulfilmentPointCategory{
+  id
+  reference
+  status
+  iconImageUrl
+  position
+  createdAt
+  updatedAt
+  translations{
+    language
+    title
+  }
+}

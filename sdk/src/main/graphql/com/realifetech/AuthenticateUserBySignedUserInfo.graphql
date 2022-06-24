@@ -1,0 +1,6 @@
+mutation AuthenticateUserBySignedUserInfo($input: SignedUserInfoInput!) {
+    authenticateUserBySignedUserInfo(input: $input) {
+        __typename
+        ...AuthToken
+    }
+}

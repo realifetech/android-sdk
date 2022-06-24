@@ -1,0 +1,6 @@
+mutation deleteMyPaymentSource($id: ID!) {
+    deleteMyPaymentSource(id: $id) {
+        __typename
+        ...FragmentPaymentSource
+    }
+}

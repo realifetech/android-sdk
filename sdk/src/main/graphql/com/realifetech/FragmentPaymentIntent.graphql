@@ -1,0 +1,44 @@
+fragment PaymentIntent on PaymentIntent {
+    __typename
+    id
+    orderType
+    orderId
+    status
+    paymentSource {
+        id
+        type
+        default
+        billingDetails {
+            address {
+                city
+                country
+                line1
+                line2
+                postalCode
+                state
+            }
+            email
+            name
+            phone
+        }
+        card {
+            brand
+            numberToken
+            expMonth
+            expYear
+            last4
+            fingerprint
+        }
+    }
+    amount
+    currency
+    livemode
+    cancellationReason
+    savePaymentSource
+    receiptEmail
+    nextAction {
+        type
+        url
+    }
+    lastPaymentError
+}

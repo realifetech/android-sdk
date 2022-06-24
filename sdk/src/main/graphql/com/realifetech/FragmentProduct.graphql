@@ -1,0 +1,79 @@
+fragment FragmentProduct on Product {
+    id
+    status
+    reference
+    externalId
+    createdAt
+    updatedAt
+    images {
+        id
+        imageUrl
+        position
+    }
+    modifierLists {
+        id
+        status
+        externalId
+        reference
+        multipleSelect
+        mandatorySelect
+        maxAllowed
+        items {
+            ... ModifierItem
+        }
+        translations {
+            language
+            title
+        }
+    }
+    variants {
+        ...ProductVariant
+    }
+    categories {
+        id
+        externalId
+        reference
+        status
+        position
+        createdAt
+        updatedAt
+        translations {
+            language
+            title
+        }
+    }
+    fulfilmentPoints {
+        ...FragmentFulfilmentPoint
+    }
+    translations {
+        id
+        language
+        title
+        description
+    }
+}
+
+
+fragment ProductVariant on ProductVariant {
+    id
+    externalId
+    price
+    createdAt
+    updatedAt
+    translations {
+        language
+        title
+    }
+}
+
+fragment ModifierItem on ProductModifierItem {
+    id
+    status
+    externalId
+    additionalPrice
+    position
+    translations {
+        language
+        title
+    }
+}

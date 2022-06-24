@@ -1,0 +1,19 @@
+fragment FragmentUser on User {
+    id
+    email
+    token
+    authType
+    status
+    lastLogin
+    ticketsFetchedAt
+    firstName
+    lastName
+    gender
+    phone
+    dob
+    userConsent {
+        id
+        marketingConsent
+        analysisConsent
+    }
+}

@@ -1,0 +1,30 @@
+fragment FragmentPaymentSource on PaymentSource {
+    __typename
+    id
+    type
+    default
+    billingDetails {
+        __typename
+        address {
+            __typename
+            city
+            country
+            line1
+            line2
+            postalCode
+            state
+        }
+        email
+        name
+        phone
+    }
+    card {
+        __typename
+        brand
+        numberToken
+        expMonth
+        expYear
+        last4
+        fingerprint
+    }
+}

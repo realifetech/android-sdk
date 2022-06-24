@@ -1,0 +1,55 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+def androidExclusion = [
+        '**/databinding/**/*.*',
+        '**/android/databinding/*Binding.*',
+        '**/BR.*',
+        '**/R.*',
+        '**/R$*.*',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*_MembersInjector.*',
+        '**/Dagger*Component.*',
+        '**/Dagger*Component$Builder.*',
+        '**/*Module_*Factory.*',
+        '**/*Provider*.*',
+        '**/*Fragment*.*',
+        '**/*Activity*.*',
+        '**/ColorPallet*.*',
+        '**/WebOrderingFeature*.*',
+        '**/NetworkUtil*.*',
+        '**/ViewExtensions*.*',
+        '**/PhysicalDeviceInfo*.*',
+        '**/ContextExtensions*.*',
+        '**/*Adapter*.*',
+        '**/*ViewPager*.*',
+        '**/*ViewHolder*.*',
+        '**/*Module*.*',
+        '**/fragment/*.*',
+        '**/WebViewWrapper*.*',
+        '**/type/*.*',
+        '**/model/*.*',
+        '**/wrapper/*.*'
+]
+task codeCoverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+    getClassDirectories().from(fileTree(
+            dir: "${project.buildDir}/tmp/kotlin-classes/debug",
+            excludes: androidExclusion))
+    getSourceDirectories().from(files("${project.projectDir}/src/main/java"))
+    getExecutionData().from(files("${project.projectDir}/build/jacoco/testDebugUnitTest.exec"))
+}
+
+task getCoverage(type: Exec, dependsOn: 'codeCoverageReport') {
+    group = "Reporting"
+    commandLine "open", "$buildDir/reports/jacoco/codeCoverageReport/html/index.html"
+}

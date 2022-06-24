@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rlt_refresh_menu_title">Refresh</string>
+    <string name="rlt_description_arrow_left">arrow left</string>
+    <string name="rlt_description_arrow_right">arrow right</string>
+</resources>

@@ -1,23 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.realifetech.sample"
-    >
+    package="com.realifetech.sample">
 
     <application
+        android:name=".SampleApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        >
-        <activity android:name=".MainActivity">
+        android:usesCleartextTraffic="true">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".GeneralSampleActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".CommunicationSampleActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".AnalyticsSampleActivity"
+            android:parentActivityName=".MainActivity" />
+           <activity
+            android:name=".identity.CAIdentitySampleActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".AudienceSampleActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".widgets.WidgetsSampleActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".webPage.WebPageSampleActivity"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".campaignAutomation.CampaignAutomationActivity"
+            android:parentActivityName=".MainActivity"
+            android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data
+                android:host="@string/host_campaign_automation"
+                android:scheme="@string/host_scheme" />
+        </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".campaignAutomation.CADataLayerActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".identity.IdentityActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/host_login_scheme"
+                    android:scheme="@string/host_scheme" />
+            </intent-filter>
+
+        </activity>
+        <service
+            android:name=".service.FirebaseMessageListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

@@ -1,0 +1,38 @@
+query GetMyPaymentSources($pageSize: Int!, $page: Int) {
+    getMyPaymentSources(pageSize: $pageSize, page: $page) {
+        __typename
+        ... PaymentSourceEdge
+    }
+}
+
+fragment PaymentSourceEdge on PaymentSourceEdge {
+    __typename
+    nextPage
+    edges {
+        __typename
+        id
+        type
+        default
+        billingDetails {
+            address {
+                city
+                country
+                line1
+                line2
+                postalCode
+                state
+            }
+            email
+            name
+            phone
+        }
+        card {
+            brand
+            numberToken
+            expMonth
+            expYear
+            last4
+            fingerprint
+        }
+    }
+}

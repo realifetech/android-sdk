@@ -1,0 +1,5 @@
+mutation updateMyBasket($input: BasketInput) {
+    updateMyBasket(input: $input) {
+        ...FragmentBasket
+    }
+}
