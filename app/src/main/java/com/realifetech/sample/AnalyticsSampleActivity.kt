@@ -6,8 +6,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.identity.data.model.RLTAliasType
-import com.realifetech.sdk.identity.data.model.RLTTraitType
 import kotlinx.android.synthetic.main.activity_analytics_sample.*
 import kotlinx.android.synthetic.main.activity_communication_sample.operationTextView
 import kotlinx.android.synthetic.main.activity_communication_sample.progressBar
