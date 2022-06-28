@@ -96,13 +96,13 @@ class CampaignAutomationActivity : SampleAppCompatActivity() {
             view.subtitle.isVisible = !bannerDataModel.subtitle.isNullOrEmpty()
             view.title.isVisible = !bannerDataModel.title.isNullOrEmpty()
             view.bannerImage.loadImage(context, bannerDataModel.imageUrl)
-            bannerDataModel.generateLinkHandler()?.let { url ->
-                view.setOnClickListener {
-                    val uriUrl = Uri.parse(url)
-                    val launchBrowser = Intent(Intent.ACTION_VIEW, uriUrl)
-                    context.startActivity(launchBrowser)
-                }
+            view.setOnClickListener {
+                val uriUrl = Uri.parse(bannerDataModel.generateLinkHandler())
+                val launchBrowser = Intent(Intent.ACTION_VIEW, uriUrl)
+                context.startActivity(launchBrowser)
             }
+
+
         }
 
         private fun ConstraintSet.match(view: View, parentView: View) {
