@@ -154,7 +154,7 @@ class CADataLayerActivity : AppCompatActivity() {
             view.title.isVisible = !bannerDataModel.title.isNullOrEmpty()
             view.bannerImage.loadImage(context, bannerDataModel.imageUrl)
             view.setOnClickListener {
-                val uriUrl = Uri.parse(bannerDataModel.imageUrl)
+                val uriUrl = Uri.parse(bannerDataModel.generateLinkHandler())
                 val launchBrowser = Intent(Intent.ACTION_VIEW, uriUrl)
                 context.startActivity(launchBrowser)
             }
