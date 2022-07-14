@@ -1,6 +1,7 @@
 package com.realifetech.sdk.communicate
 
 import android.content.Context
+import android.util.Log
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.TokenBody
@@ -8,10 +9,14 @@ import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.core.utils.hasNetworkConnection
+import kotlinx.coroutines.*
+import javax.inject.Inject
 
-class Communicate(
+class Communicate @Inject constructor(
     private val tokenStorage: PushNotificationsTokenStorage,
     private val realifetechApiV3Service: RealifetechApiV3Service,
+    private val dispatcherIO: CoroutineDispatcher,
+    private val dispatcherMain: CoroutineDispatcher,
     private val analytics: Analytics,
     private val context: Context
 ) {
@@ -50,7 +55,19 @@ class Communicate(
 
     internal fun resendPendingToken() {
         if (tokenStorage.hasPendingToken) {
-            registerForPushNotifications(tokenStorage.pendingToken)
+            CoroutineScope(dispatcherMain).launch {
+                val result = withContext(dispatcherIO) {
+                    registerForPushNotifications(tokenStorage.pendingToken)
+                }
+                when (result) {
+                    is Result.Success -> Log.d(
+                        this.javaClass.name,
+                        "Success while sending register for PN"
+                    )
+                    is Result.Error ->
+                        Log.e(this.javaClass.name, "Error: ${result.exception.message}")
+                }
+            }
         } else return
     }
 
