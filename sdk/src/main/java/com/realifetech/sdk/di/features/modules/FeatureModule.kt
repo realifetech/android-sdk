@@ -75,9 +75,11 @@ object FeatureModule {
         context: Context
     ): Communicate {
         val communicate = Communicate(
-            tokenStorage, realifetechApiV3Service,
+            tokenStorage,
+            realifetechApiV3Service,
             Dispatchers.IO,
-            Dispatchers.Main, analytics, context
+            Dispatchers.Main,
+            analytics, context
         )
         communicate.resendPendingToken()
         return communicate
