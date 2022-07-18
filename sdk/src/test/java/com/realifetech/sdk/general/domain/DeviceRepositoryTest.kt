@@ -1,6 +1,7 @@
 package com.realifetech.sdk.general.domain
 
 import com.realifetech.sdk.core.data.model.exceptions.NetworkException
+import com.realifetech.sdk.core.domain.OAuthManager
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.general.data.DeviceNetworkDataSource
 import com.realifetech.sdk.general.mocks.GeneralMocks.deviceRegisterResponse
@@ -18,12 +19,15 @@ class DeviceRepositoryTest {
     @RelaxedMockK
     lateinit var deviceNetworkDataSource: DeviceNetworkDataSource
 
+    @RelaxedMockK
+    lateinit var oAuthManager: OAuthManager
+
     private lateinit var deviceRepository: DeviceRepository
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        deviceRepository = DeviceRepository(deviceNetworkDataSource)
+        deviceRepository = DeviceRepository(deviceNetworkDataSource) { oAuthManager }
     }
 
     @Test
@@ -31,6 +35,7 @@ class DeviceRepositoryTest {
         every { deviceNetworkDataSource.registerDevice() } returns Result.Success(
             deviceRegisterResponse
         )
+        every { oAuthManager.ensureActive() }returns Unit
         val result = deviceRepository.registerDevice()
         assert(result is Result.Success)
         assertEquals(deviceRegisterResponse, (result as Result.Success).data)
@@ -45,6 +50,8 @@ class DeviceRepositoryTest {
         assert(result is Result.Error)
         assert((result as Result.Error).exception is NetworkException)
         assertEquals(networkError.message, result.exception.message)
-        verify { deviceNetworkDataSource.registerDevice() }
+        verify {
+            oAuthManager.ensureActive()
+            deviceNetworkDataSource.registerDevice() }
     }
 }
