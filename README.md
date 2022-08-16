@@ -193,7 +193,7 @@ intent.putExtra("isFromPN", true)
 by doing this it will be then possible to retrieve on the deep-link manager the origin of it and if it is true use:
 
 ```kotlin
-intent.putExtra("isFromPN", true)
+RealifeTech.Communicate().trackPush(event: .opened, trackInfo: userInfo)
 ```
 to track the event.
 
