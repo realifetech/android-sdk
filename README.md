@@ -173,3 +173,30 @@ To determine if the device is a member of an audience, you would use the followi
 RealifeTech.getAudience()
     .deviceIsMemberOfAudience(externalAudienceId: String, callback:(error: Error?, result: Boolean) -> Unit)
 ```
+# Tracking Push Notification Analytics
+## Tracking Receives
+### Option 1: Using FirebaseMessagingService
+The FirebaseMessagingService class offers a method called `onMessageReceived`
+that allows the developer to handle the data and create the UI for the push notification. Inside this method is easy to call the SDK's
+`RealifeTech.Communicate().trackPush(event: .received, trackInfo: userInfo)` method and, given that BE is sending the payload correctly, pass all the necessary info to this method.
+
+### Option 2: Using a 3rd-party service, e.g. UrbanAirship
+_Note, the following example is for UrbanAirship only_
+According to [this](https://docs.airship.com/platform/android/push-notifications/) guide UrbanAirship offer a simple PushListener that provides the same functionality as the FirebaseMessagingService described above, and can be used to call our trackPush function in the exact same way.
+
+## Tracking Opens
+### Option 1: Using FirebaseMessagingService
+Firebase does not offer a direct method to understand if a deep-link has been interacted via PN. In order to solve this issue we add an extra tag on the intent:
+```kotlin
+intent.putExtra("isFromPN", true)
+```
+by doing this it will be then possible to retrieve on the deep-link manager the origin of it and if it is true use:
+
+```kotlin
+RealifeTech.Communicate().trackPush(event: .opened, trackInfo: userInfo)
+```
+to track the event.
+
+### Option 2: Using a 3rd-party service, e.g. UrbanAirship
+_Note, the following example is for UrbanAirship only_
+According to [this](https://docs.airship.com/platform/android/push-notifications/) guide UrbanAirship offer a NotificationListener that provides the same functionality that can be used to call our trackPush function.
