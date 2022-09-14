@@ -6,6 +6,7 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.realifetech.AuthenticateUserBySignedUserInfoMutation
+import com.realifetech.DeleteMyAccountMutation
 import com.realifetech.GenerateNonceMutation
 import com.realifetech.fragment.AuthToken
 import com.realifetech.sdk.identity.mocks.IdentityMocks
@@ -23,8 +24,10 @@ class IdentityDataSourceImplTest {
     private lateinit var identityDataSource: IdentityDataSourceImpl
     private lateinit var nonceData: Response<GenerateNonceMutation.Data>
     private lateinit var authenticateInfoData: Response<AuthenticateUserBySignedUserInfoMutation.Data>
+    private lateinit var deleteMyAccountData: Response<DeleteMyAccountMutation.Data>
     private lateinit var nonceSlot: CapturingSlot<ApolloCall.Callback<GenerateNonceMutation.Data>>
     private lateinit var authenticateInfoSlot: CapturingSlot<ApolloCall.Callback<AuthenticateUserBySignedUserInfoMutation.Data>>
+    private lateinit var deleteMyAccountSlot: CapturingSlot<ApolloCall.Callback<DeleteMyAccountMutation.Data>>
     private lateinit var mutation: GenerateNonceMutation
 
     @Before
@@ -37,8 +40,10 @@ class IdentityDataSourceImplTest {
         identityDataSource = IdentityDataSourceImpl(apolloClient)
         nonceData = mockk()
         mutation = mockk()
+        deleteMyAccountData = mockk()
         authenticateInfoData = mockk()
         nonceSlot = slot()
+        deleteMyAccountSlot = slot()
         authenticateInfoSlot = slot()
     }
 
@@ -156,6 +161,33 @@ class IdentityDataSourceImplTest {
             callback.invoke(error, response)
         }
 
+    }
+
+    @Test
+    fun `authenticate Delete My Account return failure`() {
+        every {
+            apolloClient.mutate(DeleteMyAccountMutation())
+                .enqueue(capture(deleteMyAccountSlot))
+        } answers { deleteMyAccountSlot.captured.onFailure(ApolloException("")) }
+
+        identityDataSource.deleteMyAccount { error, response ->
+            assert(error is ApolloException)
+            assertEquals(null, response)
+        }
+    }
+
+    @Test
+    fun `authenticate Delete My Account return success`() {
+        every { deleteMyAccountData.data?.deleteMyAccount?.success } returns true
+        every {
+            apolloClient.mutate(DeleteMyAccountMutation())
+                .enqueue(capture(deleteMyAccountSlot))
+        } answers { deleteMyAccountSlot.captured.onResponse(deleteMyAccountData) }
+
+        identityDataSource.deleteMyAccount { error, response ->
+            assertEquals(true, response)
+            assertEquals(null, error)
+        }
     }
 
     private fun generateNonceSuccessfully() {
