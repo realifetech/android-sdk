@@ -49,6 +49,9 @@ class Identity @Inject constructor(
         )
     }
 
+    fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit) =
+        identityRepository.deleteMyAccount(callback)
+
     fun alias(
         aliasType: RLTAliasType,
         aliasId: String,

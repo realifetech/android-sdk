@@ -24,21 +24,24 @@ class IdentityRepositoryTest {
     lateinit var identityRepository: IdentityRepository
     lateinit var authenticateSlot: CapturingSlot<(error: Exception?, token: AuthToken?) -> Unit>
     lateinit var deviceSlot: CapturingSlot<(error: Exception?, deviceId: String?) -> Unit>
+    lateinit var deleteMyAccountSlot: CapturingSlot<(error: Exception?, success: Boolean?) -> Unit>
     private lateinit var nonceSlot: CapturingSlot<(error: Exception?, nonce: String?) -> Unit>
 
     @Before
     fun setup() {
-        MockKAnnotations.init(this,relaxed = true)
+        MockKAnnotations.init(this, relaxed = true)
         identityRepository = IdentityRepository(identityDataStore)
         nonceSlot = slot()
+        deleteMyAccountSlot = slot()
         authenticateSlot = slot()
-        deviceSlot= slot()
+        deviceSlot = slot()
     }
 
     @Test
     fun `attempt To Login return AuthToken successfully`() {
         every {
-            identityDataStore.getDeviceId(capture(deviceSlot))}
+            identityDataStore.getDeviceId(capture(deviceSlot))
+        }
             .answers { deviceSlot.captured.invoke(null, deviceId) }
 
         every { identityDataStore.generateNonce(capture(nonceSlot)) }
@@ -70,7 +73,8 @@ class IdentityRepositoryTest {
     @Test
     fun `attempt To Login fails to generate Nonce`() {
         every {
-            identityDataStore.getDeviceId(capture(deviceSlot))}
+            identityDataStore.getDeviceId(capture(deviceSlot))
+        }
             .answers { deviceSlot.captured.invoke(null, deviceId) }
 
         every { identityDataStore.generateNonce(capture(nonceSlot)) }
@@ -89,7 +93,8 @@ class IdentityRepositoryTest {
     @Test
     fun `attempt To Login return Exception `() {
         every {
-            identityDataStore.getDeviceId(capture(deviceSlot))}
+            identityDataStore.getDeviceId(capture(deviceSlot))
+        }
             .answers { deviceSlot.captured.invoke(null, deviceId) }
 
         every { identityDataStore.generateNonce(capture(nonceSlot)) }
@@ -107,7 +112,7 @@ class IdentityRepositoryTest {
             userInfo.lastName.value,
             SALT
         ) { authToken, error ->
-            assert( error is Exception)
+            assert(error is Exception)
             assertEquals(null, authToken)
         }
         verify {
@@ -117,6 +122,17 @@ class IdentityRepositoryTest {
             )
         }
 
+    }
+
+    @Test
+    fun `attempt to delete My Account return success`() {
+        every { identityRepository.deleteMyAccount(capture(deleteMyAccountSlot)) } answers {
+            deleteMyAccountSlot.captured.invoke(null, true)
+        }
+        identityRepository.deleteMyAccount { error, success ->
+            Assert.assertEquals(true, success)
+            Assert.assertEquals(null, error)
+        }
     }
 
     @Test

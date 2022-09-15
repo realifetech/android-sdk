@@ -7,6 +7,7 @@ import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.AuthenticateUserBySignedUserInfoMutation
+import com.realifetech.DeleteMyAccountMutation
 import com.realifetech.GenerateNonceMutation
 import com.realifetech.GetDeviceIdQuery
 import com.realifetech.fragment.AuthToken
@@ -70,6 +71,30 @@ class IdentityDataSourceImpl @Inject constructor(private val apolloClient: Apoll
                 override fun onResponse(response: Response<AuthenticateUserBySignedUserInfoMutation.Data>) {
                     response.data?.authenticateUserBySignedUserInfo?.fragments?.let {
                         callback.invoke(null, it.authToken)
+                    } ?: run {
+                        callback.invoke(
+                            Exception(), null
+                        )
+                    }
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+            })
+        } catch (exception: ApolloHttpException) {
+            callback.invoke(exception, null)
+        }
+    }
+
+    override fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit) {
+        try {
+            val response = apolloClient.mutate(DeleteMyAccountMutation())
+            response.enqueue(object :
+                ApolloCall.Callback<DeleteMyAccountMutation.Data>() {
+                override fun onResponse(response: Response<DeleteMyAccountMutation.Data>) {
+                    response.data?.deleteMyAccount?.let {
+                        callback.invoke(null, it.success)
                     } ?: run {
                         callback.invoke(
                             Exception(), null

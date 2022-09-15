@@ -69,6 +69,9 @@ class IdentityRepository @Inject constructor(private val identityDataSource: Ide
         }
     }
 
+    internal fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit) =
+        identityDataSource.deleteMyAccount(callback)
+
     internal fun getJsonObjectForData(
         email: String,
         firstName: String?,
