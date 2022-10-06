@@ -16,6 +16,7 @@ object RealifeTech : BaseRealifetech() {
 
     fun configureSdk(context: Context, configuration: CoreConfiguration) {
         Injector.initialize(context, configuration).inject(this)
+        getCommunicate().resendPendingToken()
     }
 
     fun getGeneral(): General {
