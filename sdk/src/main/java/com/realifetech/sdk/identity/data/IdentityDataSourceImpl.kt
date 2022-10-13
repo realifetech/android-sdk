@@ -114,9 +114,7 @@ class IdentityDataSourceImpl @Inject constructor(private val apolloClient: Apoll
                 .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
             response.enqueue(object : ApolloCall.Callback<GetSSOQuery.Data>() {
                 override fun onResponse(response: Response<GetSSOQuery.Data>) {
-                    response.data?.getSSO?.let {
-                        callback.invoke(null, it.authUrl)
-                    }
+                    callback.invoke(null, response.data?.getSSO?.authUrl)
                 }
                 override fun onFailure(e: ApolloException) {
                     callback.invoke(e, null)
