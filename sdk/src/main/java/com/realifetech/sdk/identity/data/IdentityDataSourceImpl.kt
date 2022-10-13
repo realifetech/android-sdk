@@ -6,10 +6,7 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
-import com.realifetech.AuthenticateUserBySignedUserInfoMutation
-import com.realifetech.DeleteMyAccountMutation
-import com.realifetech.GenerateNonceMutation
-import com.realifetech.GetDeviceIdQuery
+import com.realifetech.*
 import com.realifetech.fragment.AuthToken
 import com.realifetech.type.SignedUserInfoInput
 import javax.inject.Inject
@@ -102,6 +99,25 @@ class IdentityDataSourceImpl @Inject constructor(private val apolloClient: Apoll
                     }
                 }
 
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+            })
+        } catch (exception: ApolloHttpException) {
+            callback.invoke(exception, null)
+        }
+    }
+
+    override fun getSSO(provider: String, callback: (error: Exception?, url: String?) -> Unit) {
+        try {
+            val response = apolloClient.query(GetSSOQuery(provider)).toBuilder()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
+            response.enqueue(object : ApolloCall.Callback<GetSSOQuery.Data>() {
+                override fun onResponse(response: Response<GetSSOQuery.Data>) {
+                    response.data?.getSSO?.let {
+                        callback.invoke(null, it.authUrl)
+                    }
+                }
                 override fun onFailure(e: ApolloException) {
                     callback.invoke(e, null)
                 }

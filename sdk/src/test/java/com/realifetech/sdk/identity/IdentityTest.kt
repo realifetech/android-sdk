@@ -2,6 +2,7 @@ package com.realifetech.sdk.identity
 
 import android.webkit.WebView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.apollographql.apollo.exception.ApolloException
 import com.realifetech.fragment.AuthToken
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
@@ -9,6 +10,7 @@ import com.realifetech.sdk.core.data.database.preferences.configuration.Configur
 import com.realifetech.sdk.identity.data.model.RLTAliasType
 import com.realifetech.sdk.identity.data.model.RLTTraitType
 import com.realifetech.sdk.identity.domain.IdentityRepository
+import com.realifetech.sdk.identity.mocks.IdentityMocks
 import com.realifetech.sdk.identity.mocks.IdentityMocks.SALT
 import com.realifetech.sdk.identity.mocks.IdentityMocks.authToken
 import com.realifetech.sdk.identity.mocks.IdentityMocks.userInfo
@@ -53,6 +55,7 @@ class IdentityTest {
     lateinit var webView: WebView
     lateinit var authenticateSlot: CapturingSlot<(token: AuthToken?, error: Exception?) -> Unit>
     lateinit var deleteMyAccountSlot: CapturingSlot<(error: Exception?, success: Boolean?) -> Unit>
+    lateinit var getSsoSlot: CapturingSlot<(error: Exception?, url:String?) -> Unit>
     private lateinit var completion: (error: Exception?, result: Boolean) -> Unit
     private val testDispatcher = TestCoroutineDispatcher()
     private val aliasType = RLTAliasType.TdcAccountId
@@ -77,6 +80,7 @@ class IdentityTest {
             )
         authenticateSlot = slot()
         deleteMyAccountSlot= slot()
+        getSsoSlot= slot()
         webView = mockk()
         configurationStorage = mockk()
         completion = mockk()
@@ -216,6 +220,27 @@ class IdentityTest {
         identity.deleteMyAccount { error, success ->
             Assert.assertEquals(true, success)
             Assert.assertEquals(null, error)
+        }
+    }
+
+    @Test
+    fun `attempt to get sso return url`() {
+        every { identityRepository.getSSO(IdentityMocks.provider,capture(getSsoSlot)) } answers {
+            getSsoSlot.captured.invoke(null, IdentityMocks.authUrl)
+        }
+        identity.getSSO(IdentityMocks.provider) { error, url ->
+            Assert.assertEquals(IdentityMocks.authUrl, url)
+            Assert.assertEquals(null, error)
+        }
+    }
+    @Test
+    fun `attempt to get sso return error`() {
+        every { identityRepository.getSSO(IdentityMocks.provider,capture(getSsoSlot)) } answers {
+            getSsoSlot.captured.invoke(ApolloException(""), null)
+        }
+        identity.getSSO(IdentityMocks.provider) { error, url ->
+            Assert.assertEquals(null, url)
+            assert(error is ApolloException)
         }
     }
     private fun `Repository Attempt Login Successfully`() {
