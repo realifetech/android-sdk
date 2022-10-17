@@ -111,7 +111,7 @@ class IdentityDataSourceImpl @Inject constructor(private val apolloClient: Apoll
     override fun getSSO(provider: String, callback: (error: Exception?, url: String?) -> Unit) {
         try {
             val response = apolloClient.query(GetSSOQuery(provider)).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
+                .responseFetcher(ApolloResponseFetchers.CACHE_FIRST).build()
             response.enqueue(object : ApolloCall.Callback<GetSSOQuery.Data>() {
                 override fun onResponse(response: Response<GetSSOQuery.Data>) {
                     callback.invoke(null, response.data?.getSSO?.authUrl)

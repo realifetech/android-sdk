@@ -5,6 +5,7 @@ import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.AuthenticateUserBySignedUserInfoMutation
 import com.realifetech.DeleteMyAccountMutation
 import com.realifetech.GenerateNonceMutation
@@ -202,6 +203,9 @@ class IdentityDataSourceImplTest {
         every { getSsoDAta.data?.getSSO?.authUrl } returns authUrl
         every {
             apolloClient.query(GetSSOQuery(provider))
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.CACHE_FIRST)
+                .build()
                 .enqueue(capture(getSsoSLot))
         } answers { getSsoSLot.captured.onResponse(getSsoDAta) }
 
@@ -216,6 +220,9 @@ class IdentityDataSourceImplTest {
         every { getSsoDAta.data?.getSSO?.authUrl } throws ApolloHttpException(null)
         every {
             apolloClient.query(GetSSOQuery(provider))
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.CACHE_FIRST)
+                .build()
                 .enqueue(capture(getSsoSLot))
         } answers { getSsoSLot.captured.onResponse(getSsoDAta) }
 
