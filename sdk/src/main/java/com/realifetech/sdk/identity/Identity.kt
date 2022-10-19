@@ -27,6 +27,9 @@ class Identity @Inject constructor(
         webViewWrapper.clearCacheAndStorage()
     }
 
+    fun getSSO(provider:String,callback: (error: Exception?, url: String?) -> Unit){
+        identityRepository.getSSO(provider,callback)
+    }
     fun identify(
         userId: String,
         traits: Map<RLTTraitType, Any>?,

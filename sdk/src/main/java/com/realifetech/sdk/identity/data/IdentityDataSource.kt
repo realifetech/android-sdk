@@ -15,4 +15,6 @@ interface IdentityDataSource {
     )
 
     fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit)
+
+    fun getSSO(provider: String, callback: (error: Exception?, url: String?) -> Unit)
 }

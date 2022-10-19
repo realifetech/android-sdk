@@ -5,11 +5,15 @@ import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.AuthenticateUserBySignedUserInfoMutation
 import com.realifetech.DeleteMyAccountMutation
 import com.realifetech.GenerateNonceMutation
+import com.realifetech.GetSSOQuery
 import com.realifetech.fragment.AuthToken
 import com.realifetech.sdk.identity.mocks.IdentityMocks
+import com.realifetech.sdk.identity.mocks.IdentityMocks.authUrl
+import com.realifetech.sdk.identity.mocks.IdentityMocks.provider
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import junit.framework.Assert.assertEquals
@@ -25,9 +29,11 @@ class IdentityDataSourceImplTest {
     private lateinit var nonceData: Response<GenerateNonceMutation.Data>
     private lateinit var authenticateInfoData: Response<AuthenticateUserBySignedUserInfoMutation.Data>
     private lateinit var deleteMyAccountData: Response<DeleteMyAccountMutation.Data>
+    private lateinit var getSsoDAta: Response<GetSSOQuery.Data>
     private lateinit var nonceSlot: CapturingSlot<ApolloCall.Callback<GenerateNonceMutation.Data>>
     private lateinit var authenticateInfoSlot: CapturingSlot<ApolloCall.Callback<AuthenticateUserBySignedUserInfoMutation.Data>>
     private lateinit var deleteMyAccountSlot: CapturingSlot<ApolloCall.Callback<DeleteMyAccountMutation.Data>>
+    private lateinit var getSsoSLot: CapturingSlot<ApolloCall.Callback<GetSSOQuery.Data>>
     private lateinit var mutation: GenerateNonceMutation
 
     @Before
@@ -40,9 +46,11 @@ class IdentityDataSourceImplTest {
         identityDataSource = IdentityDataSourceImpl(apolloClient)
         nonceData = mockk()
         mutation = mockk()
+        getSsoDAta = mockk()
         deleteMyAccountData = mockk()
         authenticateInfoData = mockk()
         nonceSlot = slot()
+        getSsoSLot = slot()
         deleteMyAccountSlot = slot()
         authenticateInfoSlot = slot()
     }
@@ -187,6 +195,54 @@ class IdentityDataSourceImplTest {
         identityDataSource.deleteMyAccount { error, response ->
             assertEquals(true, response)
             assertEquals(null, error)
+        }
+    }
+
+    @Test
+    fun `get  SSO return success`() {
+        every { getSsoDAta.data?.getSSO?.authUrl } returns authUrl
+        every {
+            apolloClient.query(GetSSOQuery(provider))
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.CACHE_FIRST)
+                .build()
+                .enqueue(capture(getSsoSLot))
+        } answers { getSsoSLot.captured.onResponse(getSsoDAta) }
+
+        identityDataSource.getSSO(provider) { error, response ->
+            assertEquals(authUrl, response)
+            assertEquals(null, error)
+        }
+    }
+
+    @Test
+    fun `get  SSO throws error`() {
+        every { getSsoDAta.data?.getSSO?.authUrl } throws ApolloHttpException(null)
+        every {
+            apolloClient.query(GetSSOQuery(provider))
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.CACHE_FIRST)
+                .build()
+                .enqueue(capture(getSsoSLot))
+        } answers { getSsoSLot.captured.onResponse(getSsoDAta) }
+
+        identityDataSource.getSSO(provider) { error, response ->
+            assertEquals(response, null)
+            assert(error is ApolloHttpException)
+        }
+    }
+
+    @Test
+    fun `get  SSO returns failure`() {
+        every { getSsoDAta.data?.getSSO?.authUrl } returns authUrl
+        every {
+            apolloClient.query(GetSSOQuery(provider))
+                .enqueue(capture(getSsoSLot))
+        } answers { getSsoSLot.captured.onFailure(ApolloException("")) }
+
+        identityDataSource.getSSO(provider) { error, response ->
+            assertEquals(response, null)
+            assert(error is ApolloException)
         }
     }
 

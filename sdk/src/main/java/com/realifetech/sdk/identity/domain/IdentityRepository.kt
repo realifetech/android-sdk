@@ -88,6 +88,10 @@ class IdentityRepository @Inject constructor(private val identityDataSource: Ide
         )
     }
 
+    fun getSSO(provider: String, callback: (error: Exception?, url: String?) -> Unit) {
+        identityDataSource.getSSO(provider,callback)
+    }
+
     companion object {
         private const val EMAIL = "email"
         private const val FIRST_NAME = "firstName"
