@@ -6,7 +6,7 @@ interface AccessDataSource {
 
     fun getMyTicketById()
 
-    fun getUpcomingTicket()
+    fun getUpcomingTickets()
 
     fun getMyTicketAuths()
 
