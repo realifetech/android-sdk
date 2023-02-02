@@ -12,7 +12,7 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
         TODO("Not yet implemented")
     }
 
-    override fun getUpcomingTickets() {
+    override fun getNextUpcomingTicket() {
         TODO("Not yet implemented")
     }
 
