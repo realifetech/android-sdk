@@ -1,6 +1,8 @@
 package com.realifetech.sdk.di.features.modules
 
 import android.content.Context
+import com.realifetech.sdk.access.Access
+import com.realifetech.sdk.access.domain.AccessRepository
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
@@ -143,6 +145,10 @@ object FeatureModule {
             configuration,
             analytics
         )
+
+    @FeatureScope
+    @Provides
+    fun access(accessRepository: AccessRepository): Access = Access(accessRepository)
 
     @FeatureScope
     @Provides

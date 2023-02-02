@@ -1,6 +1,7 @@
 package com.realifetech.sdk
 
 import android.content.Context
+import com.realifetech.sdk.access.Access
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.campaignautomation.CampaignAutomation
@@ -49,6 +50,10 @@ object RealifeTech : BaseRealifetech() {
 
     fun getCampaignAutomation(): CampaignAutomation {
         return campaignAutomationInstance
+    }
+
+    fun getAccess(): Access {
+        return accessInstance
     }
 
     fun set(webOrderingJourneyUrl: String) {

@@ -1,6 +1,7 @@
 package com.realifetech.sdk
 
 import com.apollographql.apollo.ApolloClient
+import com.realifetech.sdk.access.Access
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.campaignautomation.CampaignAutomation
@@ -37,6 +38,9 @@ abstract class BaseRealifetech {
 
     @Inject
     internal lateinit var campaignAutomationInstance: CampaignAutomation
+
+    @Inject
+    internal lateinit var accessInstance: Access
 
     @Inject
     internal lateinit var apolloClient: ApolloClient
