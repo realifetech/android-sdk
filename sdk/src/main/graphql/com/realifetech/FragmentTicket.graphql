@@ -1,0 +1,41 @@
+fragment FragmentTicket on Ticket {
+    id
+    seat
+    qrCodeUrl
+    sessionDate
+    title
+    eventUId
+    barCode
+    sectorName
+    venueName
+    venueRoom
+    clientName
+    section
+    row
+    clientEmail
+    price
+    currency {
+        id
+        isoCode
+        sign
+        title
+    }
+    externalCustomerRef
+    externalCardRef
+    entrance
+    shareLink
+    canShare
+    legalLongText
+    legalShortText
+    mapImageUrl
+    mapUrl
+    status
+    redeemedAt
+    redeemerEmail
+    sharerEmail
+    additionalFields {
+        name
+        value
+    }
+    printed
+}
