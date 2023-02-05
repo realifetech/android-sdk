@@ -7,9 +7,12 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
+import com.realifetech.GetMyTicketAuthsQuery
+import com.realifetech.GetMyTicketQuery
 import com.realifetech.GetMyTicketsQuery
 import com.realifetech.GetUpcomingTicketsQuery
 import com.realifetech.sdk.access.data.model.Ticket
+import com.realifetech.sdk.access.data.model.TicketAuth
 import com.realifetech.sdk.access.data.model.asModel
 import com.realifetech.sdk.analytics.data.model.asAnalyticEvent
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
@@ -17,6 +20,7 @@ import com.realifetech.type.TicketFilter
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.List
 
 class AccessDataSourceImpl @Inject constructor(private val apolloClient: ApolloClient) :
     AccessDataSource {
@@ -30,9 +34,10 @@ class AccessDataSourceImpl @Inject constructor(private val apolloClient: ApolloC
                 .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
 
-            response.enqueue(object : ApolloCall.Callback<GetMyTicketsQuery.Data>(){
+            response.enqueue(object : ApolloCall.Callback<GetMyTicketsQuery.Data>() {
                 override fun onResponse(response: Response<GetMyTicketsQuery.Data>) {
-                    val tickets = response.data?.getMyTickets?.edges?.map { result -> result?.fragments?.fragmentTicket?.asModel }
+                    val tickets =
+                        response.data?.getMyTickets?.edges?.map { result -> result?.fragments?.fragmentTicket?.asModel }
                     val nextPage = response.data?.getMyTickets?.nextPage
                     val paginatedObject = PaginatedObject(tickets, nextPage)
                     callback.invoke(null, paginatedObject)
@@ -47,24 +52,51 @@ class AccessDataSourceImpl @Inject constructor(private val apolloClient: ApolloC
         }
     }
 
-    override fun getMyTicketById() {
-        TODO("Not yet implemented")
+    override fun getMyTicketById(
+        id: Int,
+        callback: (error: Exception?, response: Ticket?) -> Unit
+    ) {
+        try {
+            val response = apolloClient.query(GetMyTicketQuery(id = id.toString())).toBuilder()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
+            response.enqueue(object : ApolloCall.Callback<GetMyTicketQuery.Data>() {
+                override fun onResponse(response: Response<GetMyTicketQuery.Data>) {
+                    val ticket = response.data?.getMyTicket?.fragments?.fragmentTicket?.asModel
+                    callback.invoke(null, ticket)
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
+        } catch(exception: ApolloHttpException) {
+            callback.invoke(exception, null)
+        }
     }
 
     override fun getNextUpcomingTicket(callback: (error: Exception?, ticket: Ticket?) -> Unit) {
         try {
             val response = apolloClient.query(
                 GetUpcomingTicketsQuery(
-                pageSize = 1,
-                filters = Input.optional(TicketFilter(status = Input.optional(ACTIVE), sessionDateAfter = Input.optional(twentyFourHourDateTimeStamp)))
-            )
+                    pageSize = 1,
+                    filters = Input.optional(
+                        TicketFilter(
+                            status = Input.optional(ACTIVE),
+                            sessionDateAfter = Input.optional(twentyFourHourDateTimeStamp)
+                        )
+                    )
+                )
             )
                 .toBuilder()
                 .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
-            response.enqueue(object : ApolloCall.Callback<GetUpcomingTicketsQuery.Data>(){
+            response.enqueue(object : ApolloCall.Callback<GetUpcomingTicketsQuery.Data>() {
                 override fun onResponse(response: Response<GetUpcomingTicketsQuery.Data>) {
-                    callback.invoke(null, response.data?.getMyTickets?.edges?.first()?.fragments?.fragmentTicket?.asModel)
+                    callback.invoke(
+                        null,
+                        response.data?.getMyTickets?.edges?.first()?.fragments?.fragmentTicket?.asModel
+                    )
                 }
 
                 override fun onFailure(e: ApolloException) {
@@ -76,8 +108,25 @@ class AccessDataSourceImpl @Inject constructor(private val apolloClient: ApolloC
         }
     }
 
-    override fun getMyTicketAuths() {
-        TODO("Not yet implemented")
+    override fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit) {
+        try {
+            val response = apolloClient.query(GetMyTicketAuthsQuery()).toBuilder()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
+            response.enqueue(object : ApolloCall.Callback<GetMyTicketAuthsQuery.Data>() {
+                override fun onResponse(response: Response<GetMyTicketAuthsQuery.Data>) {
+                    callback.invoke(
+                        null,
+                        response.data?.getMyTicketAuths?.map { it?.fragments?.fragmentTicketAuth?.asModel })
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
+        } catch (exception: ApolloHttpException) {
+            callback.invoke(exception, null)
+        }
     }
 
     private var startOfCurrentDay: Calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
