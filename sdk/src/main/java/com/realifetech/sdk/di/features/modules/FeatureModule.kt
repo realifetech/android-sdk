@@ -8,9 +8,6 @@ import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
 import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.audiences.repository.AudiencesRepository
-import com.realifetech.sdk.campaignautomation.CampaignAutomation
-import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
-import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
@@ -149,16 +146,5 @@ object FeatureModule {
     @FeatureScope
     @Provides
     fun access(accessRepository: AccessRepository): Access = Access(accessRepository)
-
-    @FeatureScope
-    @Provides
-    fun campaignAutomation(
-        campaignAutomationRepository: CampaignAutomationRepository,
-        rltFetcher: RLTFetcher
-    ): CampaignAutomation =
-        CampaignAutomation(
-            campaignAutomationRepository,
-            rltFetcher
-        )
 
 }

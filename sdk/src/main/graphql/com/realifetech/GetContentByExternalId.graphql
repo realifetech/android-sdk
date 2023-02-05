@@ -1,9 +1,0 @@
-query getContentByExternalId($externalId: String!) {
-    getContentByExternalId(externalId: $externalId) {
-        campaignId,
-        items {
-            contentType,
-            data
-        }
-    }
-}

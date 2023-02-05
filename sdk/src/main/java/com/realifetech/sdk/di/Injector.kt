@@ -21,8 +21,7 @@ class Injector {
                 SellModule,
                 AnalyticsModule(),
                 ContentModule,
-                IdentityModule,
-                CampaignAutomationModule
+                IdentityModule
             )
             return component
         }
