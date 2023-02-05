@@ -35,42 +35,8 @@ data class Ticket(
     val redeemedAt: String?,
     val redeemerEmail: String?,
     val sharerEmail: String?,
-    val additionalFields: ArrayList<AdditionalField>?,
+    val additionalFields: List<AdditionalField?>?,
     val printed: Boolean?
 ) : Parcelable
 
-fun Ticket.fromFragmentTicket(fragmentTicket: FragmentTicket) =
-    FragmentTicket(
-        id = fragmentTicket.id,
-        seat = fragmentTicket.seat,
-        qrCodeUrl = fragmentTicket.qrCodeUrl,
-        sessionDate = fragmentTicket.sessionDate,
-        title = fragmentTicket.title,
-        eventUId = fragmentTicket.eventUId,
-        barCode = fragmentTicket.barCode,
-        sectorName = fragmentTicket.sectorName,
-        venueName = fragmentTicket.venueName,
-        venueRoom = fragmentTicket.venueRoom,
-        clientName = fragmentTicket.clientName,
-        section = fragmentTicket.section,
-        row = fragmentTicket.row,
-        clientEmail = fragmentTicket.clientEmail,
-        price = fragmentTicket.price,
-        currency = fragmentTicket.currency,
-        externalCustomerRef = fragmentTicket.externalCustomerRef,
-        externalCardRef = fragmentTicket.externalCardRef,
-        entrance = fragmentTicket.entrance,
-        shareLink = fragmentTicket.shareLink,
-        canShare = fragmentTicket.canShare,
-        legalLongText = fragmentTicket.legalLongText,
-        legalShortText = fragmentTicket.legalShortText,
-        mapImageUrl = fragmentTicket.mapImageUrl,
-        mapUrl = fragmentTicket.mapUrl,
-        status = fragmentTicket.status,
-        redeemedAt = fragmentTicket.redeemedAt,
-        redeemerEmail = fragmentTicket.redeemerEmail,
-        sharerEmail = fragmentTicket.sharerEmail,
-        additionalFields = fragmentTicket.additionalFields,
-        printed = fragmentTicket.printed
-    )
 

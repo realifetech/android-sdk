@@ -9,8 +9,3 @@ data class AdditionalField(
     val name: String?,
     val value: String?
 ) : Parcelable
-
-fun AdditionalField.fromFragmentTicket(response: FragmentTicket.AdditionalField) = AdditionalField(
-    name = response.name,
-    value = response.value
-)

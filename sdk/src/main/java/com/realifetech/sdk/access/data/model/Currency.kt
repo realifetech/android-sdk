@@ -12,9 +12,3 @@ data class Currency(
     val sign: String?
 ) : Parcelable
 
-fun Currency.fromFragmentTicket(response: FragmentTicket.Currency) = Currency(
-    id = response.id,
-    title = response.title,
-    isoCode = response.isoCode,
-    sign = response.sign
-)
