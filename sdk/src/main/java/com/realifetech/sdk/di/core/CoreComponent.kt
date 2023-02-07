@@ -18,8 +18,7 @@ interface CoreComponent {
         sellModule: SellModule,
         analyticsModule: AnalyticsModule,
         contentModule: ContentModule,
-        identityModule: IdentityModule,
-        campaignAutomationModule: CampaignAutomationModule
+        identityModule: IdentityModule
     ): FeatureComponent
 
 
