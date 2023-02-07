@@ -1,0 +1,17 @@
+fragment FragmentTicketAuth on TicketAuth {
+    id
+    userEmail {
+        id
+        email
+        valid
+    }
+    ticketIntegration {
+        id
+        name
+    }
+    accessToken
+    refreshToken
+    expireAt
+    clientEmail
+    clientId
+}

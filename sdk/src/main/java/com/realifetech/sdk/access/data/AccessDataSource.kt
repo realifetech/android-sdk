@@ -1,5 +1,7 @@
 package com.realifetech.sdk.access.data
 
+import com.realifetech.sdk.access.data.model.TicketAuth
+
 interface AccessDataSource {
 
     fun getMyTickets()
@@ -8,6 +10,6 @@ interface AccessDataSource {
 
     fun getNextUpcomingTicket()
 
-    fun getMyTicketAuths()
+    fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit)
 
 }

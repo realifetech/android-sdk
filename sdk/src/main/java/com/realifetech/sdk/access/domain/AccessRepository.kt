@@ -1,6 +1,7 @@
 package com.realifetech.sdk.access.domain
 
 import com.realifetech.sdk.access.data.AccessDataSource
+import com.realifetech.sdk.access.data.model.TicketAuth
 import javax.inject.Inject
 
 class AccessRepository @Inject constructor(private val accessDataSource: AccessDataSource) {
@@ -16,7 +17,7 @@ class AccessRepository @Inject constructor(private val accessDataSource: AccessD
         accessDataSource.getNextUpcomingTicket()
     }
 
-    fun getMyTicketAuths() {
-        accessDataSource.getMyTicketAuths()
+    fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit) {
+        accessDataSource.getMyTicketAuths(callback)
     }
 }
