@@ -1,0 +1,7 @@
+query getUpcomingTickets($pageSize: Int!, $filters: TicketFilter, $order: TicketOrder) {
+    getMyTickets(pageSize: $pageSize, filters: $filters, order: $order) {
+        edges {
+            ...FragmentTicket
+        }
+    }
+}
