@@ -14,4 +14,8 @@ class Access @Inject constructor(private val accessRepository: AccessRepository)
     fun getMyTicketById(id: Int, callback: (error: Exception?, response: Ticket?) -> Unit) {
         accessRepository.getMyTicketById(id, callback)
     }
+
+    fun getNextUpcomingTicket(callback: (error: Exception?, ticket: Ticket?) -> Unit) {
+        accessRepository.getNextUpcomingTicket(callback)
+    }
 }

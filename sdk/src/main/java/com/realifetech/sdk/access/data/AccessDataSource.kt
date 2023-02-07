@@ -9,7 +9,7 @@ interface AccessDataSource {
 
     fun getMyTicketById(id: Int, callback: (error: Exception?, response: Ticket?) -> Unit)
 
-    fun getNextUpcomingTicket()
+    fun getNextUpcomingTicket(callback: (error: Exception?, ticket: Ticket?) -> Unit)
 
     fun getMyTicketAuths()
 
