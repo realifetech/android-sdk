@@ -1,0 +1,5 @@
+query getMyTicket($id: ID!) {
+    getMyTicket(id: $id) {
+        ...FragmentTicket
+    }
+}

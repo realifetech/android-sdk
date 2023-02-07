@@ -11,8 +11,8 @@ class AccessRepository @Inject constructor(private val accessDataSource: AccessD
         callback: (error: Exception?, response: PaginatedObject<Ticket?>?) -> Unit
     ) = accessDataSource.getMyTickets(pageSize, callback)
 
-    fun getMyTicketById() {
-        accessDataSource.getMyTicketById()
+    fun getMyTicketById(id: Int, callback: (error: Exception?, response: Ticket?) -> Unit) {
+        accessDataSource.getMyTicketById(id, callback)
     }
 
     fun getNextUpcomingTicket() {

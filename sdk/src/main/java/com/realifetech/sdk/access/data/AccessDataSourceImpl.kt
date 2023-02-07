@@ -6,6 +6,7 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
+import com.realifetech.GetMyTicketQuery
 import com.realifetech.GetMyTicketsQuery
 import com.realifetech.sdk.RealifeTech.apolloClient
 import com.realifetech.sdk.access.data.model.Ticket
@@ -42,8 +43,27 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
         }
     }
 
-    override fun getMyTicketById() {
-        TODO("Not yet implemented")
+    override fun getMyTicketById(
+        id: Int,
+        callback: (error: Exception?, response: Ticket?) -> Unit
+    ) {
+        try {
+            val response = apolloClient.query(GetMyTicketQuery(id = id.toString())).toBuilder()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
+            response.enqueue(object : ApolloCall.Callback<GetMyTicketQuery.Data>() {
+                override fun onResponse(response: Response<GetMyTicketQuery.Data>) {
+                    val ticket = response.data?.getMyTicket?.fragments?.fragmentTicket?.asModel
+                    callback.invoke(null, ticket)
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
+        } catch(exception: ApolloHttpException) {
+            callback.invoke(exception, null)
+        }
     }
 
     override fun getNextUpcomingTicket() {

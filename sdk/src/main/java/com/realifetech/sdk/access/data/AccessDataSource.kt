@@ -7,7 +7,7 @@ interface AccessDataSource {
 
     fun getMyTickets(pageSize: Int, callback: (error: Exception?, response: PaginatedObject<Ticket?>?) -> Unit)
 
-    fun getMyTicketById()
+    fun getMyTicketById(id: Int, callback: (error: Exception?, response: Ticket?) -> Unit)
 
     fun getNextUpcomingTicket()
 

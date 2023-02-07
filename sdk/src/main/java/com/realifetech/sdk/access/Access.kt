@@ -10,4 +10,8 @@ class Access @Inject constructor(private val accessRepository: AccessRepository)
     fun getMyTickets( pageSize: Int, callback: (error: Exception?, response: PaginatedObject<Ticket?>?) -> Unit) {
         accessRepository.getMyTickets(pageSize, callback)
     }
+
+    fun getMyTicketById(id: Int, callback: (error: Exception?, response: Ticket?) -> Unit) {
+        accessRepository.getMyTicketById(id, callback)
+    }
 }
