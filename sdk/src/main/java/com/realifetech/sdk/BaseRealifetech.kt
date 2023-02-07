@@ -4,7 +4,6 @@ import com.apollographql.apollo.ApolloClient
 import com.realifetech.sdk.access.Access
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
-import com.realifetech.sdk.campaignautomation.CampaignAutomation
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.content.Content
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
@@ -35,9 +34,6 @@ abstract class BaseRealifetech {
 
     @Inject
     internal lateinit var identityInstance: Identity
-
-    @Inject
-    internal lateinit var campaignAutomationInstance: CampaignAutomation
 
     @Inject
     internal lateinit var accessInstance: Access

@@ -4,7 +4,6 @@ import android.content.Context
 import com.realifetech.sdk.access.Access
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
-import com.realifetech.sdk.campaignautomation.CampaignAutomation
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.content.Content
 import com.realifetech.sdk.core.data.model.config.CoreConfiguration
@@ -46,10 +45,6 @@ object RealifeTech : BaseRealifetech() {
 
     fun getIdentity(): Identity {
         return identityInstance
-    }
-
-    fun getCampaignAutomation(): CampaignAutomation {
-        return campaignAutomationInstance
     }
 
     fun getAccess(): Access {

@@ -1,7 +1,6 @@
 package com.realifetech.sdk.di.features
 
 import com.realifetech.sdk.BaseRealifetech
-import com.realifetech.sdk.access.Access
 import com.realifetech.sdk.di.features.modules.*
 import com.realifetech.sdk.sell.weboredering.WebOrderingFragment
 import dagger.Subcomponent
@@ -16,7 +15,6 @@ import dagger.Subcomponent
         SellModule::class,
         CommunicateModule::class,
         IdentityModule::class,
-        CampaignAutomationModule::class,
         AccessModule::class]
 )
 interface FeatureComponent {
