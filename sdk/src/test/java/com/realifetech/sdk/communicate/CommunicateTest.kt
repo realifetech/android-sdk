@@ -1,12 +1,12 @@
 package com.realifetech.sdk.communicate
 
 import android.content.Context
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.RegisterPushNotificationsResponse
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks
-import com.realifetech.sdk.communicate.mocks.CommunicateMocks.ACTION
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.USER
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.errorBody
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.registerResponse
@@ -15,14 +15,29 @@ import com.realifetech.sdk.communicate.mocks.CommunicateMocks.tokenBody
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.core.utils.hasNetworkConnection
+import com.realifetech.sdk.sell.utils.MainCoroutineRule
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import retrofit2.Response
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class CommunicateTest {
+
+    private val testDispatcher = TestCoroutineDispatcher()
+
+    @get:Rule
+    val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val testCoroutineRule = MainCoroutineRule()
 
     @RelaxedMockK
     lateinit var tokenStorage: PushNotificationsTokenStorage
@@ -43,7 +58,14 @@ class CommunicateTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        communicate = Communicate(tokenStorage, realifetechApiV3Service, analytics, context)
+        communicate = Communicate(
+            tokenStorage,
+            realifetechApiV3Service,
+            testDispatcher,
+            testDispatcher,
+            analytics,
+            context
+        )
         mockedResult = mockk()
         callback = mockk()
     }
@@ -91,7 +113,7 @@ class CommunicateTest {
     }
 
     @Test
-    fun `resend Pending Token `() {
+    fun `resend Pending Token `() = runBlocking {
         every { tokenStorage.hasPendingToken } returns true
         every { tokenStorage.pendingToken } returns token
         registerCall(true)

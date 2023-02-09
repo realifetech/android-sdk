@@ -1,0 +1,8 @@
+query getMyTickets($pageSize: Int!) {
+    getMyTickets(pageSize: $pageSize) {
+        edges {
+            ...FragmentTicket
+        }
+        nextPage
+    }
+}

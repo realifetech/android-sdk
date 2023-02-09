@@ -10,6 +10,7 @@ import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.core.utils.Result
 import kotlinx.android.synthetic.main.activity_general_sample.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,7 +49,7 @@ class GeneralSampleActivity : AppCompatActivity() {
         resultTextView.text = ""
         operationTextView.text = "Registering device"
 
-        GlobalScope.launch(Dispatchers.Main) {
+        CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 RealifeTech.getGeneral().registerDevice()
             }

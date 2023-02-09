@@ -1,0 +1,5 @@
+query GetSSO($provider: String!) {
+    getSSO(provider: $provider) {
+        authUrl
+    }
+}

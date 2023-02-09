@@ -27,6 +27,9 @@ class Identity @Inject constructor(
         webViewWrapper.clearCacheAndStorage()
     }
 
+    fun getSSO(provider:String,callback: (error: Exception?, url: String?) -> Unit){
+        identityRepository.getSSO(provider,callback)
+    }
     fun identify(
         userId: String,
         traits: Map<RLTTraitType, Any>?,
@@ -48,6 +51,9 @@ class Identity @Inject constructor(
             completion
         )
     }
+
+    fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit) =
+        identityRepository.deleteMyAccount(callback)
 
     fun alias(
         aliasType: RLTAliasType,

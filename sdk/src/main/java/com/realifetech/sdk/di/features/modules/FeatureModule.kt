@@ -1,14 +1,13 @@
 package com.realifetech.sdk.di.features.modules
 
 import android.content.Context
+import com.realifetech.sdk.access.Access
+import com.realifetech.sdk.access.domain.AccessRepository
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
 import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.audiences.repository.AudiencesRepository
-import com.realifetech.sdk.campaignautomation.CampaignAutomation
-import com.realifetech.sdk.campaignautomation.data.model.RLTFetcher
-import com.realifetech.sdk.campaignautomation.domain.CampaignAutomationRepository
 import com.realifetech.sdk.communicate.Communicate
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
@@ -74,9 +73,13 @@ object FeatureModule {
         analytics: Analytics,
         context: Context
     ): Communicate {
-        val communicate = Communicate(tokenStorage, realifetechApiV3Service, analytics, context)
-        communicate.resendPendingToken()
-        return communicate
+        return Communicate(
+            tokenStorage,
+            realifetechApiV3Service,
+            Dispatchers.IO,
+            Dispatchers.Main,
+            analytics, context
+        )
     }
 
     @FeatureScope
@@ -142,13 +145,6 @@ object FeatureModule {
 
     @FeatureScope
     @Provides
-    fun campaignAutomation(
-        campaignAutomationRepository: CampaignAutomationRepository,
-        rltFetcher: RLTFetcher
-    ): CampaignAutomation =
-        CampaignAutomation(
-            campaignAutomationRepository,
-            rltFetcher
-        )
+    fun access(accessRepository: AccessRepository): Access = Access(accessRepository)
 
 }

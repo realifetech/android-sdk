@@ -15,7 +15,7 @@ import dagger.Subcomponent
         SellModule::class,
         CommunicateModule::class,
         IdentityModule::class,
-        CampaignAutomationModule::class]
+        AccessModule::class]
 )
 interface FeatureComponent {
 

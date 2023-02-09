@@ -11,6 +11,8 @@ object IdentityMocks {
     const val SALT = "xcsfbtmddsjnawceuvlxjpxxzdlpjaxm"
     const val HASHED_VALUE = "4b161418e908e699d76cba6988ebeb73594ff5bfac0804b8c1e21eaae72ef9f6"
     const val deviceId="12340"
+    const val authUrl= "www.google.com"
+    const val provider="google"
     val userInfo = SignedUserInfoInput(
         "test@gmail.com","Fabio".toInput(), "BigOnion".toInput(), Input.absent(),
         Input.absent(), NONCE, HASHED_VALUE

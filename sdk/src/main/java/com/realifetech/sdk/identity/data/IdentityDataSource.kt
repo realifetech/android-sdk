@@ -13,4 +13,8 @@ interface IdentityDataSource {
         userInfo: SignedUserInfoInput,
         callback: (error: Exception?, response: AuthToken?) -> Unit
     )
+
+    fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit)
+
+    fun getSSO(provider: String, callback: (error: Exception?, url: String?) -> Unit)
 }

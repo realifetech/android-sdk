@@ -69,6 +69,9 @@ class IdentityRepository @Inject constructor(private val identityDataSource: Ide
         }
     }
 
+    internal fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit) =
+        identityDataSource.deleteMyAccount(callback)
+
     internal fun getJsonObjectForData(
         email: String,
         firstName: String?,
@@ -83,6 +86,10 @@ class IdentityRepository @Inject constructor(private val identityDataSource: Ide
                 Pair(DEVICE, deviceId)
             ).toMap()
         )
+    }
+
+    fun getSSO(provider: String, callback: (error: Exception?, url: String?) -> Unit) {
+        identityDataSource.getSSO(provider,callback)
     }
 
     companion object {
