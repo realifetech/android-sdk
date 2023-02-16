@@ -145,6 +145,10 @@ object FeatureModule {
 
     @FeatureScope
     @Provides
-    fun access(accessRepository: AccessRepository): Access = Access(accessRepository)
+    fun access(accessRepository: AccessRepository): Access = Access(
+        accessRepository,
+        Dispatchers.IO,
+        Dispatchers.Main
+    )
 
 }
