@@ -7,14 +7,6 @@ import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.realifetech.SyncDeviceMutation
-import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
-import com.realifetech.sdk.core.data.model.basket.Basket
-import com.realifetech.sdk.core.data.model.device.DeviceRegisterRequest
-import com.realifetech.sdk.core.data.model.device.DeviceRegisterResponse
-import com.realifetech.sdk.core.data.model.exceptions.NetworkException
-import com.realifetech.sdk.core.network.RealifetechApiV3Service
-import com.realifetech.sdk.core.utils.Result
 import com.realifetech.type.DeviceInput
 import com.realifetech.type.DeviceTokenInput
 
@@ -63,8 +55,6 @@ internal class DeviceNetworkDataSourceImpl(
         private const val ANDROID = "ANDROID"
     }
 }
-
-
 
 
 
