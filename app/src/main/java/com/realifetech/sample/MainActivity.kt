@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     private fun reconfigureSDK(storage: DeviceConfigurationStorage) {
         val configuration = CoreConfiguration(
             apiUrl = storage.apiUrl,
+            appVersion = BuildConfig.VERSION_NAME,
             graphApiUrl = storage.graphQl,
             clientSecret = storage.clientSecret,
             appCode = storage.appCode,

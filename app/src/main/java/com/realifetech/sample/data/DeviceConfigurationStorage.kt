@@ -3,6 +3,7 @@ package com.realifetech.sample.data
 import android.content.Context
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.realifetech.sample.BuildConfig
 
 class DeviceConfigurationStorage(context: Context) {
 
@@ -56,6 +57,12 @@ class DeviceConfigurationStorage(context: Context) {
             preferences.edit { putBoolean(LOGGED_IN, value) }
         }
 
+    var appVersion: String
+        get() = preferences.getString(APP_VERSION, BuildConfig.VERSION_NAME).orEmpty()
+        set(value) {
+            preferences.edit { putString(APP_VERSION, value) }
+        }
+
     companion object {
         private const val EMPTY = ""
         private const val PUSH_TOKEN = "PushToken"
@@ -66,5 +73,6 @@ class DeviceConfigurationStorage(context: Context) {
         private const val ORDERING_JOURNEY_URL = "ordering_journey_url"
         private const val API_URL = "api_url"
         private const val GRAPHQL_URL = "graphql_url"
+        private const val APP_VERSION = "appVersion"
     }
 }
