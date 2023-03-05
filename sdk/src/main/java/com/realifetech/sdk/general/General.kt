@@ -28,7 +28,7 @@ class General @Inject constructor(
 
 
     @Synchronized
-    fun registerDevice(): Result<DeviceRegisterResponse> {
+    fun registerDevice(): Result<Boolean> {
         sdkInitializationPrecondition.checkContextInitialized()
         return try {
             Log.d("General", "Sending register device request")

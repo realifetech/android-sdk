@@ -15,6 +15,7 @@ class DeviceRepository @Inject constructor(
     private val dataSource: DeviceNetworkDataSource,
     private val oAuthManager: Lazy<OAuthManager>
 ) {
+    private lateinit var result: com.realifetech.sdk.core.utils.Result<Boolean>
     private val retryPolicy: RetryPolicy =
         LinearRetryPolicy(DEVICE_REGISTRATION_RETRY_TIME_MILLISECONDS) {
             Log.d("RetryPolicy", "Retry, sending new register device request")
@@ -23,19 +24,22 @@ class DeviceRepository @Inject constructor(
 
 
     @Synchronized
-    fun registerDevice(): Result<DeviceRegisterResponse> {
+    fun registerDevice(): Result<Boolean> {
         val accessToken = oAuthManager.get()
         accessToken.ensureActive()
-        val response = dataSource.registerDevice()
-        if (response is Result.Error) {
-            accessToken.ensureActive()
-            Log.e("DeviceRepository", "Register device Error: ${response.exception.message}")
-            retryPolicy.execute()
-        } else {
-            retryPolicy.cancel()
+        dataSource.registerDevice() { error, registered ->
+            error?.let {
+                accessToken.ensureActive()
+                Log.e("DeviceRepository", "Register device Error: ${it.message}")
+                retryPolicy.execute()
+                result =  Result.Error(it)
+            }
+            registered?.let {
+                retryPolicy.cancel()
+                result = Result.Success(it)
+            }
         }
-
-        return response
+        return result
     }
 
     companion object {

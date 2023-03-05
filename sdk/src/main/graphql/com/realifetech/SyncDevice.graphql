@@ -1,0 +1,5 @@
+mutation syncDevice($input: DeviceInput!) {
+    syncDevice(input: $input) {
+        acknowledged
+    }
+}
