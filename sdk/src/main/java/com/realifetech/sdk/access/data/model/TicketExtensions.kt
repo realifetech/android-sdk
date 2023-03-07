@@ -37,6 +37,41 @@ val FragmentTicket.asModel: Ticket
         printed = printed
     )
 
+val emptyTicket: Ticket
+    get() = Ticket(
+        id = "",
+        seat = "",
+        qrCodeUrl = "",
+        sessionDate = "",
+        title = "",
+        eventUId = "",
+        barCode = "",
+        sectorName = "",
+        venueName = "",
+        venueRoom = "",
+        clientName = "",
+        section = "",
+        row = "",
+        clientEmail = "",
+        price = null,
+        currency = null,
+        externalCustomerRef = "",
+        externalCardRef = "",
+        entrance = "",
+        shareLink = "",
+        canShare = null,
+        legalLongText = "",
+        legalShortText = "",
+        mapImageUrl = "",
+        mapUrl = "",
+        status = "",
+        redeemedAt = "",
+        redeemerEmail = "",
+        sharerEmail = "",
+        additionalFields = null,
+        printed = false
+    )
+
 val FragmentTicket.Currency.asModel: Currency
     get() = Currency(
         id = id,

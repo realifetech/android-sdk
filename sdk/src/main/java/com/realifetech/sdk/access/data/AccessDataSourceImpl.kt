@@ -15,6 +15,7 @@ import com.realifetech.sdk.RealifeTech.apolloClient
 import com.realifetech.sdk.access.data.model.Ticket
 import com.realifetech.sdk.access.data.model.TicketAuth
 import com.realifetech.sdk.access.data.model.asModel
+import com.realifetech.sdk.access.data.model.emptyTicket
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.type.TicketFilter
 import java.text.SimpleDateFormat
@@ -74,6 +75,14 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
         }
     }
 
+    private fun getTicket(response: Response<GetUpcomingTicketsQuery.Data>): Ticket? {
+        if (response.data?.getMyTickets?.edges.isNullOrEmpty()){
+            return emptyTicket
+        } else {
+            return response.data?.getMyTickets?.edges?.first()?.fragments?.fragmentTicket?.asModel
+        }
+    }
+
     override fun getNextUpcomingTicket(callback: (error: Exception?, ticket: Ticket?) -> Unit) {
         try {
             val response = apolloClient.query(
@@ -92,16 +101,10 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetUpcomingTicketsQuery.Data>() {
                 override fun onResponse(response: Response<GetUpcomingTicketsQuery.Data>) {
-                    try {
-                        val ticket = response.data?.getMyTickets?.edges?.first()
-                        callback.invoke(
-                            null,
-                            ticket?.fragments?.fragmentTicket?.asModel
-                        )
-                    } catch (e: Exception) {
-                        callback.invoke(e, null)
-                    }
-
+                    callback.invoke(
+                        null,
+                        getTicket(response)
+                    )
                 }
 
                 override fun onFailure(e: ApolloException) {
