@@ -92,14 +92,16 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetUpcomingTicketsQuery.Data>() {
                 override fun onResponse(response: Response<GetUpcomingTicketsQuery.Data>) {
-                    if (response.data?.getMyTickets?.edges.isNullOrEmpty()) callback(
-                        Exception("Response.data?.getMyTickets?.edges is null or empty"),
-                        null
-                    ) else
+                    try {
+                        val ticket = response.data?.getMyTickets?.edges?.first()
                         callback.invoke(
                             null,
-                            response.data?.getMyTickets?.edges?.first()?.fragments?.fragmentTicket?.asModel
+                            ticket?.fragments?.fragmentTicket?.asModel
                         )
+                    } catch (e: Exception) {
+                        callback.invoke(e, null)
+                    }
+
                 }
 
                 override fun onFailure(e: ApolloException) {
