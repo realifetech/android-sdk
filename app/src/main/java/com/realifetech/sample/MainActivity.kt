@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             appCode = storage.appCode,
             webOrderingJourneyUrl = storage.orderingJourney
         )
+        println(">>> configuration: $configuration")
         RealifeTech.configureSdk(applicationContext, configuration)
 
     }

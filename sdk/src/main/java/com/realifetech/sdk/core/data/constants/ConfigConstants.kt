@@ -7,5 +7,4 @@ internal object ConfigConstants {
     const val apiUrl: String = "https://api-staging.livestyled.com/v3"
     const val graphApiUrl: String = "https://staging-graphql-eu.realifetech.com/"
     const val webOrderingJourneyUrl: String = "https://ordering.realifetech.com/"
-    const val appVersion: String = ""
 }
