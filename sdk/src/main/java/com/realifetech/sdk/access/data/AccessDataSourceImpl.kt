@@ -4,8 +4,8 @@ import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.api.toInput
+import com.apollographql.apollo.exception.*
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
 import com.realifetech.GetMyTicketAuthsQuery
 import com.realifetech.GetMyTicketQuery
@@ -17,6 +17,7 @@ import com.realifetech.sdk.access.data.model.TicketAuth
 import com.realifetech.sdk.access.data.model.asModel
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.type.TicketFilter
+import com.realifetech.type.TicketOrder
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -74,7 +75,61 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
         }
     }
 
-    override fun getNextUpcomingTicket(callback: (error: Exception?, response: PaginatedObject<Ticket?>?) -> Unit) {
+    override fun getNextUpcomingTicket(callback: (error: Exception?, response: Ticket?) -> Unit) {
+        try {
+            val response = apolloClient.query(
+                GetUpcomingTicketsQuery(
+                    pageSize = 1,
+                    filters = TicketFilter(status = ACTIVE.toInput(), sessionDateAfter = twentyFourHourDateTimeStamp.toInput()).toInput()
+                )
+            )
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .build()
+
+            response.enqueue(object : ApolloCall.Callback<GetUpcomingTicketsQuery.Data>() {
+                override fun onResponse(response: Response<GetUpcomingTicketsQuery.Data>) {
+                   response?.data?.getMyTickets?.edges?.let { list ->
+                       if (list.isNotEmpty()) {
+                           try {
+                               val nextUpcomingTicket = list.firstOrNull()?.fragments?.fragmentTicket?.asModel
+                               callback.invoke(null, nextUpcomingTicket)
+                           } catch (exception: Exception) {
+                               callback.invoke(exception, null)
+                           }
+                       } else {
+                           callback.invoke(Exception("Empty ticket list"), null)
+                       }
+                   }
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+                override fun onCanceledError(e: ApolloCanceledException) {
+                    callback.invoke(e, null)
+                }
+
+                override fun onHttpError(e: ApolloHttpException) {
+                    callback.invoke(e, null)
+                }
+
+                override fun onParseError(e: ApolloParseException) {
+                    callback.invoke(e, null)
+                }
+
+                override fun onNetworkError(e: ApolloNetworkException) {
+                    callback.invoke(e, null)
+                }
+
+            })
+        } catch (exception: ApolloHttpException) {
+            callback.invoke(exception, null)
+        }
+    }
+
+   /* fun getNextUpcomingTicket2(callback: (error: Exception?, response: PaginatedObject<Ticket?>?) -> Unit) {
         try {
             val response = apolloClient.query(
                 GetUpcomingTicketsQuery(
@@ -105,7 +160,7 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
         } catch (exception: ApolloHttpException) {
             callback.invoke(exception, null)
         }
-    }
+    }*/
 
     override fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit) {
         try {

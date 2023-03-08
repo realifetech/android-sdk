@@ -40,14 +40,8 @@ class Access @Inject constructor(
         }
     }
 
-    fun getNextUpcomingTicket(callback: (error: Exception?, response: PaginatedObject<Ticket?>?) -> Unit) {
-        accessRepository.getNextUpcomingTicket { error, response ->
-            GlobalScope.launch(dispatcherIO) {
-                withContext(dispatcherMain) {
-                    callback(error, response)
-                }
-            }
-        }
+    fun getNextUpcomingTicket(callback: (error: Exception?, response: Ticket?) -> Unit) {
+        accessRepository.getNextUpcomingTicket(callback)
     }
 
     fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit) {
