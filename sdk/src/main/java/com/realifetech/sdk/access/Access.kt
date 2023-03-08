@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 import javax.inject.Inject
 
 class Access @Inject constructor(
@@ -39,8 +40,14 @@ class Access @Inject constructor(
         }
     }
 
-    fun getNextUpcomingTicket(callback: (error: Exception?, ticketList: List<Ticket?>) -> Unit) {
-        accessRepository.getNextUpcomingTicket(callback)
+    fun getNextUpcomingTicket(callback: (error: Exception?, response: PaginatedObject<Ticket?>?) -> Unit) {
+        accessRepository.getNextUpcomingTicket { error, response ->
+            GlobalScope.launch(dispatcherIO) {
+                withContext(dispatcherMain) {
+                    callback(error, response)
+                }
+            }
+        }
     }
 
     fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit) {
