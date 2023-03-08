@@ -39,14 +39,8 @@ class Access @Inject constructor(
         }
     }
 
-    fun getNextUpcomingTicket(callback: (error: Exception?, ticket: Ticket?) -> Unit) {
-        accessRepository.getNextUpcomingTicket { error, ticket ->
-            GlobalScope.launch(dispatcherIO) {
-                withContext(dispatcherMain) {
-                    callback(error, ticket)
-                }
-            }
-        }
+    fun getNextUpcomingTicket(callback: (error: Exception?, ticketList: List<Ticket?>) -> Unit) {
+        accessRepository.getNextUpcomingTicket(callback)
     }
 
     fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit) {

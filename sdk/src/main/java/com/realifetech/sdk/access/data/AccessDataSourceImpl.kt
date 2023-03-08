@@ -74,7 +74,7 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
         }
     }
 
-    override fun getNextUpcomingTicket(callback: (error: Exception?, ticket: Ticket?) -> Unit) {
+    override fun getNextUpcomingTicket(callback: (error: Exception?, ticketList: List<Ticket?>) -> Unit) {
         try {
             val response = apolloClient.query(
                 GetUpcomingTicketsQuery(
@@ -92,18 +92,23 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetUpcomingTicketsQuery.Data>() {
                 override fun onResponse(response: Response<GetUpcomingTicketsQuery.Data>) {
-                    callback.invoke(
-                        null,
-                        response.data?.getMyTickets?.edges?.first()?.fragments?.fragmentTicket?.asModel
-                    )
+                    val list = response.data?.getMyTickets?.edges
+                    if (list.isNullOrEmpty()) {
+                        callback.invoke(ApolloException("Empty ticket list"), emptyList())
+                    } else {
+                        callback.invoke(
+                            null,
+                            list?.map { it?.fragments?.fragmentTicket?.asModel } ?: emptyList()
+                        )
+                    }
                 }
 
                 override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
+                    callback.invoke(e, emptyList())
                 }
             })
         } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            callback.invoke(exception, emptyList())
         }
     }
 

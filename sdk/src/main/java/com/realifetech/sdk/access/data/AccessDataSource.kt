@@ -10,7 +10,7 @@ interface AccessDataSource {
 
     fun getMyTicketById(id: Int, callback: (error: Exception?, response: Ticket?) -> Unit)
 
-    fun getNextUpcomingTicket(callback: (error: Exception?, ticket: Ticket?) -> Unit)
+    fun getNextUpcomingTicket(callback: (error: Exception?, ticketList: List<Ticket?>) -> Unit)
 
     fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit)
 
