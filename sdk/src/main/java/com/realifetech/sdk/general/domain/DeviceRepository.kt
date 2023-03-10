@@ -24,7 +24,7 @@ class DeviceRepository @Inject constructor(
 
 
     @Synchronized
-    fun registerDevice(appVersion: String): Result<Boolean> {
+    fun registerDevice(): Result<Boolean> {
         val accessToken = oAuthManager.get()
         accessToken.ensureActive()
         dataSource.registerDevice() { error, registered ->

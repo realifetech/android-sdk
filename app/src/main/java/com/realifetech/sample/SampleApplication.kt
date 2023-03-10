@@ -49,7 +49,7 @@ class SampleApplication : Application() {
     private fun registerDeviceForSDK(appVersion: String) {
         GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
-                RealifeTech.getGeneral().registerDevice(appVersion)
+                RealifeTech.getGeneral().registerDevice()
             }
         }
     }
