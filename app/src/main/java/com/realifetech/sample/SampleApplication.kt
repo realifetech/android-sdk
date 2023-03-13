@@ -19,17 +19,17 @@ class SampleApplication : Application() {
         val storage = DeviceConfigurationStorage(this)
         // Prefill the storage with default values from the configuration
         if (storage.graphQl.isBlank() && storage.apiUrl.isBlank() && storage.orderingJourney.isBlank()) {
-            val configuration = CoreConfiguration(appVersion = BuildConfig.VERSION_NAME)
+            val configuration = CoreConfiguration()
             storage.graphQl = configuration.graphApiUrl
             storage.apiUrl = configuration.apiUrl
             storage.appCode = configuration.appCode
             storage.clientSecret = configuration.clientSecret
             storage.orderingJourney = configuration.webOrderingJourneyUrl
-            storage.appVersion = configuration.appVersion
+            storage.appVersion = appVersion
         }
         val configuration = CoreConfiguration(
             apiUrl = storage.apiUrl,
-            appVersion = BuildConfig.VERSION_NAME,
+            appVersion = storage.appVersion,
             graphApiUrl = storage.graphQl,
             clientSecret = storage.clientSecret,
             appCode = storage.appCode,
@@ -49,7 +49,7 @@ class SampleApplication : Application() {
     private fun registerDeviceForSDK(appVersion: String) {
         GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
-                RealifeTech.getGeneral().registerDevice()
+                RealifeTech.getGeneral().registerDevice(appVersion)
             }
         }
     }

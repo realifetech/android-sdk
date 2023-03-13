@@ -51,9 +51,16 @@ class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
             preferences.edit { putString(USER_ID, value) }
         }
 
+    var appVersion: String?
+        get() = preferences.getString(APP_VERSION, ConfigConstants.appVersion)
+        set(value) {
+            preferences.edit { putString(APP_VERSION, value) }
+        }
+
     fun set(value: CoreConfiguration) {
         value.let {
             appCode = it.appCode
+            appVersion = it.appVersion
             clientSecret = it.clientSecret
             apiUrl = it.apiUrl
             graphApiUrl = it.graphApiUrl
@@ -76,5 +83,6 @@ class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
         private const val GRAPHQL_URL = "graphql_url"
         private const val DEVICE_ID = "device_id"
         private const val BACK_SLASH = "/"
+        private const val APP_VERSION = "app_version"
     }
 }

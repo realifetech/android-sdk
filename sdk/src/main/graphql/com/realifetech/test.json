@@ -1,0 +1,13 @@
+{
+  "input": {
+    "token": "f341256a-f5e4-4a38-9f0e-401be93a00cf:com.realifetech.sample.debug",
+    "type": "ANDROID",
+    "appVersion": "2.0.0",
+    "osVersion": "13",
+    "model": "sdk_gphone64_arm64",
+    "manufacturer": "Google",
+    "bluetoothOn": true,
+    "wifiConnected": true,
+    "tokens": []
+  }
+}

@@ -2,6 +2,7 @@ package com.realifetech.sample
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -17,9 +18,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class GeneralSampleActivity : AppCompatActivity() {
+
+    private lateinit var appVersion: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_general_sample)
+
+        appVersion = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES).versionName
 
         val storage = DeviceConfigurationStorage(this)
         clientSecretEditText.setText(storage.clientSecret)
@@ -51,7 +56,7 @@ class GeneralSampleActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                RealifeTech.getGeneral().registerDevice()
+                RealifeTech.getGeneral().registerDevice(appVersion)
             }
 
             deviceIdentifierTextView.text =

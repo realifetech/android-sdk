@@ -28,8 +28,9 @@ class General @Inject constructor(
 
 
     @Synchronized
-    fun registerDevice(): Result<Boolean> {
+    fun registerDevice(appVersion: String): Result<Boolean> {
         sdkInitializationPrecondition.checkContextInitialized()
+        deviceRepository.setUpAppVersion(appVersion)
         return try {
             Log.d("General", "Sending register device request")
             val result = deviceRepository.registerDevice()
