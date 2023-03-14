@@ -34,6 +34,7 @@ class General @Inject constructor(
         return try {
             Log.d("General", "Sending register device request")
             val result = deviceRepository.registerDevice()
+            println(">>> result: $result")
             isSdkReady = result is Result.Success
 
             Log.d("General", "Register device request result, is SDK ready = $isSdkReady")
