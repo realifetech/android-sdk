@@ -48,10 +48,11 @@ class GeneralSampleActivity : AppCompatActivity() {
         progressBar.isVisible = true
         resultTextView.text = ""
         operationTextView.text = "Registering device"
+        val appVersion = BuildConfig.VERSION_NAME
 
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                RealifeTech.getGeneral().registerDevice()
+                RealifeTech.getGeneral().registerDevice(appVersion)
             }
 
             deviceIdentifierTextView.text =

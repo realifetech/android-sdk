@@ -20,34 +20,35 @@ internal class DeviceNetworkDataSourceImpl(
             return DeviceInput(
                 token = deviceInfo.deviceId,
                 type = ANDROID.toInput(),
+                status = null.toInput(),
                 appVersion = deviceInfo.appVersionName.toInput(),
                 osVersion = deviceInfo.osVersion.toInput(),
                 model = deviceInfo.model.toInput(),
                 manufacturer = deviceInfo.manufacturer.toInput(),
                 bluetoothOn = deviceInfo.isBluetoothEnabled.toInput(),
                 wifiConnected = deviceInfo.isWifiOn.toInput(),
-                tokens = listOf<DeviceTokenInput?>().toInput()
+                tokens = emptyList<DeviceTokenInput?>().toInput()
             )
         }
 
-    override fun registerDevice(callback: (error: Exception?, registered: Boolean?) -> Unit) {
+    override fun registerDevice(appVersion: String, callback: (error: Exception?, registered: Boolean?) -> Unit) {
         try {
-            val response = apolloClient.mutate(SyncDeviceMutation(input))
+            val response = apolloClient.mutate(SyncDeviceMutation(input.copy(appVersion=appVersion.toInput())))
             response.enqueue(object : ApolloCall.Callback<SyncDeviceMutation.Data>() {
                 override fun onResponse(response: Response<SyncDeviceMutation.Data>) {
                     callback.invoke(
                         null,
-                        response?.data?.syncDevice?.acknowledged
+                        response.data?.syncDevice?.acknowledged ?: false
                     )
                 }
 
                 override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
+                    callback.invoke(e, false)
                 }
 
             })
         } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            callback.invoke(exception, false)
         }
     }
 
