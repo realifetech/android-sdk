@@ -4,6 +4,7 @@ import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
+import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.realifetech.SyncDeviceMutation
@@ -35,26 +36,22 @@ internal class DeviceNetworkDataSourceImpl(
     ) {
         try {
             val response =
-                apolloClient.mutate(SyncDeviceMutation(input))
+                apolloClient.mutate(SyncDeviceMutation(input.copy(appVersion = appVersion.toInput())))
             response.enqueue(object : ApolloCall.Callback<SyncDeviceMutation.Data>() {
                 override fun onResponse(response: Response<SyncDeviceMutation.Data>) {
-                    response.data?.syncDevice?.let {
-                        println(">>> onResponse not null")
-                        callback.invoke(null, it.acknowledged)
+                    response.data?.syncDevice?.acknowledged?.let {
+                        callback.invoke(null, it)
                     } ?: run {
-                        println(">>> onResponse is null")
                         callback.invoke(Exception(), null)
                     }
                 }
 
                 override fun onFailure(e: ApolloException) {
-                    println(">>> onFailure ApolloException: $e")
                     callback.invoke(e, null)
                 }
 
             })
         } catch (exception: ApolloHttpException) {
-            println(">>> catch ApolloHttpException: $exception")
             callback.invoke(exception, null)
         }
     }
