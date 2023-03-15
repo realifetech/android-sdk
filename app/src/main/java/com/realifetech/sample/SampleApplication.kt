@@ -46,7 +46,7 @@ class SampleApplication : Application() {
     private fun registerDeviceForSDK() {
         GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
-                RealifeTech.getGeneral().registerDevice(BuildConfig.VERSION_NAME)
+                RealifeTech.getGeneral().registerDevice()
             }
         }
     }
