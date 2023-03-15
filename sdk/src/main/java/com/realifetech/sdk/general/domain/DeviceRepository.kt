@@ -27,7 +27,7 @@ class DeviceRepository @Inject constructor(
     fun registerDevice(): Result<Boolean> {
         val accessToken = oAuthManager.get()
         accessToken.ensureActive()
-        dataSource.registerDevice() { error, registered ->
+        dataSource.registerDevice { error, registered ->
             error?.let {
                 accessToken.ensureActive()
                 Log.e("DeviceRepository", "Register device Error: ${it.message}")
