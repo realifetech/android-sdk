@@ -12,7 +12,6 @@ import com.realifetech.sdk.core.utils.Result
 import kotlinx.android.synthetic.main.activity_general_sample.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

@@ -50,6 +50,7 @@ class SampleApplication : Application() {
             }
         }
     }
+
     companion object {
         private const val EMPTY = ""
     }
