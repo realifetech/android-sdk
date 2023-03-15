@@ -43,12 +43,12 @@ internal class DeviceNetworkDataSourceImpl(
                 }
 
                 override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, false)
+                    callback.invoke(e, null)
                 }
 
             })
         } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, false)
+            callback.invoke(exception, null)
         }
     }
 
