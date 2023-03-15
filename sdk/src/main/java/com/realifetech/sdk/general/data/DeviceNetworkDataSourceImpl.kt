@@ -26,7 +26,7 @@ internal class DeviceNetworkDataSourceImpl(
                 manufacturer = deviceInfo.manufacturer.toInput(),
                 bluetoothOn = deviceInfo.isBluetoothEnabled.toInput(),
                 wifiConnected = deviceInfo.isWifiOn.toInput(),
-                tokens = listOf<DeviceTokenInput?>().toInput()
+                tokens = emptyList<DeviceTokenInput?>().toInput()
             )
         }
 
@@ -37,7 +37,7 @@ internal class DeviceNetworkDataSourceImpl(
                 override fun onResponse(response: Response<SyncDeviceMutation.Data>) {
                     callback.invoke(
                         null,
-                        response?.data?.syncDevice?.acknowledged
+                        response.data?.syncDevice?.acknowledged ?: false
                     )
                 }
 
