@@ -24,8 +24,6 @@ class GeneralSampleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_general_sample)
 
-        appVersion = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES).versionName
-
         val storage = DeviceConfigurationStorage(this)
         clientSecretEditText.setText(storage.clientSecret)
         clientIdEditText.setText(storage.appCode)

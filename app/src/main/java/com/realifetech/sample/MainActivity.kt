@@ -62,13 +62,12 @@ class MainActivity : AppCompatActivity() {
     private fun reconfigureSDK(storage: DeviceConfigurationStorage) {
         val configuration = CoreConfiguration(
             apiUrl = storage.apiUrl,
-            appVersion = BuildConfig.VERSION_NAME,
+            appVersion = storage.appVersion,
             graphApiUrl = storage.graphQl,
             clientSecret = storage.clientSecret,
             appCode = storage.appCode,
             webOrderingJourneyUrl = storage.orderingJourney
         )
-        println(">>> configuration: $configuration")
         RealifeTech.configureSdk(applicationContext, configuration)
 
     }
