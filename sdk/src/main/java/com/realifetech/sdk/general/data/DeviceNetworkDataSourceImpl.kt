@@ -21,6 +21,7 @@ internal class DeviceNetworkDataSourceImpl(
             return DeviceInput(
                 token = deviceInfo.deviceId,
                 type = ANDROID.toInput(),
+                appVersion = deviceInfo.appVersionName.toInput(),
                 osVersion = deviceInfo.osVersion.toInput(),
                 model = deviceInfo.model.toInput(),
                 manufacturer = deviceInfo.manufacturer.toInput(),
@@ -31,11 +32,10 @@ internal class DeviceNetworkDataSourceImpl(
         }
 
     override fun registerDevice(
-        appVersion: String,
         callback: (error: Exception?, registered: Boolean?) -> Unit
     ) {
         try {
-            val response = apolloClient.mutate(SyncDeviceMutation(input.copy(appVersion = appVersion.toInput())))
+            val response = apolloClient.mutate(SyncDeviceMutation(input))
             response.enqueue(object : ApolloCall.Callback<SyncDeviceMutation.Data>() {
                 override fun onResponse(response: Response<SyncDeviceMutation.Data>) {
                     response.data?.syncDevice?.acknowledged?.let {

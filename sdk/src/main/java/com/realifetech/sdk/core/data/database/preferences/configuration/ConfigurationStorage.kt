@@ -51,8 +51,8 @@ class ConfigurationStorage(context: Context) : AbstractPreferences(context) {
             preferences.edit { putString(USER_ID, value) }
         }
 
-    var appVersion: String?
-        get() = preferences.getString(APP_VERSION, ConfigConstants.appVersion)
+    var appVersion: String
+        get() = preferences.getString(APP_VERSION, ConfigConstants.appVersion).orEmpty()
         set(value) {
             preferences.edit { putString(APP_VERSION, value) }
         }

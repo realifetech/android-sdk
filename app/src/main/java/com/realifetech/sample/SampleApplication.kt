@@ -17,6 +17,7 @@ class SampleApplication : Application() {
         val appVersion = packageManager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES).versionName
 
         val storage = DeviceConfigurationStorage(this)
+        storage.appVersion = appVersion
         // Prefill the storage with default values from the configuration
         if (storage.graphQl.isBlank() && storage.apiUrl.isBlank() && storage.orderingJourney.isBlank()) {
             val configuration = CoreConfiguration()
@@ -36,7 +37,7 @@ class SampleApplication : Application() {
             webOrderingJourneyUrl = storage.orderingJourney
         )
         RealifeTech.configureSdk(this, configuration)
-        registerDeviceForSDK(appVersion)
+        registerDeviceForSDK()
 
 //  Set Colors via code
         // EXAMPLE 1
@@ -46,10 +47,10 @@ class SampleApplication : Application() {
 //            .setColor(ContextCompat.getColor(this, R.color.colorAccent), ColorType.ON_PRIMARY)
     }
 
-    private fun registerDeviceForSDK(appVersion: String) {
+    private fun registerDeviceForSDK() {
         GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
-                RealifeTech.getGeneral().registerDevice(appVersion)
+                RealifeTech.getGeneral().registerDevice()
             }
         }
     }

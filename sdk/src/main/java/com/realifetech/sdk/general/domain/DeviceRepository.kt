@@ -15,11 +15,6 @@ class DeviceRepository @Inject constructor(
     private val dataSource: DeviceNetworkDataSource,
     private val oAuthManager: Lazy<OAuthManager>
 ) {
-    private lateinit var appVersion: String
-
-    fun setUpAppVersion(version: String) {
-        appVersion = version
-    }
 
     private lateinit var result: Result<Boolean>
     private val retryPolicy: RetryPolicy =
@@ -33,7 +28,7 @@ class DeviceRepository @Inject constructor(
     fun registerDevice(): Result<Boolean> {
         val accessToken = oAuthManager.get()
         accessToken.ensureActive()
-        dataSource.registerDevice(appVersion) { error, registered ->
+        dataSource.registerDevice { error, registered ->
             error?.let {
                 accessToken.ensureActive()
                 Log.e("DeviceRepository", "Register device Error: ${it.message}")

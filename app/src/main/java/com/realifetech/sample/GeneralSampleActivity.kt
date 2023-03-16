@@ -56,7 +56,7 @@ class GeneralSampleActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                RealifeTech.getGeneral().registerDevice(appVersion)
+                RealifeTech.getGeneral().registerDevice()
             }
 
             deviceIdentifierTextView.text =
