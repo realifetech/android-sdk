@@ -17,10 +17,12 @@ object GeneralModule {
     @Provides
     fun deviceRepositoryNetworkDataSource(
         apolloClient: ApolloClient,
-        context: Context
+        context: Context,
+        configuration: ConfigurationStorage
     ): DeviceNetworkDataSource = DeviceNetworkDataSourceImpl(
         apolloClient,
-        PhysicalDeviceInfo(context)
+        PhysicalDeviceInfo(context),
+        configuration
     )
 
 }
