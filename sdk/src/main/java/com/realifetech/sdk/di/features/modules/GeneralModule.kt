@@ -21,7 +21,8 @@ object GeneralModule {
         configurationStorage: ConfigurationStorage
     ): DeviceNetworkDataSource = DeviceNetworkDataSourceImpl(
         apolloClient,
-        PhysicalDeviceInfo(context, configurationStorage)
+        PhysicalDeviceInfo(context, configurationStorage),
+        configurationStorage
     )
 
 }
