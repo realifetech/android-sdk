@@ -8,12 +8,14 @@ import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.realifetech.SyncDeviceMutation
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.type.DeviceInput
 import com.realifetech.type.DeviceTokenInput
 
 internal class DeviceNetworkDataSourceImpl(
     private val apolloClient: ApolloClient,
     private val deviceInfo: DeviceInfo,
+    private val configuration: ConfigurationStorage
 ) : DeviceNetworkDataSource {
 
     private val input: DeviceInput
@@ -34,6 +36,7 @@ internal class DeviceNetworkDataSourceImpl(
     override fun registerDevice(
         callback: (error: Exception?, registered: Boolean?) -> Unit
     ) {
+        configuration.deviceId = deviceInfo.deviceId
         try {
             val response = apolloClient.mutate(SyncDeviceMutation(input))
             response.enqueue(object : ApolloCall.Callback<SyncDeviceMutation.Data>() {
