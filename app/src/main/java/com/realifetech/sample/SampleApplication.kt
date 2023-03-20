@@ -16,15 +16,17 @@ class SampleApplication : Application() {
         val storage = DeviceConfigurationStorage(this)
         // Prefill the storage with default values from the configuration
         if (storage.graphQl.isBlank() && storage.apiUrl.isBlank() && storage.orderingJourney.isBlank()) {
-            val configuration = CoreConfiguration()
+            val configuration = CoreConfiguration(appVersion = BuildConfig.VERSION_NAME)
             storage.graphQl = configuration.graphApiUrl
             storage.apiUrl = configuration.apiUrl
             storage.appCode = configuration.appCode
             storage.clientSecret = configuration.clientSecret
             storage.orderingJourney = configuration.webOrderingJourneyUrl
+            storage.appVersion = configuration.appVersion
         }
         val configuration = CoreConfiguration(
             apiUrl = storage.apiUrl,
+            appVersion = BuildConfig.VERSION_NAME,
             graphApiUrl = storage.graphQl,
             clientSecret = storage.clientSecret,
             appCode = storage.appCode,

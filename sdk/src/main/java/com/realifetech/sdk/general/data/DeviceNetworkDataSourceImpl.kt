@@ -1,44 +1,56 @@
 package com.realifetech.sdk.general.data
 
+import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.api.Response
+import com.apollographql.apollo.api.toInput
+import com.apollographql.apollo.exception.ApolloException
+import com.apollographql.apollo.exception.ApolloHttpException
+import com.realifetech.SyncDeviceMutation
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
-import com.realifetech.sdk.core.data.model.device.DeviceRegisterRequest
-import com.realifetech.sdk.core.data.model.device.DeviceRegisterResponse
-import com.realifetech.sdk.core.data.model.exceptions.NetworkException
-import com.realifetech.sdk.core.network.RealifetechApiV3Service
-import com.realifetech.sdk.core.utils.Result
+import com.realifetech.type.DeviceInput
+import com.realifetech.type.DeviceTokenInput
 
 internal class DeviceNetworkDataSourceImpl(
-    private val realifetechApiV3Service: RealifetechApiV3Service,
+    private val apolloClient: ApolloClient,
     private val deviceInfo: DeviceInfo,
-    private val configuration: ConfigurationStorage,
+    private val configuration: ConfigurationStorage
 ) : DeviceNetworkDataSource {
 
-    private val registerRequest: DeviceRegisterRequest
+    private val input: DeviceInput
         get() {
-            return DeviceRegisterRequest(
-                deviceInfo.deviceId,
-                ANDROID,
-                deviceInfo.appVersionName,
-                deviceInfo.osVersion,
-                deviceInfo.model,
-                deviceInfo.manufacturer,
-                deviceInfo.screenWidthPixels,
-                deviceInfo.screenHeightPixels,
-                deviceInfo.isBluetoothEnabled,
-                deviceInfo.isWifiOn,
-                deviceInfo.isWifiConnected
+            return DeviceInput(
+                token = deviceInfo.deviceId,
+                type = ANDROID.toInput(),
+                appVersion = deviceInfo.appVersionName.toInput(),
+                osVersion = deviceInfo.osVersion.toInput(),
+                model = deviceInfo.model.toInput(),
+                manufacturer = deviceInfo.manufacturer.toInput(),
+                bluetoothOn = deviceInfo.isBluetoothEnabled.toInput(),
+                wifiConnected = deviceInfo.isWifiOn.toInput(),
+                tokens = listOf<DeviceTokenInput?>().toInput()
             )
         }
 
-    override fun registerDevice(): Result<DeviceRegisterResponse> {
+    override fun registerDevice(callback: (error: Exception?, registered: Boolean?) -> Unit) {
         configuration.deviceId = deviceInfo.deviceId
-        val networkResponse = realifetechApiV3Service.registerDevice(registerRequest).execute()
-        return if (networkResponse.isSuccessful) {
-            val response = networkResponse.body() ?: DeviceRegisterResponse(-1, "", "")
-            Result.Success(response)
-        } else {
-            val errorMessage = networkResponse.errorBody()?.string().orEmpty()
-            Result.Error(NetworkException(networkResponse.code(), errorMessage))
+        try {
+            val response = apolloClient.mutate(SyncDeviceMutation(input))
+            response.enqueue(object : ApolloCall.Callback<SyncDeviceMutation.Data>() {
+                override fun onResponse(response: Response<SyncDeviceMutation.Data>) {
+                    callback.invoke(
+                        null,
+                        response?.data?.syncDevice?.acknowledged
+                    )
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    callback.invoke(e, null)
+                }
+
+            })
+        } catch (exception: ApolloHttpException) {
+            callback.invoke(exception, null)
         }
     }
 
