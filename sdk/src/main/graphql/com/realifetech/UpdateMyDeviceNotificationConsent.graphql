@@ -1,0 +1,9 @@
+mutation updateMyDeviceNotificationConsent($input: DeviceNotificationConsentInput!) {
+    updateMyDeviceNotificationConsent(input: $input) {
+        id
+        enabled
+        consent {
+            ...NotificationConsentFragment
+        }
+    }
+}
