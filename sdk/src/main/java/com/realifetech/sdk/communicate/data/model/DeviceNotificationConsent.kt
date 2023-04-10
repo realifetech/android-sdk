@@ -5,3 +5,4 @@ data class DeviceNotificationConsent(
     val enabled: Boolean,
     val consent: NotificationConsent
 )
+

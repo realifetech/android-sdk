@@ -13,6 +13,14 @@ data class NotificationConsent(
     val translations: List<Translation>
 )
 
+fun emptyNotificationConsent() = NotificationConsent(
+    id = "",
+    name = "",
+    sortId = 0,
+    status = NotificationConsentStatus.ACTIVE,
+    translations = emptyList()
+)
+
 fun NotificationConsentFragment.asModel() = NotificationConsent(
     id = id,
     name = name,

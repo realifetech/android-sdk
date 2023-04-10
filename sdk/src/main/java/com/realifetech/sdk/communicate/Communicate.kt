@@ -71,6 +71,8 @@ class Communicate @Inject constructor(
         } else return
     }
 
+    fun getNotificationConsents(){}
+
 
     companion object {
         private const val ID = "me"
