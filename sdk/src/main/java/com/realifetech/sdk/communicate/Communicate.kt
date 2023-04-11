@@ -75,11 +75,11 @@ class Communicate @Inject constructor(
         } else return
     }
 
-    fun getNotificationConsents(): List<NotificationConsent>{
+    fun getNotificationConsents(): Result<List<NotificationConsent>> {
         return pushConsentRepository.getNotificationConsents()
     }
 
-    fun getMyNotificationConsents(): List<DeviceNotificationConsent> {
+    fun getMyNotificationConsents(): Result<List<DeviceNotificationConsent>> {
         return pushConsentRepository.getMyNotificationConsents()
     }
 

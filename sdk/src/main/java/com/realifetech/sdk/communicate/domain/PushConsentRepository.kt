@@ -9,31 +9,33 @@ import javax.inject.Inject
 
 class PushConsentRepository @Inject constructor(private val dataSource: PushConsentDataSource) {
     private lateinit var result: Result<Boolean>
+    private lateinit var notificationConsentResult: Result<List<NotificationConsent>>
+    private lateinit var deviceNotificationConsentResult: Result<List<DeviceNotificationConsent>>
 
-    fun getNotificationConsents(): List<NotificationConsent> {
-        var notificationConsentList = emptyList<NotificationConsent>()
+    fun getNotificationConsents(): Result<List<NotificationConsent>> {
         dataSource.getNotificationConsents { error, response ->
             error?.let {
                 Log.e("PushConsentRepository", "Get notification consents Error: ${it.message}")
+                notificationConsentResult = Result.Error(it)
             }
             response?.let {
-                notificationConsentList = it.filterNotNull()
+                notificationConsentResult = Result.Success(it.filterNotNull())
             }
         }
-        return notificationConsentList
+        return notificationConsentResult
     }
 
-    fun getMyNotificationConsents(): List<DeviceNotificationConsent> {
-        var deviceNotificationConsentList = emptyList<DeviceNotificationConsent>()
+    fun getMyNotificationConsents(): Result<List<DeviceNotificationConsent>> {
         dataSource.getMyNotificationConsents { error, response ->
             error?.let {
                 Log.e("PushConsentRepository", "Get my notification consents Error: ${it.message}")
+                deviceNotificationConsentResult= Result.Error(it)
             }
             response?.let {
-                deviceNotificationConsentList = it.filterNotNull()
+                deviceNotificationConsentResult = Result.Success(it.filterNotNull())
             }
         }
-        return deviceNotificationConsentList
+        return deviceNotificationConsentResult
     }
 
     fun updateMyNotificationConsent(id: String, enabled: Boolean): Result<Boolean> {
