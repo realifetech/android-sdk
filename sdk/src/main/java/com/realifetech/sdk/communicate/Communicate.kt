@@ -5,6 +5,9 @@ import android.util.Log
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.TokenBody
+import com.realifetech.sdk.communicate.data.model.DeviceNotificationConsent
+import com.realifetech.sdk.communicate.data.model.NotificationConsent
+import com.realifetech.sdk.communicate.domain.PushConsentRepository
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.Result
@@ -18,7 +21,8 @@ class Communicate @Inject constructor(
     private val dispatcherIO: CoroutineDispatcher,
     private val dispatcherMain: CoroutineDispatcher,
     private val analytics: Analytics,
-    private val context: Context
+    private val context: Context,
+    private val pushConsentRepository: PushConsentRepository
 ) {
 
     fun trackPush(
@@ -71,7 +75,17 @@ class Communicate @Inject constructor(
         } else return
     }
 
-    fun getNotificationConsents(){}
+    fun getNotificationConsents(): List<NotificationConsent>{
+        return pushConsentRepository.getNotificationConsents()
+    }
+
+    fun getMyNotificationConsents(): List<DeviceNotificationConsent> {
+        return pushConsentRepository.getMyNotificationConsents()
+    }
+
+    fun updateMyNotificationConsent(id: String, enabled: Boolean): Result<Boolean> {
+        return pushConsentRepository.updateMyNotificationConsent(id, enabled)
+    }
 
 
     companion object {
