@@ -78,7 +78,7 @@ class PushConsentDataSourceImpl : PushConsentDataSource {
     override fun updateMyNotificationConsent(
         id: String,
         enabled: Boolean,
-        callback: (error: Exception?, success: Result.Success<Boolean>?) -> Unit
+        callback: (error: Exception?, success: Boolean?) -> Unit
     ) {
         val input = DeviceNotificationConsentInput(notificationConsentId = id, enabled = enabled)
         try {
@@ -86,8 +86,8 @@ class PushConsentDataSourceImpl : PushConsentDataSource {
                 .enqueue(object : ApolloCall.Callback<UpdateMyDeviceNotificationConsentMutation.Data>() {
                     override fun onResponse(response: Response<UpdateMyDeviceNotificationConsentMutation.Data>) {
                         response.data?.updateMyDeviceNotificationConsent?.let {
-                            callback.invoke(null, Result.Success(true))
-                        } ?: callback.invoke(null, Result.Success(false))
+                            callback.invoke(null,true)
+                        } ?: callback.invoke(null, false)
                     }
 
                     override fun onFailure(e: ApolloException) {
