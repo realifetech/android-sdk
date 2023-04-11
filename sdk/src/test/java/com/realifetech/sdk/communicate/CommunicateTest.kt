@@ -5,6 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.RegisterPushNotificationsResponse
+import com.realifetech.sdk.communicate.domain.PushConsentRepository
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.USER
@@ -51,6 +52,9 @@ class CommunicateTest {
     @RelaxedMockK
     lateinit var context: Context
 
+    @RelaxedMockK
+    lateinit var pushConsentRepository: PushConsentRepository
+
     private lateinit var communicate: Communicate
     private lateinit var mockedResult: Response<RegisterPushNotificationsResponse>
     private lateinit var callback: (error: Exception?, response: Boolean) -> Unit
@@ -64,7 +68,8 @@ class CommunicateTest {
             testDispatcher,
             testDispatcher,
             analytics,
-            context
+            context,
+            pushConsentRepository
         )
         mockedResult = mockk()
         callback = mockk()

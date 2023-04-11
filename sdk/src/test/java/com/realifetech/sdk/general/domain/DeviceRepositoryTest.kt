@@ -32,19 +32,17 @@ class DeviceRepositoryTest {
 
     @Test
     fun `register Device results successfully`() {
-        every { deviceNetworkDataSource.registerDevice() } returns Result.Success(
-            deviceRegisterResponse
-        )
+        every { deviceRepository.registerDevice() } returns Result.Success(true)
         every { oAuthManager.ensureActive() }returns Unit
         val result = deviceRepository.registerDevice()
         assert(result is Result.Success)
         assertEquals(deviceRegisterResponse, (result as Result.Success).data)
-        verify { deviceNetworkDataSource.registerDevice() }
+        verify { deviceRepository.registerDevice() }
     }
 
     @Test
     fun `register Device result with error `() {
-        every { deviceNetworkDataSource.registerDevice() }
+        every { deviceRepository.registerDevice() }
             .returns(Result.Error(networkError))
         val result = deviceRepository.registerDevice()
         assert(result is Result.Error)
@@ -52,6 +50,6 @@ class DeviceRepositoryTest {
         assertEquals(networkError.message, result.exception.message)
         verify {
             oAuthManager.ensureActive()
-            deviceNetworkDataSource.registerDevice() }
+            deviceRepository.registerDevice() }
     }
 }

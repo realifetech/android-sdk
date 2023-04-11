@@ -1,10 +1,12 @@
 package com.realifetech.sdk.general.data
 
+import com.apollographql.apollo.ApolloClient
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.data.model.device.DeviceRegisterResponse
 import com.realifetech.sdk.core.data.model.exceptions.NetworkException
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.Result
+import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.mocks.GeneralMocks.deviceRegisterResponse
 import com.realifetech.sdk.general.mocks.GeneralMocks.deviceRequest
 import com.realifetech.sdk.general.mocks.GeneralMocks.errorBody
@@ -29,6 +31,12 @@ class DeviceNetworkDataSourceImplTest {
     @RelaxedMockK
     lateinit var realifetechApiV3Service: RealifetechApiV3Service
 
+    @RelaxedMockK
+    lateinit var apolloClient: ApolloClient
+
+    @RelaxedMockK
+    lateinit var deviceRepository: DeviceRepository
+
     private lateinit var deviceNetworkDataSource: DeviceNetworkDataSourceImpl
     private lateinit var registerDeviceResponse: Response<DeviceRegisterResponse>
 
@@ -36,7 +44,7 @@ class DeviceNetworkDataSourceImplTest {
     fun setUp() {
         MockKAnnotations.init(this)
         deviceNetworkDataSource =
-            DeviceNetworkDataSourceImpl(realifetechApiV3Service, deviceInfo, configurationStorage)
+            DeviceNetworkDataSourceImpl(apolloClient, deviceInfo, configurationStorage)
         initMockedFields()
 
     }
@@ -64,7 +72,7 @@ class DeviceNetworkDataSourceImplTest {
         } returns registerDeviceResponse
         every { registerDeviceResponse.isSuccessful } returns true
         every { registerDeviceResponse.body() } returns deviceRegisterResponse
-        val result: Result<DeviceRegisterResponse> = deviceNetworkDataSource.registerDevice()
+        val result: Result<Boolean> = deviceRepository.registerDevice()
         assert(result is Result.Success)
         assertEquals(deviceRegisterResponse, (result as Result.Success).data)
         verify { configurationStorage.deviceId = deviceRequest.token }
@@ -75,7 +83,7 @@ class DeviceNetworkDataSourceImplTest {
     fun `register Device results successfully with null response`() {
         registerSuccessfully()
         every { registerDeviceResponse.body() } returns null
-        val result: Result<DeviceRegisterResponse> = deviceNetworkDataSource.registerDevice()
+        val result: Result<Boolean> = deviceRepository.registerDevice()
         assert(result is Result.Success)
         assertEquals(DeviceRegisterResponse(-1, "", ""), (result as Result.Success).data)
         verify { configurationStorage.deviceId = deviceRequest.token }
@@ -93,7 +101,7 @@ class DeviceNetworkDataSourceImplTest {
     fun `register Device results with failure`() {
         registerFail()
         every { registerDeviceResponse.errorBody()?.string() } returns errorBody.message
-        val result: Result<DeviceRegisterResponse> = deviceNetworkDataSource.registerDevice()
+        val result: Result<Boolean> = deviceRepository.registerDevice()
         assert(result is Result.Error)
         assert((result as Result.Error).exception is NetworkException)
         assertEquals(errorBody.message, result.exception.message)
@@ -105,7 +113,7 @@ class DeviceNetworkDataSourceImplTest {
     fun `register Device results with failure and null message`() {
         registerFail()
         every { registerDeviceResponse.errorBody()?.string() } returns null
-        val result: Result<DeviceRegisterResponse> = deviceNetworkDataSource.registerDevice()
+        val result: Result<Boolean> = deviceRepository.registerDevice()
         assert(result is Result.Error)
         assert((result as Result.Error).exception is NetworkException)
         assertEquals("", result.exception.message)
@@ -117,7 +125,7 @@ class DeviceNetworkDataSourceImplTest {
     fun `register Device results with failure and null error body`() {
         registerFail()
         every { registerDeviceResponse.errorBody() } returns null
-        val result: Result<DeviceRegisterResponse> = deviceNetworkDataSource.registerDevice()
+        val result: Result<Boolean> = deviceRepository.registerDevice()
         assert(result is Result.Error)
         assert((result as Result.Error).exception is NetworkException)
         assertEquals("", result.exception.message)
