@@ -6,7 +6,6 @@ import com.realifetech.fragment.NotificationConsentFragment
 
 data class Translation(val language: String, val title: String)
 
-
 fun GetScreenByIdQuery.Translation.mapToTranslation(): Translation =
     Translation(this.language.name, this.title)
 
