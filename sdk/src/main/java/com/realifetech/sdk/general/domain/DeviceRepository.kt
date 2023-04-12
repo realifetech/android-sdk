@@ -5,6 +5,7 @@ import com.realifetech.sdk.core.domain.LinearRetryPolicy
 import com.realifetech.sdk.core.domain.OAuthManager
 import com.realifetech.sdk.core.domain.RetryPolicy
 import com.realifetech.sdk.core.utils.Result
+import com.realifetech.sdk.general.data.DeviceConsent
 import com.realifetech.sdk.general.data.DeviceNetworkDataSource
 import dagger.Lazy
 import java.util.concurrent.TimeUnit
@@ -15,6 +16,7 @@ class DeviceRepository @Inject constructor(
     private val oAuthManager: Lazy<OAuthManager>
 ) {
     private lateinit var result: Result<Boolean>
+    private lateinit var updateMyDeviceConsentResult: Result<Boolean>
 
     private val retryPolicy: RetryPolicy =
         LinearRetryPolicy(DEVICE_REGISTRATION_RETRY_TIME_MILLISECONDS) {
@@ -39,6 +41,19 @@ class DeviceRepository @Inject constructor(
             }
         }
         return result
+    }
+
+    fun updateMyDeviceConsent(deviceConsent: DeviceConsent): Result<Boolean>{
+        dataSource.updateMyDeviceConsent(deviceConsent) { error, result ->
+            error?.let {
+                Log.e("DeviceRepository", "Update my device consent Error: ${it.message}")
+                updateMyDeviceConsentResult = Result.Error(it)
+            }
+            result?.let {
+                updateMyDeviceConsentResult = Result.Success(it)
+            }
+        }
+        return updateMyDeviceConsentResult
     }
 
     companion object {

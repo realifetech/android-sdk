@@ -7,6 +7,7 @@ import com.realifetech.sdk.core.data.model.color.ColorType
 import com.realifetech.sdk.core.data.model.color.ColorType.*
 import com.realifetech.sdk.core.utils.ColorPallet
 import com.realifetech.sdk.core.utils.Result
+import com.realifetech.sdk.general.data.DeviceConsent
 import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
 import javax.inject.Inject
@@ -41,6 +42,9 @@ class General @Inject constructor(
         }
     }
 
+    fun updateMyDeviceConsent(deviceConsent: DeviceConsent) {
+        deviceRepository.updateMyDeviceConsent(deviceConsent)
+    }
 
     fun setColor(@ColorInt color: Int, forType: ColorType) {
         colorPallet.apply {
