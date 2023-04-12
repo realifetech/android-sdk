@@ -16,14 +16,6 @@ enum class LocationGranularStatus {
     ALWAYS, APPINUSE
 }
 
-fun getLocationGranularStatus(status: String): LocationGranularStatus {
-    return if (status == LocationGranular.ALWAYS.toString()) {
-        LocationGranularStatus.ALWAYS
-    } else {
-        LocationGranularStatus.APPINUSE
-    }
-}
-
 fun getLocationGranular(status: String): LocationGranular {
     return if (status == LocationGranularStatus.ALWAYS.toString()) {
         LocationGranular.ALWAYS
@@ -31,4 +23,3 @@ fun getLocationGranular(status: String): LocationGranular {
         LocationGranular.APPINUSE
     }
 }
-
