@@ -2,7 +2,6 @@ package com.realifetech.sdk.general.data
 
 import com.realifetech.type.LocationGranular
 
-
 data class DeviceConsent(
     val calendar: Boolean,
     val camera: Boolean,
