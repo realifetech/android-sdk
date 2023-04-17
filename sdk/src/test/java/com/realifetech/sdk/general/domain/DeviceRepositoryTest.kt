@@ -28,24 +28,18 @@ class DeviceRepositoryTest {
     @RelaxedMockK
     lateinit var oAuthManager: OAuthManager
 
-    // Rule para forzar la ejecución de tareas en el hilo principal
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Objeto a probar
     lateinit var deviceRepository: DeviceRepository
 
-    // Datos de prueba
     lateinit var deviceConsent: DeviceConsent
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         deviceRepository = DeviceRepository(deviceNetworkDataSource) { oAuthManager }
-        // Inicialización de Mockito
         MockitoAnnotations.initMocks(this)
-
-        // Creación de los datos de prueba
         deviceConsent = DeviceConsent(true, true, true, LocationGranularStatus.ALWAYS, true, true)
     }
 
