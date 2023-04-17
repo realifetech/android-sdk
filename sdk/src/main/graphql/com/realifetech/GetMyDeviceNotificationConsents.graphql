@@ -1,0 +1,9 @@
+query getMyDeviceNotificationConsents {
+    getMyDeviceNotificationConsents {
+        id
+        enabled
+        consent {
+            ...NotificationConsentFragment
+        }
+    }
+}
