@@ -12,6 +12,16 @@ private String getCommitMessages() {
     return note.toString()
 }
 
+private Integer getBuildNumber() {
+    return "git rev-list HEAD --count".execute().text.trim().toInteger()
+}
+
+private static String generateVersionName() {
+    def testVersionName = "git describe --abbrev=0 --tags".execute().text.trim()
+    return testVersionName.toString()
+}
+
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion "30.0.3"
