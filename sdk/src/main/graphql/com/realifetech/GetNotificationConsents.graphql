@@ -1,0 +1,5 @@
+query getNotificationConsents($filter: NotificationConsentFilter) {
+    getNotificationConsents(filter: $filter) {
+        ...NotificationConsentFragment
+    }
+}

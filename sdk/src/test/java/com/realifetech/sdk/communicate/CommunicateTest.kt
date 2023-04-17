@@ -5,6 +5,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.RegisterPushNotificationsResponse
+import com.realifetech.sdk.communicate.data.model.NotificationConsent
+import com.realifetech.sdk.communicate.data.model.NotificationConsentStatus
+import com.realifetech.sdk.communicate.data.model.emptyNotificationConsent
+import com.realifetech.sdk.communicate.domain.PushConsentRepository
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.USER
@@ -51,6 +55,9 @@ class CommunicateTest {
     @RelaxedMockK
     lateinit var context: Context
 
+    @RelaxedMockK
+    lateinit var pushConsentRepository: PushConsentRepository
+
     private lateinit var communicate: Communicate
     private lateinit var mockedResult: Response<RegisterPushNotificationsResponse>
     private lateinit var callback: (error: Exception?, response: Boolean) -> Unit
@@ -64,7 +71,8 @@ class CommunicateTest {
             testDispatcher,
             testDispatcher,
             analytics,
-            context
+            context,
+            pushConsentRepository
         )
         mockedResult = mockk()
         callback = mockk()
@@ -128,6 +136,40 @@ class CommunicateTest {
         justRun { communicate.resendPendingToken() }
     }
 
+    @Test
+    fun `when call getNotificationConsents() and notification consent list is not empty, then return Success`() = runBlocking {
+        val quoteList = listOf(dummyNotificationConsent())
+
+        coEvery { pushConsentRepository.getNotificationConsents() } returns Result.Success(quoteList)
+
+        val response = communicate.getNotificationConsents()
+
+        assertEquals(response, Result.Success(quoteList))
+    }
+
+    @Test
+    fun `when call getMyNotificationConsents() and notification consent list is null, then return Error`() = runBlocking {
+        val error: Exception = Exception("Error message")
+
+        coEvery { pushConsentRepository.getMyNotificationConsents() } returns Result.Error(error)
+
+        val response = communicate.getMyNotificationConsents()
+
+        assertEquals(response, Result.Error(error))
+    }
+
+    @Test
+    fun `when call updateMyNotificationConsent() and response value is not null, then return Success(value)`() = runBlocking {
+        val value: Boolean? = true
+
+        coEvery { pushConsentRepository.updateMyNotificationConsent(CommunicateMocks.ID, true) } returns Result.Success(value)
+
+        val response = communicate.updateMyNotificationConsent(CommunicateMocks.ID, true)
+
+        assertEquals(response, Result.Success(value))
+    }
+
+
     private fun registerCall(isSuccessful: Boolean = true) {
         every { context.hasNetworkConnection } returns true
         every {
@@ -138,5 +180,13 @@ class CommunicateTest {
         } returns mockedResult
         every { mockedResult.isSuccessful } returns isSuccessful
     }
+
+    private fun dummyNotificationConsent() = NotificationConsent(
+        id = "",
+        name = "",
+        sortId = 0,
+        status = NotificationConsentStatus.ACTIVE,
+        translations = emptyList()
+    )
 
 }

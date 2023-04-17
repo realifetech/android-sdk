@@ -45,9 +45,7 @@ class DeviceRepositoryTest {
 
     @Test
     fun `register Device results successfully`() {
-        every { deviceRepository.registerDevice() } returns Result.Success(
-            deviceRegisterResponse
-        )
+        every { deviceRepository.registerDevice() } returns Result.Success(true)
         every { oAuthManager.ensureActive() }returns Unit
         val result = deviceRepository.registerDevice()
         assert(result is Result.Success)
