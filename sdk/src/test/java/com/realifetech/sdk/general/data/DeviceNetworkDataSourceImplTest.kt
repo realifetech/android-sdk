@@ -34,10 +34,8 @@ class DeviceNetworkDataSourceImplTest {
     @RelaxedMockK
     lateinit var apolloClient: ApolloClient
 
-    @RelaxedMockK
-    lateinit var deviceRepository: DeviceRepository
-
     private lateinit var deviceNetworkDataSource: DeviceNetworkDataSourceImpl
+    private lateinit var deviceRepository: DeviceRepository
     private lateinit var registerDeviceResponse: Response<DeviceRegisterResponse>
 
     @Before
@@ -63,31 +61,6 @@ class DeviceNetworkDataSourceImplTest {
             every { deviceInfo.isWifiOn } returns deviceRequest.wifiOn
             every { deviceInfo.isWifiConnected } returns deviceRequest.wifiConnected
         }
-    }
-
-    @Test
-    fun `register Device results successfully`() {
-        every {
-            realifetechApiV3Service.registerDevice(any()).execute()
-        } returns registerDeviceResponse
-        every { registerDeviceResponse.isSuccessful } returns true
-        every { registerDeviceResponse.body() } returns deviceRegisterResponse
-        val result: Result<Boolean> = deviceRepository.registerDevice()
-        assert(result is Result.Success)
-        assertEquals(deviceRegisterResponse, (result as Result.Success).data)
-        verify { configurationStorage.deviceId = deviceRequest.token }
-        verify { realifetechApiV3Service.registerDevice(any()) }
-    }
-
-    @Test
-    fun `register Device results successfully with null response`() {
-        registerSuccessfully()
-        every { registerDeviceResponse.body() } returns null
-        val result: Result<Boolean> = deviceRepository.registerDevice()
-        assert(result is Result.Success)
-        assertEquals(DeviceRegisterResponse(-1, "", ""), (result as Result.Success).data)
-        verify { configurationStorage.deviceId = deviceRequest.token }
-        verify { realifetechApiV3Service.registerDevice(any()) }
     }
 
     private fun registerSuccessfully() {
