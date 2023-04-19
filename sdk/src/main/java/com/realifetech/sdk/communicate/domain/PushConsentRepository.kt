@@ -6,39 +6,21 @@ import com.realifetech.sdk.communicate.data.model.DeviceNotificationConsent
 import com.realifetech.sdk.communicate.data.model.NotificationConsent
 import com.realifetech.sdk.core.utils.Result
 import javax.inject.Inject
+import javax.security.auth.callback.Callback
 
 class PushConsentRepository @Inject constructor(private val dataSource: PushConsentDataSource) {
     private lateinit var result: Result<Boolean>
-    private lateinit var notificationConsentResult: Result<List<NotificationConsent>>
-    private lateinit var deviceNotificationConsentResult: Result<List<DeviceNotificationConsent>>
 
-    fun getNotificationConsents(): Result<List<NotificationConsent>> {
-        dataSource.getNotificationConsents { error, response ->
-            error?.let {
-                Log.e("PushConsentRepository", "Get notification consents Error: ${it.message}")
-                notificationConsentResult = Result.Error(it)
-            }
-            response?.let {
-                notificationConsentResult = Result.Success(it.filterNotNull())
-            }
-        }
-        return notificationConsentResult
+    fun getNotificationConsents(callback: (error: Exception?, response: List<NotificationConsent?>?) -> Unit) {
+        dataSource.getNotificationConsents(callback)
     }
 
-    fun getMyNotificationConsents(): Result<List<DeviceNotificationConsent>> {
-        dataSource.getMyNotificationConsents { error, response ->
-            error?.let {
-                Log.e("PushConsentRepository", "Get my notification consents Error: ${it.message}")
-                deviceNotificationConsentResult= Result.Error(it)
-            }
-            response?.let {
-                deviceNotificationConsentResult = Result.Success(it.filterNotNull())
-            }
-        }
-        return deviceNotificationConsentResult
+    fun getMyNotificationConsents(callback: (error: Exception?, response: List<DeviceNotificationConsent?>?) -> Unit) {
+        dataSource.getMyNotificationConsents(callback)
     }
 
     fun updateMyNotificationConsent(id: String, enabled: Boolean): Result<Boolean> {
+        result = Result.Error(Exception("Unknown error"))
         dataSource.updateMyNotificationConsent(id, enabled) { error, success ->
             error?.let {
                 Log.e("PushConsentRepository", "Update my notification consents Error: ${it.message}")

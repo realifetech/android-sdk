@@ -63,30 +63,34 @@ internal class DeviceNetworkDataSourceImpl(
         deviceConsent: DeviceConsent,
         callback: (error: Exception?, result: Boolean?) -> Unit
     ) {
-        val input = DeviceConsentInput(
-            locationCapture = deviceConsent.locationCapture.toInput(),
-            locationGranular = getLocationGranular(deviceConsent.locationGranular.toString()).toInput(),
-            camera = deviceConsent.camera.toInput(),
-            calendar = deviceConsent.calendar.toInput(),
-            photoSharing = deviceConsent.photoSharing.toInput(),
-            pushNotification = deviceConsent.pushNotification.toInput()
-        )
 
-        try {
-            apolloClient.mutate(UpdateMyDeviceConsentMutation(input))
-                .enqueue(object : ApolloCall.Callback<UpdateMyDeviceConsentMutation.Data>() {
-                    override fun onResponse(response: Response<UpdateMyDeviceConsentMutation.Data>) {
-                        response.data?.let { callback.invoke(null, true) } ?: callback.invoke( Exception("Apollo response no data exception"), null) }
+        if (deviceConsent != null) {
+            val input = DeviceConsentInput(
+                locationCapture = deviceConsent.locationCapture.toInput(),
+                locationGranular = getLocationGranular(deviceConsent.locationGranular.toString()).toInput(),
+                camera = deviceConsent.camera.toInput(),
+                calendar = deviceConsent.calendar.toInput(),
+                photoSharing = deviceConsent.photoSharing.toInput(),
+                pushNotification = deviceConsent.pushNotification.toInput()
+            )
 
-                    override fun onFailure(e: ApolloException) {
-                        Log.e("Update my device consent", "${e.message}")
-                        callback.invoke(e, null)
-                    }
-                })
-        } catch (e: Exception) {
-            Log.e("Update my device consent", "${e.message}")
-            callback.invoke(e, null)
-        }
+            try {
+                apolloClient.mutate(UpdateMyDeviceConsentMutation(input))
+                    .enqueue(object : ApolloCall.Callback<UpdateMyDeviceConsentMutation.Data>() {
+                        override fun onResponse(response: Response<UpdateMyDeviceConsentMutation.Data>) {
+                            response.data?.let { callback.invoke(null, true) } ?: callback.invoke( Exception("Apollo response no data exception"), null) }
+
+                        override fun onFailure(e: ApolloException) {
+                            Log.e("Update my device consent", "${e.message}")
+                            callback.invoke(e, null)
+                        }
+                    })
+            } catch (e: Exception) {
+                Log.e("Update my device consent", "${e.message}")
+                callback.invoke(e, null)
+            }
+        } else return
+
     }
 
     private companion object {

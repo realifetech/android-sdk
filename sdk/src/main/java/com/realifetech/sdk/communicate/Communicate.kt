@@ -75,12 +75,12 @@ class Communicate @Inject constructor(
         } else return
     }
 
-    fun getNotificationConsents(): Result<List<NotificationConsent>> {
-        return pushConsentRepository.getNotificationConsents()
+    fun getNotificationConsents(callback: (error: Exception?, response: List<NotificationConsent?>?) -> Unit) {
+        pushConsentRepository.getNotificationConsents(callback)
     }
 
-    fun getMyNotificationConsents(): Result<List<DeviceNotificationConsent>> {
-        return pushConsentRepository.getMyNotificationConsents()
+    fun getMyNotificationConsents(callback: (error: Exception?, response: List<DeviceNotificationConsent?>?) -> Unit) {
+        pushConsentRepository.getMyNotificationConsents(callback)
     }
 
     fun updateMyNotificationConsent(id: String, enabled: Boolean): Result<Boolean> {
