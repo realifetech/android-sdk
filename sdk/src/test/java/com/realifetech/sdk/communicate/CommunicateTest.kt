@@ -7,8 +7,7 @@ import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.RegisterPushNotificationsResponse
 import com.realifetech.sdk.communicate.data.model.NotificationConsent
 import com.realifetech.sdk.communicate.data.model.NotificationConsentStatus
-import com.realifetech.sdk.communicate.data.model.emptyNotificationConsent
-import com.realifetech.sdk.communicate.domain.PushConsentRepository
+import com.realifetech.sdk.communicate.domain.NotificationConsentRepository
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks.USER
@@ -58,6 +57,9 @@ class CommunicateTest {
     @RelaxedMockK
     lateinit var pushConsentRepository: PushConsentRepository
 
+    @RelaxedMockK
+    lateinit var notificationConsentRepository: NotificationConsentRepository
+
     private lateinit var communicate: Communicate
     private lateinit var mockedResult: Response<RegisterPushNotificationsResponse>
     private lateinit var callback: (error: Exception?, response: Boolean) -> Unit
@@ -72,7 +74,8 @@ class CommunicateTest {
             testDispatcher,
             analytics,
             context,
-            pushConsentRepository
+            pushConsentRepository,
+            notificationConsentRepository
         )
         mockedResult = mockk()
         callback = mockk()
