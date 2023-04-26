@@ -9,7 +9,7 @@ import com.realifetech.sdk.analytics.domain.AnalyticsStorage
 import com.realifetech.sdk.audiences.Audiences
 import com.realifetech.sdk.audiences.repository.AudiencesRepository
 import com.realifetech.sdk.communicate.Communicate
-import com.realifetech.sdk.communicate.domain.PushConsentRepository
+import com.realifetech.sdk.communicate.domain.NotificationConsentRepository
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
@@ -73,7 +73,7 @@ object FeatureModule {
         realifetechApiV3Service: RealifetechApiV3Service,
         analytics: Analytics,
         context: Context,
-        pushConsentRepository: PushConsentRepository
+        notificationConsentRepository: NotificationConsentRepository
     ): Communicate {
         return Communicate(
             tokenStorage,
@@ -81,7 +81,7 @@ object FeatureModule {
             Dispatchers.IO,
             Dispatchers.Main,
             analytics, context,
-            pushConsentRepository
+            notificationConsentRepository
         )
     }
 

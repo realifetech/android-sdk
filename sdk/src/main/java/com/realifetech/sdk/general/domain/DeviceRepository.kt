@@ -43,17 +43,8 @@ class DeviceRepository @Inject constructor(
         return result
     }
 
-    fun updateMyDeviceConsent(deviceConsent: DeviceConsent): Result<Boolean>{
-        dataSource.updateMyDeviceConsent(deviceConsent) { error, result ->
-            error?.let {
-                Log.e("DeviceRepository", "Update my device consent Error: ${it.message}")
-                updateMyDeviceConsentResult = Result.Error(it)
-            }
-            result?.let {
-                updateMyDeviceConsentResult = Result.Success(it)
-            }
-        }
-        return updateMyDeviceConsentResult
+    fun updateMyDeviceConsent(deviceConsent: DeviceConsent, callback: (error: Exception?, result: Boolean?) -> Unit) {
+        dataSource.updateMyDeviceConsent(deviceConsent, callback)
     }
 
     companion object {

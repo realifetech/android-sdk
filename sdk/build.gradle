@@ -104,8 +104,8 @@ dependencies {
     // Testing
     testImplementation "junit:junit:$rootProject.ext.junit_version"
     testImplementation "org.mockito:mockito-core:$rootProject.ext.mockito_version"
-    testImplementation "org.mockito:mockito-core:$rootProject.ext.mockito_version"
     testImplementation "org.mockito:mockito-inline:$rootProject.ext.mockito_inline_version"
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
     testImplementation "io.mockk:mockk:$rootProject.ext.mockk_version"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation 'androidx.arch.core:core-testing:2.1.0'

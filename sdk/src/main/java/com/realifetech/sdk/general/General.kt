@@ -42,8 +42,8 @@ class General @Inject constructor(
         }
     }
 
-    fun updateMyDeviceConsent(deviceConsent: DeviceConsent): Result<Boolean> {
-        return deviceRepository.updateMyDeviceConsent(deviceConsent)
+    fun updateMyDeviceConsent(deviceConsent: DeviceConsent, callback: (error: Exception?, result: Boolean?) -> Unit) {
+        return deviceRepository.updateMyDeviceConsent(deviceConsent, callback)
     }
 
     fun setColor(@ColorInt color: Int, forType: ColorType) {
