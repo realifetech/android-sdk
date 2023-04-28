@@ -57,7 +57,7 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
     ) {
         try {
             val response = apolloClient.query(GetMyTicketQuery(id = id.toString())).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
             response.enqueue(object : ApolloCall.Callback<GetMyTicketQuery.Data>() {
                 override fun onResponse(response: Response<GetMyTicketQuery.Data>) {
                     val ticket = response.data?.getMyTicket?.fragments?.fragmentTicket?.asModel
@@ -88,7 +88,7 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
                 )
             )
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetUpcomingTicketsQuery.Data>() {
                 override fun onResponse(response: Response<GetUpcomingTicketsQuery.Data>) {
