@@ -30,7 +30,7 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
         try {
             val response = apolloClient.query(GetMyTicketsQuery(pageSize))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
                 .build()
 
             response.enqueue(object : ApolloCall.Callback<GetMyTicketsQuery.Data>() {
