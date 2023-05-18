@@ -30,7 +30,7 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
         try {
             val response = apolloClient.query(GetMyTicketsQuery(pageSize))
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
+                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                 .build()
 
             response.enqueue(object : ApolloCall.Callback<GetMyTicketsQuery.Data>() {
@@ -57,7 +57,7 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
     ) {
         try {
             val response = apolloClient.query(GetMyTicketQuery(id = id.toString())).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
+                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
             response.enqueue(object : ApolloCall.Callback<GetMyTicketQuery.Data>() {
                 override fun onResponse(response: Response<GetMyTicketQuery.Data>) {
                     val ticket = response.data?.getMyTicket?.fragments?.fragmentTicket?.asModel
@@ -88,7 +88,7 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
                 )
             )
                 .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
+                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK)
                 .build()
             response.enqueue(object : ApolloCall.Callback<GetUpcomingTicketsQuery.Data>() {
                 override fun onResponse(response: Response<GetUpcomingTicketsQuery.Data>) {
@@ -110,7 +110,7 @@ class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : Acc
     override fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit) {
         try {
             val response = apolloClient.query(GetMyTicketAuthsQuery()).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
+                .responseFetcher(ApolloResponseFetchers.CACHE_AND_NETWORK).build()
             response.enqueue(object : ApolloCall.Callback<GetMyTicketAuthsQuery.Data>() {
                 override fun onResponse(response: Response<GetMyTicketAuthsQuery.Data>) {
                     callback.invoke(
