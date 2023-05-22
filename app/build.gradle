@@ -21,7 +21,6 @@ private static String generateVersionName() {
     return testVersionName.toString()
 }
 
-
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion "30.0.3"

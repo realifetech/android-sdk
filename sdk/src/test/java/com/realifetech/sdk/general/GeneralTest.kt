@@ -49,7 +49,7 @@ class GeneralTest {
     @Test
     fun `register Device results with success`() {
         every { sdkInitializationPrecondition.checkContextInitialized() } returns Unit
-        every { deviceRepository.registerDevice() } returns Result.Success(deviceRegisterResponse)
+        every { deviceRepository.registerDevice() } returns Result.Success(true)
         val result = general.registerDevice()
         assert(result is Result.Success)
         assertEquals(deviceRegisterResponse, (result as Result.Success).data)

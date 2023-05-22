@@ -3,9 +3,9 @@ package com.realifetech.sdk.general.data
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.os.Build
+import android.provider.Settings
 import android.util.DisplayMetrics
-import com.google.android.gms.ads.identifier.AdvertisingIdClient
-import com.realifetech.realifetech_sdk.BuildConfig
+import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.utils.isWifiConnected
 import com.realifetech.sdk.core.utils.isWifiOn
 import javax.inject.Inject
@@ -15,7 +15,8 @@ import javax.inject.Inject
  * Will be excluded from unit test coverage as it contains context, use UI test instead.
  */
 open class PhysicalDeviceInfo @Inject constructor(
-    private val context: Context
+    private val context: Context,
+    private val configurationStorage: ConfigurationStorage
 ) : DeviceInfo {
 
     private val displayMetrics: DisplayMetrics by lazy {
@@ -23,10 +24,10 @@ open class PhysicalDeviceInfo @Inject constructor(
     }
 
     override val deviceId: String
-        get() = AdvertisingIdClient.getAdvertisingIdInfo(context).id + ":" + context.packageName
+        get() = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID) + ":" + context.packageName
 
     override val appVersionName: String
-        get() = "SDK_${BuildConfig.LIBRARY_PACKAGE_NAME}"
+        get() = configurationStorage.appVersion
 
     override val osVersion: String
         get() = Build.VERSION.RELEASE

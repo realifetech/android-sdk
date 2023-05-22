@@ -18,11 +18,11 @@ object GeneralModule {
     fun deviceRepositoryNetworkDataSource(
         apolloClient: ApolloClient,
         context: Context,
-        configuration: ConfigurationStorage
+        configurationStorage: ConfigurationStorage
     ): DeviceNetworkDataSource = DeviceNetworkDataSourceImpl(
         apolloClient,
-        PhysicalDeviceInfo(context),
-        configuration
+        PhysicalDeviceInfo(context, configurationStorage),
+        configurationStorage
     )
 
 }

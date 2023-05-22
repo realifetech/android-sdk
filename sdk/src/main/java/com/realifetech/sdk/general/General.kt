@@ -5,12 +5,11 @@ import androidx.annotation.ColorInt
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.data.model.color.ColorType
 import com.realifetech.sdk.core.data.model.color.ColorType.*
-import com.realifetech.sdk.core.data.model.device.DeviceRegisterResponse
 import com.realifetech.sdk.core.utils.ColorPallet
 import com.realifetech.sdk.core.utils.Result
+import com.realifetech.sdk.general.data.DeviceConsent
 import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
-import kotlinx.coroutines.selects.select
 import javax.inject.Inject
 
 class General @Inject constructor(
@@ -43,6 +42,9 @@ class General @Inject constructor(
         }
     }
 
+    fun updateMyDeviceConsent(deviceConsent: DeviceConsent, callback: (error: Exception?, result: Boolean?) -> Unit) {
+        return deviceRepository.updateMyDeviceConsent(deviceConsent, callback)
+    }
 
     fun setColor(@ColorInt color: Int, forType: ColorType) {
         colorPallet.apply {

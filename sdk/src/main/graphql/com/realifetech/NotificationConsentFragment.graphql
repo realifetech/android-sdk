@@ -1,0 +1,10 @@
+fragment NotificationConsentFragment on NotificationConsent {
+    id
+    name
+    sortId
+    status
+    translations {
+        name
+        language
+    }
+}

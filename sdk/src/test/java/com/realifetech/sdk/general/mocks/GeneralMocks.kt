@@ -21,6 +21,6 @@ object GeneralMocks {
         wifiConnected = true
     )
     val errorBody = DeviceRegisterResponse(400, "NetworkException", "backend isn't ready, please try again later")
-    val deviceRegisterResponse = DeviceRegisterResponse(200, "success", "all good")
+    val deviceRegisterResponse = true
     val networkError=  NetworkException(errorBody.code, errorBody.message)
 }

@@ -5,7 +5,10 @@ import android.util.Log
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.TokenBody
+import com.realifetech.sdk.communicate.domain.NotificationConsentRepository
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
+import com.realifetech.sdk.communicate.domain.model.DeviceNotificationConsent
+import com.realifetech.sdk.communicate.domain.model.NotificationConsent
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.core.utils.hasNetworkConnection
@@ -18,7 +21,8 @@ class Communicate @Inject constructor(
     private val dispatcherIO: CoroutineDispatcher,
     private val dispatcherMain: CoroutineDispatcher,
     private val analytics: Analytics,
-    private val context: Context
+    private val context: Context,
+    private val notificationConsentRepository: NotificationConsentRepository
 ) {
 
     fun trackPush(
@@ -71,6 +75,17 @@ class Communicate @Inject constructor(
         } else return
     }
 
+    fun getNotificationConsent(callback: (error: Exception?, response: List<NotificationConsent?>?) -> Unit) {
+        notificationConsentRepository.getNotificationConsents(callback)
+    }
+
+    fun getMyDeviceNotificationConsents(callback: (error: Exception?, response: List<DeviceNotificationConsent?>?) -> Unit) {
+        notificationConsentRepository.getMyDeviceNotificationConsents(callback)
+    }
+
+    fun updateMyDeviceNotificationConsent(id: String, enabled: Boolean, callback: (error: Exception?, success: Boolean?) -> Unit){
+        notificationConsentRepository.updateMyDeviceNotificationConsent(id, enabled, callback)
+    }
 
     companion object {
         private const val ID = "me"
