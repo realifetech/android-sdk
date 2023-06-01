@@ -19,6 +19,7 @@ import com.realifetech.sdk.core.utils.DeviceCalendar
 import com.realifetech.sdk.core.utils.NetworkUtil
 import com.realifetech.sdk.di.features.FeatureScope
 import com.realifetech.sdk.general.General
+import com.realifetech.sdk.general.data.PhysicalDeviceInfo
 import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
 import com.realifetech.sdk.identity.Identity
@@ -98,13 +99,15 @@ object FeatureModule {
         deviceRepository: DeviceRepository,
         sdkInitializationPrecondition: SdkInitializationPrecondition,
         configuration: ConfigurationStorage,
-        colorPallet: ColorPallet
+        colorPallet: ColorPallet,
+        physicalDeviceInfo: PhysicalDeviceInfo
     ): General =
         General(
             deviceRepository,
             sdkInitializationPrecondition,
             configuration,
-            colorPallet
+            colorPallet,
+            physicalDeviceInfo
         )
 
     @FeatureScope
