@@ -8,6 +8,7 @@ import com.realifetech.sdk.core.data.model.color.ColorType.*
 import com.realifetech.sdk.core.utils.ColorPallet
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.general.data.DeviceConsent
+import com.realifetech.sdk.general.data.PhysicalDeviceInfo
 import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
 import javax.inject.Inject
@@ -16,8 +17,13 @@ class General @Inject constructor(
     private val deviceRepository: DeviceRepository,
     private val sdkInitializationPrecondition: SdkInitializationPrecondition,
     private val configuration: ConfigurationStorage,
-    private val colorPallet: ColorPallet
+    private val colorPallet: ColorPallet,
+    physicalDeviceInfo: PhysicalDeviceInfo
 ) {
+
+    init {
+        configuration.deviceId = physicalDeviceInfo.deviceId
+    }
 
     var isSdkReady: Boolean = false
         private set
