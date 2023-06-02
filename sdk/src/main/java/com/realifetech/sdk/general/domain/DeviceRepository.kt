@@ -16,7 +16,6 @@ class DeviceRepository @Inject constructor(
     private val oAuthManager: Lazy<OAuthManager>
 ) {
     private lateinit var result: Result<Boolean>
-    private lateinit var updateMyDeviceConsentResult: Result<Boolean>
 
     private val retryPolicy: RetryPolicy =
         LinearRetryPolicy(DEVICE_REGISTRATION_RETRY_TIME_MILLISECONDS) {
