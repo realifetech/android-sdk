@@ -4,12 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.realifetech.sample.utils.NotificationUtil.IS_PN
-import com.realifetech.sample.utils.NotificationUtil.PN_PAYLOAD
+import androidx.lifecycle.lifecycleScope
+import com.realifetech.sample.service.FirebaseMessageListenerService.Companion.FAILED_MESSAGE
+import com.realifetech.sample.service.FirebaseMessageListenerService.Companion.TRACKED_MESSAGE
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.communicate.data.Event
+import kotlinx.coroutines.launch
 
 abstract class SampleAppCompatActivity : AppCompatActivity() {
+
+    companion object {
+        const val IS_PN = "is_push_notification"
+        const val PN_PAYLOAD = "push_notification_payload"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,18 +28,26 @@ abstract class SampleAppCompatActivity : AppCompatActivity() {
         intent?.let { trackPushNotification(it) }
     }
 
-
     private fun trackPushNotification(intent: Intent) {
         val arguments = intent.extras
         val isPN = arguments?.getBoolean(IS_PN, false)
         val payload = arguments?.getSerializable(PN_PAYLOAD) as? Map<*, *>
-        payload.let {
-            if (isPN == true && it?.isEmpty() == false) {
-                RealifeTech.getCommunicate()
-                    .trackPush(Event.OPENED, it as? Map<String, Any>) { error, response ->
-                        handleResponse(response)
-                        handleError(error)
-                    }
+        payload?.let {
+            if (isPN == true && it.isNotEmpty()) {
+                val event = Event.OPENED
+                val trackInfo = it as? Map<String, Any>
+                trackPush(event, trackInfo)
+            }
+        }
+    }
+
+    private fun trackPush(event: Event, trackInfo: Map<String, Any>?) {
+        lifecycleScope.launch {
+            try {
+                val result = RealifeTech.getCommunicate().trackPush(event, trackInfo)
+                handleResponse(result)
+            } catch (e: Exception) {
+                handleError(e)
             }
         }
     }
@@ -45,10 +60,5 @@ abstract class SampleAppCompatActivity : AppCompatActivity() {
         val responseMessage = "Notification was opened" +
                 if (response) TRACKED_MESSAGE else FAILED_MESSAGE
         Log.d(this.javaClass.name, responseMessage)
-    }
-
-    companion object {
-        const val TRACKED_MESSAGE = " and we tracked it successfully"
-        const val FAILED_MESSAGE = "  but our tracking radar failed to spot it"
     }
 }

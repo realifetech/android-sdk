@@ -11,49 +11,27 @@ import javax.inject.Inject
 
 class PaymentFeature @Inject constructor(private val paymentRepo: PaymentRepository) {
 
-
-    fun addPaymentSource(
-        input: PaymentSourceWrapper,
-        callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
-    ) {
-        paymentRepo.addPaymentSource(input, callback)
+    suspend fun addPaymentSource(input: PaymentSourceWrapper): PaymentSource? {
+        return paymentRepo.addPaymentSource(input)
     }
 
-    fun getMyPaymentSources(
-        pageSize: Int, page: Int?,
-        callback: (error: Exception?, response: PaginatedObject<PaymentSource?>?) -> Unit
-    ) {
-        paymentRepo.getMyPaymentSources(pageSize, page, callback)
+    suspend fun getMyPaymentSources(pageSize: Int, page: Int?): PaginatedObject<PaymentSource?>? {
+        return paymentRepo.getMyPaymentSources(pageSize, page)
     }
 
-    fun createPaymentIntent(
-        input: PaymentIntentWrapper,
-        callback: (error: Exception?, response: PaymentIntent?) -> Unit
-    ) {
-        paymentRepo.createPaymentIntent(input, callback)
+    suspend fun createPaymentIntent(input: PaymentIntentWrapper): PaymentIntent? {
+        return paymentRepo.createPaymentIntent(input)
     }
 
-    fun updatePaymentIntent(
-        id: String,
-        input: PaymentIntentUpdateWrapper,
-        callback: (error: Exception?, response: PaymentIntent?) -> Unit
-    ) {
-        paymentRepo.updatePaymentIntent(id, input, callback)
+    suspend fun updatePaymentIntent(id: String, input: PaymentIntentUpdateWrapper): PaymentIntent? {
+        return paymentRepo.updatePaymentIntent(id, input)
     }
 
-    fun getMyPaymentIntent(
-        id: String,
-        callback: (error: Exception?, response: PaymentIntent?) -> Unit
-    ) {
-        paymentRepo.getMyPaymentIntent(id, callback)
+    suspend fun getMyPaymentIntent(id: String): PaymentIntent? {
+        return paymentRepo.getMyPaymentIntent(id)
     }
 
-    fun deletePaymentSource(
-        id: String,
-        callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
-    ) {
-        paymentRepo.deleteMyPaymentSource(id, callback)
+    suspend fun deletePaymentSource(id: String): PaymentSource? {
+        return paymentRepo.deleteMyPaymentSource(id)
     }
-
-
 }

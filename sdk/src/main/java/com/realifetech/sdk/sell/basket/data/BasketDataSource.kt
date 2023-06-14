@@ -7,20 +7,9 @@ import com.realifetech.type.BasketInput
 import com.realifetech.type.CheckoutInput
 
 interface BasketDataSource {
-    fun getBasket(callback: (error: Exception?, basket: Basket?) -> Unit)
-    fun createMyBasket(
-        basketInput: BasketInput,
-        callback: (error: Exception?, basket: Basket?) -> Unit
-    )
-
-    fun updateMyBasket(
-        basketInput: BasketInput,
-        callback: (error: Exception?, basket: Basket?) -> Unit
-    )
-
-    fun deleteMyBasket(callback: (error: Exception?, response: StandardResponse?) -> Unit)
-    fun checkoutMyBasket(
-        checkoutInput: CheckoutInput,
-        callback: (error: Exception?, order: Order?) -> Unit
-    )
+    suspend fun getBasket(): Basket?
+    suspend fun createMyBasket(basketInput: BasketInput): Basket?
+    suspend fun updateMyBasket(basketInput: BasketInput): Basket?
+    suspend fun deleteMyBasket(): StandardResponse
+    suspend fun checkoutMyBasket(checkoutInput: CheckoutInput): Order?
 }

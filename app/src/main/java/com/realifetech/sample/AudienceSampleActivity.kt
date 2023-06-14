@@ -2,15 +2,17 @@ package com.realifetech.sample
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.realifetech.sdk.RealifeTech
 import kotlinx.android.synthetic.main.activity_analytics_sample.typeEditText
 import kotlinx.android.synthetic.main.activity_audience_sample.*
 import kotlinx.android.synthetic.main.activity_communication_sample.operationTextView
 import kotlinx.android.synthetic.main.activity_communication_sample.progressBar
 import kotlinx.android.synthetic.main.activity_communication_sample.resultTextView
+import kotlinx.coroutines.launch
 
 class AudienceSampleActivity : AppCompatActivity() {
 
@@ -26,11 +28,16 @@ class AudienceSampleActivity : AppCompatActivity() {
         resultTextView.text = ""
         operationTextView.text = "Query if belongs to audience"
 
-        RealifeTech.getAudience().deviceIsMemberOfAudience(typeEditText.text.toString()) { error, doesBelong ->
-            progressBar.isVisible = false
-            resultTextView.text = when (error != null) {
-                false -> "Does belong to audience? Response = $doesBelong"
-                else -> error.message ?: "Unknown error"
+        val audience = RealifeTech.getAudience()
+        lifecycleScope.launch {
+            try {
+                val doesBelong = audience.deviceIsMemberOfAudience(typeEditText.text.toString())
+                progressBar.isVisible = false
+                resultTextView.text = "Does belong to audience? Response = $doesBelong"
+            } catch (e: Exception) {
+                progressBar.isVisible = false
+                resultTextView.text = e.message ?: "Unknown error"
+                e.printStackTrace()
             }
         }
     }

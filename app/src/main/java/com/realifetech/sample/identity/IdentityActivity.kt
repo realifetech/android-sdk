@@ -6,16 +6,17 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.realifetech.sample.R
 import com.realifetech.sample.data.DeviceConfigurationStorage
 import com.realifetech.sample.databinding.ActivityIdentityBinding
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
+import kotlinx.coroutines.launch
 
 class IdentityActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityIdentityBinding
-
     private lateinit var storage: DeviceConfigurationStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,9 +30,11 @@ class IdentityActivity : AppCompatActivity() {
 
     private fun setupView() {
         binding.apply {
-            identityTitle.text =
-                if (storage.isLoggedIn) getString(R.string.identity_logout_title)
-                else getString(R.string.identity_login_title)
+            identityTitle.text = if (storage.isLoggedIn) {
+                getString(R.string.identity_logout_title)
+            } else {
+                getString(R.string.identity_login_title)
+            }
             emailEditTextView.isVisible = !storage.isLoggedIn
             passwordInputLayout.isVisible = !storage.isLoggedIn
             identityLoginButton.isVisible = !storage.isLoggedIn
@@ -50,30 +53,26 @@ class IdentityActivity : AppCompatActivity() {
     }
 
     private fun setupLoginFlow() {
-        binding.apply {
-            identityLoginButton.setOnClickListener {
-                if (validInputs()) {
-                    val preferences = AuthTokenStorage(this@IdentityActivity)
-                    preferences.accessToken = userTokenEditTextView.text.toString()
-                    RealifeTech.getIdentity().attemptLogin(
-                        emailEditTextView.text.toString(),
-                        FIRST_NAME, LAST_NAME,
-                        storage.salt
-                    ) { errorMessage ->
-                        errorMessage?.let { error ->
-                            error.message?.let {
-                                Toast.makeText(
-                                    this@IdentityActivity,
-                                    it,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        } ?: run {
-                            storage.isLoggedIn = true
-                            finish()
-                        }
-
-
+        binding.identityLoginButton.setOnClickListener {
+            if (validInputs()) {
+                val preferences = AuthTokenStorage(this@IdentityActivity)
+                preferences.accessToken = binding.userTokenEditTextView.text.toString()
+                lifecycleScope.launch {
+                    try {
+                        RealifeTech.getIdentity().attemptLogin(
+                            binding.emailEditTextView.text.toString(),
+                            FIRST_NAME, LAST_NAME,
+                            storage.salt
+                        )
+                        storage.isLoggedIn = true
+                        finish()
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            this@IdentityActivity,
+                            e.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        e.printStackTrace()
                     }
                 }
             }
@@ -82,9 +81,7 @@ class IdentityActivity : AppCompatActivity() {
 
     private fun validInputs(): Boolean {
         binding.apply {
-            if (emailEditTextView.text.isNullOrEmpty() ||
-                !isEmailValid(emailEditTextView.text.toString())
-            ) {
+            if (emailEditTextView.text.isNullOrEmpty() || !isEmailValid(emailEditTextView.text.toString())) {
                 emailEditTextView.error = resources.getString(R.string.identity_email)
                 return false
             }
@@ -93,8 +90,7 @@ class IdentityActivity : AppCompatActivity() {
                 return false
             }
             if (userTokenEditTextView.text.isNullOrEmpty()) {
-                userTokenEditTextView.error =
-                    resources.getString(R.string.user_access_token_message)
+                userTokenEditTextView.error = resources.getString(R.string.user_access_token_message)
                 return false
             }
             return true
@@ -108,6 +104,7 @@ class IdentityActivity : AppCompatActivity() {
     companion object {
         private const val FIRST_NAME = "user"
         private const val LAST_NAME = "test"
+
         fun start(context: Context) {
             context.startActivity(Intent(context, IdentityActivity::class.java))
         }

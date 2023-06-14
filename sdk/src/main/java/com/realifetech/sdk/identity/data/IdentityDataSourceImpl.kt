@@ -1,127 +1,111 @@
 package com.realifetech.sdk.identity.data
 
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.exception.ApolloHttpException
-import com.apollographql.apollo.fetcher.ApolloResponseFetchers
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.exception.ApolloException
 import com.realifetech.*
 import com.realifetech.fragment.AuthToken
 import com.realifetech.type.SignedUserInfoInput
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class IdentityDataSourceImpl @Inject constructor(private val apolloClient: ApolloClient) :
     IdentityDataSource {
 
-    override fun generateNonce(callback: (error: Exception?, response: String?) -> Unit) {
-        try {
-            apolloClient.mutate(GenerateNonceMutation())
-                .enqueue(object : ApolloCall.Callback<GenerateNonceMutation.Data>() {
-                    override fun onResponse(response: Response<GenerateNonceMutation.Data>) {
-                        response.data?.generateNonce?.let { callback.invoke(null, it.token) }
-                            ?: run { callback.invoke(Exception(), null) }
-                    }
+    override suspend fun generateNonce(): String {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apolloClient.mutation(GenerateNonceMutation()).execute()
 
-                    override fun onFailure(e: ApolloException) {
-                        callback.invoke(e, null)
-                    }
-                })
-        } catch (exception: Exception) {
-            callback.invoke(exception, null)
+                if (response.hasErrors()) {
+                    throw ApolloException(
+                        response.errors?.firstOrNull()?.message ?: "Unknown error"
+                    )
+                } else {
+                    response.data?.generateNonce?.token
+                        ?: throw Exception("No data found")
+                }
+            } catch (exception: ApolloException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun getDeviceId(callback: (error: Exception?, response: String?) -> Unit) {
-        try {
-            val response = apolloClient.query(GetDeviceIdQuery()).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
-            response.enqueue(object :
-                ApolloCall.Callback<GetDeviceIdQuery.Data>() {
-                override fun onResponse(response: Response<GetDeviceIdQuery.Data>) {
-                    response.data?.me?.device?.let {
-                        callback.invoke(null, it.id)
-                    } ?: run {
-                        callback.invoke(
-                            Exception(), null
-                        )
-                    }
-                }
+    override suspend fun getDeviceId(): String {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apolloClient.query(GetDeviceIdQuery()).execute()
 
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
+                if (response.hasErrors()) {
+                    throw ApolloException(
+                        response.errors?.firstOrNull()?.message ?: "Unknown error"
+                    )
+                } else {
+                    response.data?.me?.device?.id
+                        ?: throw Exception("No data found")
                 }
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            } catch (exception: HttpException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun authenticateUserBySignedUserInfo(
-        userInfo: SignedUserInfoInput,
-        callback: (error: Exception?, response: AuthToken?) -> Unit
-    ) {
-        try {
-            val response = apolloClient.mutate(AuthenticateUserBySignedUserInfoMutation(userInfo))
-            response.enqueue(object :
-                ApolloCall.Callback<AuthenticateUserBySignedUserInfoMutation.Data>() {
-                override fun onResponse(response: Response<AuthenticateUserBySignedUserInfoMutation.Data>) {
-                    response.data?.authenticateUserBySignedUserInfo?.fragments?.let {
-                        callback.invoke(null, it.authToken)
-                    } ?: run {
-                        callback.invoke(
-                            Exception(), null
-                        )
-                    }
-                }
+    override suspend fun authenticateUserBySignedUserInfo(userInfo: SignedUserInfoInput): AuthToken {
+        return withContext(Dispatchers.IO) {
+            try {
+                val mutation = AuthenticateUserBySignedUserInfoMutation(userInfo)
+                val response = apolloClient.mutation(mutation).execute()
 
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
+                if (response.hasErrors()) {
+                    throw ApolloException(
+                        response.errors?.firstOrNull()?.message ?: "Unknown error"
+                    )
+                } else {
+                    response.data?.authenticateUserBySignedUserInfo?.authToken
+                        ?: throw Exception("No data found")
                 }
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            } catch (exception: HttpException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit) {
-        try {
-            val response = apolloClient.mutate(DeleteMyAccountMutation())
-            response.enqueue(object :
-                ApolloCall.Callback<DeleteMyAccountMutation.Data>() {
-                override fun onResponse(response: Response<DeleteMyAccountMutation.Data>) {
-                    response.data?.deleteMyAccount?.let {
-                        callback.invoke(null, it.success)
-                    } ?: run {
-                        callback.invoke(
-                            Exception(), null
-                        )
-                    }
-                }
+    override suspend fun deleteMyAccount(): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apolloClient.mutation(DeleteMyAccountMutation()).execute()
 
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
+                if (response.hasErrors()) {
+                    throw ApolloException(
+                        response.errors?.firstOrNull()?.message ?: "Unknown error"
+                    )
+                } else {
+                    response.data?.deleteMyAccount?.success
+                        ?: throw Exception("No data found")
                 }
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            } catch (exception: HttpException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun getSSO(provider: String, callback: (error: Exception?, url: String?) -> Unit) {
-        try {
-            val response = apolloClient.query(GetSSOQuery(provider)).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.CACHE_FIRST).build()
-            response.enqueue(object : ApolloCall.Callback<GetSSOQuery.Data>() {
-                override fun onResponse(response: Response<GetSSOQuery.Data>) {
-                    callback.invoke(null, response.data?.getSSO?.authUrl)
+    override suspend fun getSSO(provider: String): String? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val query = GetSSOQuery(provider)
+                val response = apolloClient.query(query).execute()
+
+                if (response.hasErrors()) {
+                    throw ApolloException(
+                        response.errors?.firstOrNull()?.message ?: "Unknown error"
+                    )
+                } else {
+                    response.data?.getSSO?.authUrl
                 }
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            } catch (exception: HttpException) {
+                throw Exception(exception)
+            }
         }
     }
 }

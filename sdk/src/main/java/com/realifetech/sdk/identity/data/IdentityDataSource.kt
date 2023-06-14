@@ -4,17 +4,9 @@ import com.realifetech.fragment.AuthToken
 import com.realifetech.type.SignedUserInfoInput
 
 interface IdentityDataSource {
-
-    fun generateNonce(callback: (error: Exception?, response: String?) -> Unit)
-
-    fun getDeviceId(callback: (error: Exception?, response: String?) -> Unit)
-
-    fun authenticateUserBySignedUserInfo(
-        userInfo: SignedUserInfoInput,
-        callback: (error: Exception?, response: AuthToken?) -> Unit
-    )
-
-    fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit)
-
-    fun getSSO(provider: String, callback: (error: Exception?, url: String?) -> Unit)
+    suspend fun generateNonce(): String
+    suspend fun getDeviceId(): String
+    suspend fun authenticateUserBySignedUserInfo(userInfo: SignedUserInfoInput): AuthToken
+    suspend fun deleteMyAccount(): Boolean
+    suspend fun getSSO(provider: String): String?
 }

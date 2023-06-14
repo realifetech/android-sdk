@@ -1,9 +1,9 @@
 package com.realifetech.sdk.identity.domain
 
 import android.util.Log
-import com.apollographql.apollo.api.Input
-import com.apollographql.apollo.api.toInput
+import com.apollographql.apollo3.api.Optional
 import com.realifetech.fragment.AuthToken
+import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.core.utils.sha256
 import com.realifetech.sdk.identity.data.IdentityDataSource
 import com.realifetech.type.SignedUserInfoInput
@@ -13,66 +13,56 @@ import javax.inject.Inject
 
 class IdentityRepository @Inject constructor(private val identityDataSource: IdentityDataSource) {
 
-    fun attemptToLogin(
-        email: String, firstName: String?, lastName: String?, salt: String,
-        completion: (authToken: AuthToken?, error: Exception?) -> Unit
-    ) {
-        identityDataSource.getDeviceId { error, response ->
-            error?.let { completion.invoke(null, it) }
-            response?.let { deviceId ->
-                val jsonObject = getJsonObjectForData(email, firstName, lastName, deviceId)
-                Log.d("JSON_OBJECT", jsonObject)
-                val encodedResult = "${jsonObject}.${salt}"
-                Log.d("JSON_OBJECT_SALT", encodedResult)
-                val signature = encodedResult.sha256()
-                Log.d("JSON_OBJECT_SALT_HASH", signature)
-                identityDataSource.generateNonce { error, response ->
-                    error?.let {
-                        completion.invoke(null, it)
-                    }
-                    response?.let { nonce ->
-                        authenticateSignedUser(
-                            firstName,
-                            lastName,
-                            email,
-                            nonce,
-                            signature,
-                            completion
-                        )
-                    }
-                }
-            }
+    suspend fun attemptToLogin(
+        email: String, firstName: String?, lastName: String?, salt: String
+    ): Result<AuthToken> {
+        return try {
+            val deviceId = identityDataSource.getDeviceId()
+            val jsonObject = getJsonObjectForData(email, firstName, lastName, deviceId)
+            Log.d("JSON_OBJECT", jsonObject)
+            val encodedResult = "${jsonObject}.${salt}"
+            Log.d("JSON_OBJECT_SALT", encodedResult)
+            val signature = encodedResult.sha256()
+            Log.d("JSON_OBJECT_SALT_HASH", signature)
+            val nonce = identityDataSource.generateNonce()
+            authenticateSignedUser(firstName, lastName, email, nonce, signature)
+        } catch (e: Exception) {
+            Result.Error(e)
         }
     }
 
-    internal fun authenticateSignedUser(
+    private suspend fun authenticateSignedUser(
         firstName: String?,
         lastName: String?,
         emailAddress: String,
         nonce: String,
-        signature: String,
-        completion: (authToken: AuthToken?, error: Exception?) -> Unit
-    ) {
-        identityDataSource.authenticateUserBySignedUserInfo(
-            SignedUserInfoInput(
-                emailAddress,
-                firstName.toInput(), lastName.toInput(),
-                Input.absent(), Input.absent(), nonce, signature
+        signature: String
+    ): Result<AuthToken> {
+        return try {
+            val response = identityDataSource.authenticateUserBySignedUserInfo(
+                SignedUserInfoInput(
+                    email = emailAddress,
+                    firstName = Optional.Present(firstName),
+                    lastName = Optional.Present(lastName),
+                    nonce = nonce,
+                    signature = signature
+                )
             )
-        ) { error, response ->
-            error?.let {
-                completion.invoke(null, it)
-            }
-            response?.let {
-                completion.invoke(it, null)
-            }
+            Result.Success(response)
+        } catch (e: Exception) {
+            Result.Error(e)
         }
     }
 
-    internal fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit) =
-        identityDataSource.deleteMyAccount(callback)
+    suspend fun deleteMyAccount(): Result<Boolean> {
+        return try {
+            Result.Success(identityDataSource.deleteMyAccount())
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 
-    internal fun getJsonObjectForData(
+    private fun getJsonObjectForData(
         email: String,
         firstName: String?,
         lastName: String?,
@@ -88,8 +78,13 @@ class IdentityRepository @Inject constructor(private val identityDataSource: Ide
         )
     }
 
-    fun getSSO(provider: String, callback: (error: Exception?, url: String?) -> Unit) {
-        identityDataSource.getSSO(provider,callback)
+    suspend fun getSSO(provider: String): String? {
+        return try {
+            val result = identityDataSource.getSSO(provider)
+            result ?: "No SSO URL available"
+        } catch (e: Exception) {
+            e.message ?: "Error retrieving SSO URL"
+        }
     }
 
     companion object {
@@ -97,6 +92,5 @@ class IdentityRepository @Inject constructor(private val identityDataSource: Ide
         private const val FIRST_NAME = "firstName"
         private const val LAST_NAME = "lastName"
         private const val DEVICE = "device"
-
     }
 }

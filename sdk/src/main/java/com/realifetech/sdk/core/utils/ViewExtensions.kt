@@ -48,5 +48,5 @@ fun MenuItem.clicks(): Flow<MenuItem> {
 }
 
 internal fun <T> SendChannel<T>.safeOffer(element: T): Boolean {
-    return runCatching { offer(element) }.getOrDefault(false)
+    return runCatching { trySend(element).isSuccess }.getOrDefault(false)
 }

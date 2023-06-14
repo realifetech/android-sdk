@@ -29,16 +29,16 @@ val FragmentFulfilmentPoint.asModel: FulfilmentPoint
             imageUrl = imageUrl,
             mapImageUrl = mapImageUrl,
             lat = lat.toString(),
-            long = long_.toString(),
+            long = long.toString(),
             waitTime = waitTime,
             prepTime = prepTime,
             position = position,
             createdAt = createdAt,
             updatedAt = updatedAt,
             translations = translations?.mapNotNull { it?.asModel },
-            form = seatForm?.fragments?.fragmentForm?.asModel,
+            form = seatForm?.fragmentForm?.asModel,
             categories = categories?.mapNotNull { it?.asModel },
-            timeslots = timeslots?.mapNotNull { it?.fragments?.fragmentTimeslot?.asModel }
+            timeslots = timeslots?.mapNotNull { it?.fragmentTimeslot?.asModel }
         )
 
 val FragmentForm.asModel: Form
@@ -84,7 +84,7 @@ val FragmentForm.Translation1.asModel: FieldTranslation
     )
 
 val FragmentForm.AutoFill.asModel: AutoFill
-    get() = AutoFill(type = type, field = field_)
+    get() = AutoFill(type = type, field = field)
 
 val FragmentForm.Translation.asModel: FormTranslation
     get() = FormTranslation(
@@ -104,7 +104,7 @@ val FragmentFulfilmentPoint.Translation.asModel: FulfilmentPointTranslation
         title = title,
         description = description,
         collectionNote = collectionNote,
-        collectionNotes = collectionNotes?.fragments?.fragmentCollectionNotes?.asModel
+        collectionNotes = collectionNotes?.fragmentCollectionNotes?.asModel
     )
 
 val FragmentCollectionNotes.asModel: CollectionNotes
@@ -114,7 +114,7 @@ val FragmentCollectionNotes.asModel: CollectionNotes
     )
 
 val FragmentFulfilmentPoint.Category.asModel: FulfilmentPointCategory
-    get() = fragments.fragmentFulfilmentPointCategory.asModel
+    get() = fragmentFulfilmentPointCategory.asModel
 
 val FragmentFulfilmentPointCategory.Translation.asModel: StandardTranslation
     get() = StandardTranslation(

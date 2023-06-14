@@ -1,20 +1,14 @@
 package com.realifetech.sdk.general.data
 
-import android.util.Log
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.api.toInput
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.exception.ApolloHttpException
-import com.apollographql.apollo.subscription.OperationServerMessage
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.api.toInput
+import com.apollographql.apollo3.exception.ApolloException
 import com.realifetech.SyncDeviceMutation
 import com.realifetech.UpdateMyDeviceConsentMutation
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.type.DeviceConsentInput
 import com.realifetech.type.DeviceInput
-import com.realifetech.type.DeviceTokenInput
-import com.realifetech.type.LocationGranular
 
 internal class DeviceNetworkDataSourceImpl(
     private val apolloClient: ApolloClient,
@@ -26,65 +20,47 @@ internal class DeviceNetworkDataSourceImpl(
         get() {
             return DeviceInput(
                 token = configuration.deviceId,
-                type = ANDROID.toInput(),
-                appVersion = deviceInfo.appVersionName.toInput(),
-                osVersion = deviceInfo.osVersion.toInput(),
-                model = deviceInfo.model.toInput(),
-                manufacturer = deviceInfo.manufacturer.toInput(),
-                bluetoothOn = deviceInfo.isBluetoothEnabled.toInput(),
-                wifiConnected = deviceInfo.isWifiOn.toInput(),
-                tokens = emptyList<DeviceTokenInput?>().toInput()
+                type = Optional.Present(ANDROID),
+                appVersion = Optional.Present(deviceInfo.appVersionName),
+                osVersion = Optional.Present(deviceInfo.osVersion),
+                model = Optional.Present(deviceInfo.model),
+                manufacturer = Optional.Present(deviceInfo.manufacturer),
+                bluetoothOn = Optional.Present(deviceInfo.isBluetoothEnabled),
+                wifiConnected = Optional.Present(deviceInfo.isWifiOn),
+                tokens = Optional.Present(emptyList())
             )
         }
 
-    override fun registerDevice(callback: (error: Exception?, registered: Boolean?) -> Unit) {
-        try {
-            val response = apolloClient.mutate(SyncDeviceMutation(input))
-            response.enqueue(object : ApolloCall.Callback<SyncDeviceMutation.Data>() {
-                override fun onResponse(response: Response<SyncDeviceMutation.Data>) {
-                    callback.invoke(
-                        null,
-                        response.data?.syncDevice?.acknowledged ?: false
-                    )
-                }
-
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+    override suspend fun registerDevice(): com.realifetech.sdk.core.utils.Result<Boolean> {
+        return try {
+            val response = apolloClient.mutation(SyncDeviceMutation(input)).execute()
+            if (response.hasErrors()) {
+                throw ApolloException(response.errors?.firstOrNull()?.message ?: "")
+            }
+            com.realifetech.sdk.core.utils.Result.Success(response.data?.syncDevice?.acknowledged ?: false)
+        } catch (exception: Exception) {
+            com.realifetech.sdk.core.utils.Result.Error(exception)
         }
     }
 
-    override fun updateMyDeviceConsent(
-        deviceConsent: DeviceConsent,
-        callback: (error: Exception?, result: Boolean?) -> Unit
-    ) {
+    override suspend fun updateMyDeviceConsent(deviceConsent: DeviceConsent): com.realifetech.sdk.core.utils.Result<Boolean> {
         val input = DeviceConsentInput(
             locationCapture = deviceConsent.locationCapture.toInput(),
             locationGranular = getLocationGranular(deviceConsent.locationGranular.toString()).toInput(),
-            camera = deviceConsent.camera.toInput(),
-            calendar = deviceConsent.calendar.toInput(),
-            photoSharing = deviceConsent.photoSharing.toInput(),
-            pushNotification = deviceConsent.pushNotification.toInput()
+            camera = Optional.Present(deviceConsent.camera),
+            calendar = Optional.Present(deviceConsent.calendar),
+            photoSharing = Optional.Present(deviceConsent.photoSharing),
+            pushNotification = Optional.Present(deviceConsent.pushNotification)
         )
 
-        try {
-            apolloClient.mutate(UpdateMyDeviceConsentMutation(input))
-                .enqueue(object : ApolloCall.Callback<UpdateMyDeviceConsentMutation.Data>() {
-                    override fun onResponse(response: Response<UpdateMyDeviceConsentMutation.Data>) {
-                        response.data?.let { callback.invoke(null, true) } ?: callback.invoke( Exception("Apollo response no data exception"), null) }
-
-                    override fun onFailure(e: ApolloException) {
-                        Log.e("Update my device consent", "${e.message}")
-                        callback.invoke(e, null)
-                    }
-                })
+        return try {
+            val response = apolloClient.mutate(UpdateMyDeviceConsentMutation(input)).execute()
+            if (response.hasErrors()) {
+                throw ApolloException(response.errors?.firstOrNull()?.message ?: "")
+            }
+            com.realifetech.sdk.core.utils.Result.Success(response.data?.let { true } ?: false)
         } catch (e: Exception) {
-            Log.e("Update my device consent", "${e.message}")
-            callback.invoke(e, null)
+            com.realifetech.sdk.core.utils.Result.Error(e)
         }
     }
 

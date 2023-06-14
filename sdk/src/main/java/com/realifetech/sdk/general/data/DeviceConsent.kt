@@ -17,8 +17,8 @@ enum class LocationGranularStatus {
 
 fun getLocationGranular(status: String): LocationGranular {
     return if (status == LocationGranularStatus.ALWAYS.toString()) {
-        LocationGranular.ALWAYS
+        LocationGranular.always
     } else {
-        LocationGranular.APPINUSE
+        LocationGranular.appInUse
     }
 }

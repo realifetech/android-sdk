@@ -8,9 +8,6 @@ import com.realifetech.sdk.identity.data.model.RLTTraitType
 import com.realifetech.sdk.identity.domain.IdentityRepository
 import com.realifetech.sdk.sell.weboredering.WebViewWrapper
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class Identity @Inject constructor(
@@ -27,13 +24,12 @@ class Identity @Inject constructor(
         webViewWrapper.clearCacheAndStorage()
     }
 
-    fun getSSO(provider:String,callback: (error: Exception?, url: String?) -> Unit){
-        identityRepository.getSSO(provider,callback)
+    suspend fun getSSO(provider:String): String? {
+        return identityRepository.getSSO(provider)
     }
-    fun identify(
+    suspend fun identify(
         userId: String,
-        traits: Map<RLTTraitType, Any>?,
-        completion: (error: Exception?, result: Boolean) -> Unit
+        traits: Map<RLTTraitType, Any>?
     ) {
 
         configurationStorage.userId = userId
@@ -47,18 +43,16 @@ class Identity @Inject constructor(
             type = USER,
             action = IDENTIFY,
             new = map,
-            old = null,
-            completion
+            old = null
         )
     }
 
-    fun deleteMyAccount(callback: (error: Exception?, success: Boolean?) -> Unit) =
-        identityRepository.deleteMyAccount(callback)
+    suspend fun deleteMyAccount() =
+        identityRepository.deleteMyAccount()
 
-    fun alias(
+    suspend fun alias(
         aliasType: RLTAliasType,
-        aliasId: String,
-        completion: (error: Exception?, result: Boolean) -> Unit
+        aliasId: String
     ) {
 
         val alias = aliasType.convertAliasToString()
@@ -67,8 +61,7 @@ class Identity @Inject constructor(
             type = USER,
             action = ALIAS,
             new = mapOf(alias to aliasId),
-            old = null,
-            completion
+            old = null
         )
     }
 
@@ -77,39 +70,23 @@ class Identity @Inject constructor(
     }
 
 
-    fun attemptLogin(
-        emailAddress: String, firstName: String?, lastName: String?, salt: String,
-        completion: (error: Exception?) -> Unit
+    suspend fun attemptLogin(
+        emailAddress: String, firstName: String?, lastName: String?, salt: String
     ) {
-        GlobalScope.launch(dispatcherIO) {
-            identityRepository.attemptToLogin(
-                emailAddress,
-                firstName,
-                lastName,
-                salt
-            ) { authToken, errorMessage ->
-                GlobalScope.launch(dispatcherIO) {
-                    withContext(dispatcherMain) {
-                        errorMessage?.let {
-                            completion.invoke(it)
-                        }
-                        authToken?.let {
-                            webViewWrapper.webView?.apply {
-                                webViewWrapper.authenticate(it)
-                            } ?: run {
-                                storage.webAuthToken = it
-                            }
-                            completion.invoke(null)
-                        }
+        val result = identityRepository.attemptToLogin(emailAddress, firstName, lastName, salt)
+        when (result) {
+            is com.realifetech.sdk.core.utils.Result.Success -> {
+                val authToken = result.data
+                authToken?.let {
+                    webViewWrapper.webView?.apply {
+                        webViewWrapper.authenticate(it)
+                    } ?: run {
+                        storage.webAuthToken = it
                     }
-
                 }
-
             }
-
-
+            is com.realifetech.sdk.core.utils.Result.Error -> throw result.exception
         }
-
     }
 
     companion object {

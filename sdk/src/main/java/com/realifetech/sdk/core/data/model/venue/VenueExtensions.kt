@@ -3,7 +3,7 @@ package com.realifetech.sdk.core.data.model.venue
 import com.realifetech.fragment.FragmentFulfilmentPoint
 
 val FragmentFulfilmentPoint.Venue.asModel: Venue
-    get() = with(fragments.fragmentVenue) {
+    get() = with(fragmentVenue) {
         Venue(
             id = id,
             name = name,

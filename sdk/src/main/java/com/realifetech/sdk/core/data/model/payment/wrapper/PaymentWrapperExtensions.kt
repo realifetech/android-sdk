@@ -1,7 +1,7 @@
 package com.realifetech.sdk.core.data.model.payment.wrapper
 
-import com.apollographql.apollo.api.Input
-import com.apollographql.apollo.api.toInput
+import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.api.toInput
 import com.realifetech.fragment.PaymentSourceEdge
 import com.realifetech.type.*
 
@@ -41,58 +41,58 @@ val PaymentIntentWrapper.asInput
     get() = PaymentIntentInput(
         orderType,
         orderId,
-        Input.optional(paymentSource?.asInput),
+        Optional.presentIfNotNull(paymentSource?.asInput),
         amount,
         currency,
         savePaymentSource,
         livemode,
-        Input.optional(cancellationReason),
-        Input.optional(receiptEmail)
+        Optional.presentIfNotNull(cancellationReason),
+        Optional.presentIfNotNull(receiptEmail)
     )
 
 val PaymentIntentUpdateWrapper.asInput
     get() = PaymentIntentUpdateInput(
-        Input.optional(status),
-        Input.optional(paymentSourceWrapper?.asInput),
-        Input.optional(savePaymentSource)
+        Optional.presentIfNotNull(status),
+        Optional.presentIfNotNull(paymentSourceWrapper?.asInput),
+        Optional.presentIfNotNull(savePaymentSource)
     )
 
 val PaymentSourceAddressWrapper.asInput
     get() = PaymentSourceAddressInput(
-        city.toInput(),
-        country.toInput(),
-        line1.toInput(),
-        line2.toInput(),
-        postalCode.toInput(),
-        state.toInput()
+        Optional.presentIfNotNull(city),
+        Optional.presentIfNotNull(country),
+        Optional.presentIfNotNull(line1),
+        Optional.presentIfNotNull(line2),
+        Optional.presentIfNotNull(postalCode),
+        Optional.presentIfNotNull(state)
     )
 
 val PaymentSourceBillingDetailsWrapper.asInput
     get() =
         PaymentSourceBillingDetailsInput(
             address?.asInput.toInput(),
-            email.toInput(),
-            name.toInput(),
-            phone.toInput()
+            Optional.presentIfNotNull(email),
+            Optional.presentIfNotNull(name),
+            Optional.presentIfNotNull(phone)
         )
 
 val PaymentSourceWrapper.asInput
     get() = PaymentSourceInput(
-        Input.optional(id),
-        TOKEN_PROVIDER.toInput(),
-        PaymentSourceType.CARD.toInput(),
-        Input.optional(billingDetailsInput?.asInput),
-        Input.optional(card?.asInput)
+        Optional.presentIfNotNull(id),
+        Optional.Present(TOKEN_PROVIDER),
+        Optional.Present(PaymentSourceType.card),
+        Optional.presentIfNotNull(billingDetailsInput?.asInput),
+        Optional.presentIfNotNull(card?.asInput)
     )
 
 fun convertPaymentSourceWrapperToInput(items: List<PaymentSourceWrapper>): List<PaymentSourceInput> =
     items.map {
         PaymentSourceInput(
-            Input.optional(it.id),
-            TOKEN_PROVIDER.toInput(),
-            PaymentSourceType.CARD.toInput(),
-            Input.optional(it.billingDetailsInput?.asInput),
-            Input.optional(it.card?.asInput)
+            Optional.presentIfNotNull(it.id),
+            Optional.Present(TOKEN_PROVIDER),
+            Optional.Present(PaymentSourceType.card),
+            Optional.presentIfNotNull(it.billingDetailsInput?.asInput),
+            Optional.presentIfNotNull(it.card?.asInput)
         )
     }
 

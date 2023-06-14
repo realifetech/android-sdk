@@ -1,7 +1,6 @@
 package com.realifetech.sdk.communicate
 
 import android.content.Context
-import android.util.Log
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.TokenBody
@@ -12,7 +11,11 @@ import com.realifetech.sdk.communicate.domain.model.NotificationConsent
 import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.core.utils.hasNetworkConnection
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 class Communicate @Inject constructor(
@@ -24,19 +27,17 @@ class Communicate @Inject constructor(
     private val context: Context,
     private val notificationConsentRepository: NotificationConsentRepository
 ) {
-
-    fun trackPush(
-        event: Event,
-        trackInfo: Map<String, Any>?,
-        completion: (error: Exception?, response: Boolean) -> Unit
-    ) {
-        analytics.track(
-            USER,
-            event.message,
-            trackInfo,
-            null,
-            completion
-        )
+    suspend fun trackPush(event: Event, trackInfo: Map<String, Any>?): Boolean {
+        return try {
+            val result = analytics.track(USER, event.message, trackInfo, null)
+            // Log the successful result with Timber
+            Timber.i("Push tracked successfully: $result")
+            result
+        } catch (e: Exception) {
+            // Log the error with Timber
+            Timber.e(e, "Error tracking push")
+            throw e
+        }
     }
 
     fun registerForPushNotifications(token: String): Result<Boolean> {
@@ -64,27 +65,38 @@ class Communicate @Inject constructor(
                     registerForPushNotifications(tokenStorage.pendingToken)
                 }
                 when (result) {
-                    is Result.Success -> Log.d(
-                        this.javaClass.name,
-                        "Success while sending register for PN"
-                    )
-                    is Result.Error ->
-                        Log.e(this.javaClass.name, "Error: ${result.exception.message}")
+                    is Result.Success -> Timber.d("Success while sending register for PN")
+                    is Result.Error -> Timber.e(result.exception, "Error while sending register for PN")
                 }
             }
         } else return
     }
 
-    fun getNotificationConsent(callback: (error: Exception?, response: List<NotificationConsent?>?) -> Unit) {
-        notificationConsentRepository.getNotificationConsents(callback)
+    suspend fun getNotificationConsent(): List<NotificationConsent?> {
+        return try {
+            notificationConsentRepository.getNotificationConsents()
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to get notification consents")
+            emptyList()
+        }
     }
 
-    fun getMyDeviceNotificationConsents(callback: (error: Exception?, response: List<DeviceNotificationConsent?>?) -> Unit) {
-        notificationConsentRepository.getMyDeviceNotificationConsents(callback)
+    suspend fun getMyDeviceNotificationConsents(): List<DeviceNotificationConsent?> {
+        return try {
+            notificationConsentRepository.getMyDeviceNotificationConsents()
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to get my device notification consents")
+            emptyList()
+        }
     }
 
-    fun updateMyDeviceNotificationConsent(id: String, enabled: Boolean, callback: (error: Exception?, success: Boolean?) -> Unit){
-        notificationConsentRepository.updateMyDeviceNotificationConsent(id, enabled, callback)
+    suspend fun updateMyDeviceNotificationConsent(id: String, enabled: Boolean): Boolean {
+        return try {
+            notificationConsentRepository.updateMyDeviceNotificationConsent(id, enabled)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to update my device notification consent")
+            false
+        }
     }
 
     companion object {

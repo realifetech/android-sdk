@@ -26,9 +26,9 @@ val FragmentOrder.asModel: Order
         seatInfo = seatInfo as? LinkedHashMap<String, String>?,
         items = items?.map { it?.asModel }?.toMutableList(),
         orderNotes = orderNotes?.map { it?.asModel },
-        timeSlot = timeslot?.fragments?.fragmentTimeslot?.asModel,
-        fulfilmentPoint = fulfilmentPoint?.fragments?.fragmentFulfilmentPoint?.asModel,
-        user = user?.fragments?.fragmentUser?.asModel
+        timeSlot = timeslot?.fragmentTimeslot?.asModel,
+        fulfilmentPoint = fulfilmentPoint?.fragmentFulfilmentPoint?.asModel,
+        user = user?.fragmentUser?.asModel
     )
 
 val FragmentUser.asModel: User
@@ -73,10 +73,10 @@ val FragmentOrder.Translation.asModel: OrderStateTranslation
 val FragmentOrder.Item.asModel: OrderItem
     get() = OrderItem(
         id = id,
-        product = product?.fragments?.fragmentProduct?.asModel,
-        productVariant = productVariant?.fragments?.productVariant?.asModel,
-        fulfilmentPoint = fulfilmentPoint?.fragments?.fragmentFulfilmentPoint?.asModel,
-        productModifierItems = productModifierItems?.map { it?.fragments?.fragmentModifierItemSelection?.asModel },
+        product = product?.fragmentProduct?.asModel,
+        productVariant = productVariant?.productVariant?.asModel,
+        fulfilmentPoint = fulfilmentPoint?.fragmentFulfilmentPoint?.asModel,
+        productModifierItems = productModifierItems?.map { it?.fragmentModifierItemSelection?.asModel },
         price = price,
         modifierItemsPrice = modifierItemsPrice,
         quantity = quantity,

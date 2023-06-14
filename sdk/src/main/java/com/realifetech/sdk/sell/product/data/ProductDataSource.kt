@@ -6,17 +6,15 @@ import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.type.ProductFilter
 
 interface ProductDataSource {
-    fun getProducts(
+    suspend fun getProducts(
         pageSize: Int,
         page: Int,
         filters: ProductFilter,
-        params: List<FilterParamWrapper>?,
-        callback: (error: Exception?, response: PaginatedObject<Product?>?) -> Unit
-    )
+        params: List<FilterParamWrapper>?
+    ): PaginatedObject<Product?>
 
-    fun getProductById(
+    suspend fun getProductById(
         id: String,
-        params: List<FilterParamWrapper>?,
-        callback: (error: Exception?, product: Product?) -> Unit
-    )
+        params: List<FilterParamWrapper>?
+    ): Product?
 }

@@ -1,12 +1,9 @@
 package com.realifetech.sdk.access.data
 
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Input
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.exception.ApolloHttpException
-import com.apollographql.apollo.fetcher.ApolloResponseFetchers
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.exception.ApolloException
+import com.apollographql.apollo3.exception.ApolloHttpException
 import com.realifetech.GetMyTicketAuthsQuery
 import com.realifetech.GetMyTicketQuery
 import com.realifetech.GetMyTicketsQuery
@@ -17,114 +14,83 @@ import com.realifetech.sdk.access.data.model.TicketAuth
 import com.realifetech.sdk.access.data.model.asModel
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.type.TicketFilter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 class AccessDataSourceImpl @Inject constructor(apolloClient: ApolloClient) : AccessDataSource {
 
-    override fun getMyTickets(
-        pageSize: Int,
-        callback: (error: Exception?, response: PaginatedObject<Ticket?>?) -> Unit
-    ) {
-        try {
-            val response = apolloClient.query(GetMyTicketsQuery(pageSize))
-                .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
-                .build()
-
-            response.enqueue(object : ApolloCall.Callback<GetMyTicketsQuery.Data>() {
-                override fun onResponse(response: Response<GetMyTicketsQuery.Data>) {
-                    val tickets =
-                        response.data?.getMyTickets?.edges?.map { result -> result?.fragments?.fragmentTicket?.asModel }
-                    val nextPage = response.data?.getMyTickets?.nextPage
-                    val paginatedObject = PaginatedObject(tickets, nextPage)
-                    callback.invoke(null, paginatedObject)
-                }
-
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+    override suspend fun getMyTickets(
+        pageSize: Int
+    ): PaginatedObject<Ticket?> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val query = GetMyTicketsQuery(pageSize)
+                val response = apolloClient.query(query).execute()
+                val tickets =
+                    response.data?.getMyTickets?.edges?.mapNotNull { it?.fragmentTicket?.asModel }
+                val nextPage = response.data?.getMyTickets?.nextPage
+                PaginatedObject(tickets, nextPage)
+            } catch (exception: ApolloHttpException) {
+                throw Exception(exception)
+            } catch (exception: ApolloException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun getMyTicketById(
-        id: Int,
-        callback: (error: Exception?, response: Ticket?) -> Unit
-    ) {
-        try {
-            val response = apolloClient.query(GetMyTicketQuery(id = id.toString())).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
-            response.enqueue(object : ApolloCall.Callback<GetMyTicketQuery.Data>() {
-                override fun onResponse(response: Response<GetMyTicketQuery.Data>) {
-                    val ticket = response.data?.getMyTicket?.fragments?.fragmentTicket?.asModel
-                    callback.invoke(null, ticket)
-                }
-
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+    override suspend fun getMyTicketById(
+        id: Int
+    ): Ticket? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val query = GetMyTicketQuery(id = id.toString())
+                val response = apolloClient.query(query).execute()
+                response.data?.getMyTicket?.fragmentTicket?.asModel
+            } catch (exception: ApolloHttpException) {
+                throw Exception(exception)
+            } catch (exception: ApolloException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun getNextUpcomingTicket(callback: (error: Exception?, ticket: Ticket?) -> Unit) {
-        try {
-            val response = apolloClient.query(
-                GetUpcomingTicketsQuery(
+    override suspend fun getNextUpcomingTicket(): Ticket? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val query = GetUpcomingTicketsQuery(
                     pageSize = 1,
-                    filters = Input.optional(
+                    filters = Optional.presentIfNotNull(
                         TicketFilter(
-                            status = Input.optional(ACTIVE),
-                            sessionDateAfter = Input.optional(twentyFourHourDateTimeStamp)
+                            status = if (ACTIVE != null) Optional.presentIfNotNull(ACTIVE) else Optional.presentIfNotNull(""),
+                            sessionDateAfter = if (twentyFourHourDateTimeStamp != null) Optional.present(twentyFourHourDateTimeStamp) else Optional.present("")
                         )
                     )
                 )
-            )
-                .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
-                .build()
-            response.enqueue(object : ApolloCall.Callback<GetUpcomingTicketsQuery.Data>() {
-                override fun onResponse(response: Response<GetUpcomingTicketsQuery.Data>) {
-                    callback.invoke(
-                        null,
-                        response.data?.getMyTickets?.edges?.first()?.fragments?.fragmentTicket?.asModel
-                    )
-                }
-
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+                val response = apolloClient.query(query).execute()
+                response.data?.getMyTickets?.edges?.firstOrNull()?.fragmentTicket?.asModel
+            } catch (exception: ApolloHttpException) {
+                throw Exception(exception)
+            } catch (exception: ApolloException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit) {
-        try {
-            val response = apolloClient.query(GetMyTicketAuthsQuery()).toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST).build()
-            response.enqueue(object : ApolloCall.Callback<GetMyTicketAuthsQuery.Data>() {
-                override fun onResponse(response: Response<GetMyTicketAuthsQuery.Data>) {
-                    callback.invoke(
-                        null,
-                        response.data?.getMyTicketAuths?.map { it?.fragments?.fragmentTicketAuth?.asModel })
-                }
-
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+    override suspend fun getMyTicketAuths(): List<TicketAuth?> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val query = GetMyTicketAuthsQuery()
+                val response = apolloClient.query(query).execute()
+                response.data?.getMyTicketAuths?.map { it?.fragmentTicketAuth?.asModel }
+                    ?: emptyList()
+            } catch (exception: ApolloHttpException) {
+                throw Exception(exception)
+            } catch (exception: ApolloException) {
+                throw Exception(exception)
+            }
         }
     }
 }

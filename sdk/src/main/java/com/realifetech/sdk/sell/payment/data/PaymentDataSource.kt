@@ -8,35 +8,21 @@ import com.realifetech.type.PaymentIntentUpdateInput
 import com.realifetech.type.PaymentSourceInput
 
 interface PaymentDataSource {
-    fun addPaymentSource(
-        input: PaymentSourceInput,
-        callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
-    )
+    suspend fun addPaymentSource(input: PaymentSourceInput): PaymentSource?
 
-    fun getMyPaymentSources(
+    suspend fun getMyPaymentSources(
         pageSize: Int,
-        page: Int?,
-        callback: (error: Exception?, response: PaginatedObject<PaymentSource?>?) -> Unit
-    )
+        page: Int?
+    ): PaginatedObject<PaymentSource?>?
 
-    fun createPaymentIntent(
-        input: PaymentIntentInput,
-        callback: (error: Exception?, response: PaymentIntent?) -> Unit
-    )
+    suspend fun createPaymentIntent(input: PaymentIntentInput): PaymentIntent?
 
-    fun updatePaymentIntent(
+    suspend fun updatePaymentIntent(
         id: String,
-        input: PaymentIntentUpdateInput,
-        callback: (error: Exception?, response: PaymentIntent?) -> Unit
-    )
+        input: PaymentIntentUpdateInput
+    ): PaymentIntent?
 
-    fun getMyPaymentIntent(
-        id: String,
-        callback: (error: Exception?, response: PaymentIntent?) -> Unit
-    )
+    suspend fun getMyPaymentIntent(id: String): PaymentIntent?
 
-    fun deleteMyPaymentSource(
-        id: String,
-        callback: (error: Exception?, paymentSource: PaymentSource?) -> Unit
-    )
+    suspend fun deleteMyPaymentSource(id: String): PaymentSource?
 }

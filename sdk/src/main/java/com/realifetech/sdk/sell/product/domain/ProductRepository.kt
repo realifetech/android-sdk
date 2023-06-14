@@ -8,20 +8,19 @@ import com.realifetech.type.ProductFilter
 
 class ProductRepository(private val dataSource: ProductDataSource) {
 
-    fun getProductById(
+    suspend fun getProductById(
         id: String,
-        params: List<FilterParamWrapper>?,
-        callback: (error: Exception?, product: Product?) -> Unit
-    ) =
-        dataSource.getProductById(id, params, callback)
+        params: List<FilterParamWrapper>?
+    ): Product? {
+        return dataSource.getProductById(id, params)
+    }
 
-    fun getProducts(
+    suspend fun getProducts(
         pageSize: Int,
         page: Int,
         filters: ProductFilter,
-        params: List<FilterParamWrapper>?,
-        callback: (error: Exception?, response: PaginatedObject<Product?>?) -> Unit
-    ) =
-        dataSource.getProducts(pageSize, page, filters, params, callback)
-
+        params: List<FilterParamWrapper>?
+    ): PaginatedObject<Product?> {
+        return dataSource.getProducts(pageSize, page, filters, params)
+    }
 }

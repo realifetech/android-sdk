@@ -1,16 +1,15 @@
 package com.realifetech.sdk.general
 
-import android.util.Log
 import androidx.annotation.ColorInt
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.data.model.color.ColorType
-import com.realifetech.sdk.core.data.model.color.ColorType.*
 import com.realifetech.sdk.core.utils.ColorPallet
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.general.data.DeviceConsent
 import com.realifetech.sdk.general.data.PhysicalDeviceInfo
 import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
+import timber.log.Timber
 import javax.inject.Inject
 
 class General @Inject constructor(
@@ -25,43 +24,46 @@ class General @Inject constructor(
         configuration.deviceId = physicalDeviceInfo.deviceId
     }
 
+    @Volatile
     var isSdkReady: Boolean = false
         private set
 
     val deviceIdentifier: String
         get() = configuration.deviceId
 
-
     @Synchronized
-    fun registerDevice(): Result<Boolean> {
+    suspend fun registerDevice(): Result<Boolean> {
         sdkInitializationPrecondition.checkContextInitialized()
         return try {
-            Log.d("General", "Sending register device request")
+            Timber.d("Sending register device request")
             val result = deviceRepository.registerDevice()
             isSdkReady = result is Result.Success
 
-            Log.d("General", "Register device request result, is SDK ready = $isSdkReady")
+            Timber.d("Register device request result, is SDK ready = $isSdkReady")
             result
         } catch (exception: Exception) {
-            Log.e("General", exception.message, exception)
+            Timber.e(exception, "Error while registering device")
             Result.Error(exception)
         }
     }
 
-    fun updateMyDeviceConsent(deviceConsent: DeviceConsent, callback: (error: Exception?, result: Boolean?) -> Unit) {
-        return deviceRepository.updateMyDeviceConsent(deviceConsent, callback)
+    suspend fun updateMyDeviceConsent(deviceConsent: DeviceConsent): com.realifetech.sdk.core.utils.Result<Boolean> {
+        return try {
+            deviceRepository.updateMyDeviceConsent(deviceConsent)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
     fun setColor(@ColorInt color: Int, forType: ColorType) {
         colorPallet.apply {
-            when (forType ) {
-                PRIMARY -> colorPrimary = color
-                ON_PRIMARY -> colorOnPrimary = color
-                SURFACE -> colorSurface = color
-                ON_SURFACE -> colorOnSurface = color
-                NEUTRAL -> colorNeutral = color
+            when (forType) {
+                ColorType.PRIMARY -> colorPrimary = color
+                ColorType.ON_PRIMARY -> colorOnPrimary = color
+                ColorType.SURFACE -> colorSurface = color
+                ColorType.ON_SURFACE -> colorOnSurface = color
+                ColorType.NEUTRAL -> colorNeutral = color
             }
         }
     }
-
 }

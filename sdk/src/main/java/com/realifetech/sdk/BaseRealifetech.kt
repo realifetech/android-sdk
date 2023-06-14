@@ -1,6 +1,6 @@
 package com.realifetech.sdk
 
-import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo3.ApolloClient
 import com.realifetech.sdk.access.Access
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences

@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
-apply plugin: "com.apollographql.apollo"
+apply plugin: "com.apollographql.apollo3"
 apply plugin: "maven-publish"
 apply plugin: "net.thauvin.erik.gradle.semver"
 android {
@@ -45,16 +45,18 @@ android {
 
 apollo {
     // instruct the compiler to generate Kotlin models
-    generateKotlinModels.set(true)
+    //generateKotlinModels.set(true)
 
     service("core"){
         sourceFolder = "com/realifetech"
         packageName ="com.realifetech"
+
+        decapitalizeFields.set(true)
     }
-    service("realifetechCa"){
+    /*service("realifetechCa"){
         sourceFolder = "com/realifetechCa"
         packageName ="com.realifetechCa"
-    }
+    }*/
 }
 
 task sourceJar(type: Jar) {
@@ -83,9 +85,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$rootProject.ext.coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$rootProject.ext.kotlin_json"
     // GraphQL
-    implementation "com.apollographql.apollo:apollo-runtime:$rootProject.ext.graphql_version"
-    implementation "com.apollographql.apollo:apollo-coroutines-support:$rootProject.ext.graphql_version"
-    implementation "com.apollographql.apollo:apollo-normalized-cache-sqlite:$rootProject.ext.graphql_version"
+    implementation "com.apollographql.apollo3:apollo-runtime:$rootProject.ext.graphql_version"
+    //implementation "com.apollographql.apollo:apollo-coroutines-support:$rootProject.ext.graphql_version"
+    implementation "com.apollographql.apollo3:apollo-normalized-cache-sqlite:$rootProject.ext.graphql_version"
     //Material UI
     implementation "com.google.android.material:material:$rootProject.ext.material_version"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraint_version"
@@ -101,6 +103,8 @@ dependencies {
     implementation "androidx.room:room-ktx:$rootProject.ext.room_version"
     implementation "androidx.room:room-runtime:$rootProject.ext.room_version"
     annotationProcessor "androidx.room:room-compiler:$rootProject.ext.room_version"
+    //Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
     // Testing
     testImplementation "junit:junit:$rootProject.ext.junit_version"
     testImplementation "org.mockito:mockito-core:$rootProject.ext.mockito_version"

@@ -5,51 +5,27 @@ import com.realifetech.sdk.access.data.model.TicketAuth
 import com.realifetech.sdk.access.domain.AccessRepository
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class Access @Inject constructor(
     private val accessRepository: AccessRepository,
-    private val dispatcherIO: CoroutineDispatcher,
-    private val dispatcherMain: CoroutineDispatcher
+    private val dispatcherIO: CoroutineDispatcher
 ) {
 
-    fun getMyTickets(
-        pageSize: Int,
-        callback: (error: Exception?, response: PaginatedObject<Ticket?>?) -> Unit
-    ) {
-        accessRepository.getMyTickets(pageSize) { error, response ->
-            GlobalScope.launch(dispatcherIO) {
-                withContext(dispatcherMain) {
-                    callback(error, response)
-                }
-            }
-        }
+    suspend fun getMyTickets(pageSize: Int): PaginatedObject<Ticket?> = withContext(dispatcherIO) {
+        accessRepository.getMyTickets(pageSize)
     }
 
-    fun getMyTicketById(id: Int, callback: (error: Exception?, response: Ticket?) -> Unit) {
-        accessRepository.getMyTicketById(id) { error, response ->
-            GlobalScope.launch(dispatcherIO) {
-                withContext(dispatcherMain) {
-                    callback(error, response)
-                }
-            }
-        }
+    suspend fun getMyTicketById(id: Int): Ticket? = withContext(dispatcherIO) {
+        accessRepository.getMyTicketById(id)
     }
 
-    fun getNextUpcomingTicket(callback: (error: Exception?, ticket: Ticket?) -> Unit) {
-        accessRepository.getNextUpcomingTicket { error, ticket ->
-            GlobalScope.launch(dispatcherIO) {
-                withContext(dispatcherMain) {
-                    callback(error, ticket)
-                }
-            }
-        }
+    suspend fun getNextUpcomingTicket(): Ticket? = withContext(dispatcherIO) {
+        accessRepository.getNextUpcomingTicket()
     }
 
-    fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit) {
-        accessRepository.getMyTicketAuths(callback)
+    suspend fun getMyTicketAuths(): List<TicketAuth?> = withContext(dispatcherIO) {
+        accessRepository.getMyTicketAuths()
     }
 }

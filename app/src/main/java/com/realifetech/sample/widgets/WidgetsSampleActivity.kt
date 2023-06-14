@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.realifetech.sample.R
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.type.ScreenType
@@ -25,13 +26,13 @@ class WidgetsSampleActivity : AppCompatActivity() {
 
         radioGroup.setOnCheckedChangeListener { group, checkedId ->
             selectedType = when (checkedId) {
-                R.id.radioBooking -> ScreenType.BOOKING
-                R.id.radioDiscovery -> ScreenType.DISCOVER
-                R.id.radioShop -> ScreenType.SHOP
-                R.id.radioEvents -> ScreenType.EVENTS
-                R.id.radioWallet -> ScreenType.WALLET
-                R.id.radioLineup -> ScreenType.LINEUP
-                R.id.radioGeneric -> ScreenType.GENERIC
+                R.id.radioBooking -> ScreenType.booking
+                R.id.radioDiscovery -> ScreenType.discover
+                R.id.radioShop -> ScreenType.shop
+                R.id.radioEvents -> ScreenType.events
+                R.id.radioWallet -> ScreenType.wallet
+                R.id.radioLineup -> ScreenType.lineup
+                R.id.radioGeneric -> ScreenType.generic
                 else -> null
             }
         }
@@ -63,41 +64,30 @@ class WidgetsSampleActivity : AppCompatActivity() {
     }
 
     private fun queryWidgets() {
-        GlobalScope.launch(Dispatchers.IO) {
-            RealifeTech.getContent()
-                .getWidgetsByScreenType(selectedType!!, 10, 1) { error, response ->
-                    GlobalScope.launch(Dispatchers.IO) {
-                        withContext(Dispatchers.Main) {
-                            error?.let {
-                                displayToast("Error loading:${it.message}")
-                            }
-                            response?.let {
-                                displayToast(
-                                    "Next Page: ${it.nextPage} " + "\n Widget loading: ${it.items} "
-                                )
-                            }
-                        }
+        lifecycleScope.launch(Dispatchers.IO) {
+            val result = RealifeTech.getContent().getWidgetsByScreenType(selectedType!!, 10, 1)
+            withContext(Dispatchers.Main) {
+                result.fold(
+                    onSuccess = { response ->
+                        displayToast("Next Page: ${response.nextPage}\nWidget loading: ${response.items}")
+                    },
+                    onFailure = { error ->
+                        displayToast("Error loading: ${error.message}")
                     }
-                }
+                )
+            }
         }
     }
 
     private fun queryScreenTitle() {
-        GlobalScope.launch(Dispatchers.IO) {
-            RealifeTech.getContent().getScreenTitleByScreenType(selectedType!!) { error, response ->
-                GlobalScope.launch(Dispatchers.IO) {
-                    withContext(Dispatchers.Main) {
-                        error?.let {
-                            displayToast("Error loading:${it.message}")
-                        }
-                        response?.let {
-                            displayToast("Screen Title translations loading: $it")
-                        }
-                    }
-                }
+        lifecycleScope.launch(Dispatchers.IO) {
+            val result = RealifeTech.getContent().getScreenTitleByScreenType(selectedType!!)
+            withContext(Dispatchers.Main) {
+                displayToast("Screen Title translations loading: $result")
             }
         }
     }
+
 
     private fun displayToast(message: String?) {
         Toast.makeText(

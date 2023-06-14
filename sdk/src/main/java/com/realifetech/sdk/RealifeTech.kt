@@ -1,6 +1,7 @@
 package com.realifetech.sdk
 
 import android.content.Context
+import com.apollographql.apollo3.cache.normalized.apolloStore
 import com.realifetech.sdk.access.Access
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.audiences.Audiences
@@ -56,7 +57,7 @@ object RealifeTech : BaseRealifetech() {
     }
 
     fun clearAllCachedData() {
-        apolloClient.clearNormalizedCache()
+        apolloClient.apolloStore.clearAll()
     }
 
 }

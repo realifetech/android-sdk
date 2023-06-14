@@ -2,12 +2,12 @@ package com.realifetech.sdk.di.features.modules
 
 import android.content.Context
 import androidx.room.Room
-import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo3.ApolloClient
+import com.realifetech.sdk.analytics.data.database.PendingAnalyticEventsDatabase
 import com.realifetech.sdk.analytics.data.datasource.AnalyticsStorageDataSourceImpl
 import com.realifetech.sdk.analytics.domain.AnalyticsEngine
 import com.realifetech.sdk.analytics.domain.AnalyticsStorage
 import com.realifetech.sdk.analytics.domain.RltBackendAnalyticsEngine
-import com.realifetech.sdk.analytics.data.database.PendingAnalyticEventsDatabase
 import dagger.Module
 import dagger.Provides
 
@@ -31,7 +31,7 @@ class AnalyticsModule {
     }
 
     @Provides
-    fun provideAnalyticsEngine(apolloClient: ApolloClient,analyticsStorage: AnalyticsStorage): AnalyticsEngine {
+    fun provideAnalyticsEngine(apolloClient: ApolloClient, analyticsStorage: AnalyticsStorage): AnalyticsEngine {
         return RltBackendAnalyticsEngine(apolloClient,analyticsStorage)
     }
 

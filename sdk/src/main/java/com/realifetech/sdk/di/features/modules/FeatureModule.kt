@@ -91,7 +91,7 @@ object FeatureModule {
     internal fun audiences(
         audiencesRepository: AudiencesRepository,
         context: Context
-    ) = Audiences(audiencesRepository, Dispatchers.IO, Dispatchers.Main, context)
+    ) = Audiences(audiencesRepository, context)
 
     @FeatureScope
     @Provides
@@ -153,8 +153,7 @@ object FeatureModule {
     @Provides
     fun access(accessRepository: AccessRepository): Access = Access(
         accessRepository,
-        Dispatchers.IO,
-        Dispatchers.Main
+        Dispatchers.IO
     )
 
 }

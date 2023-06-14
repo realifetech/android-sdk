@@ -4,18 +4,15 @@ import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
 import com.realifetech.type.ScreenType
 
 interface WidgetsDataSource {
-    fun getWidgetsByScreenId(
-        id: String,
-        pageSize: Int,
-        page: Int,
-        callback: (error: Exception?, response: WidgetEdge?) -> Unit
-    )
-
-    fun getWidgetsByScreenType(
+    suspend fun getWidgetsByScreenType(
         screenType: ScreenType,
         pageSize: Int,
-        page: Int,
-        callback: (error: Exception?, response: WidgetEdge?) -> Unit
-    )
+        page: Int
+    ): Result<WidgetEdge>
 
+    suspend fun getWidgetsByScreenId(
+        id: String,
+        pageSize: Int,
+        page: Int
+    ): Result<WidgetEdge>
 }

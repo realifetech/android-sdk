@@ -1,31 +1,29 @@
 package com.realifetech.sdk.sell.order.domain
 
 import com.realifetech.sdk.core.data.model.order.model.Order
-import com.realifetech.sdk.core.data.model.order.wrapper.OrderUpdateWrapper
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.sell.order.data.datasource.OrderDataSource
+import com.realifetech.type.OrderUpdateInput
 
 class OrderRepository(
-    private val dataSource: OrderDataSource,
+    private val dataSource: OrderDataSource
 ) {
 
-    fun getOrders(
+    suspend fun getOrders(
         pageSize: Int,
-        page: Int,
-        callback: (error: Exception?, response: PaginatedObject<Order?>?) -> Unit
-    ) {
-        dataSource.getOrders(pageSize, page, callback)
+        page: Int
+    ): PaginatedObject<Order?> {
+        return dataSource.getOrders(pageSize, page)
     }
 
-    fun getOrderById(id: String, callback: (error: Exception?, order: Order?) -> Unit) {
-        dataSource.getOrderById(id, callback)
+    suspend fun getOrderById(id: String): Order {
+        return dataSource.getOrderById(id)
     }
 
-    fun updateMyOrder(
+    suspend fun updateMyOrder(
         id: String,
-        input: OrderUpdateWrapper,
-        callback: (error: Exception?, order: Order?) -> Unit
-    ) {
-        dataSource.updateMyOrder(id, input, callback)
+        orderUpdateInput: OrderUpdateInput
+    ): Order {
+        return dataSource.updateMyOrder(id, orderUpdateInput)
     }
 }

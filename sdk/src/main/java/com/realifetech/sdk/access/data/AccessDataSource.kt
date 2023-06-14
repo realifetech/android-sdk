@@ -1,17 +1,21 @@
 package com.realifetech.sdk.access.data
 
 import com.realifetech.sdk.access.data.model.Ticket
-import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.access.data.model.TicketAuth
+import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 
 interface AccessDataSource {
 
-    fun getMyTickets(pageSize: Int, callback: (error: Exception?, response: PaginatedObject<Ticket?>?) -> Unit)
+    suspend fun getMyTickets(
+        pageSize: Int
+    ): PaginatedObject<Ticket?>
 
-    fun getMyTicketById(id: Int, callback: (error: Exception?, response: Ticket?) -> Unit)
+    suspend fun getMyTicketById(
+        id: Int
+    ): Ticket?
 
-    fun getNextUpcomingTicket(callback: (error: Exception?, ticket: Ticket?) -> Unit)
+    suspend fun getNextUpcomingTicket(): Ticket?
 
-    fun getMyTicketAuths(callback: (error: Exception?, tickets: List<TicketAuth?>?) -> Unit)
+    suspend fun getMyTicketAuths(): List<TicketAuth?>
 
 }

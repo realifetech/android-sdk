@@ -8,31 +8,23 @@ import javax.inject.Inject
 
 class BasketRepository @Inject constructor(private val dataSource: BasketDataSource) {
 
-    fun getBasket(callback: (error: Exception?, basket: Basket?) -> Unit) {
-        dataSource.getBasket(callback)
+    suspend fun getBasket(): Basket? {
+        return dataSource.getBasket()
     }
 
-    fun createMyBasket(
-        basket: BasketRequest,
-        callback: (error: Exception?, basket: Basket?) -> Unit
-    ) {
-        dataSource.createMyBasket(basket.asInputObject, callback)
+    suspend fun createMyBasket(basket: BasketRequest): Basket? {
+        return dataSource.createMyBasket(basket.asInputObject)
     }
 
-    fun updateMyBasket(
-        basket: BasketRequest,
-        callback: (error: Exception?, basket: Basket?) -> Unit
-    ) {
-        dataSource.updateMyBasket(basket.asInputObject, callback)
+    suspend fun updateMyBasket(basket: BasketRequest): Basket? {
+        return dataSource.updateMyBasket(basket.asInputObject)
     }
 
-    fun deleteMyBasket(callback: (error: Exception?, response: StandardResponse?) -> Unit) {
-        dataSource.deleteMyBasket(callback)
+    suspend fun deleteMyBasket(): StandardResponse {
+        return dataSource.deleteMyBasket()
     }
 
-    fun checkoutMyBasket(
-        checkoutRequest: CheckoutRequest,
-        callback: (error: Exception?, order: Order?) -> Unit
-    ) =
-        dataSource.checkoutMyBasket(checkoutRequest.asInput, callback)
+    suspend fun checkoutMyBasket(checkoutRequest: CheckoutRequest): Order? {
+        return dataSource.checkoutMyBasket(checkoutRequest.asInput)
+    }
 }

@@ -9,22 +9,19 @@ import javax.inject.Inject
 
 class ProductFeature @Inject constructor(private val productRepo: ProductRepository) {
 
-    fun getProducts(
+    suspend fun getProducts(
         pageSize: Int,
         page: Int,
         filters: ProductFilter,
-        params: List<FilterParamWrapper>?,
-        callback: (error: Exception?, response: PaginatedObject<Product?>?) -> Unit
-    ) {
-        productRepo.getProducts(pageSize, page, filters, params, callback)
+        params: List<FilterParamWrapper>?
+    ): PaginatedObject<Product?> {
+        return productRepo.getProducts(pageSize, page, filters, params)
     }
 
-    fun getProductById(
+    suspend fun getProductById(
         id: String,
-        params: List<FilterParamWrapper>?,
-        callback: (error: Exception?, product: Product?) -> Unit
-    ) {
-        productRepo.getProductById(id, params, callback)
+        params: List<FilterParamWrapper>?
+    ): Product? {
+        return productRepo.getProductById(id, params)
     }
-
 }

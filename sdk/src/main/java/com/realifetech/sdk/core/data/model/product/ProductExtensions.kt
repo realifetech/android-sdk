@@ -1,9 +1,9 @@
 package com.realifetech.sdk.core.data.model.product
 
-import com.realifetech.sdk.core.data.model.fulfilmentPoint.asModel
-import com.realifetech.sdk.core.data.model.shared.translation.StandardTranslation
 import com.realifetech.fragment.FragmentProduct
 import com.realifetech.fragment.ModifierItem
+import com.realifetech.sdk.core.data.model.fulfilmentPoint.asModel
+import com.realifetech.sdk.core.data.model.shared.translation.StandardTranslation
 
 val FragmentProduct.asModel: Product
     get() = Product(
@@ -13,10 +13,10 @@ val FragmentProduct.asModel: Product
         images = images?.map { it?.asModel }?.toMutableList(),
         translations = translations?.map { it?.asModel }?.toMutableList(),
         categories = categories?.map { it?.asModel }?.toMutableList(),
-        variants = variants?.map { it?.fragments?.productVariant?.asModel }
+        variants = variants?.map { it?.productVariant?.asModel }
             ?.toMutableList(),
         modifierLists = modifierLists?.map { it?.asModel }?.toMutableList(),
-        fulfilmentPoints = fulfilmentPoints?.map { it?.fragments?.fragmentFulfilmentPoint?.asModel }
+        fulfilmentPoints = fulfilmentPoints?.map { it?.fragmentFulfilmentPoint?.asModel }
             ?.toMutableList(),
         reference = reference
     )
@@ -103,6 +103,6 @@ val FragmentProduct.ModifierList.asModel: ProductModifierList
         multipleSelect = multipleSelect,
         mandatorySelect = mandatorySelect,
         maxAllowed = maxAllowed,
-        items = items?.map { it?.fragments?.modifierItem?.asModel }?.toMutableList(),
+        items = items?.map { it?.modifierItem?.asModel }?.toMutableList(),
         translations = translations?.map { it?.asModel }?.toMutableList()
     )

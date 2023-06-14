@@ -1,12 +1,12 @@
 package com.realifetech.sdk.di.features.modules
 
-import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo3.ApolloClient
 import com.realifetech.sdk.content.screen.data.datasource.ScreenDataSourceImpl
 import com.realifetech.sdk.content.screen.data.datasource.ScreensDataSource
 import com.realifetech.sdk.content.webPage.data.WebPageDataSource
 import com.realifetech.sdk.content.webPage.data.WebPageDataSourceImpl
-import com.realifetech.sdk.content.widgets.data.datasource.WidgetsDataSourceImpl
 import com.realifetech.sdk.content.widgets.data.datasource.WidgetsDataSource
+import com.realifetech.sdk.content.widgets.data.datasource.WidgetsDataSourceImpl
 import dagger.Module
 import dagger.Provides
 

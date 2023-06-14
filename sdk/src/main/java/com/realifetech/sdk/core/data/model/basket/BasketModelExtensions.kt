@@ -1,7 +1,6 @@
 package com.realifetech.sdk.core.data.model.basket
 
-import com.apollographql.apollo.api.Input
-import com.apollographql.apollo.api.toInput
+import com.apollographql.apollo3.api.Optional
 import com.realifetech.fragment.FragmentBasket
 import com.realifetech.fragment.FragmentModifierItemSelection
 import com.realifetech.sdk.core.data.model.fulfilmentPoint.asModel
@@ -20,7 +19,7 @@ val FragmentBasket.asModel: Basket
         grossAmount = grossAmount,
         netAmount = netAmount,
         seatInfo = seatInfo as? LinkedHashMap<String, String>?,
-        timeslot = timeslot?.fragments?.fragmentTimeslot?.asModel,
+        timeslot = timeslot?.fragmentTimeslot?.asModel,
         collectionDate = collectionDate,
         collectionPreferenceType = collectionPreferenceType,
         items = items?.mapNotNull { it?.asModel }
@@ -33,52 +32,52 @@ val FragmentBasket.Item.asModel: BasketItem
         modifierItemsPrice = modifierItemsPrice,
         quantity = quantity,
         totalPrice = totalPrice,
-        product = product?.fragments?.fragmentProduct?.asModel,
-        productVariant = productVariant?.fragments?.productVariant?.asModel,
-        fulfilmentPoint = fulfilmentPoint?.fragments?.fragmentFulfilmentPoint?.asModel,
-        productModifierItems = productModifierItems?.map { it?.fragments?.fragmentModifierItemSelection?.asModel }
+        product = product?.fragmentProduct?.asModel,
+        productVariant = productVariant?.productVariant?.asModel,
+        fulfilmentPoint = fulfilmentPoint?.fragmentFulfilmentPoint?.asModel,
+        productModifierItems = productModifierItems?.map { it?.fragmentModifierItemSelection?.asModel }
     )
 
 val FragmentModifierItemSelection.asModel: ProductModifierItemSelection
     get() = ProductModifierItemSelection(
-        productModifierItem = productModifierItem?.fragments?.modifierItem?.asModel,
+        productModifierItem = productModifierItem?.modifierItem?.asModel,
         quantity = quantity,
         totalPrice = totalPrice
     )
 
 val BasketRequest.asInputObject: BasketInput
     get() = BasketInput(
-        collectionDate = collectionDate.toInput(),
-        collectionPreferenceType = collectionPreferenceType.toInput(),
-        timeslot = timeslotId.toInput(),
+        collectionDate = Optional.presentIfNotNull(collectionDate),
+        collectionPreferenceType = Optional.presentIfNotNull(collectionPreferenceType),
+        timeslot = Optional.presentIfNotNull(timeslotId),
         fulfilmentPoint = fulfilmentPoint.orEmpty(),
-        seatInfo = seatInfo.toInput(),
+        seatInfo = Optional.presentIfNotNull(seatInfo),
         items = convertBasketItemsToInput(items).orEmpty()
     )
 
 fun convertBasketItemsToInput(basketItems: List<BasketRequestItem?>?): List<BasketItemInput?>? =
     basketItems?.map {
         BasketItemInput(
-            Input.optional(it?.id),
-            Input.optional(it?.product),
-            Input.optional(it?.productVariant),
-            Input.optional(it?.fulfilmentPoint),
-            Input.optional(it?.quantity),
-            Input.optional(it?.productModifierItems?.toInputList())
+            Optional.presentIfNotNull(it?.id),
+            Optional.presentIfNotNull(it?.product),
+            Optional.presentIfNotNull(it?.productVariant),
+            Optional.presentIfNotNull(it?.fulfilmentPoint),
+            Optional.presentIfNotNull(it?.quantity),
+            Optional.presentIfNotNull(it?.productModifierItems?.toInputList())
         )
     }
 
 val CheckoutRequest.asInput
     get() =
         CheckoutInput(
-            Input.optional(netAmount),
-            Input.optional(language.toLanguage)
+            Optional.presentIfNotNull(netAmount),
+            Optional.presentIfNotNull(language.toLanguage)
         )
 
 fun List<ProductModifierItemSelectionRequest?>.toInputList(): List<ProductModifierItemSelectionInput?> =
     map {
         ProductModifierItemSelectionInput(
-            Input.optional(it?.productModifierItemId),
-            Input.optional(it?.quantity)
+            Optional.presentIfNotNull(it?.productModifierItemId),
+            Optional.presentIfNotNull(it?.quantity)
         )
     }

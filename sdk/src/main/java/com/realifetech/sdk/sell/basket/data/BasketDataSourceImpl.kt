@@ -1,13 +1,9 @@
 package com.realifetech.sdk.sell.basket.data
 
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Input
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.exception.ApolloHttpException
-import com.apollographql.apollo.exception.ApolloParseException
-import com.apollographql.apollo.fetcher.ApolloResponseFetchers
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.exception.ApolloException
+import com.apollographql.apollo3.exception.ApolloHttpException
 import com.realifetech.*
 import com.realifetech.sdk.core.data.model.basket.Basket
 import com.realifetech.sdk.core.data.model.basket.asModel
@@ -16,129 +12,110 @@ import com.realifetech.sdk.core.data.model.order.model.asModel
 import com.realifetech.sdk.core.data.model.shared.`object`.StandardResponse
 import com.realifetech.type.BasketInput
 import com.realifetech.type.CheckoutInput
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class BasketDataSourceImpl @Inject constructor(private val apolloClient: ApolloClient) :
     BasketDataSource {
 
-    override fun getBasket(callback: (error: Exception?, basket: Basket?) -> Unit) {
-        try {
-            val response = apolloClient.query(GetMyBasketQuery())
-                .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_ONLY)
-                .build()
-            response.enqueue(object : ApolloCall.Callback<GetMyBasketQuery.Data>() {
-                override fun onResponse(response: Response<GetMyBasketQuery.Data>) {
-                    callback.invoke(
-                        null,
-                        response.data?.getMyBasket?.fragments?.fragmentBasket?.asModel
-                    )
-                }
+    override suspend fun getBasket(): Basket? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val query = GetMyBasketQuery()
+                val response = apolloClient.query(query).execute()
 
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
+                if (response.hasErrors()) {
+                    throw ApolloException(
+                        response.errors?.firstOrNull()?.message ?: "Unknown error"
+                    )
+                } else {
+                    response.data?.getMyBasket?.fragmentBasket?.asModel
                 }
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            } catch (exception: HttpException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun createMyBasket(
-        basketInput: BasketInput,
-        callback: (error: Exception?, basket: Basket?) -> Unit
-    ) {
-        try {
-            val response =
-                apolloClient.mutate(CreateMyBasketMutation(Input.optional(basketInput)))
-            response.enqueue(object : ApolloCall.Callback<CreateMyBasketMutation.Data>() {
-                override fun onResponse(response: Response<CreateMyBasketMutation.Data>) {
-                    callback.invoke(
-                        null,
-                        response.data?.createMyBasket?.fragments?.fragmentBasket?.asModel
+    override suspend fun createMyBasket(basketInput: BasketInput): Basket? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val mutation = CreateMyBasketMutation(Optional.Present(basketInput))
+                val response = apolloClient.mutation(mutation).execute()
+
+                if (response.hasErrors()) {
+                    throw ApolloException(
+                        response.errors?.firstOrNull()?.message ?: "Unknown error"
                     )
+                } else {
+                    response.data?.createMyBasket?.fragmentBasket?.asModel
                 }
-
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            } catch (exception: ApolloHttpException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun updateMyBasket(
-        basketInput: BasketInput,
-        callback: (error: Exception?, basket: Basket?) -> Unit
-    ) {
-        try {
-            val response =
-                apolloClient.mutate(UpdateMyBasketMutation(Input.optional(basketInput)))
-            response.enqueue(object : ApolloCall.Callback<UpdateMyBasketMutation.Data>() {
-                override fun onResponse(response: Response<UpdateMyBasketMutation.Data>) {
-                    callback.invoke(
-                        null,
-                        response.data?.updateMyBasket?.fragments?.fragmentBasket?.asModel
+    override suspend fun updateMyBasket(basketInput: BasketInput): Basket? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val mutation = UpdateMyBasketMutation(Optional.Present(basketInput))
+                val response = apolloClient.mutation(mutation).execute()
+
+                if (response.hasErrors()) {
+                    throw ApolloException(
+                        response.errors?.firstOrNull()?.message ?: "Unknown error"
                     )
+                } else {
+                    response.data?.updateMyBasket?.fragmentBasket?.asModel
                 }
-
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            } catch (exception: ApolloHttpException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun deleteMyBasket(callback: (error: Exception?, response: StandardResponse?) -> Unit) {
-        try {
-            val response = apolloClient.mutate(DeleteMyBasketMutation())
-            response.enqueue(object : ApolloCall.Callback<DeleteMyBasketMutation.Data>() {
-                override fun onResponse(response: Response<DeleteMyBasketMutation.Data>) {
-                    val standardResponse = StandardResponse(
+    override suspend fun deleteMyBasket(): StandardResponse {
+        return withContext(Dispatchers.IO) {
+            try {
+                val mutation = DeleteMyBasketMutation()
+                val response = apolloClient.mutation(mutation).execute()
+
+                if (response.hasErrors()) {
+                    throw ApolloException(
+                        response.errors?.firstOrNull()?.message ?: "Unknown error"
+                    )
+                } else {
+                    StandardResponse(
                         message = response.data?.deleteMyBasket?.message,
                         code = null,
                         type = null
                     )
-                    callback.invoke(null, standardResponse)
                 }
-
-                    override fun onFailure(e: ApolloException) {
-                        callback.invoke(e, null)
-                    }
-
-                })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            } catch (exception: ApolloHttpException) {
+                throw Exception(exception)
+            }
         }
     }
 
-    override fun checkoutMyBasket(
-        checkoutInput: CheckoutInput,
-        callback: (error: Exception?, order: Order?) -> Unit
-    ) {
-        try {
-            val response =
-                apolloClient.mutate(CheckoutMyBasketMutation(Input.optional(checkoutInput)))
-            response.enqueue(object : ApolloCall.Callback<CheckoutMyBasketMutation.Data>() {
-                override fun onResponse(response: Response<CheckoutMyBasketMutation.Data>) {
-                    callback.invoke(
-                        null,
-                        response.data?.checkoutMyBasket?.fragments?.fragmentOrder?.asModel
+    override suspend fun checkoutMyBasket(checkoutInput: CheckoutInput): Order? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val mutation = CheckoutMyBasketMutation(Optional.Present(checkoutInput))
+                val response = apolloClient.mutation(mutation).execute()
+
+                if (response.hasErrors()) {
+                    throw ApolloException(
+                        response.errors?.firstOrNull()?.message ?: "Unknown error"
                     )
+                } else {
+                    response.data?.checkoutMyBasket?.fragmentOrder?.asModel
                 }
-
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+            } catch (exception: ApolloHttpException) {
+                throw Exception(exception)
+            }
         }
     }
 }

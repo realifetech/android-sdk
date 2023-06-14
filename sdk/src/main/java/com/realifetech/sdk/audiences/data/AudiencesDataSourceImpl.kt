@@ -1,48 +1,31 @@
 package com.realifetech.sdk.audiences.data
 
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.exception.ApolloHttpException
-import com.apollographql.apollo.fetcher.ApolloResponseFetchers
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.exception.ApolloException
 import com.realifetech.BelongsToAudienceWithExternalIdQuery
+import timber.log.Timber
 import javax.inject.Inject
 
 class AudiencesDataSourceImpl @Inject constructor(private val apolloClient: ApolloClient) :
     AudiencesDataSource {
-    override fun belongsToAudienceWithExternalId(
-        externalAudienceId: String,
-        callback: (error: Error?, result: Boolean) -> Unit
-    ) {
-        try {
-            val responseServer =
-                apolloClient.query(BelongsToAudienceWithExternalIdQuery(externalAudienceId))
-                    .toBuilder().responseFetcher(ApolloResponseFetchers.NETWORK_ONLY).build()
+    override suspend fun belongsToAudienceWithExternalId(externalAudienceId: String): Boolean {
+        return try {
+            val query = BelongsToAudienceWithExternalIdQuery(externalAudienceId)
+            val response = apolloClient.query(query).execute()
 
-            responseServer.enqueue(object :
-                ApolloCall.Callback<BelongsToAudienceWithExternalIdQuery.Data>() {
-                override fun onResponse(response: Response<BelongsToAudienceWithExternalIdQuery.Data>) {
-                    response.errors?.first()?.let {
-                        callback.invoke(Error(it.message), false)
-                    } ?: run {
-                        callback.invoke(
-                            null,
-                            response.data?.me?.device?.belongsToAudienceWithExternalId ?: false
-                        )
-                    }
-                }
+            if (response.hasErrors()) {
+                val message = response.errors?.first()?.message
+                Timber.e("Error in response: $message")
+                throw ApolloException(message)
+            }
 
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(Error(e.message), false)
-                }
-
-            })
-        } catch (exception: ApolloHttpException) {
-            val errorMessage =
-                "HTTP error with code = ${exception.code()} & message = ${exception.message()}"
-            callback.invoke(Error(errorMessage), false)
-
+            response.data?.me?.device?.belongsToAudienceWithExternalId ?: false
+        } catch (exception: ApolloException) {
+            Timber.e(exception, "ApolloException occurred")
+            throw exception
+        } catch (exception: Exception) {
+            Timber.e(exception, "Unexpected exception occurred")
+            throw exception
         }
     }
 }

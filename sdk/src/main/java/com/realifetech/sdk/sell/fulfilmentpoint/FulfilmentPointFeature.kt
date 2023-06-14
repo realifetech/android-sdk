@@ -1,6 +1,5 @@
 package com.realifetech.sdk.sell.fulfilmentpoint
 
-import com.apollographql.apollo.api.toInput
 import com.realifetech.sdk.core.data.model.fulfilmentPoint.FulfilmentPoint
 import com.realifetech.sdk.core.data.model.fulfilmentPoint.FulfilmentPointCategory
 import com.realifetech.sdk.core.data.model.shared.`object`.FilterParamWrapper
@@ -11,37 +10,30 @@ import javax.inject.Inject
 
 class FulfilmentPointFeature @Inject constructor(private val fulfilmentPointRepo: FulfilmentPointRepository) {
 
-    fun getFulfilmentPoints(
+    suspend fun getFulfilmentPoints(
         pageSize: Int,
         page: Int,
         filters: FulfilmentPointFilter?,
-        params: List<FilterParamWrapper>?,
-        callback: (error: Exception?, response: PaginatedObject<FulfilmentPoint?>?) -> Unit
-    ) {
-        fulfilmentPointRepo.getFulfilmentPoints(pageSize, page, filters.toInput(), params, callback)
+        params: List<FilterParamWrapper>?
+    ): PaginatedObject<FulfilmentPoint?>? {
+        return fulfilmentPointRepo.getFulfilmentPoints(pageSize, page, filters, params)
     }
 
-    fun getFulfilmentPointById(
+    suspend fun getFulfilmentPointById(
         id: String,
-        params: List<FilterParamWrapper>?,
-        callback: (error: Exception?, fulfilmentPoint: FulfilmentPoint?) -> Unit
-    ) {
-        fulfilmentPointRepo.getFulfilmentPointById(id, params, callback)
+        params: List<FilterParamWrapper>?
+    ): FulfilmentPoint? {
+        return fulfilmentPointRepo.getFulfilmentPointById(id, params)
     }
 
-    fun getFulfilmentPointCategories(
+    suspend fun getFulfilmentPointCategories(
         pageSize: Int,
-        page: Int,
-        callback: (error: Exception?, response: PaginatedObject<FulfilmentPointCategory?>?) -> Unit
-    ) {
-        fulfilmentPointRepo.getFulfilmentPointCategories(pageSize, page, callback)
-
+        page: Int
+    ): PaginatedObject<FulfilmentPointCategory?> {
+        return fulfilmentPointRepo.getFulfilmentPointCategories(pageSize, page)
     }
 
-    fun getFulfilmentPointCategoryById(
-        id: String,
-        callback: (error: Exception?, fulfilmentPointCategory: FulfilmentPointCategory?) -> Unit
-    ) {
-        fulfilmentPointRepo.getFulfilmentPointCategoryById(id, callback)
+    suspend fun getFulfilmentPointCategoryById(id: String): FulfilmentPointCategory? {
+        return fulfilmentPointRepo.getFulfilmentPointCategoryById(id)
     }
 }

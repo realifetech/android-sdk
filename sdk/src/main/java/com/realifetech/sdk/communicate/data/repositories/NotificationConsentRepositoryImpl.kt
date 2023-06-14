@@ -1,10 +1,8 @@
 package com.realifetech.sdk.communicate.data.repositories
 
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.api.toInput
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.fetcher.ApolloResponseFetchers
+import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.api.toInput
+import com.apollographql.apollo3.exception.ApolloException
 import com.realifetech.GetMyDeviceNotificationConsentsQuery
 import com.realifetech.GetNotificationConsentsQuery
 import com.realifetech.UpdateMyDeviceConsentMutation
@@ -17,146 +15,90 @@ import com.realifetech.sdk.communicate.domain.model.NotificationConsent
 import com.realifetech.type.*
 
 class NotificationConsentRepositoryImpl : NotificationConsentRepository {
-    override fun getNotificationConsents(callback: (error: Exception?, response: List<NotificationConsent?>?) -> Unit) {
-        if (callback == null) {
-            throw IllegalArgumentException("Callback must not be null")
-        }
-        val activeStatus = NotificationConsentFilter(ConsentStatus.ACTIVE.toInput())
+    override suspend fun getNotificationConsents(): List<NotificationConsent?> {
+        val activeStatus = NotificationConsentFilter(Optional.Present(ConsentStatus.ACTIVE))
         try {
-            val response =
-                apolloClient.query(GetNotificationConsentsQuery(filter = activeStatus.toInput()))
-                    .toBuilder()
-                    .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
-                    .build()
-            response.enqueue(object : ApolloCall.Callback<GetNotificationConsentsQuery.Data>() {
-                override fun onResponse(response: Response<GetNotificationConsentsQuery.Data>) {
-                    try {
-                        response.data?.getNotificationConsents?.let { notificationConsentList ->
-                            notificationConsentList.map { getNotificationConsent ->
-                                getNotificationConsent?.fragments?.notificationConsentFragment?.toDomainModel()
-                            }.let { notificationConsentList ->
-                                callback.invoke(
-                                    null,
-                                    notificationConsentList
-                                )
-                            }
-                        }
-                    } catch (e: Exception) {
-                        callback.invoke(e, null)
-                    }
-                }
+            val response = apolloClient.query(GetNotificationConsentsQuery(filter = activeStatus.toInput()))
+                .execute()
 
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-            })
+            if (response.hasErrors()) {
+                throw ApolloException(response.errors?.first()?.message)
+            }
+
+            return response.data?.getNotificationConsents?.map {
+                it?.notificationConsentFragment?.toDomainModel()
+            } ?: emptyList()
         } catch (e: Exception) {
-            callback.invoke(e, null)
+            throw e
         }
     }
 
-    override fun getMyDeviceNotificationConsents(callback: (error: Exception?, response: List<DeviceNotificationConsent?>?) -> Unit) {
+    override suspend fun getMyDeviceNotificationConsents(): List<DeviceNotificationConsent?> {
         try {
-            val response = apolloClient.query(GetMyDeviceNotificationConsentsQuery())
-                .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
-                .build()
-            response.enqueue(object :
-                ApolloCall.Callback<GetMyDeviceNotificationConsentsQuery.Data>() {
-                override fun onResponse(response: Response<GetMyDeviceNotificationConsentsQuery.Data>) {
-                    val deviceNotificationConsentList =
-                        response.data?.getMyDeviceNotificationConsents?.let { getMyDeviceNotificationConsent ->
-                            getMyDeviceNotificationConsent.map {
-                                DeviceNotificationConsent(
-                                    id = it?.id ?: "",
-                                    enabled = it?.enabled ?: false,
-                                    consent = it?.consent?.fragments?.notificationConsentFragment?.toDomainModel() ?: NotificationConsent.empty()
-                                )
-                            }
-                        }
-                    callback.invoke(null, deviceNotificationConsentList)
-                }
+            val response = apolloClient.query(GetMyDeviceNotificationConsentsQuery()).execute()
 
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
+            if (response.hasErrors()) {
+                throw ApolloException(response.errors?.first()?.message)
+            }
 
-            })
+            return response.data?.getMyDeviceNotificationConsents?.map {
+                DeviceNotificationConsent(
+                    id = it?.id ?: "",
+                    enabled = it?.enabled ?: false,
+                    consent = it?.consent?.notificationConsentFragment?.toDomainModel() ?: NotificationConsent.empty()
+                )
+            } ?: emptyList()
         } catch (e: Exception) {
-            callback.invoke(e, null)
+            throw e
         }
     }
 
-    override fun updateMyDeviceNotificationConsent(
-        id: String,
-        enabled: Boolean,
-        callback: (error: Exception?, success: Boolean?) -> Unit
-    ) {
+    override suspend fun updateMyDeviceNotificationConsent(id: String, enabled: Boolean): Boolean {
         val input = DeviceNotificationConsentInput(notificationConsentId = id, enabled = enabled)
         val mutation = UpdateMyDeviceNotificationConsentMutation(input = input)
         try {
-            apolloClient.mutate(mutation).enqueue(object : ApolloCall.Callback<UpdateMyDeviceNotificationConsentMutation.Data>() {
-                override fun onResponse(response: Response<UpdateMyDeviceNotificationConsentMutation.Data>) {
-                    val data = response.data
-                    val errors = response.errors
+            val response = apolloClient.mutate(mutation).execute()
 
-                    if (errors != null && errors.isNotEmpty()) {
-                        callback.invoke(Exception(errors[0].message), null)
-                    } else if (data?.updateMyDeviceNotificationConsent != null) {
-                        callback.invoke(null, true)
-                    } else {
-                        callback.invoke(null, false)
-                    }
-                }
+            if (response.hasErrors()) {
+                throw ApolloException(response.errors?.first()?.message)
+            }
 
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-            })
+            return response.data?.updateMyDeviceNotificationConsent != null
         } catch (e: Exception) {
-            callback.invoke(e, null)
+            throw e
         }
     }
 
-    override fun updateMyDeviceConsent(
+    override suspend fun updateMyDeviceConsent(
         calendar: Boolean,
         camera: Boolean,
         locationCapture: Boolean,
         locationGranular: LocationGranular,
         photoSharing: Boolean,
-        pushNotification: Boolean,
-        callback: (error: Exception?, success: Boolean?) -> Unit
-    ) {
+        pushNotification: Boolean
+    ): Boolean {
         val input = DeviceConsentInput(
-            calendar = calendar.toInput(),
-            camera = camera.toInput(),
-            locationCapture = locationCapture.toInput(),
-            locationGranular = locationGranular.toInput(),
-            photoSharing = photoSharing.toInput(),
-            pushNotification = pushNotification.toInput()
+            calendar = Optional.Present(calendar),
+            camera = Optional.Present(camera),
+            locationCapture = Optional.Present(locationCapture),
+            locationGranular = Optional.Present(locationGranular),
+            photoSharing = Optional.Present(photoSharing),
+            pushNotification = Optional.Present(pushNotification)
         )
         val mutation = UpdateMyDeviceConsentMutation(input = input)
 
-        apolloClient.mutate(mutation).enqueue(object : ApolloCall.Callback<UpdateMyDeviceConsentMutation.Data>() {
-            override fun onResponse(response: Response<UpdateMyDeviceConsentMutation.Data>) {
-                val data = response.data
-                val errors = response.errors
+        try {
+            val response = apolloClient.mutate(mutation).execute()
 
-                if (errors != null && errors.isNotEmpty()) {
-                    callback.invoke(Exception(errors[0].message), null)
-                } else if (data?.updateMyDeviceConsent != null) {
-                    callback.invoke(null, true)
-                } else {
-                    callback.invoke(null, false)
-                }
+            if (response.hasErrors()) {
+                throw ApolloException(response.errors?.first()?.message)
             }
 
-            override fun onFailure(e: ApolloException) {
-                callback.invoke(e, null)
-            }
-        })
+            return response.data?.updateMyDeviceConsent != null
+        } catch (e: Exception) {
+            throw e
+        }
     }
-
 
 }
 

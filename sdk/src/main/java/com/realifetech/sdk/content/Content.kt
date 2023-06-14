@@ -8,6 +8,7 @@ import com.realifetech.sdk.content.widgets.data.model.WidgetEdge
 import com.realifetech.sdk.content.widgets.domain.WidgetsRepository
 import com.realifetech.type.ScreenType
 import com.realifetech.type.WebPageType
+import timber.log.Timber
 import javax.inject.Inject
 
 class Content @Inject constructor(
@@ -15,42 +16,36 @@ class Content @Inject constructor(
     private val widgetsRepository: WidgetsRepository,
     private val screenRepository: ScreenRepository
 ) {
-
-    fun getWebPage(
-        webPage: WebPageType,
-        callback: (error: Exception?, result: FragmentWebPage?) -> Unit
-    ) {
-
-        webPageRepository.getWebPageByType(webPage, callback)
+    suspend fun getWebPage(webPage: WebPageType): FragmentWebPage? {
+        return try {
+            webPageRepository.getWebPageByType(webPage)
+        } catch (e: Exception) {
+            Timber.e(e, "Error getting web page")
+            null
+        }
     }
 
-    fun getWidgetsByScreenId(
-        id: String,
-        pageSize: Int,
-        page: Int,
-        callback: (error: Exception?, response: WidgetEdge?) -> Unit
-    ) =
-        widgetsRepository.getWidgetsByScreenId(id, pageSize, page, callback)
+    suspend fun getWidgetsByScreenId(id: String, pageSize: Int, page: Int): Result<WidgetEdge> =
+        widgetsRepository.getWidgetsByScreenId(id, pageSize, page)
 
-    fun getWidgetsByScreenType(
-        screenType: ScreenType,
-        pageSize: Int,
-        page: Int,
-        callback: (error: Exception?, response: WidgetEdge?) -> Unit
-    ) =
-        widgetsRepository.getWidgetsByScreenType(screenType, pageSize, page, callback)
+    suspend fun getWidgetsByScreenType(screenType: ScreenType, pageSize: Int, page: Int): Result<WidgetEdge> =
+        widgetsRepository.getWidgetsByScreenType(screenType, pageSize, page)
 
-    fun getScreenTitleById(
-        id: String,
-        callback: (error: Exception?, response: List<Translation>?) -> Unit
-    ) =
-        screenRepository.getScreenById(id, callback)
-
-    fun getScreenTitleByScreenType(
-        screenType: ScreenType,
-        callback: (error: Exception?, response: List<Translation>?) -> Unit
-    ) {
-        screenRepository.getScreenByScreenType(screenType, callback)
+    suspend fun getScreenTitleById(id: String): List<Translation> {
+        return try {
+            screenRepository.getScreenById(id)
+        } catch (exception: Exception) {
+            Timber.e(exception, "Error getting screen title by id")
+            listOf()
+        }
     }
 
+    suspend fun getScreenTitleByScreenType(screenType: ScreenType): List<Translation> {
+        return try {
+            screenRepository.getScreenByScreenType(screenType)
+        } catch (exception: Exception) {
+            Timber.e(exception, "Error getting screen title by screen type")
+            listOf()
+        }
+    }
 }

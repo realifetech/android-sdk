@@ -5,20 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.realifetech.sample.R
 import com.realifetech.sdk.RealifeTech
 import com.realifetech.sdk.identity.data.model.RLTAliasType
 import com.realifetech.sdk.identity.data.model.RLTTraitType
-import kotlinx.android.synthetic.main.activity_analytics_sample.*
-import kotlinx.android.synthetic.main.activity_analytics_sample.actionEditText
-import kotlinx.android.synthetic.main.activity_analytics_sample.newDictionaryCheckBox
-import kotlinx.android.synthetic.main.activity_analytics_sample.oldDictionaryCheckBox
-import kotlinx.android.synthetic.main.activity_analytics_sample.sendEventButton
-import kotlinx.android.synthetic.main.activity_analytics_sample.typeEditText
 import kotlinx.android.synthetic.main.activity_ca_identity.*
 import kotlinx.android.synthetic.main.activity_communication_sample.operationTextView
 import kotlinx.android.synthetic.main.activity_communication_sample.progressBar
 import kotlinx.android.synthetic.main.activity_communication_sample.resultTextView
+import kotlinx.coroutines.launch
 
 class CAIdentitySampleActivity : AppCompatActivity() {
 
@@ -37,8 +33,6 @@ class CAIdentitySampleActivity : AppCompatActivity() {
         clearIdButton.setOnClickListener {
             clearId()
         }
-
-
     }
 
     private fun clearId() {
@@ -48,42 +42,42 @@ class CAIdentitySampleActivity : AppCompatActivity() {
     private fun sendAlias() {
         progressBar.isVisible = true
         resultTextView.text = ""
-        operationTextView.text = "Sending analytics event"
+        operationTextView.text = "Sending alias analytics event"
 
-        RealifeTech.getIdentity().alias(
-            aliasType = RLTAliasType.TdcAccountId,
-            aliasId = aliasIdEditText.text.toString()
-        ) { error, result ->
-            progressBar.isVisible = false
-            result.takeIf { it }?.let {
+        val identity = RealifeTech.getIdentity()
+        lifecycleScope.launch {
+            try {
+                identity.alias(
+                    aliasType = RLTAliasType.TdcAccountId,
+                    aliasId = aliasIdEditText.text.toString()
+                )
+                progressBar.isVisible = false
                 resultTextView.text = "Success"
-            }
-            error?.let {
+            } catch (e: Exception) {
+                progressBar.isVisible = false
                 resultTextView.text = "Failure"
+                e.printStackTrace()
             }
-
         }
     }
 
     private fun sendIdentify() {
-
         progressBar.isVisible = true
         resultTextView.text = ""
-        operationTextView.text = "Sending analytics event"
+        operationTextView.text = "Sending identify analytics event"
 
-        val map = mutableMapOf<RLTTraitType, Any>()
-        map[RLTTraitType.LastName] = "RLT Last Name"
-
-        RealifeTech.getIdentity().identify(
-            userId = userIdEditText.text.toString(),
-            map
-        ) { error, result ->
-            progressBar.isVisible = false
-            result.takeIf { it }?.let {
+        val identity = RealifeTech.getIdentity()
+        lifecycleScope.launch {
+            try {
+                val traits = mutableMapOf<RLTTraitType, Any>()
+                traits[RLTTraitType.LastName] = "RLT Last Name"
+                identity.identify(userIdEditText.text.toString(), traits)
+                progressBar.isVisible = false
                 resultTextView.text = "Success"
-            }
-            error?.let {
+            } catch (e: Exception) {
+                progressBar.isVisible = false
                 resultTextView.text = "Failure"
+                e.printStackTrace()
             }
         }
     }

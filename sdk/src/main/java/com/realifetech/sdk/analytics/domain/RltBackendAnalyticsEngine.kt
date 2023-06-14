@@ -1,10 +1,7 @@
 package com.realifetech.sdk.analytics.domain
 
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.exception.ApolloException
 import com.realifetech.PutAnalyticEventMutation
 import com.realifetech.sdk.analytics.data.model.AnalyticEventWrapper
 import com.realifetech.sdk.analytics.data.model.asAnalyticEvent
@@ -18,34 +15,22 @@ internal class RltBackendAnalyticsEngine @Inject constructor(
     private val storage: AnalyticsStorage
 ) :
     AnalyticsEngine {
-    override suspend fun track(
-        event: AnalyticEventWrapper,
-        callback: (error: Exception?, response: Boolean) -> Unit
-    ) {
-        try {
-            val response = apolloClient.mutate(PutAnalyticEventMutation(event.asAnalyticEvent()))
-            response.enqueue(object : ApolloCall.Callback<PutAnalyticEventMutation.Data>() {
-                override fun onResponse(response: Response<PutAnalyticEventMutation.Data>) {
-                    response.data?.putAnalyticEvent?.let {
-                        callback.invoke(null, it.success)
-                    } ?: run {
-                        storage.save(event)
-                        callback.invoke(Exception("Unknown error"), false)
-                    }
-                }
+    override suspend fun track(event: AnalyticEventWrapper): Boolean {
+        return try {
+            val mutation = PutAnalyticEventMutation(event.asAnalyticEvent())
+            val response = apolloClient.mutation(mutation).execute()
 
-                override fun onFailure(e: ApolloException) {
-                    storage.save(event)
-                    callback.invoke(e, false)
-                }
+            if (response.hasErrors() || response.data?.putAnalyticEvent == null) {
+                throw ApolloException("Errors in response")
+            }
 
-            })
-
-        } catch (exception: ApolloHttpException) {
+            response.data!!.putAnalyticEvent.success
+        } catch (exception: ApolloException) {
             storage.save(event)
-            callback.invoke(exception, false)
+            throw exception // o devuelve false si quieres mantener el mismo patrón de comportamiento
         }
     }
+
 
     /**
      * Extracts all the pending events from the [storage] and attempts to send them again using the [engine].
@@ -53,19 +38,24 @@ internal class RltBackendAnalyticsEngine @Inject constructor(
      */
 
     @Synchronized
-    override suspend fun sendPendingEvents(callback: (isEmpty: Boolean) -> Unit) {
+    override suspend fun sendPendingEvents(): Boolean {
         val allPendingEvents = storage.getAll()
         if (allPendingEvents.isEmpty()) {
-            callback.invoke(true)
-            return
+            return true
         }
+
         allPendingEvents.forEach { pendingEvent ->
-            track(pendingEvent.event) { error, response ->
-                if (error == null) {
-                    storage.remove(pendingEvent)
-                }
+            try {
+                track(pendingEvent.event)
+                storage.remove(pendingEvent)
+            } catch (error: Exception) {
+                // Si ocurre un error al rastrear un evento, se detiene la ejecución
+                // y se lanza el error. Si necesitas un comportamiento diferente,
+                // puedes manejar el error de forma diferente.
+                throw error
             }
         }
-    }
 
+        return false
+    }
 }

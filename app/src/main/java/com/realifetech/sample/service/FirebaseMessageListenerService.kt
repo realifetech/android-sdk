@@ -9,8 +9,6 @@ import com.realifetech.sample.R
 import com.realifetech.sample.utils.CustomNotificationBody
 import com.realifetech.sample.utils.NotificationUtil
 import com.realifetech.sdk.RealifeTech
-import com.realifetech.sdk.communicate.data.Event
-
 import com.realifetech.sdk.core.utils.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +32,6 @@ class FirebaseMessageListenerService : FirebaseMessagingService() {
             }
         }
     }
-
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         val data = remoteMessage.data
         val title = data[KEY_TITLE]
@@ -45,25 +42,22 @@ class FirebaseMessageListenerService : FirebaseMessagingService() {
         val referenceId = data[REFERENCE_ID]
         val trackInfo = hashMapOf<String, Any>()
         val gson = Gson()
+
         if (message.isNullOrEmpty()) {
             message = data[KEY_ALERT]
         }
+
         customData?.let {
             val (url) = gson.fromJson(customData, CustomNotificationBody::class.java)
             actionUrl = url
         }
+
         trackData?.let {
             val type = object : TypeToken<Map<String, Any>?>() {}.type
-            gson.fromJson<HashMap<String, Any>?>(it, type).map { entry ->
-                trackInfo.put(entry.key, entry.value)
-            }
+            val parsedTrackData: Map<String, Any>? = gson.fromJson(it, type)
+            parsedTrackData?.let { trackInfo.putAll(it) }
         }
-        if (trackInfo.isNotEmpty()) {
-            RealifeTech.getCommunicate().trackPush(Event.RECEIVED, trackInfo) { error, response ->
-                handleResponse(response)
-                handleError(error)
-            }
-        }
+
         showNotification(title, message, actionUrl, referenceId, trackInfo)
     }
 

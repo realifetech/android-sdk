@@ -1,33 +1,40 @@
 package com.realifetech.sdk.sell.order
 
+import com.apollographql.apollo3.api.Optional
 import com.realifetech.sdk.core.data.model.order.model.Order
 import com.realifetech.sdk.core.data.model.order.wrapper.OrderUpdateWrapper
 import com.realifetech.sdk.core.data.model.shared.`object`.PaginatedObject
 import com.realifetech.sdk.sell.order.domain.OrderRepository
+import com.realifetech.type.OrderUpdateInput
 import javax.inject.Inject
 
 class OrderFeature @Inject constructor(private val orderRepo: OrderRepository) {
 
-    fun getOrders(
+    suspend fun getOrders(
         pageSize: Int,
-        page: Int,
-        callback: (error: Exception?, response: PaginatedObject<Order?>?) -> Unit
-    ) {
-        orderRepo.getOrders(pageSize, page, callback)
+        page: Int
+    ): PaginatedObject<Order?> {
+        return orderRepo.getOrders(pageSize, page)
     }
 
-    fun getOrderById(
-        id: String,
-        callback: (error: Exception?, order: Order?) -> Unit
-    ) {
-        orderRepo.getOrderById(id, callback)
+    suspend fun getOrderById(id: String): Order {
+        return orderRepo.getOrderById(id)
     }
 
-    fun updateMyOrder(
+    suspend fun updateMyOrder(
         id: String,
-        input: OrderUpdateWrapper,
-        callback: (error: Exception?, order: Order?) -> Unit
-    ) {
-        orderRepo.updateMyOrder(id, input, callback)
+        input: OrderUpdateWrapper
+    ): Order {
+        val updateInput = mapOrderUpdateWrapperToOrderUpdateInput(input)
+        return orderRepo.updateMyOrder(id, updateInput)
     }
+}
+
+fun mapOrderUpdateWrapperToOrderUpdateInput(input: OrderUpdateWrapper): OrderUpdateInput {
+    return OrderUpdateInput(
+        status = Optional.present(input.status),
+        collectionPreferenceType = Optional.present(input.collectionPreferenceType),
+        checkInTime = Optional.present(input.checkInTime),
+        paymentStatus = Optional.present(input.paymentStatus)
+    )
 }

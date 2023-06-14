@@ -1,42 +1,23 @@
 package com.realifetech.sdk.content.webPage.data
 
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
-import com.apollographql.apollo.exception.ApolloHttpException
-import com.apollographql.apollo.fetcher.ApolloResponseFetchers
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.realifetech.GetWebPageByTypeQuery
 import com.realifetech.fragment.FragmentWebPage
 import com.realifetech.type.WebPageType
+import timber.log.Timber
 
 class WebPageDataSourceImpl (private val apolloClient: ApolloClient) :
     WebPageDataSource {
 
-    override fun getWebPageByType(
-        type: WebPageType,
-        callback: (error: Exception?, result: FragmentWebPage?) -> Unit
-    ) {
-        try {
-            val response = apolloClient.query(GetWebPageByTypeQuery(type))
-                .toBuilder()
-                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
-                .build()
-            response.enqueue(object : ApolloCall.Callback<GetWebPageByTypeQuery.Data>() {
-                override fun onResponse(response: Response<GetWebPageByTypeQuery.Data>) {
-                    callback.invoke(
-                        null,
-                        response.data?.getWebPageByType?.fragments?.fragmentWebPage
-                    )
-                }
-
-                override fun onFailure(e: ApolloException) {
-                    callback.invoke(e, null)
-                }
-
-            })
-        } catch (exception: ApolloHttpException) {
-            callback.invoke(exception, null)
+    @ApolloExperimental
+    override suspend fun getWebPageByType(type: WebPageType): FragmentWebPage? {
+        return try {
+            val response = apolloClient.query(GetWebPageByTypeQuery(type)).execute()
+            response.data?.getWebPageByType?.fragmentWebPage
+        } catch (exception: Exception) {
+            Timber.e(exception, "Error getting web page by type")
+            null
         }
     }
 }

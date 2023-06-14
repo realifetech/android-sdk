@@ -1,6 +1,6 @@
 package com.realifetech.sdk.di.features.modules
 
-import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo3.ApolloClient
 import com.realifetech.sdk.access.data.AccessDataSource
 import com.realifetech.sdk.access.data.AccessDataSourceImpl
 import com.realifetech.sdk.access.domain.AccessRepository
