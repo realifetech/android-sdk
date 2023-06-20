@@ -2,6 +2,7 @@ package com.realifetech.sdk.identity.domain
 
 import com.apollographql.apollo.exception.ApolloException
 import com.realifetech.fragment.AuthToken
+import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.identity.data.IdentityDataSource
 import com.realifetech.sdk.identity.mocks.IdentityMocks
 import com.realifetech.sdk.identity.mocks.IdentityMocks.DICTIONARY
@@ -31,10 +32,13 @@ class IdentityRepositoryTest {
     lateinit var deleteMyAccountSlot: CapturingSlot<(error: Exception?, success: Boolean?) -> Unit>
     private lateinit var nonceSlot: CapturingSlot<(error: Exception?, nonce: String?) -> Unit>
 
+    @RelaxedMockK
+    lateinit var authTokenStorage: AuthTokenStorage
+
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
-        identityRepository = IdentityRepository(identityDataStore)
+        identityRepository = IdentityRepository(identityDataStore, authTokenStorage)
         nonceSlot = slot()
         getSsoSlot= slot()
         deleteMyAccountSlot = slot()
@@ -173,4 +177,25 @@ class IdentityRepositoryTest {
         Assert.assertEquals(DICTIONARY, encodedResult)
     }
 
+    private fun mockGetDeviceId(deviceId: String? = IdentityMocks.deviceId, exception: Exception? = null) {
+        every {
+            identityDataStore.getDeviceId(capture(deviceSlot))
+        }
+            .answers { deviceSlot.captured.invoke(exception, deviceId) }
+    }
+
+    private fun mockGenerateNonce(nonce: String? = NONCE, exception: Exception? = null) {
+        every { identityDataStore.generateNonce(capture(nonceSlot)) }
+            .answers { nonceSlot.captured.invoke(exception, nonce) }
+    }
+
+    private fun mockAuthenticateUserBySignedUserInfo(authToken: AuthToken? = IdentityMocks.authToken, exception: Exception? = null) {
+        every {
+            identityDataStore.authenticateUserBySignedUserInfo(
+                userInfo,
+                capture(authenticateSlot)
+            )
+        }
+            .answers { authenticateSlot.captured.invoke(exception, authToken) }
+    }
 }

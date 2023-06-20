@@ -6,10 +6,7 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.fetcher.ApolloResponseFetchers
-import com.realifetech.AuthenticateUserBySignedUserInfoMutation
-import com.realifetech.DeleteMyAccountMutation
-import com.realifetech.GenerateNonceMutation
-import com.realifetech.GetSSOQuery
+import com.realifetech.*
 import com.realifetech.fragment.AuthToken
 import com.realifetech.sdk.identity.mocks.IdentityMocks
 import com.realifetech.sdk.identity.mocks.IdentityMocks.authUrl
@@ -36,6 +33,9 @@ class IdentityDataSourceImplTest {
     private lateinit var getSsoSLot: CapturingSlot<ApolloCall.Callback<GetSSOQuery.Data>>
     private lateinit var mutation: GenerateNonceMutation
 
+    private lateinit var deviceIdData: Response<GetDeviceIdQuery.Data>
+    private lateinit var deviceIdSlot: CapturingSlot<ApolloCall.Callback<GetDeviceIdQuery.Data>>
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -53,6 +53,8 @@ class IdentityDataSourceImplTest {
         getSsoSLot = slot()
         deleteMyAccountSlot = slot()
         authenticateInfoSlot = slot()
+        deviceIdData = mockk()
+        deviceIdSlot = slot()
     }
 
     @Test
@@ -258,5 +260,53 @@ class IdentityDataSourceImplTest {
             apolloClient.mutate(AuthenticateUserBySignedUserInfoMutation(IdentityMocks.userInfo))
                 .enqueue(capture(authenticateInfoSlot))
         } answers { authenticateInfoSlot.captured.onResponse(authenticateInfoData) }
+    }
+
+    @Test
+    fun `getDeviceId returns data`() {
+        every { deviceIdData.data?.me?.device?.id } returns "device_id"
+        getDeviceIdSuccessfully()
+
+        identityDataSource.getDeviceId { error, response ->
+            assertEquals(null, error)
+            assertEquals("device_id", response)
+        }
+    }
+
+    @Test
+    fun `getDeviceId throws exception`() {
+        every { deviceIdData.data?.me?.device?.id } throws ApolloHttpException(null)
+        getDeviceIdSuccessfully()
+
+        identityDataSource.getDeviceId { error, response ->
+            assert(error is ApolloHttpException)
+            assertEquals(null, response)
+        }
+    }
+
+    @Test
+    fun `getDeviceId returns failure`() {
+        every {
+            apolloClient.query(GetDeviceIdQuery())
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
+                .build()
+                .enqueue(capture(deviceIdSlot))
+        } answers { deviceIdSlot.captured.onFailure(ApolloException("")) }
+
+        identityDataSource.getDeviceId { error, response ->
+            assert(error is ApolloException)
+            assertEquals(null, response)
+        }
+    }
+
+    private fun getDeviceIdSuccessfully() {
+        every {
+            apolloClient.query(GetDeviceIdQuery())
+                .toBuilder()
+                .responseFetcher(ApolloResponseFetchers.NETWORK_FIRST)
+                .build()
+                .enqueue(capture(deviceIdSlot))
+        } answers { deviceIdSlot.captured.onResponse(deviceIdData) }
     }
 }

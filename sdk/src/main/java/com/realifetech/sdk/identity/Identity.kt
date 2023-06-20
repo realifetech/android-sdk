@@ -1,5 +1,6 @@
 package com.realifetech.sdk.identity
 
+import com.realifetech.fragment.AuthToken
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
@@ -110,6 +111,18 @@ class Identity @Inject constructor(
 
         }
 
+    }
+
+    fun getAccessToken(): String {
+        return storage.accessToken
+    }
+
+    fun getWebAuthToken(): AuthToken? {
+        return storage.webAuthToken
+    }
+
+    fun isTokenExpired(): Boolean {
+        return storage.isTokenExpired
     }
 
     companion object {

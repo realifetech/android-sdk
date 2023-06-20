@@ -4,6 +4,7 @@ import android.util.Log
 import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.toInput
 import com.realifetech.fragment.AuthToken
+import com.realifetech.sdk.core.data.database.preferences.auth.AuthTokenStorage
 import com.realifetech.sdk.core.utils.sha256
 import com.realifetech.sdk.identity.data.IdentityDataSource
 import com.realifetech.type.SignedUserInfoInput
@@ -11,34 +12,42 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
-class IdentityRepository @Inject constructor(private val identityDataSource: IdentityDataSource) {
+class IdentityRepository @Inject constructor(
+    private val identityDataSource: IdentityDataSource,
+    private val authTokenStorage: AuthTokenStorage
+) {
 
     fun attemptToLogin(
         email: String, firstName: String?, lastName: String?, salt: String,
         completion: (authToken: AuthToken?, error: Exception?) -> Unit
     ) {
-        identityDataSource.getDeviceId { error, response ->
-            error?.let { completion.invoke(null, it) }
-            response?.let { deviceId ->
-                val jsonObject = getJsonObjectForData(email, firstName, lastName, deviceId)
-                Log.d("JSON_OBJECT", jsonObject)
-                val encodedResult = "${jsonObject}.${salt}"
-                Log.d("JSON_OBJECT_SALT", encodedResult)
-                val signature = encodedResult.sha256()
-                Log.d("JSON_OBJECT_SALT_HASH", signature)
-                identityDataSource.generateNonce { error, response ->
-                    error?.let {
-                        completion.invoke(null, it)
-                    }
-                    response?.let { nonce ->
-                        authenticateSignedUser(
-                            firstName,
-                            lastName,
-                            email,
-                            nonce,
-                            signature,
-                            completion
-                        )
+        val storedAuthToken = authTokenStorage.webAuthToken
+        if (storedAuthToken != null && !authTokenStorage.isTokenExpired) {
+            completion.invoke(storedAuthToken, null)
+        } else {
+            identityDataSource.getDeviceId { error, response ->
+                error?.let { completion.invoke(null, it) }
+                response?.let { deviceId ->
+                    val jsonObject = getJsonObjectForData(email, firstName, lastName, deviceId)
+                    Log.d("JSON_OBJECT", jsonObject)
+                    val encodedResult = "$jsonObject.$salt"
+                    Log.d("JSON_OBJECT_SALT", encodedResult)
+                    val signature = encodedResult.sha256()
+                    Log.d("JSON_OBJECT_SALT_HASH", signature)
+                    identityDataSource.generateNonce { error, response ->
+                        error?.let {
+                            completion.invoke(null, it)
+                        }
+                        response?.let { nonce ->
+                            authenticateSignedUser(
+                                firstName,
+                                lastName,
+                                email,
+                                nonce,
+                                signature,
+                                completion
+                            )
+                        }
                     }
                 }
             }
@@ -64,6 +73,7 @@ class IdentityRepository @Inject constructor(private val identityDataSource: Ide
                 completion.invoke(null, it)
             }
             response?.let {
+                authTokenStorage.webAuthToken = it
                 completion.invoke(it, null)
             }
         }
@@ -89,7 +99,7 @@ class IdentityRepository @Inject constructor(private val identityDataSource: Ide
     }
 
     fun getSSO(provider: String, callback: (error: Exception?, url: String?) -> Unit) {
-        identityDataSource.getSSO(provider,callback)
+        identityDataSource.getSSO(provider, callback)
     }
 
     companion object {
@@ -97,6 +107,5 @@ class IdentityRepository @Inject constructor(private val identityDataSource: Ide
         private const val FIRST_NAME = "firstName"
         private const val LAST_NAME = "lastName"
         private const val DEVICE = "device"
-
     }
 }

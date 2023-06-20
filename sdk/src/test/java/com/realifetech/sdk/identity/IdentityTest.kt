@@ -27,6 +27,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 
 @ExperimentalCoroutinesApi
 class IdentityTest {
@@ -64,6 +66,8 @@ class IdentityTest {
     private val USER = "user"
     private val ALIAS = "alias"
     private val IDENTIFY = "identify"
+
+    private val mockAuthTokenStorage = mock(AuthTokenStorage::class.java)
 
     @Before
     fun setUp() {
@@ -253,6 +257,35 @@ class IdentityTest {
                 capture(authenticateSlot)
             )
         } answers { authenticateSlot.captured.invoke(authToken, null) }
+    }
+
+    @Test
+    fun testGetAccessToken() {
+        `when`(mockAuthTokenStorage.accessToken).thenReturn("test_access_token")
+
+        Assert.assertEquals("test_access_token", identity.getAccessToken())
+    }
+
+    @Test
+    fun testGetWebAuthToken() {
+        val authToken = AuthToken(
+            __typename = "AuthToken",
+            accessToken = "token",
+            tokenType = "Bearer",
+            expiresIn = 3600,
+            refreshToken = "refreshToken",
+            scope = "openid"
+        )
+        `when`(mockAuthTokenStorage.webAuthToken).thenReturn(authToken)
+
+        Assert.assertEquals(authToken, identity.getWebAuthToken())
+    }
+
+    @Test
+    fun testIsTokenExpired() {
+        `when`(mockAuthTokenStorage.isTokenExpired).thenReturn(true)
+
+        Assert.assertEquals(true, identity.isTokenExpired())
     }
 
 }
