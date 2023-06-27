@@ -34,7 +34,7 @@ object RestClientV3Module {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
-            .addInterceptor(OAuth2AuthenticationInterceptor(authTokenStorage, platformPreferences))
+            //.addInterceptor(OAuth2AuthenticationInterceptor(authTokenStorage, platformPreferences))
             .authenticator(OAuth2Authenticator { oAuthManager })
             .addInterceptor(deviceIdInterceptor)
             .addInterceptor(loggingInterceptor)

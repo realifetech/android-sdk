@@ -13,6 +13,7 @@ import com.realifetech.sdk.core.network.RealifetechApiV3Service
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.core.utils.hasNetworkConnection
 import kotlinx.coroutines.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class Communicate @Inject constructor(
@@ -24,6 +25,8 @@ class Communicate @Inject constructor(
     private val context: Context,
     private val notificationConsentRepository: NotificationConsentRepository
 ) {
+
+    private val TAG = Communicate::class.simpleName
 
     fun trackPush(
         event: Event,
@@ -64,12 +67,10 @@ class Communicate @Inject constructor(
                     registerForPushNotifications(tokenStorage.pendingToken)
                 }
                 when (result) {
-                    is Result.Success -> Log.d(
-                        this.javaClass.name,
-                        "Success while sending register for PN"
-                    )
+                    is Result.Success ->
+                        Timber.tag(TAG).d("Success while sending register for PN")
                     is Result.Error ->
-                        Log.e(this.javaClass.name, "Error: ${result.exception.message}")
+                        Timber.tag(TAG).e( "Error: ${result.exception.message}")
                 }
             }
         } else return

@@ -32,7 +32,7 @@ class GraphQlModule {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
-            .addInterceptor(OAuth2AuthenticationInterceptor(authTokenStorage, platformPreferences))
+            //.addInterceptor(OAuth2AuthenticationInterceptor(authTokenStorage, platformPreferences))
             .addInterceptor(deviceIdInterceptor)
             .addInterceptor(languageInterceptor)
             .authenticator(OAuth2Authenticator(oAuthManager))

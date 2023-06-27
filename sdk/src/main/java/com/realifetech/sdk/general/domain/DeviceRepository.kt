@@ -8,6 +8,7 @@ import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.general.data.DeviceConsent
 import com.realifetech.sdk.general.data.DeviceNetworkDataSource
 import dagger.Lazy
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -15,6 +16,7 @@ class DeviceRepository @Inject constructor(
     private val dataSource: DeviceNetworkDataSource,
     private val oAuthManager: Lazy<OAuthManager>
 ) {
+    private val TAG = DeviceRepository::class.simpleName
     private lateinit var result: Result<Boolean>
 
     private val retryPolicy: RetryPolicy =
@@ -29,8 +31,7 @@ class DeviceRepository @Inject constructor(
         accessToken.ensureActive()
         dataSource.registerDevice { error, registered ->
             error?.let {
-                accessToken.ensureActive()
-                Log.e("DeviceRepository", "Register device Error: ${it.message}")
+                Timber.tag(TAG).e("Register device Error: ${it.message}")
                 retryPolicy.execute()
                 result = Result.Error(it)
             }

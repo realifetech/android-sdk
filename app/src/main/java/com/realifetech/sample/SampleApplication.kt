@@ -33,7 +33,7 @@ class SampleApplication : Application() {
             webOrderingJourneyUrl = storage.orderingJourney
         )
         RealifeTech.configureSdk(this, configuration)
-        registerDeviceForSDK()
+        //registerDeviceForSDK()
 
 //  Set Colors via code
         // EXAMPLE 1
@@ -43,13 +43,13 @@ class SampleApplication : Application() {
 //            .setColor(ContextCompat.getColor(this, R.color.colorAccent), ColorType.ON_PRIMARY)
     }
 
-    private fun registerDeviceForSDK() {
+   /* private fun registerDeviceForSDK() {
         GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
                 RealifeTech.getGeneral().registerDevice()
             }
         }
-    }
+    }*/
 
     companion object {
         private const val EMPTY = ""

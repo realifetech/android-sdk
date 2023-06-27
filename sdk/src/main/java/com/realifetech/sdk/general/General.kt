@@ -11,6 +11,7 @@ import com.realifetech.sdk.general.data.DeviceConsent
 import com.realifetech.sdk.general.data.PhysicalDeviceInfo
 import com.realifetech.sdk.general.domain.DeviceRepository
 import com.realifetech.sdk.general.domain.SdkInitializationPrecondition
+import timber.log.Timber
 import javax.inject.Inject
 
 class General @Inject constructor(
@@ -20,6 +21,7 @@ class General @Inject constructor(
     private val colorPallet: ColorPallet,
     physicalDeviceInfo: PhysicalDeviceInfo
 ) {
+    val TAG = General::class.simpleName
 
     init {
         configuration.deviceId = physicalDeviceInfo.deviceId
@@ -36,14 +38,13 @@ class General @Inject constructor(
     fun registerDevice(): Result<Boolean> {
         sdkInitializationPrecondition.checkContextInitialized()
         return try {
-            Log.d("General", "Sending register device request")
+            Timber.tag(TAG).d("Sending register device request")
             val result = deviceRepository.registerDevice()
             isSdkReady = result is Result.Success
-
-            Log.d("General", "Register device request result, is SDK ready = $isSdkReady")
+            Timber.tag(TAG).d("Register device request result, is SDK ready = $isSdkReady")
             result
         } catch (exception: Exception) {
-            Log.e("General", exception.message, exception)
+            Timber.tag(TAG).e(exception)
             Result.Error(exception)
         }
     }
