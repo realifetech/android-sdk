@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.realifetech.sdk.core.data.database.preferences.AbstractPreferences
 import com.realifetech.sdk.core.data.model.auth.OAuthTokenResponse
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class PlatformPreferences @Inject constructor(context: Context) : AbstractPreferences(context) {
 
     override val preferencesStorageName = REALIFETECH_PREFERENCES
+    private val TAG = PlatformPreferences::class.simpleName
 
     var rltToken: OAuthTokenResponse?
         get() {
@@ -23,7 +25,7 @@ class PlatformPreferences @Inject constructor(context: Context) : AbstractPrefer
             try {
                 return Gson().fromJson(jsonToken, OAuthTokenResponse::class.java)
             } catch (e: JsonSyntaxException) {
-                Log.e(this.javaClass.name, "Couldn't getOAuthToken: %s", e)
+                Timber.tag(TAG).e(e)
             }
             return null
         }

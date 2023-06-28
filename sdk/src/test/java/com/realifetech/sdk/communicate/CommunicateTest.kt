@@ -5,8 +5,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.realifetech.sdk.analytics.Analytics
 import com.realifetech.sdk.communicate.data.Event
 import com.realifetech.sdk.communicate.data.RegisterPushNotificationsResponse
-import com.realifetech.sdk.communicate.data.model.NotificationConsent
-import com.realifetech.sdk.communicate.data.model.NotificationConsentStatus
 import com.realifetech.sdk.communicate.domain.NotificationConsentRepository
 import com.realifetech.sdk.communicate.domain.PushNotificationsTokenStorage
 import com.realifetech.sdk.communicate.mocks.CommunicateMocks

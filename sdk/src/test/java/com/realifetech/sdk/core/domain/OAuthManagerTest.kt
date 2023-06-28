@@ -14,9 +14,11 @@ import com.realifetech.sdk.core.mocks.NetworkMocks.accessToken
 import com.realifetech.sdk.core.mocks.NetworkMocks.rltToken
 import dagger.Lazy
 import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -50,6 +52,10 @@ class OAuthManagerTest {
         )
     }
 
+    @After
+    fun tearDown() {
+        clearAllMocks()
+    }
 
     @Test
     fun `get Access Token returns AuthTokenStorage's accessToken`() {
@@ -204,5 +210,42 @@ class OAuthManagerTest {
                 configurationStorage.appCode.toClientId
             )
         }
+    }
+
+    @Test
+    fun `requestAccessTokenServer should do nothing when API call fails`() {
+        // Given
+        every {
+            authApiLazyWrapper.get().getAccessToken(
+                configurationStorage.clientSecret,
+                configurationStorage.appCode.toClientId
+            )
+        } returns null
+
+        // When
+        oAuthManager.requestAccessTokenServer()
+
+        // Then
+        verify(exactly = 0) { authTokenStorage.accessToken = any() }
+        verify(exactly = 0) { authTokenStorage.expireAtMilliseconds = any() }
+    }
+
+    @Test
+    fun `requestRefreshTokenServer should do nothing when API call fails`() {
+        // Given
+        every {
+            authApiLazyWrapper.get().refreshToken(
+                configurationStorage.clientSecret,
+                configurationStorage.appCode.toClientId,
+                refreshToken
+            )
+        } returns null
+
+        // When
+        oAuthManager.requestRefreshTokenServer(refreshToken)
+
+        // Then
+        verify(exactly = 0) { platformTokenStorage.rltToken = any() }
+        verify(exactly = 0) { authTokenStorage.expireAtMilliseconds = any() }
     }
 }

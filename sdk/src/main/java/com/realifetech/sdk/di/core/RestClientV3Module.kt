@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 
 @Module(includes = [GraphQlModule::class])
-object RestClientV3Module {
+object RestClientV3Module: BaseRestClientModule() {
 
     @CoreScope
     @Provides

@@ -101,6 +101,10 @@ dependencies {
     implementation "androidx.room:room-ktx:$rootProject.ext.room_version"
     implementation "androidx.room:room-runtime:$rootProject.ext.room_version"
     annotationProcessor "androidx.room:room-compiler:$rootProject.ext.room_version"
+
+    //Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
     // Testing
     testImplementation "junit:junit:$rootProject.ext.junit_version"
     testImplementation "org.mockito:mockito-core:$rootProject.ext.mockito_version"

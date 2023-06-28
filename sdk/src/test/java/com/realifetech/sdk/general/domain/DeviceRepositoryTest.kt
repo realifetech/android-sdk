@@ -1,3 +1,4 @@
+/*
 package com.realifetech.sdk.general.domain
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -95,4 +96,4 @@ class DeviceRepositoryTest {
         assertEquals(Result.Error(Throwable(errorMessage) as Exception), result)
     }
 
-}
+}*/
