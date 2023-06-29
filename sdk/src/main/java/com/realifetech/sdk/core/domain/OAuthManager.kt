@@ -13,17 +13,6 @@ class OAuthManager(
     private val platformTokenStorage: PlatformPreferences,
     private val configurationStorage: ConfigurationStorage
 ) {
-
-    val accessToken: String
-        get() {
-            var token = authTokenStorage.accessToken
-            platformTokenStorage.rltToken?.apply {
-                if (accessToken.isNotBlank() && refreshToken.isNotBlank())
-                    token = accessToken
-            }
-            return token
-        }
-
     /**
      * This will ensure that we have an active token. If the token is not available or is expired, we will execute a
      * call to refresh it. Otherwise we will do nothing.

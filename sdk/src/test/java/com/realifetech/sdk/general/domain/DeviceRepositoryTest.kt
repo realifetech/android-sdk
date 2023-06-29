@@ -38,7 +38,7 @@ class DeviceRepositoryTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        deviceRepository = DeviceRepository(deviceNetworkDataSource) { oAuthManager }
+        deviceRepository = DeviceRepository(deviceNetworkDataSource, oAuthManager)
         MockitoAnnotations.initMocks(this)
         deviceConsent = DeviceConsent(true, true, true, LocationGranularStatus.ALWAYS, true, true)
     }

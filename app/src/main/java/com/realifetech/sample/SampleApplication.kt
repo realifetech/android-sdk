@@ -33,7 +33,6 @@ class SampleApplication : Application() {
             webOrderingJourneyUrl = storage.orderingJourney
         )
         RealifeTech.configureSdk(this, configuration)
-        registerDeviceForSDK()
 
 //  Set Colors via code
         // EXAMPLE 1

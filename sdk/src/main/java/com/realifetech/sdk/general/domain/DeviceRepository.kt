@@ -1,36 +1,34 @@
 package com.realifetech.sdk.general.domain
 
-import android.util.Log
 import com.realifetech.sdk.core.domain.LinearRetryPolicy
 import com.realifetech.sdk.core.domain.OAuthManager
 import com.realifetech.sdk.core.domain.RetryPolicy
 import com.realifetech.sdk.core.utils.Result
 import com.realifetech.sdk.general.data.DeviceConsent
 import com.realifetech.sdk.general.data.DeviceNetworkDataSource
-import dagger.Lazy
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class DeviceRepository @Inject constructor(
     private val dataSource: DeviceNetworkDataSource,
-    private val oAuthManager: Lazy<OAuthManager>
+    private val oAuthManager: OAuthManager
 ) {
+    private val tag = this::class.java.simpleName
     private lateinit var result: Result<Boolean>
 
     private val retryPolicy: RetryPolicy =
         LinearRetryPolicy(DEVICE_REGISTRATION_RETRY_TIME_MILLISECONDS) {
-            Log.d("RetryPolicy", "Retry, sending new register device request")
+            Timber.tag(tag).d("Retry, sending new register device request")
             registerDevice()
         }
 
     @Synchronized
     fun registerDevice(): Result<Boolean> {
-        val accessToken = oAuthManager.get()
-        accessToken.ensureActive()
+        oAuthManager.ensureActive()
         dataSource.registerDevice { error, registered ->
             error?.let {
-                accessToken.ensureActive()
-                Log.e("DeviceRepository", "Register device Error: ${it.message}")
+                Timber.tag(tag).e( "Register device Error: ${it.message}")
                 retryPolicy.execute()
                 result = Result.Error(it)
             }

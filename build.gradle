@@ -69,7 +69,7 @@ ext {
     sdk_version = sdkProps.getProperty("sdk.semver")
     compose_version = '1.0.5'
     glideVersion = '4.13.0'
-
+    timberVersion = '4.7.1'
 }
 task clean(type: Delete) {
     delete rootProject.buildDir
