@@ -34,7 +34,8 @@ val FragmentTicket.asModel: Ticket
         redeemerEmail = redeemerEmail,
         sharerEmail = sharerEmail,
         additionalFields = additionalFields?.map { it?.asModel }?.toMutableList(),
-        printed = printed
+        printed = printed,
+        timezone = timezone
     )
 
 val FragmentTicket.Currency.asModel: Currency
