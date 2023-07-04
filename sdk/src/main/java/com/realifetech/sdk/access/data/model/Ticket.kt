@@ -35,7 +35,8 @@ data class Ticket(
     val redeemerEmail: String?,
     val sharerEmail: String?,
     val additionalFields: MutableList<AdditionalField?>?,
-    val printed: Boolean?
+    val printed: Boolean?,
+    val timezone: String?
 ) : Parcelable
 
 
