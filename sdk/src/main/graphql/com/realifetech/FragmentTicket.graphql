@@ -38,4 +38,5 @@ fragment FragmentTicket on Ticket {
         value
     }
     printed
+    timezone
 }

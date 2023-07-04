@@ -3,6 +3,7 @@ package com.realifetech.sdk.general.data
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.os.Build
+import android.provider.Settings
 import android.util.DisplayMetrics
 import com.realifetech.sdk.core.data.database.preferences.configuration.ConfigurationStorage
 import com.realifetech.sdk.core.utils.isWifiConnected
@@ -24,7 +25,7 @@ open class PhysicalDeviceInfo @Inject constructor(
     }
 
     override val deviceId: String
-        get() = UUID.randomUUID().toString() + ":" + context.packageName
+        get() = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID) + ":" + context.packageName
 
     override val appVersionName: String
         get() = configurationStorage.appVersion
